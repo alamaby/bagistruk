@@ -9,6 +9,7 @@ import '../../../domain/entities/assignment.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/participant.dart';
+import '../../settings/providers/profile_notifier.dart';
 
 part 'split_notifier.freezed.dart';
 part 'split_notifier.g.dart';
@@ -179,11 +180,35 @@ class SplitNotifier extends _$SplitNotifier {
     final assignsRes = await repo.listAssignments(billId);
     final assignments = _unwrap(assignsRes);
 
+    var effectiveParticipants = participants;
+    String? autoSelectedId;
+    if (participants.isEmpty) {
+      try {
+        final profile = await ref.read(profileNotifierProvider.future);
+        final name = profile.displayName?.trim();
+        if (name != null && name.isNotEmpty) {
+          final p = Participant(
+            id: _uuid.v4(),
+            billId: bill.id,
+            name: name,
+          );
+          final res = await repo.upsertParticipant(p);
+          if (res is Success<Participant>) {
+            effectiveParticipants = [res.data];
+            autoSelectedId = res.data.id;
+          }
+        }
+      } catch (_) {
+        // Profil belum siap / gagal load — fallback diam: user pakai dialog manual.
+      }
+    }
+
     return SplitState(
       bill: bill,
       items: items,
-      participants: participants,
+      participants: effectiveParticipants,
       assignments: assignments,
+      selectedParticipantId: autoSelectedId,
     );
   }
 
