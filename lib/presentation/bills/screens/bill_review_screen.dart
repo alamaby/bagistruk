@@ -31,6 +31,8 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
   late final TextEditingController _titleCtrl;
   late final TextEditingController _taxCtrl;
   late final TextEditingController _serviceCtrl;
+  final FocusNode _taxFocus = FocusNode();
+  final FocusNode _serviceFocus = FocusNode();
   final Map<String, _ItemControllers> _itemCtrls = {};
 
   BillReviewNotifier get _notifier =>
@@ -47,6 +49,9 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     _serviceCtrl = TextEditingController(
       text: initial.service > 0 ? _fmtNum(initial.service) : '',
     );
+    _taxFocus.addListener(() => _selectAllOnFocus(_taxCtrl, _taxFocus));
+    _serviceFocus
+        .addListener(() => _selectAllOnFocus(_serviceCtrl, _serviceFocus));
     for (final it in initial.items) {
       _itemCtrls[it.localId] = _ItemControllers.fromItem(it);
     }
@@ -57,6 +62,8 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     _titleCtrl.dispose();
     _taxCtrl.dispose();
     _serviceCtrl.dispose();
+    _taxFocus.dispose();
+    _serviceFocus.dispose();
     for (final c in _itemCtrls.values) {
       c.dispose();
     }
@@ -197,6 +204,8 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
               currency: currency,
               taxCtrl: _taxCtrl,
               serviceCtrl: _serviceCtrl,
+              taxFocus: _taxFocus,
+              serviceFocus: _serviceFocus,
               onTaxChanged: (v) =>
                   _notifier.setTax(double.tryParse(v.trim()) ?? 0),
               onServiceChanged: (v) =>
@@ -212,6 +221,12 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
 
 String _fmtNum(double v) =>
     v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
+
+void _selectAllOnFocus(TextEditingController c, FocusNode node) {
+  if (node.hasFocus && c.text.isNotEmpty) {
+    c.selection = TextSelection(baseOffset: 0, extentOffset: c.text.length);
+  }
+}
 
 class _ItemControllers {
   _ItemControllers({
@@ -474,6 +489,8 @@ class _StickyBottom extends StatelessWidget {
     required this.currency,
     required this.taxCtrl,
     required this.serviceCtrl,
+    required this.taxFocus,
+    required this.serviceFocus,
     required this.onTaxChanged,
     required this.onServiceChanged,
     required this.onSave,
@@ -483,6 +500,8 @@ class _StickyBottom extends StatelessWidget {
   final NumberFormat currency;
   final TextEditingController taxCtrl;
   final TextEditingController serviceCtrl;
+  final FocusNode taxFocus;
+  final FocusNode serviceFocus;
   final ValueChanged<String> onTaxChanged;
   final ValueChanged<String> onServiceChanged;
   final VoidCallback onSave;
@@ -537,10 +556,14 @@ class _StickyBottom extends StatelessWidget {
                                 RegExp(r'[0-9.]'),
                               ),
                             ],
+                            focusNode: taxFocus,
                             onChanged: onTaxChanged,
                             decoration: InputDecoration(
                               labelText: 'Pajak',
                               isDense: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(fontSize: 12.sp),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
@@ -559,10 +582,14 @@ class _StickyBottom extends StatelessWidget {
                                 RegExp(r'[0-9.]'),
                               ),
                             ],
+                            focusNode: serviceFocus,
                             onChanged: onServiceChanged,
                             decoration: InputDecoration(
                               labelText: 'Service',
                               isDense: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(fontSize: 12.sp),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
