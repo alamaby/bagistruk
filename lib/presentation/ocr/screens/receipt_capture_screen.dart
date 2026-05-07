@@ -36,10 +36,88 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
   // berjalan sebelum OcrNotifier sempat set state ke processing.
   bool _starting = false;
 
-  Future<void> _addImages() async {
+  Future<void> _addFromGallery() async {
     final picked = await _picker.pickMultiImage(imageQuality: 90);
     if (picked.isEmpty) return;
     setState(() => _images.addAll(picked));
+  }
+
+  Future<void> _addFromCamera() async {
+    final l10n = AppL10n.of(context);
+    while (true) {
+      final shot = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 90,
+      );
+      if (shot == null) return;
+      if (!mounted) return;
+      setState(() => _images.add(shot));
+
+      final again = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(l10n.scanCameraContinuePrompt),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(l10n.scanCameraDone),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(l10n.scanCameraTakeAnother),
+            ),
+          ],
+        ),
+      );
+      if (again != true) return;
+      if (!mounted) return;
+    }
+  }
+
+  Future<void> _showAddPhotoSheet() async {
+    final l10n = AppL10n.of(context);
+    final source = await showModalBottomSheet<_PhotoSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 8.h),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.scanSourceSheetTitle,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera),
+              title: Text(l10n.scanSourceCamera),
+              onTap: () => Navigator.of(ctx).pop(_PhotoSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: Text(l10n.scanSourceGallery),
+              onTap: () => Navigator.of(ctx).pop(_PhotoSource.gallery),
+            ),
+            SizedBox(height: 8.h),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) return;
+    switch (source) {
+      case _PhotoSource.camera:
+        await _addFromCamera();
+      case _PhotoSource.gallery:
+        await _addFromGallery();
+    }
   }
 
   Future<void> _process() async {
@@ -147,7 +225,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: busy ? null : _addImages,
+                    onPressed: busy ? null : _showAddPhotoSheet,
                     icon: const Icon(Icons.add_photo_alternate),
                     label: Text(l10n.scanAddPhotos),
                   ),
@@ -188,6 +266,8 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
     );
   }
 }
+
+enum _PhotoSource { camera, gallery }
 
 class _StatusLabel extends StatelessWidget {
   const _StatusLabel({required this.state, required this.starting});

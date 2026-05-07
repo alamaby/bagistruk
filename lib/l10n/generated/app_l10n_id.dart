@@ -33,6 +33,24 @@ class AppL10nId extends AppL10n {
   String get scanInProgress => 'Memindai…';
 
   @override
+  String get scanSourceSheetTitle => 'Tambah foto struk';
+
+  @override
+  String get scanSourceCamera => 'Kamera';
+
+  @override
+  String get scanSourceGallery => 'Galeri';
+
+  @override
+  String get scanCameraContinuePrompt => 'Foto lagi untuk struk panjang?';
+
+  @override
+  String get scanCameraTakeAnother => 'Foto Lagi';
+
+  @override
+  String get scanCameraDone => 'Selesai';
+
+  @override
   String get retry => 'Coba Lagi';
 
   @override
@@ -241,8 +259,14 @@ class AppL10nId extends AppL10n {
   String get splitSummaryService => 'Service (proporsional)';
 
   @override
-  String get splitSummaryShareWhatsapp => 'Bagikan ke WhatsApp';
+  String get splitSummaryShare => 'Bagikan';
 
   @override
-  String get splitWhatsappFailed => 'Tidak bisa buka WhatsApp';
+  String get splitSummaryCopy => 'Salin';
+
+  @override
+  String get splitSummaryCopied => 'Disalin ke clipboard';
+
+  @override
+  String get splitShareFailed => 'Tidak bisa membagikan';
 }

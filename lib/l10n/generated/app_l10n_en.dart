@@ -33,6 +33,25 @@ class AppL10nEn extends AppL10n {
   String get scanInProgress => 'Scanning…';
 
   @override
+  String get scanSourceSheetTitle => 'Add receipt photo';
+
+  @override
+  String get scanSourceCamera => 'Camera';
+
+  @override
+  String get scanSourceGallery => 'Gallery';
+
+  @override
+  String get scanCameraContinuePrompt =>
+      'Take another photo for this long receipt?';
+
+  @override
+  String get scanCameraTakeAnother => 'Take another';
+
+  @override
+  String get scanCameraDone => 'Done';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -240,8 +259,14 @@ class AppL10nEn extends AppL10n {
   String get splitSummaryService => 'Service (proportional)';
 
   @override
-  String get splitSummaryShareWhatsapp => 'Share to WhatsApp';
+  String get splitSummaryShare => 'Share';
 
   @override
-  String get splitWhatsappFailed => 'Could not open WhatsApp';
+  String get splitSummaryCopy => 'Copy';
+
+  @override
+  String get splitSummaryCopied => 'Copied to clipboard';
+
+  @override
+  String get splitShareFailed => 'Could not share';
 }

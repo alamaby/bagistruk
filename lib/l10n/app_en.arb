@@ -10,6 +10,12 @@
   "scanAddPhotos": "Add Photos",
   "scanAction": "Scan",
   "scanInProgress": "Scanning…",
+  "scanSourceSheetTitle": "Add receipt photo",
+  "scanSourceCamera": "Camera",
+  "scanSourceGallery": "Gallery",
+  "scanCameraContinuePrompt": "Take another photo for this long receipt?",
+  "scanCameraTakeAnother": "Take another",
+  "scanCameraDone": "Done",
 
   "retry": "Retry",
 
@@ -96,6 +102,8 @@
   "splitSummarySubtotal": "Subtotal",
   "splitSummaryTax": "Tax (proportional)",
   "splitSummaryService": "Service (proportional)",
-  "splitSummaryShareWhatsapp": "Share to WhatsApp",
-  "splitWhatsappFailed": "Could not open WhatsApp"
+  "splitSummaryShare": "Share",
+  "splitSummaryCopy": "Copy",
+  "splitSummaryCopied": "Copied to clipboard",
+  "splitShareFailed": "Could not share"
 }

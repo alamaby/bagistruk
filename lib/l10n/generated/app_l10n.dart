@@ -145,6 +145,42 @@ abstract class AppL10n {
   /// **'Memindai…'**
   String get scanInProgress;
 
+  /// No description provided for @scanSourceSheetTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah foto struk'**
+  String get scanSourceSheetTitle;
+
+  /// No description provided for @scanSourceCamera.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamera'**
+  String get scanSourceCamera;
+
+  /// No description provided for @scanSourceGallery.
+  ///
+  /// In id, this message translates to:
+  /// **'Galeri'**
+  String get scanSourceGallery;
+
+  /// No description provided for @scanCameraContinuePrompt.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto lagi untuk struk panjang?'**
+  String get scanCameraContinuePrompt;
+
+  /// No description provided for @scanCameraTakeAnother.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto Lagi'**
+  String get scanCameraTakeAnother;
+
+  /// No description provided for @scanCameraDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesai'**
+  String get scanCameraDone;
+
   /// No description provided for @retry.
   ///
   /// In id, this message translates to:
@@ -547,17 +583,29 @@ abstract class AppL10n {
   /// **'Service (proporsional)'**
   String get splitSummaryService;
 
-  /// No description provided for @splitSummaryShareWhatsapp.
+  /// No description provided for @splitSummaryShare.
   ///
   /// In id, this message translates to:
-  /// **'Bagikan ke WhatsApp'**
-  String get splitSummaryShareWhatsapp;
+  /// **'Bagikan'**
+  String get splitSummaryShare;
 
-  /// No description provided for @splitWhatsappFailed.
+  /// No description provided for @splitSummaryCopy.
   ///
   /// In id, this message translates to:
-  /// **'Tidak bisa buka WhatsApp'**
-  String get splitWhatsappFailed;
+  /// **'Salin'**
+  String get splitSummaryCopy;
+
+  /// No description provided for @splitSummaryCopied.
+  ///
+  /// In id, this message translates to:
+  /// **'Disalin ke clipboard'**
+  String get splitSummaryCopied;
+
+  /// No description provided for @splitShareFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak bisa membagikan'**
+  String get splitShareFailed;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
