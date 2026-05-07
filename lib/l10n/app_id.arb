@@ -10,6 +10,12 @@
   "scanAddPhotos": "Tambah Foto",
   "scanAction": "Pindai",
   "scanInProgress": "Memindai…",
+  "scanSourceSheetTitle": "Tambah foto struk",
+  "scanSourceCamera": "Kamera",
+  "scanSourceGallery": "Galeri",
+  "scanCameraContinuePrompt": "Foto lagi untuk struk panjang?",
+  "scanCameraTakeAnother": "Foto Lagi",
+  "scanCameraDone": "Selesai",
 
   "retry": "Coba Lagi",
 
@@ -96,6 +102,8 @@
   "splitSummarySubtotal": "Subtotal",
   "splitSummaryTax": "Pajak (proporsional)",
   "splitSummaryService": "Service (proporsional)",
-  "splitSummaryShareWhatsapp": "Bagikan ke WhatsApp",
-  "splitWhatsappFailed": "Tidak bisa buka WhatsApp"
+  "splitSummaryShare": "Bagikan",
+  "splitSummaryCopy": "Salin",
+  "splitSummaryCopied": "Disalin ke clipboard",
+  "splitShareFailed": "Tidak bisa membagikan"
 }

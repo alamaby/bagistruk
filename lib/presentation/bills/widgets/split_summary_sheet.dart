@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/format/app_format.dart';
 import '../../../domain/entities/participant.dart';
@@ -10,8 +11,9 @@ import '../providers/split_notifier.dart';
 import 'participant_avatar.dart';
 
 /// Bottom-sheet summary listing per-participant items, proportional tax/
-/// service, and total. Each row has a "Bagikan ke WhatsApp" button that opens
-/// `wa.me/?text=...` with a pre-formatted breakdown.
+/// service, and total. Each row has Copy and Share buttons — Share opens the
+/// native OS share sheet so the user can route the breakdown to any app
+/// (WhatsApp, Telegram, Email, SMS, etc.).
 class SplitSummarySheet extends StatelessWidget {
   const SplitSummarySheet({super.key, required this.state});
 
@@ -119,14 +121,29 @@ class _ParticipantSummaryCard extends StatelessWidget {
     return buf.toString();
   }
 
-  Future<void> _shareWhatsapp(BuildContext context) async {
-    final text = Uri.encodeComponent(_buildShareText());
-    final uri = Uri.parse('https://wa.me/?text=$text');
-    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.splitWhatsappFailed)),
+  Future<void> _shareSystem(BuildContext context) async {
+    try {
+      await Share.share(
+        _buildShareText(),
+        subject: 'Rincian ${bill.bill.title} — ${participant.name}',
       );
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.splitShareFailed)),
+        );
+      }
+    }
+  }
+
+  Future<void> _copyToClipboard(BuildContext context) async {
+    await Clipboard.setData(ClipboardData(text: _buildShareText()));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text(l10n.splitSummaryCopied)),
+        );
     }
   }
 
@@ -233,21 +250,36 @@ class _ParticipantSummaryCard extends StatelessWidget {
               ),
           ],
           SizedBox(height: 10.h),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.tonalIcon(
-              onPressed: () => _shareWhatsapp(context),
-              icon: const Icon(Icons.share),
-              label: Text(l10n.splitSummaryShareWhatsapp),
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF25D366).withValues(alpha: 0.15),
-                foregroundColor: const Color(0xFF128C7E),
-                minimumSize: Size.fromHeight(40.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.r),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => _copyToClipboard(context),
+                  icon: const Icon(Icons.content_copy, size: 18),
+                  label: Text(l10n.splitSummaryCopy),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size.fromHeight(40.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: FilledButton.tonalIcon(
+                  onPressed: () => _shareSystem(context),
+                  icon: const Icon(Icons.share, size: 18),
+                  label: Text(l10n.splitSummaryShare),
+                  style: FilledButton.styleFrom(
+                    minimumSize: Size.fromHeight(40.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
