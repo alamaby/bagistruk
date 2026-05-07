@@ -138,7 +138,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       return const SaveError('Tambahkan minimal satu item');
     }
     for (final it in state.items) {
-      if (it.name.trim().isEmpty || it.price <= 0 || it.qty <= 0) {
+      if (it.name.trim().isEmpty || it.price < 0 || it.qty <= 0) {
         return const SaveError('Periksa nama, harga, dan qty setiap item');
       }
     }
