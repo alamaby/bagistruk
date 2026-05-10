@@ -205,6 +205,12 @@ abstract class AppL10n {
   /// **'Pengguna BagiStruk'**
   String get displayNameFallback;
 
+  /// No description provided for @anonDisplayName.
+  ///
+  /// In id, this message translates to:
+  /// **'Saya'**
+  String get anonDisplayName;
+
   /// No description provided for @guestAccount.
   ///
   /// In id, this message translates to:
@@ -606,6 +612,96 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Tidak bisa membagikan'**
   String get splitShareFailed;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tentang'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutSettingsTile.
+  ///
+  /// In id, this message translates to:
+  /// **'Tentang Aplikasi'**
+  String get aboutSettingsTile;
+
+  /// No description provided for @aboutVersionLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Versi'**
+  String get aboutVersionLabel;
+
+  /// No description provided for @aboutSectionApp.
+  ///
+  /// In id, this message translates to:
+  /// **'Aplikasi'**
+  String get aboutSectionApp;
+
+  /// No description provided for @aboutSectionAuthor.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembuat'**
+  String get aboutSectionAuthor;
+
+  /// No description provided for @aboutSectionSupport.
+  ///
+  /// In id, this message translates to:
+  /// **'Dukung'**
+  String get aboutSectionSupport;
+
+  /// No description provided for @aboutAuthorName.
+  ///
+  /// In id, this message translates to:
+  /// **'Alam Aby Bashit'**
+  String get aboutAuthorName;
+
+  /// No description provided for @aboutWebsite.
+  ///
+  /// In id, this message translates to:
+  /// **'Situs Web'**
+  String get aboutWebsite;
+
+  /// No description provided for @aboutGithub.
+  ///
+  /// In id, this message translates to:
+  /// **'GitHub'**
+  String get aboutGithub;
+
+  /// No description provided for @aboutLinkedin.
+  ///
+  /// In id, this message translates to:
+  /// **'LinkedIn'**
+  String get aboutLinkedin;
+
+  /// No description provided for @aboutBuyMeACoffee.
+  ///
+  /// In id, this message translates to:
+  /// **'Buy Me a Coffee'**
+  String get aboutBuyMeACoffee;
+
+  /// No description provided for @aboutSaweria.
+  ///
+  /// In id, this message translates to:
+  /// **'Saweria'**
+  String get aboutSaweria;
+
+  /// No description provided for @aboutPatreon.
+  ///
+  /// In id, this message translates to:
+  /// **'Patreon'**
+  String get aboutPatreon;
+
+  /// No description provided for @linkUnavailable.
+  ///
+  /// In id, this message translates to:
+  /// **'Tautan belum tersedia'**
+  String get linkUnavailable;
+
+  /// No description provided for @reviewSuspectThousandsBug.
+  ///
+  /// In id, this message translates to:
+  /// **'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.'**
+  String get reviewSuspectThousandsBug;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

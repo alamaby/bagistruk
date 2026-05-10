@@ -12,7 +12,12 @@ _OcrRequestDto _$OcrRequestDtoFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toList(),
       hint: json['hint'] as String?,
+      currency: json['currency'] as String?,
     );
 
 Map<String, dynamic> _$OcrRequestDtoToJson(_OcrRequestDto instance) =>
-    <String, dynamic>{'images': instance.images, 'hint': ?instance.hint};
+    <String, dynamic>{
+      'images': instance.images,
+      'hint': ?instance.hint,
+      'currency': ?instance.currency,
+    };

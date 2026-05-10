@@ -26,6 +26,7 @@ class OCRService {
   Future<Result<OcrResponseDto>> processReceipt(
     List<Uint8List> imagesBytes, {
     String? hint,
+    String? currency,
   }) {
     return guardAsync(() async {
       // Downscale + base64 in parallel — encoding is CPU-bound but the image
@@ -33,7 +34,11 @@ class OCRService {
       final encoded = await Future.wait(
         imagesBytes.map(ImageCodec.downscaleToBase64),
       );
-      final request = OcrRequestDto(images: encoded, hint: hint);
+      final request = OcrRequestDto(
+        images: encoded,
+        hint: hint,
+        currency: currency,
+      );
 
       final response = await _client.functions.invoke(
         AppConstants.ocrEdgeFunctionName,

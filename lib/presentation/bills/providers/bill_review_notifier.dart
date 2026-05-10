@@ -9,6 +9,7 @@ import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/ocr_result.dart';
+import '../../settings/providers/profile_notifier.dart';
 
 part 'bill_review_notifier.freezed.dart';
 part 'bill_review_notifier.g.dart';
@@ -37,6 +38,9 @@ abstract class BillReviewState with _$BillReviewState {
     DateTime? receiptDate,
     double? detectedTotal,
     required double confidence,
+    // ISO 4217 currency aktif saat review dimulai. Dipakai untuk safety net
+    // mendeteksi bug parsing pemisah ribuan pada zero-decimal currencies.
+    @Default('IDR') String currency,
     @Default(false) bool saving,
   }) = _BillReviewState;
 
@@ -50,6 +54,18 @@ abstract class BillReviewState with _$BillReviewState {
     if (d == null) return false;
     return (grandTotal - d).abs() > AppConstants.billTotalMismatchTolerance;
   }
+
+  /// Heuristic safety net: untuk zero-decimal currency (IDR/JPY/dll) setiap
+  /// nilai harga seharusnya integer. Jika ada pecahan, kemungkinan besar
+  /// pemisah ribuan ('.') ditafsirkan sebagai desimal oleh LLM. Tampilkan
+  /// banner peringatan di review screen agar user verifikasi & koreksi.
+  bool get suspectThousandsBug {
+    if (!AppConstants.zeroDecimalCurrencies.contains(currency)) return false;
+    bool isFractional(double v) => v != v.truncateToDouble();
+    return items.any((i) => isFractional(i.price)) ||
+        isFractional(tax) ||
+        isFractional(service);
+  }
 }
 
 /// Live-editable review state seeded from an [OcrResult]. Total recalculation
@@ -60,6 +76,12 @@ class BillReviewNotifier extends _$BillReviewNotifier {
 
   @override
   BillReviewState build(OcrResult ocr) {
+    // Snapshot currency saat review dibuka — kalau user nanti ganti currency
+    // di Settings, state ini tidak rebuild (review state spesifik per OCR
+    // result), dan itu sengaja: angka di review berasal dari OCR yg dipanggil
+    // dengan currency saat itu.
+    final currency =
+        ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
     return BillReviewState(
       title: ocr.merchant?.trim().isNotEmpty == true
           ? ocr.merchant!.trim()
@@ -79,6 +101,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       receiptDate: ocr.receiptDate,
       detectedTotal: ocr.detectedTotal,
       confidence: ocr.confidence,
+      currency: currency,
     );
   }
 

@@ -7,7 +7,8 @@
 // and tries each in turn. Per-attempt telemetry is fire-and-forget written
 // to `llm_logs` so failures can be diagnosed in the dashboard.
 //
-// Request:  { images: string[] /* base64, no data: prefix */, hint?: string }
+// Request:  { images: string[] /* base64, no data: prefix */, hint?: string,
+//             currency?: string /* ISO 4217 code, default IDR */ }
 // Response: { items, detected_total, detected_tax, detected_service,
 //             merchant, receipt_date, confidence, provider_used }
 
@@ -20,7 +21,21 @@ const CORS_HEADERS = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const SYSTEM_PROMPT =
+// Zero-decimal currencies (ISO 4217). Receipts in these currencies must have
+// integer prices — any fractional value is almost certainly a thousand
+// separator misread as decimal (e.g. Indonesian "10.455" → 10455 IDR).
+const ZERO_DECIMAL_CURRENCIES = new Set([
+  "IDR",
+  "JPY",
+  "KRW",
+  "VND",
+  "CLP",
+  "ISK",
+  "HUF",
+  "TWD",
+]);
+
+const BASE_SYSTEM_PROMPT =
   `You are a receipt parser. Extract line items, totals, tax, service charges, merchant, and receipt date from the attached photos.
 
 Return STRICTLY this JSON shape, no prose:
@@ -38,7 +53,23 @@ Rules:
 - Combine duplicate line items by summing qty when names match exactly.
 - Prices are per-unit (so subtotal = price * qty); never include tax in price.
 - If multiple photos show different parts of the same receipt, merge them.
-- Use the receipt's currency as-is; do not convert.`;
+- Use the receipt's currency as-is; do not convert.
+
+Locale & number formatting (IMPORTANT):
+- Receipts may format numbers with locale-specific separators.
+- Indonesian / European convention: '.' is the THOUSAND separator and ',' is the DECIMAL separator. Example: "10.455" means ten thousand four hundred fifty-five (10455), NOT ten point four five five.
+- US / UK convention: '.' is the decimal separator and ',' is the thousand separator.
+- Always interpret separators based on the request currency and the receipt's visual language. Do NOT default to US convention.
+- For zero-decimal currencies (IDR, JPY, KRW, VND, CLP, ISK, HUF, TWD), every numeric field — \`price\`, \`detected_total\`, \`detected_tax\`, \`detected_service\` — MUST be a JSON integer with no fractional part. If you see "Rp 10.455" or similar, output \`10455\` (integer), never \`10.455\`.`;
+
+function buildSystemPrompt(currency: string): string {
+  const isZeroDecimal = ZERO_DECIMAL_CURRENCIES.has(currency);
+  return `${BASE_SYSTEM_PROMPT}\n\nRequest currency: ${currency}${
+    isZeroDecimal
+      ? ` (zero-decimal — output every number as a JSON integer).`
+      : `.`
+  }`;
+}
 
 interface OcrPayload {
   items: { name: string; price: number; qty: number }[];
@@ -106,13 +137,15 @@ function buildOpenRouterUrl(baseUrl: string): string {
 async function callGemini(
   cfg: LlmConfig,
   images: string[],
+  currency: string,
   hint?: string,
 ): Promise<OcrPayload> {
   if (!cfg.base_url) throw new ProviderError("gemini base_url missing", 400);
   if (!cfg.model_name) throw new ProviderError("gemini model_name missing", 400);
   const url = buildGeminiUrl(cfg.base_url, cfg.model_name, cfg.api_key);
+  const systemPrompt = buildSystemPrompt(currency);
   const parts: unknown[] = [
-    { text: SYSTEM_PROMPT + (hint ? `\n\nHint: ${hint}` : "") },
+    { text: systemPrompt + (hint ? `\n\nHint: ${hint}` : "") },
     ...images.map((b64) => ({
       inline_data: { mime_type: "image/jpeg", data: b64 },
     })),
@@ -148,11 +181,13 @@ async function callGemini(
 async function callOpenRouter(
   cfg: LlmConfig,
   images: string[],
+  currency: string,
   hint?: string,
 ): Promise<OcrPayload> {
   if (!cfg.base_url) throw new ProviderError("openrouter base_url missing", 400);
   if (!cfg.model_name) throw new ProviderError("openrouter model_name missing", 400);
   const url = buildOpenRouterUrl(cfg.base_url);
+  const systemPrompt = buildSystemPrompt(currency);
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -164,7 +199,7 @@ async function callOpenRouter(
       response_format: { type: "json_object" },
       temperature: 0.1,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemPrompt },
         {
           role: "user",
           content: [
@@ -201,13 +236,14 @@ async function callOpenRouter(
 async function callProvider(
   cfg: LlmConfig,
   images: string[],
+  currency: string,
   hint?: string,
 ): Promise<OcrPayload> {
   switch (cfg.provider_name.toLowerCase()) {
     case "gemini":
-      return await callGemini(cfg, images, hint);
+      return await callGemini(cfg, images, currency, hint);
     case "openrouter":
-      return await callOpenRouter(cfg, images, hint);
+      return await callOpenRouter(cfg, images, currency, hint);
     case "nvidianim":
       throw new ProviderError("nvidianim not_implemented", 501);
     default:
@@ -216,6 +252,44 @@ async function callProvider(
         400,
       );
   }
+}
+
+/// Heuristic post-process: untuk zero-decimal currencies, pastikan setiap nilai
+/// adalah integer. Jika LLM mengembalikan pecahan (mis. 10.455 dari struk
+/// Indonesia "Rp 10.455"), rekonstruksi nilai integer dengan strip pemisah
+/// titik dari representasi string. Ini menyembuhkan kasus di mana LLM gagal
+/// mengikuti instruksi locale di prompt.
+function normalizePayload(payload: OcrPayload, currency: string): OcrPayload {
+  if (!ZERO_DECIMAL_CURRENCIES.has(currency)) return payload;
+
+  const fixNumber = (v: number | null | undefined): number | null => {
+    if (v === null || v === undefined) return null;
+    if (Number.isInteger(v)) return v;
+    // Rekonstruksi: "10.455" → "10455" → 10455. Toleransi terhadap nilai
+    // negatif (tidak diharapkan) dan eksponensial (juga tidak).
+    const s = Math.abs(v).toString();
+    const stripped = s.replace(/\./g, "");
+    const parsed = parseInt(stripped, 10);
+    if (Number.isFinite(parsed)) {
+      return v < 0 ? -parsed : parsed;
+    }
+    // Fallback terakhir: pembulatan biasa.
+    return Math.round(v);
+  };
+
+  const fixRequired = (v: number): number => fixNumber(v) ?? Math.round(v);
+
+  return {
+    ...payload,
+    items: payload.items.map((it) => ({
+      ...it,
+      price: fixRequired(it.price),
+      qty: Number.isInteger(it.qty) ? it.qty : Math.round(it.qty),
+    })),
+    detected_total: fixNumber(payload.detected_total),
+    detected_tax: fixNumber(payload.detected_tax),
+    detected_service: fixNumber(payload.detected_service),
+  };
 }
 
 function statusOf(err: unknown): number {
@@ -246,7 +320,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return jsonResponse({ error: "method_not_allowed" }, 405);
   }
 
-  let body: { images?: string[]; hint?: string };
+  let body: { images?: string[]; hint?: string; currency?: string };
   try {
     body = await req.json();
   } catch {
@@ -254,6 +328,12 @@ Deno.serve(async (req: Request): Promise<Response> => {
   }
   const images = body.images;
   const hint = body.hint;
+  // Normalisasi currency: trim, uppercase, fallback IDR. Default IDR mengikuti
+  // pasar utama aplikasi sehingga klien lama yang belum kirim field tetap
+  // mendapat heuristic yang sesuai.
+  const currency = (typeof body.currency === "string" && body.currency.trim())
+    ? body.currency.trim().toUpperCase()
+    : "IDR";
   if (
     !Array.isArray(images) || images.length === 0 ||
     images.some((x) => typeof x !== "string")
@@ -316,7 +396,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
   for (const cfg of configs as LlmConfig[]) {
     const start = Date.now();
     try {
-      const payload = await callProvider(cfg, images, hint);
+      const rawPayload = await callProvider(cfg, images, currency, hint);
+      const payload = normalizePayload(rawPayload, currency);
       logAttempt(cfg, 200, Date.now() - start, true, payload);
       return jsonResponse({
         items: payload.items,

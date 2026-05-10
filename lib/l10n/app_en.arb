@@ -23,6 +23,7 @@
   "preferencesSection": "Preferences",
 
   "displayNameFallback": "BagiStruk User",
+  "anonDisplayName": "Me",
   "guestAccount": "Guest Account",
 
   "changeName": "Change Name",
@@ -105,5 +106,22 @@
   "splitSummaryShare": "Share",
   "splitSummaryCopy": "Copy",
   "splitSummaryCopied": "Copied to clipboard",
-  "splitShareFailed": "Could not share"
+  "splitShareFailed": "Could not share",
+
+  "aboutTitle": "About",
+  "aboutSettingsTile": "About App",
+  "aboutVersionLabel": "Version",
+  "aboutSectionApp": "Application",
+  "aboutSectionAuthor": "Author",
+  "aboutSectionSupport": "Support",
+  "aboutAuthorName": "Alam Aby Bashit",
+  "aboutWebsite": "Website",
+  "aboutGithub": "GitHub",
+  "aboutLinkedin": "LinkedIn",
+  "aboutBuyMeACoffee": "Buy Me a Coffee",
+  "aboutSaweria": "Saweria",
+  "aboutPatreon": "Patreon",
+  "linkUnavailable": "Link is not available yet",
+
+  "reviewSuspectThousandsBug": "Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving."
 }

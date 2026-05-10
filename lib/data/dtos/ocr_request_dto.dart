@@ -10,6 +10,10 @@ abstract class OcrRequestDto with _$OcrRequestDto {
   const factory OcrRequestDto({
     required List<String> images,
     String? hint,
+    // ISO 4217 currency code (mis. 'IDR'). Server pakai untuk pilih konvensi
+    // locale parsing & menerapkan heuristic post-process untuk zero-decimal
+    // currencies (IDR/JPY/KRW/VND/dll).
+    String? currency,
   }) = _OcrRequestDto;
 
   factory OcrRequestDto.fromJson(Map<String, dynamic> json) =>

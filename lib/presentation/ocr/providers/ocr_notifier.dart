@@ -27,10 +27,18 @@ class OcrNotifier extends _$OcrNotifier {
   @override
   OcrState build() => const OcrState.idle();
 
-  Future<void> process(List<Uint8List> images, {String? hint}) async {
+  Future<void> process(
+    List<Uint8List> images, {
+    String? hint,
+    String? currency,
+  }) async {
     state = OcrState.processing(images.length);
     final repo = ref.read(ocrRepositoryProvider);
-    final res = await repo.processReceipt(images, hint: hint);
+    final res = await repo.processReceipt(
+      images,
+      hint: hint,
+      currency: currency,
+    );
     state = switch (res) {
       Success(:final data) => OcrState.success(data),
       ResultFailure(:final failure) => OcrState.failure(failure),

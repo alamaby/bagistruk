@@ -130,19 +130,22 @@ class _SettingsBody extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.person_outline),
           title: Text(
-            profile.displayName?.trim().isNotEmpty == true
-                ? profile.displayName!
-                : l10n.displayNameFallback,
+            isAnon
+                ? l10n.anonDisplayName
+                : (profile.displayName?.trim().isNotEmpty == true
+                    ? profile.displayName!
+                    : l10n.displayNameFallback),
           ),
           subtitle: Text(
             isAnon ? l10n.guestAccount : (profile.email ?? '—'),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.edit_outlined),
-          title: Text(l10n.changeName),
-          onTap: () => _onChangeName(context, ref),
-        ),
+        if (!isAnon)
+          ListTile(
+            leading: const Icon(Icons.edit_outlined),
+            title: Text(l10n.changeName),
+            onTap: () => _onChangeName(context, ref),
+          ),
         if (!isAnon)
           ListTile(
             leading: const Icon(Icons.lock_reset_outlined),
@@ -177,6 +180,13 @@ class _SettingsBody extends ConsumerWidget {
             style: theme.textTheme.bodyMedium,
           ),
           onTap: () => _onPickTheme(context, ref, profile.themePref),
+        ),
+        const Divider(),
+        _SectionHeader(l10n.aboutTitle),
+        ListTile(
+          leading: const Icon(Icons.info_outline),
+          title: Text(l10n.aboutSettingsTile),
+          onTap: () => context.pushNamed(Routes.aboutName),
         ),
         SizedBox(height: 24.h),
         Padding(

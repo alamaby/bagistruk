@@ -184,8 +184,17 @@ class SplitNotifier extends _$SplitNotifier {
     String? autoSelectedId;
     if (participants.isEmpty) {
       try {
-        final profile = await ref.read(profileNotifierProvider.future);
-        final name = profile.displayName?.trim();
+        final profile = await ref.read(profileProvider.future);
+        final trimmed = profile.displayName?.trim();
+        final String? name;
+        if (profile.isAnonymous) {
+          // Anon tidak bisa mengubah nama; gunakan label generik terlokalisasi.
+          name = profile.languagePref == 'id' ? 'Saya' : 'Me';
+        } else if (trimmed != null && trimmed.isNotEmpty) {
+          name = trimmed;
+        } else {
+          name = null;
+        }
         if (name != null && name.isNotEmpty) {
           final p = Participant(
             id: _uuid.v4(),

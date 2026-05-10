@@ -64,6 +64,9 @@ class AppL10nEn extends AppL10n {
   String get displayNameFallback => 'BagiStruk User';
 
   @override
+  String get anonDisplayName => 'Me';
+
+  @override
   String get guestAccount => 'Guest Account';
 
   @override
@@ -269,4 +272,50 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get splitShareFailed => 'Could not share';
+
+  @override
+  String get aboutTitle => 'About';
+
+  @override
+  String get aboutSettingsTile => 'About App';
+
+  @override
+  String get aboutVersionLabel => 'Version';
+
+  @override
+  String get aboutSectionApp => 'Application';
+
+  @override
+  String get aboutSectionAuthor => 'Author';
+
+  @override
+  String get aboutSectionSupport => 'Support';
+
+  @override
+  String get aboutAuthorName => 'Alam Aby Bashit';
+
+  @override
+  String get aboutWebsite => 'Website';
+
+  @override
+  String get aboutGithub => 'GitHub';
+
+  @override
+  String get aboutLinkedin => 'LinkedIn';
+
+  @override
+  String get aboutBuyMeACoffee => 'Buy Me a Coffee';
+
+  @override
+  String get aboutSaweria => 'Saweria';
+
+  @override
+  String get aboutPatreon => 'Patreon';
+
+  @override
+  String get linkUnavailable => 'Link is not available yet';
+
+  @override
+  String get reviewSuspectThousandsBug =>
+      'Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.';
 }

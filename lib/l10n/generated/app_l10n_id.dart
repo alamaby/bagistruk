@@ -63,6 +63,9 @@ class AppL10nId extends AppL10n {
   String get displayNameFallback => 'Pengguna BagiStruk';
 
   @override
+  String get anonDisplayName => 'Saya';
+
+  @override
   String get guestAccount => 'Akun Tamu';
 
   @override
@@ -269,4 +272,50 @@ class AppL10nId extends AppL10n {
 
   @override
   String get splitShareFailed => 'Tidak bisa membagikan';
+
+  @override
+  String get aboutTitle => 'Tentang';
+
+  @override
+  String get aboutSettingsTile => 'Tentang Aplikasi';
+
+  @override
+  String get aboutVersionLabel => 'Versi';
+
+  @override
+  String get aboutSectionApp => 'Aplikasi';
+
+  @override
+  String get aboutSectionAuthor => 'Pembuat';
+
+  @override
+  String get aboutSectionSupport => 'Dukung';
+
+  @override
+  String get aboutAuthorName => 'Alam Aby Bashit';
+
+  @override
+  String get aboutWebsite => 'Situs Web';
+
+  @override
+  String get aboutGithub => 'GitHub';
+
+  @override
+  String get aboutLinkedin => 'LinkedIn';
+
+  @override
+  String get aboutBuyMeACoffee => 'Buy Me a Coffee';
+
+  @override
+  String get aboutSaweria => 'Saweria';
+
+  @override
+  String get aboutPatreon => 'Patreon';
+
+  @override
+  String get linkUnavailable => 'Tautan belum tersedia';
+
+  @override
+  String get reviewSuspectThousandsBug =>
+      'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.';
 }

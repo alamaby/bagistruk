@@ -10,6 +10,7 @@ import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../settings/providers/profile_notifier.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/ocr_notifier.dart';
 import '../utils/ocr_messages.dart';
@@ -138,7 +139,15 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         return;
       }
       final bytes = await Future.wait(_images.map((f) => f.readAsBytes()));
-      await ref.read(ocrProvider.notifier).process(bytes);
+      // Pass currency dari profile user supaya Edge Function bisa pakai
+      // konvensi locale yg tepat saat parsing harga (mis. IDR gunakan '.'
+      // sebagai pemisah ribuan, bukan desimal). Fallback ke 'IDR' jika
+      // profile belum siap — sesuai pasar utama aplikasi.
+      final currency =
+          ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
+      await ref
+          .read(ocrProvider.notifier)
+          .process(bytes, currency: currency);
     } finally {
       if (mounted) setState(() => _starting = false);
     }

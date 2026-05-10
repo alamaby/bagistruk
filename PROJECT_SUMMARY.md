@@ -135,7 +135,10 @@ Source: [supabase/functions/process-receipt/index.ts](supabase/functions/process
 // POST /functions/v1/process-receipt
 // Request body
 { images: string[],  // base64 JPEG, no `data:` prefix
-  hint?: string }
+  hint?: string,
+  currency?: string }  // ISO 4217, default 'IDR' — drives locale-aware
+                       // parsing rules in the system prompt and the
+                       // zero-decimal post-process heuristic
 
 // Response 200
 { items: [{ name, price, qty }],
@@ -161,7 +164,8 @@ Source: [supabase/functions/process-receipt/index.ts](supabase/functions/process
 3. **Init service-role client** — uses `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (auto-injected by Supabase, no manual setup).
 4. **Query `llm_configs`** — `is_active=true ORDER BY priority ASC`. Error or empty result → 500 `no_active_provider`.
 5. **Failover loop** — for each row:
-   - Dispatches to `callProvider(cfg)` by `cfg.provider_name.toLowerCase()`:
+   - System prompt is built per-request via `buildSystemPrompt(currency)` — appends locale rules ('.' is thousand separator in ID/EU; '.' is decimal in US/UK) and, for zero-decimal currencies (`IDR / JPY / KRW / VND / CLP / ISK / HUF / TWD`), a hard rule that every numeric output must be a JSON integer.
+   - Dispatches to `callProvider(cfg, images, currency, hint)` by `cfg.provider_name.toLowerCase()`:
      - `gemini` → Gemini REST (`POST /v1beta/models/{model}:generateContent`)
      - `openrouter` → OpenAI-compatible (`POST {base_url}/chat/completions`)
      - `nvidianim` → placeholder `not_implemented`
@@ -171,7 +175,8 @@ Source: [supabase/functions/process-receipt/index.ts](supabase/functions/process
    - Success → return 200 immediately.
    - Retryable failure (`429 / 5xx / 408`) → continue to next row.
    - Non-retryable failure (other 4xx) → break loop.
-6. **No successful payload** → 502 `all_providers_failed` with `attempts` array detailing each tried provider.
+6. **Post-process** — on the first successful payload, `normalizePayload(payload, currency)` runs before `jsonResponse`. For zero-decimal currencies it forces every numeric field (`item.price`, `detected_total`, `detected_tax`, `detected_service`) to an integer by reconstructing from the string form: a value the JSON parser saw as `10.455` is restripped to `10455`. This is the safety net for cases where the LLM ignores the prompt rule and still returns a fractional value (the most common Indonesian-receipt failure mode).
+7. **No successful payload** → 502 `all_providers_failed` with `attempts` array detailing each tried provider.
 
 ### URL Builder Per Provider
 
@@ -220,6 +225,8 @@ Supabase Edge Function (Section 3)
    │  - Editable items list (name, qty: double, price)
    │  - Tax & Service: numeric TextFields, pre-filled from detected_*
    │  - Mismatch banner when |computedTotal − detectedTotal| > 1.0
+   │  - Suspect-thousands banner when currency is zero-decimal but any
+   │    price/tax/service is fractional (locale safety net — see §13)
    │  - Save → IBillRepository.createBill + upsertItems
    ▼
 Supabase PostgREST (tables: bills + items)
@@ -369,6 +376,10 @@ Added in migration `20260501120000_profiles_preferences.sql`:
 
 **Trigger search_path fix** (`20260502090000_fix_ensure_profile_search_path.sql`): the original function used bare `profiles` (no schema). Because `SECURITY DEFINER` functions fire in the `auth.users` execution context — where `public` is NOT on the `search_path` — this raised `relation "profiles" does not exist` and blocked every new sign-up. Fixed by adding `SET search_path = ''` and qualifying the table as `public.profiles`.
 
+**Anonymous restrictions:** anonymous sessions cannot rename themselves. The Settings UI hides the **Change Name** tile entirely while `profile.isAnonymous == true` and shows a locale-aware generic label ("Saya" / "Me") instead of the stored `display_name`. The auto-added first participant on the Split screen uses the same label (chosen by `profile.languagePref`). This is a soft nudge to register; renaming becomes available the moment the user promotes the session to an email account.
+
+**About page:** [lib/presentation/about/screens/about_screen.dart](lib/presentation/about/screens/about_screen.dart) shows the app logo, version + build number (via `package_info_plus.PackageInfo.fromPlatform()`), author info ("Alam Aby Bashit"), and tappable link tiles for the landing page, GitHub, LinkedIn, Buy Me a Coffee, Saweria, and Patreon. URLs live as `const String k…Url` at the top of the file with `'#'` placeholders — replace with real URLs when available. Tapping a tile uses `url_launcher` (`LaunchMode.externalApplication`); a `'#'` placeholder shows a snackbar via the localized `linkUnavailable` key. Reached via `Routes.about` (`/about`) from a "Tentang Aplikasi / About App" tile in the Settings tab.
+
 **New Dart files:**
 
 | Path | Role |
@@ -383,6 +394,7 @@ Added in migration `20260501120000_profiles_preferences.sql`:
 | `lib/presentation/settings/providers/settings_actions.dart` | `performLogout` — invalidates all user-scoped providers then calls `ensureSignedIn()` for a fresh anon session |
 | `lib/presentation/settings/screens/settings_screen.dart` | Account + Preferences UI; anonymous guard auto-opens paywall |
 | `lib/presentation/settings/widgets/` | `edit_name_sheet`, `confirm_dialog`, `currency_picker_dialog`, `language_picker_dialog`, `theme_picker_dialog` |
+| `lib/presentation/about/screens/about_screen.dart` | About page — version, author, donation/profile links |
 | `lib/core/format/currency_formatter.dart` | `CurrencyFormatter.of(code)` — `NumberFormat` factory for IDR/USD/MYR/AUD/SGD/SAR |
 
 **Cold-start safety:** `profileProvider` watches `authStateProvider` and returns `UserProfile(id:'', isAnonymous:true)` when `userId==null`. This prevents the `keepAlive` error cache from forming before a session exists.
@@ -428,13 +440,28 @@ The following files still contain hardcoded Indonesian strings. Localize in a fu
 
 ---
 
+## 13. Locale-aware OCR Pricing
+
+Receipts in Indonesian, German, and most European locales use `.` as a thousand separator and `,` as a decimal separator — the inverse of US/UK convention. Vision LLMs (Gemini, OpenRouter routes) trained primarily on English data tend to read `"Rp 10.455"` as `10.455` (ten point four five five) instead of `10455` (ten thousand four hundred fifty-five). When this happens, every line item is silently scaled down by ~1000×, the receipt's printed grand total is also misread the same way, so the simple "computed vs detected" mismatch banner does NOT fire — the user gets a wrong bill with no warning.
+
+The fix is defense-in-depth, currency-aware:
+
+1. **Client passes currency.** [`receipt_capture_screen.dart`](lib/presentation/ocr/screens/receipt_capture_screen.dart) reads `profileProvider.value?.defaultCurrency` (default `'IDR'`) and pipes it through `OcrNotifier.process(..., currency:)` → `OCRService` → `OcrRequestDto.currency`.
+2. **Server prompt is currency-aware.** [`buildSystemPrompt(currency)`](supabase/functions/process-receipt/index.ts) appends explicit locale rules ('.' = thousand separator in ID/EU receipts) and, for zero-decimal currencies, a hard "every numeric output must be an integer" rule.
+3. **Server post-process heuristic.** `normalizePayload(payload, currency)` runs after the LLM responds. For currencies in `ZERO_DECIMAL_CURRENCIES = {IDR, JPY, KRW, VND, CLP, ISK, HUF, TWD}`, every fractional value is reconstructed via `parseInt(String(v).replace(/\./g,''), 10)` — `10.455 → "10.455" → "10455" → 10455`. Other currencies pass through untouched (USD `12.50` stays `12.50`).
+4. **Client safety net.** [`BillReviewState.suspectThousandsBug`](lib/presentation/bills/providers/bill_review_notifier.dart) flags the case where the currency is zero-decimal yet any price/tax/service still has a fractional part (i.e. both prompt + heuristic missed it). `bill_review_screen.dart` shows a red `_SuspectThousandsBanner` above the mismatch banner asking the user to verify before saving. Localized via `reviewSuspectThousandsBug`.
+
+`AppConstants.zeroDecimalCurrencies` mirrors the server-side set so prompts, heuristic, and client banner stay in sync. Adding a new zero-decimal currency requires updating both lists.
+
+---
+
 ## Appendix: Key Files
 
 | Path | Role |
 |---|---|
 | [lib/main.dart](lib/main.dart) | Entry point: dotenv load, Supabase init (no eager anon — session restored from local storage; lazy anon via `ensureSignedIn`) |
 | [lib/core/config/env.dart](lib/core/config/env.dart) | Typed accessors: `Env.supabaseUrl`, etc. |
-| [lib/core/config/app_constants.dart](lib/core/config/app_constants.dart) | `ocrLowConfidenceThreshold`, `billTotalMismatchTolerance`, `ocrMaxImageEdgePx`, etc. |
+| [lib/core/config/app_constants.dart](lib/core/config/app_constants.dart) | `ocrLowConfidenceThreshold`, `billTotalMismatchTolerance`, `ocrMaxImageEdgePx`, `zeroDecimalCurrencies` (mirrors the server-side set) |
 | [lib/core/theme/app_theme.dart](lib/core/theme/app_theme.dart) | Material 3, seed color `Color(0xFF2E7D5B)` (receipt-paper green) |
 | [lib/core/router/app_router.dart](lib/core/router/app_router.dart) | go_router routes: list → capture → review |
 | [lib/data/services/ocr_service.dart](lib/data/services/ocr_service.dart) | Edge Function client (downscale + invoke) |
@@ -456,7 +483,8 @@ The following files still contain hardcoded Indonesian strings. Localize in a fu
 | [lib/l10n/app_en.arb](lib/l10n/app_en.arb) | ARB translation — English |
 | [lib/l10n/generated/app_l10n.dart](lib/l10n/generated/app_l10n.dart) | Auto-generated localization class (do not edit) |
 | [lib/core/format/currency_formatter.dart](lib/core/format/currency_formatter.dart) | Multi-currency `NumberFormat` factory (IDR/USD/MYR/AUD/SGD/SAR) |
-| [lib/presentation/settings/screens/settings_screen.dart](lib/presentation/settings/screens/settings_screen.dart) | Profile & Settings UI |
+| [lib/presentation/settings/screens/settings_screen.dart](lib/presentation/settings/screens/settings_screen.dart) | Profile & Settings UI; hides Change-Name tile for anonymous users; About entry point |
+| [lib/presentation/about/screens/about_screen.dart](lib/presentation/about/screens/about_screen.dart) | About page: version (`package_info_plus`), author, donation/profile links via `url_launcher` |
 | [lib/presentation/settings/providers/profile_notifier.dart](lib/presentation/settings/providers/profile_notifier.dart) | `keepAlive` profile state — cold-start safe |
 | [lib/presentation/settings/providers/preferences_providers.dart](lib/presentation/settings/providers/preferences_providers.dart) | Locale / ThemeMode / currency pref providers |
 | [supabase/migrations/20260501120000_profiles_preferences.sql](supabase/migrations/20260501120000_profiles_preferences.sql) | Profiles preference columns + auto-create trigger |

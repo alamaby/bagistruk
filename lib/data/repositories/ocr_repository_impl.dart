@@ -13,8 +13,13 @@ class OcrRepositoryImpl implements IOCRRepository {
   Future<Result<OcrResult>> processReceipt(
     List<Uint8List> imagesBytes, {
     String? hint,
+    String? currency,
   }) async {
-    final res = await _service.processReceipt(imagesBytes, hint: hint);
+    final res = await _service.processReceipt(
+      imagesBytes,
+      hint: hint,
+      currency: currency,
+    );
     return switch (res) {
       Success(:final data) => Result.success(data.toEntity()),
       ResultFailure(:final failure) => Result.failure(failure),
