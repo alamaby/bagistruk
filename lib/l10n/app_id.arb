@@ -23,6 +23,7 @@
   "preferencesSection": "Preferensi",
 
   "displayNameFallback": "Pengguna BagiStruk",
+  "anonDisplayName": "Saya",
   "guestAccount": "Akun Tamu",
 
   "changeName": "Ubah Nama",
@@ -105,5 +106,22 @@
   "splitSummaryShare": "Bagikan",
   "splitSummaryCopy": "Salin",
   "splitSummaryCopied": "Disalin ke clipboard",
-  "splitShareFailed": "Tidak bisa membagikan"
+  "splitShareFailed": "Tidak bisa membagikan",
+
+  "aboutTitle": "Tentang",
+  "aboutSettingsTile": "Tentang Aplikasi",
+  "aboutVersionLabel": "Versi",
+  "aboutSectionApp": "Aplikasi",
+  "aboutSectionAuthor": "Pembuat",
+  "aboutSectionSupport": "Dukung",
+  "aboutAuthorName": "Alam Aby Bashit",
+  "aboutWebsite": "Situs Web",
+  "aboutGithub": "GitHub",
+  "aboutLinkedin": "LinkedIn",
+  "aboutBuyMeACoffee": "Buy Me a Coffee",
+  "aboutSaweria": "Saweria",
+  "aboutPatreon": "Patreon",
+  "linkUnavailable": "Tautan belum tersedia",
+
+  "reviewSuspectThousandsBug": "Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan."
 }

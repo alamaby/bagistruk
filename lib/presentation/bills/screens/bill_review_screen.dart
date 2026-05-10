@@ -9,6 +9,7 @@ import '../../../core/config/app_constants.dart';
 import '../../../core/format/app_format.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/ocr_result.dart';
+import '../../../l10n/generated/app_l10n.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/bill_review_notifier.dart';
 
@@ -119,6 +120,11 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
               confidence: state.confidence,
               onTitleChanged: _notifier.setTitle,
             ),
+            if (state.suspectThousandsBug)
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+                child: const _SuspectThousandsBanner(),
+              ),
             if (state.hasMismatch && state.detectedTotal != null)
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
@@ -702,6 +708,39 @@ class _SaveButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SuspectThousandsBanner extends StatelessWidget {
+  const _SuspectThousandsBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    return Container(
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: Colors.red.shade300),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline,
+              color: Colors.red.shade700, size: 20.r),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              l10n.reviewSuspectThousandsBug,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.red.shade900,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -26,4 +26,20 @@ class AppConstants {
   /// sebelum menampilkan banner mismatch. 1.0 menyerap rounding kecil
   /// (LLM kadang bulatkan ke ratusan).
   static const double billTotalMismatchTolerance = 1.0;
+
+  /// ISO 4217 currencies yang seharusnya integer (tidak punya subunit
+  /// seperti cents). Dipakai sebagai client safety net: jika harga hasil
+  /// OCR untuk currency ini punya pecahan, kemungkinan besar pemisah ribuan
+  /// salah ditafsirkan sebagai desimal — tampilkan banner peringatan agar
+  /// user verifikasi sebelum simpan.
+  static const Set<String> zeroDecimalCurrencies = {
+    'IDR',
+    'JPY',
+    'KRW',
+    'VND',
+    'CLP',
+    'ISK',
+    'HUF',
+    'TWD',
+  };
 }

@@ -15,7 +15,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OcrRequestDto {
 
- List<String> get images; String? get hint;
+ List<String> get images; String? get hint;// ISO 4217 currency code (mis. 'IDR'). Server pakai untuk pilih konvensi
+// locale parsing & menerapkan heuristic post-process untuk zero-decimal
+// currencies (IDR/JPY/KRW/VND/dll).
+ String? get currency;
 /// Create a copy of OcrRequestDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +31,16 @@ $OcrRequestDtoCopyWith<OcrRequestDto> get copyWith => _$OcrRequestDtoCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OcrRequestDto&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.hint, hint) || other.hint == hint));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OcrRequestDto&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.hint, hint) || other.hint == hint)&&(identical(other.currency, currency) || other.currency == currency));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(images),hint);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(images),hint,currency);
 
 @override
 String toString() {
-  return 'OcrRequestDto(images: $images, hint: $hint)';
+  return 'OcrRequestDto(images: $images, hint: $hint, currency: $currency)';
 }
 
 
@@ -48,7 +51,7 @@ abstract mixin class $OcrRequestDtoCopyWith<$Res>  {
   factory $OcrRequestDtoCopyWith(OcrRequestDto value, $Res Function(OcrRequestDto) _then) = _$OcrRequestDtoCopyWithImpl;
 @useResult
 $Res call({
- List<String> images, String? hint
+ List<String> images, String? hint, String? currency
 });
 
 
@@ -65,10 +68,11 @@ class _$OcrRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of OcrRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? images = null,Object? hint = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? images = null,Object? hint = freezed,Object? currency = freezed,}) {
   return _then(_self.copyWith(
 images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,hint: freezed == hint ? _self.hint : hint // ignore: cast_nullable_to_non_nullable
+as String?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -154,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> images,  String? hint)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> images,  String? hint,  String? currency)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OcrRequestDto() when $default != null:
-return $default(_that.images,_that.hint);case _:
+return $default(_that.images,_that.hint,_that.currency);case _:
   return orElse();
 
 }
@@ -175,10 +179,10 @@ return $default(_that.images,_that.hint);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> images,  String? hint)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> images,  String? hint,  String? currency)  $default,) {final _that = this;
 switch (_that) {
 case _OcrRequestDto():
-return $default(_that.images,_that.hint);case _:
+return $default(_that.images,_that.hint,_that.currency);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +199,10 @@ return $default(_that.images,_that.hint);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> images,  String? hint)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> images,  String? hint,  String? currency)?  $default,) {final _that = this;
 switch (_that) {
 case _OcrRequestDto() when $default != null:
-return $default(_that.images,_that.hint);case _:
+return $default(_that.images,_that.hint,_that.currency);case _:
   return null;
 
 }
@@ -210,7 +214,7 @@ return $default(_that.images,_that.hint);case _:
 @JsonSerializable()
 
 class _OcrRequestDto implements OcrRequestDto {
-  const _OcrRequestDto({required final  List<String> images, this.hint}): _images = images;
+  const _OcrRequestDto({required final  List<String> images, this.hint, this.currency}): _images = images;
   factory _OcrRequestDto.fromJson(Map<String, dynamic> json) => _$OcrRequestDtoFromJson(json);
 
  final  List<String> _images;
@@ -221,6 +225,10 @@ class _OcrRequestDto implements OcrRequestDto {
 }
 
 @override final  String? hint;
+// ISO 4217 currency code (mis. 'IDR'). Server pakai untuk pilih konvensi
+// locale parsing & menerapkan heuristic post-process untuk zero-decimal
+// currencies (IDR/JPY/KRW/VND/dll).
+@override final  String? currency;
 
 /// Create a copy of OcrRequestDto
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OcrRequestDto&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.hint, hint) || other.hint == hint));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OcrRequestDto&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.hint, hint) || other.hint == hint)&&(identical(other.currency, currency) || other.currency == currency));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_images),hint);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_images),hint,currency);
 
 @override
 String toString() {
-  return 'OcrRequestDto(images: $images, hint: $hint)';
+  return 'OcrRequestDto(images: $images, hint: $hint, currency: $currency)';
 }
 
 
@@ -255,7 +263,7 @@ abstract mixin class _$OcrRequestDtoCopyWith<$Res> implements $OcrRequestDtoCopy
   factory _$OcrRequestDtoCopyWith(_OcrRequestDto value, $Res Function(_OcrRequestDto) _then) = __$OcrRequestDtoCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> images, String? hint
+ List<String> images, String? hint, String? currency
 });
 
 
@@ -272,10 +280,11 @@ class __$OcrRequestDtoCopyWithImpl<$Res>
 
 /// Create a copy of OcrRequestDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? images = null,Object? hint = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? images = null,Object? hint = freezed,Object? currency = freezed,}) {
   return _then(_OcrRequestDto(
 images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<String>,hint: freezed == hint ? _self.hint : hint // ignore: cast_nullable_to_non_nullable
+as String?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

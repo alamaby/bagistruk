@@ -280,7 +280,9 @@ as double,
 /// @nodoc
 mixin _$BillReviewState {
 
- String get title; List<BillReviewItem> get items; double get tax; double get service; DateTime? get receiptDate; double? get detectedTotal; double get confidence; bool get saving;
+ String get title; List<BillReviewItem> get items; double get tax; double get service; DateTime? get receiptDate; double? get detectedTotal; double get confidence;// ISO 4217 currency aktif saat review dimulai. Dipakai untuk safety net
+// mendeteksi bug parsing pemisah ribuan pada zero-decimal currencies.
+ String get currency; bool get saving;
 /// Create a copy of BillReviewState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -291,16 +293,16 @@ $BillReviewStateCopyWith<BillReviewState> get copyWith => _$BillReviewStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BillReviewState&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.detectedTotal, detectedTotal) || other.detectedTotal == detectedTotal)&&(identical(other.confidence, confidence) || other.confidence == confidence)&&(identical(other.saving, saving) || other.saving == saving));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BillReviewState&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.detectedTotal, detectedTotal) || other.detectedTotal == detectedTotal)&&(identical(other.confidence, confidence) || other.confidence == confidence)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.saving, saving) || other.saving == saving));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(items),tax,service,receiptDate,detectedTotal,confidence,saving);
+int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(items),tax,service,receiptDate,detectedTotal,confidence,currency,saving);
 
 @override
 String toString() {
-  return 'BillReviewState(title: $title, items: $items, tax: $tax, service: $service, receiptDate: $receiptDate, detectedTotal: $detectedTotal, confidence: $confidence, saving: $saving)';
+  return 'BillReviewState(title: $title, items: $items, tax: $tax, service: $service, receiptDate: $receiptDate, detectedTotal: $detectedTotal, confidence: $confidence, currency: $currency, saving: $saving)';
 }
 
 
@@ -311,7 +313,7 @@ abstract mixin class $BillReviewStateCopyWith<$Res>  {
   factory $BillReviewStateCopyWith(BillReviewState value, $Res Function(BillReviewState) _then) = _$BillReviewStateCopyWithImpl;
 @useResult
 $Res call({
- String title, List<BillReviewItem> items, double tax, double service, DateTime? receiptDate, double? detectedTotal, double confidence, bool saving
+ String title, List<BillReviewItem> items, double tax, double service, DateTime? receiptDate, double? detectedTotal, double confidence, String currency, bool saving
 });
 
 
@@ -328,7 +330,7 @@ class _$BillReviewStateCopyWithImpl<$Res>
 
 /// Create a copy of BillReviewState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? items = null,Object? tax = null,Object? service = null,Object? receiptDate = freezed,Object? detectedTotal = freezed,Object? confidence = null,Object? saving = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? items = null,Object? tax = null,Object? service = null,Object? receiptDate = freezed,Object? detectedTotal = freezed,Object? confidence = null,Object? currency = null,Object? saving = null,}) {
   return _then(_self.copyWith(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
@@ -337,7 +339,8 @@ as double,service: null == service ? _self.service : service // ignore: cast_nul
 as double,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,detectedTotal: freezed == detectedTotal ? _self.detectedTotal : detectedTotal // ignore: cast_nullable_to_non_nullable
 as double?,confidence: null == confidence ? _self.confidence : confidence // ignore: cast_nullable_to_non_nullable
-as double,saving: null == saving ? _self.saving : saving // ignore: cast_nullable_to_non_nullable
+as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,saving: null == saving ? _self.saving : saving // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -423,10 +426,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  bool saving)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  String currency,  bool saving)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BillReviewState() when $default != null:
-return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.saving);case _:
+return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.currency,_that.saving);case _:
   return orElse();
 
 }
@@ -444,10 +447,10 @@ return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDat
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  bool saving)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  String currency,  bool saving)  $default,) {final _that = this;
 switch (_that) {
 case _BillReviewState():
-return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.saving);case _:
+return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.currency,_that.saving);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -464,10 +467,10 @@ return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDat
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  bool saving)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  List<BillReviewItem> items,  double tax,  double service,  DateTime? receiptDate,  double? detectedTotal,  double confidence,  String currency,  bool saving)?  $default,) {final _that = this;
 switch (_that) {
 case _BillReviewState() when $default != null:
-return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.saving);case _:
+return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDate,_that.detectedTotal,_that.confidence,_that.currency,_that.saving);case _:
   return null;
 
 }
@@ -479,7 +482,7 @@ return $default(_that.title,_that.items,_that.tax,_that.service,_that.receiptDat
 
 
 class _BillReviewState extends BillReviewState {
-  const _BillReviewState({required this.title, required final  List<BillReviewItem> items, required this.tax, required this.service, this.receiptDate, this.detectedTotal, required this.confidence, this.saving = false}): _items = items,super._();
+  const _BillReviewState({required this.title, required final  List<BillReviewItem> items, required this.tax, required this.service, this.receiptDate, this.detectedTotal, required this.confidence, this.currency = 'IDR', this.saving = false}): _items = items,super._();
   
 
 @override final  String title;
@@ -495,6 +498,9 @@ class _BillReviewState extends BillReviewState {
 @override final  DateTime? receiptDate;
 @override final  double? detectedTotal;
 @override final  double confidence;
+// ISO 4217 currency aktif saat review dimulai. Dipakai untuk safety net
+// mendeteksi bug parsing pemisah ribuan pada zero-decimal currencies.
+@override@JsonKey() final  String currency;
 @override@JsonKey() final  bool saving;
 
 /// Create a copy of BillReviewState
@@ -507,16 +513,16 @@ _$BillReviewStateCopyWith<_BillReviewState> get copyWith => __$BillReviewStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BillReviewState&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.detectedTotal, detectedTotal) || other.detectedTotal == detectedTotal)&&(identical(other.confidence, confidence) || other.confidence == confidence)&&(identical(other.saving, saving) || other.saving == saving));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BillReviewState&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.detectedTotal, detectedTotal) || other.detectedTotal == detectedTotal)&&(identical(other.confidence, confidence) || other.confidence == confidence)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.saving, saving) || other.saving == saving));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(_items),tax,service,receiptDate,detectedTotal,confidence,saving);
+int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(_items),tax,service,receiptDate,detectedTotal,confidence,currency,saving);
 
 @override
 String toString() {
-  return 'BillReviewState(title: $title, items: $items, tax: $tax, service: $service, receiptDate: $receiptDate, detectedTotal: $detectedTotal, confidence: $confidence, saving: $saving)';
+  return 'BillReviewState(title: $title, items: $items, tax: $tax, service: $service, receiptDate: $receiptDate, detectedTotal: $detectedTotal, confidence: $confidence, currency: $currency, saving: $saving)';
 }
 
 
@@ -527,7 +533,7 @@ abstract mixin class _$BillReviewStateCopyWith<$Res> implements $BillReviewState
   factory _$BillReviewStateCopyWith(_BillReviewState value, $Res Function(_BillReviewState) _then) = __$BillReviewStateCopyWithImpl;
 @override @useResult
 $Res call({
- String title, List<BillReviewItem> items, double tax, double service, DateTime? receiptDate, double? detectedTotal, double confidence, bool saving
+ String title, List<BillReviewItem> items, double tax, double service, DateTime? receiptDate, double? detectedTotal, double confidence, String currency, bool saving
 });
 
 
@@ -544,7 +550,7 @@ class __$BillReviewStateCopyWithImpl<$Res>
 
 /// Create a copy of BillReviewState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? items = null,Object? tax = null,Object? service = null,Object? receiptDate = freezed,Object? detectedTotal = freezed,Object? confidence = null,Object? saving = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? items = null,Object? tax = null,Object? service = null,Object? receiptDate = freezed,Object? detectedTotal = freezed,Object? confidence = null,Object? currency = null,Object? saving = null,}) {
   return _then(_BillReviewState(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
@@ -553,7 +559,8 @@ as double,service: null == service ? _self.service : service // ignore: cast_nul
 as double,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,detectedTotal: freezed == detectedTotal ? _self.detectedTotal : detectedTotal // ignore: cast_nullable_to_non_nullable
 as double?,confidence: null == confidence ? _self.confidence : confidence // ignore: cast_nullable_to_non_nullable
-as double,saving: null == saving ? _self.saving : saving // ignore: cast_nullable_to_non_nullable
+as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,saving: null == saving ? _self.saving : saving // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

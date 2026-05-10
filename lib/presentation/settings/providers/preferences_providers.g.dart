@@ -58,7 +58,7 @@ final class LocalePrefProvider
   }
 }
 
-String _$localePrefHash() => r'167b41a1d0258b7d4579d9e0f95ba900bea14568';
+String _$localePrefHash() => r'dd94a7b0bf20680735db2bdf4efba666e0d3a2e2';
 
 @ProviderFor(themeModePref)
 const themeModePrefProvider = ThemeModePrefProvider._();
@@ -99,7 +99,7 @@ final class ThemeModePrefProvider
   }
 }
 
-String _$themeModePrefHash() => r'b5598f8b5d1230ce5e825e9709df395bab5a4799';
+String _$themeModePrefHash() => r'3204d49d90e4364ba64a4c48e33d05da7942d1fb';
 
 @ProviderFor(currencyPref)
 const currencyPrefProvider = CurrencyPrefProvider._();
@@ -140,4 +140,4 @@ final class CurrencyPrefProvider
   }
 }
 
-String _$currencyPrefHash() => r'6d6d4a9553b88873944403fc4646f7094727f762';
+String _$currencyPrefHash() => r'2f454e3b3e93892c8d6ff8f168c9024cd1901694';
