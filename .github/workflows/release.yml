@@ -38,16 +38,28 @@ jobs:
           echo "build_name=${BUILD_NAME}" >> "$GITHUB_OUTPUT"
           echo "build_number=${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
 
-      - name: Decode keystore
+      - name: Decode upload keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > "${RUNNER_TEMP}/upload-keystore.jks"
-          echo "KEYSTORE_PATH=${RUNNER_TEMP}/upload-keystore.jks" >> "$GITHUB_ENV"
+          echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+
+      - name: Write android/key.properties
+        env:
+          KEY_ALIAS: ${{ vars.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        run: |
+          cat > android/key.properties <<EOF
+          storeFile=../upload-keystore.jks
+          storePassword=${STORE_PASSWORD}
+          keyAlias=${KEY_ALIAS}
+          keyPassword=${KEY_PASSWORD}
+          EOF
 
       - name: Write .env from secrets
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           {
@@ -62,16 +74,21 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build split-per-ABI release APKs
-        env:
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         run: |
           flutter build apk \
             --release \
             --split-per-abi \
             --build-name="${{ steps.version.outputs.build_name }}" \
             --build-number="${{ steps.version.outputs.build_number }}"
+
+      - name: Verify signing (must NOT be debug key)
+        run: |
+          APK="build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"
+          jarsigner -verify -verbose -certs "$APK" | tee /tmp/jarsigner.log
+          if grep -qi "Android Debug" /tmp/jarsigner.log; then
+            echo "::error::APK is signed with debug key — check KEYSTORE_BASE64 / key.properties wiring."
+            exit 1
+          fi
 
       - name: Rename APKs
         id: rename

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/router/routes.dart';
 import '../../../l10n/generated/app_l10n.dart';
 
 // Placeholder URLs — ganti dengan URL final saat sudah tersedia.
@@ -33,6 +35,12 @@ class AboutScreen extends StatelessWidget {
             icon: Icons.public_outlined,
             label: l10n.aboutWebsite,
             url: kWebsiteUrl,
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(l10n.aboutPrivacyPolicy),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(Routes.privacyPolicyName),
           ),
           const Divider(),
           _SectionHeader(l10n.aboutSectionAuthor),

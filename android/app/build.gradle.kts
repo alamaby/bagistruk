@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,9 +8,23 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Load android/key.properties for release signing. The file is gitignored;
+// see key.properties.example for the expected schema. Falls back to debug
+// signing when the file is absent (e.g. CI debug builds, fresh clones).
+val keystoreProperties = Properties().apply {
+    val keystoreFile = rootProject.file("key.properties")
+    if (keystoreFile.exists()) {
+        load(FileInputStream(keystoreFile))
+    }
+}
+val hasReleaseSigning = keystoreProperties.getProperty("storeFile") != null
+
 android {
-    namespace = "com.bagistruk.bagistruk"
-    compileSdk = flutter.compileSdkVersion
+    namespace = "com.alamaby.bagistruk"
+    // Pinned to Android 16 (API 36) — Play Store requires targetSdk 35+ from
+    // Aug 2025 and is expected to require 36 from Aug 2026. Pinning explicitly
+    // also avoids surprises when bumping the Flutter SDK.
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -20,21 +37,40 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.bagistruk.bagistruk"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        applicationId = "com.alamaby.bagistruk"
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // When key.properties is absent we fall back to debug signing so
+            // `flutter run --release` still works locally. Play Store uploads
+            // MUST use the release keystore — see README "Release build".
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }

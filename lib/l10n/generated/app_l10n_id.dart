@@ -313,6 +313,12 @@ class AppL10nId extends AppL10n {
   String get aboutPatreon => 'Patreon';
 
   @override
+  String get aboutPrivacyPolicy => 'Kebijakan Privasi';
+
+  @override
+  String get privacyPolicyTitle => 'Kebijakan Privasi';
+
+  @override
   String get linkUnavailable => 'Tautan belum tersedia';
 
   @override
