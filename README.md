@@ -122,6 +122,88 @@ Reads `SUPABASE_URL` and `SUPABASE_ANON_KEY` from `.env`. Exit 0 = OCR pipeline 
 
 ---
 
+## Release Build (Google Play Store)
+
+The Android release build is configured for `compileSdk = 36` / `targetSdk = 36` with R8 minification and resource shrinking enabled. Follow these steps to produce a Play-Store-ready App Bundle:
+
+### 1. Generate the upload keystore (one time)
+
+```bash
+keytool -genkey -v -keystore android/upload-keystore.jks \
+  -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+
+> ⚠️ Keep `upload-keystore.jks` and its passwords backed up offline. **Losing it means you can no longer publish updates** under the same Play Store listing without contacting Google support. `.gitignore` already excludes `*.jks` and `key.properties`.
+
+### 2. Wire the signing credentials
+
+```bash
+cp android/key.properties.example android/key.properties
+# Edit android/key.properties and fill in storePassword, keyPassword.
+```
+
+### 3. Generate adaptive launcher icons
+
+```bash
+dart run flutter_launcher_icons
+```
+
+> The current `assets/images/icon_launcher.png` is reused as both the legacy and adaptive-icon foreground. For best results on Android 8+ devices, replace it with a 1024×1024 PNG that has transparent padding (artwork should fit within the inner 66% safe zone) before the first Play Store upload.
+
+### 4. Build the App Bundle
+
+```bash
+flutter build appbundle --release
+# Output: build/app/outputs/bundle/release/app-release.aab
+```
+
+Verify the bundle is signed with the upload key (not the debug key):
+
+```bash
+jarsigner -verify -verbose -certs build/app/outputs/bundle/release/app-release.aab
+```
+
+### 5. Smoke test on Android 16
+
+```bash
+flutter build apk --release
+flutter install
+```
+
+Test on an emulator running API 36 and (ideally) a physical device. Verify:
+
+- Sign-in with Supabase works
+- Receipt camera capture + OCR pipeline succeeds
+- Share bill action works
+- No screen has content hidden behind the status bar / navigation bar (edge-to-edge is enforced on `targetSdk = 36`)
+- Predictive back gesture navigates correctly
+
+### 6a. (Optional) Build the AAB via GitHub Actions
+
+Trigger the **Build Play Store AAB** workflow manually from the Actions tab (uses `workflow_dispatch`). Required repository secrets and variables:
+
+| Kind | Name | Value |
+|------|------|-------|
+| Secret | `KEYSTORE_BASE64` | `base64 -w0 android/upload-keystore.jks` |
+| Variable | `KEY_ALIAS` | `upload` (or whatever alias you used with `keytool`) |
+| Secret | `KEY_PASSWORD` | key password |
+| Secret | `STORE_PASSWORD` | keystore password |
+| Variable | `SUPABASE_URL` | Supabase project URL |
+| Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
+
+The workflow uploads the signed AAB as a workflow artifact (30-day retention) — download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using [r0adkll/upload-google-play](https://github.com/r0adkll/upload-google-play) for fully automated releases.
+
+### 6b. Upload to Play Console
+
+1. Go to **Play Console → Internal testing** for your app and upload `app-release.aab`.
+   - Package name: `com.alamaby.bagistruk`
+2. Under **App content**:
+   - Submit the **Privacy policy URL** (host `docs/privacy-policy.md` publicly, e.g. on GitHub Pages, and paste the URL here — required because the app uses CAMERA and stores user data).
+   - Complete the **Data safety** form: declare collection of email, photos (receipts), and user-entered text (bill data); declare third-party processing (Supabase + OCR providers).
+3. Promote to **Closed testing → Production** once internal testing passes.
+
+---
+
 ## Full Technical Documentation
 
 See [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) — architecture diagrams, database schema, Edge Function lifecycle, Flutter layer flow, LLM provider configuration, and troubleshooting.

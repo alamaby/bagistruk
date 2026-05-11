@@ -1,4 +1,4 @@
-package com.bagistruk.bagistruk
+package com.alamaby.bagistruk
 
 import io.flutter.embedding.android.FlutterActivity
 

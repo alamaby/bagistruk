@@ -14,6 +14,7 @@ import '../../presentation/bills/screens/bill_split_screen.dart';
 import '../../presentation/history/screens/history_screen.dart';
 import '../../presentation/ocr/screens/receipt_capture_screen.dart';
 import '../../presentation/about/screens/about_screen.dart';
+import '../../presentation/about/screens/privacy_policy_screen.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
 import '../../presentation/shell/screens/main_shell_screen.dart';
 import 'routes.dart';
@@ -149,6 +150,11 @@ GoRouter appRouter(Ref ref) {
         path: Routes.about,
         name: Routes.aboutName,
         builder: (context, state) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: Routes.privacyPolicy,
+        name: Routes.privacyPolicyName,
+        builder: (context, state) => const PrivacyPolicyScreen(),
       ),
     ],
   );

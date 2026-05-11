@@ -71,3 +71,17 @@ flutter:
     - .env
     - assets/lottie/
     - assets/images/
+
+# Run `dart run flutter_launcher_icons` after editing this block.
+# `image_path` is the legacy square icon (used on pre-Android 8 devices).
+# `adaptive_icon_foreground` should be a 1024×1024 PNG with transparent
+# padding so the system's circular/squircle mask doesn't clip the artwork —
+# replace assets/images/icon_launcher.png with a properly padded version
+# before the first Play Store upload (current asset is reused as a placeholder).
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/icon_launcher.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/icon_launcher.png"
+  min_sdk_android: 21

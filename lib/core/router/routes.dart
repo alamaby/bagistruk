@@ -33,4 +33,7 @@ class Routes {
 
   static const String about = '/about';
   static const String aboutName = 'about';
+
+  static const String privacyPolicy = '/privacy-policy';
+  static const String privacyPolicyName = 'privacy-policy';
 }

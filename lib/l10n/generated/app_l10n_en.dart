@@ -313,6 +313,12 @@ class AppL10nEn extends AppL10n {
   String get aboutPatreon => 'Patreon';
 
   @override
+  String get aboutPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get privacyPolicyTitle => 'Privacy Policy';
+
+  @override
   String get linkUnavailable => 'Link is not available yet';
 
   @override

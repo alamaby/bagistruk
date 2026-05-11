@@ -691,6 +691,18 @@ abstract class AppL10n {
   /// **'Patreon'**
   String get aboutPatreon;
 
+  /// No description provided for @aboutPrivacyPolicy.
+  ///
+  /// In id, this message translates to:
+  /// **'Kebijakan Privasi'**
+  String get aboutPrivacyPolicy;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Kebijakan Privasi'**
+  String get privacyPolicyTitle;
+
   /// No description provided for @linkUnavailable.
   ///
   /// In id, this message translates to:

@@ -380,7 +380,9 @@ Added in migration `20260501120000_profiles_preferences.sql`:
 
 **About page:** [lib/presentation/about/screens/about_screen.dart](lib/presentation/about/screens/about_screen.dart) shows the app logo, version + build number (via `package_info_plus.PackageInfo.fromPlatform()`), author info ("Alam Aby Bashit"), and tappable link tiles for the landing page, GitHub, LinkedIn, Buy Me a Coffee, Saweria, and Patreon. URLs live as `const String k…Url` at the top of the file with `'#'` placeholders — replace with real URLs when available. Tapping a tile uses `url_launcher` (`LaunchMode.externalApplication`); a `'#'` placeholder shows a snackbar via the localized `linkUnavailable` key. Reached via `Routes.about` (`/about`) from a "Tentang Aplikasi / About App" tile in the Settings tab.
 
-**New Dart files:**
+A **Privacy Policy** tile (`Icons.privacy_tip_outlined`) has been added to the About page. It navigates via `context.pushNamed(Routes.privacyPolicyName)` to [lib/presentation/about/screens/privacy_policy_screen.dart](lib/presentation/about/screens/privacy_policy_screen.dart), which renders bilingual policy sections (ID/EN) chosen from `Localizations.localeOf(context).languageCode`. A Markdown version for public hosting is at [docs/privacy-policy.md](docs/privacy-policy.md) — the URL of that hosted page must be submitted to Play Console → App content → Privacy policy (required because the app uses CAMERA and stores user data in Supabase).
+
+**New Dart files (§11 batch):**
 
 | Path | Role |
 |---|---|
@@ -400,6 +402,51 @@ Added in migration `20260501120000_profiles_preferences.sql`:
 **Cold-start safety:** `profileProvider` watches `authStateProvider` and returns `UserProfile(id:'', isAnonymous:true)` when `userId==null`. This prevents the `keepAlive` error cache from forming before a session exists.
 
 **Post-login routing:** Settings tab passes `from: Routes.settings` through `showPaywallSheet` → login URL `?from=` query param → `LoginScreen.from` field → `context.go(widget.from)` on success, landing the user back on the Settings tab instead of History.
+
+---
+
+---
+
+## 14. Android Release Configuration (Play Store)
+
+**Package / Application ID:** `com.alamaby.bagistruk` (set in `android/app/build.gradle.kts` as both `namespace` and `applicationId`). This value is immutable once the first AAB is uploaded to Play Console.
+
+**SDK levels** — pinned explicitly to avoid surprises when bumping the Flutter SDK:
+- `compileSdk = 36`, `targetSdk = 36` (Android 16 — Play Store requires ≥ 35 from Aug 2025, ≥ 36 expected Aug 2026)
+- `minSdk = flutter.minSdkVersion` (remains dynamic for broad device coverage)
+
+**Side-effect of targetSdk = 36:**
+- **Edge-to-edge enforced** by the OS — `Scaffold` content must not be obscured by status/navigation bars. Test on an emulator running API 36.
+- **Predictive back gesture** is active by default — test GoRouter back navigation.
+
+**R8 / ProGuard** — enabled for all `release` builds:
+```kotlin
+isMinifyEnabled = true
+isShrinkResources = true
+proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+```
+Keep rules for Flutter embedding are in `android/app/proguard-rules.pro`.
+
+**Signing** — reads from `android/key.properties` (gitignored). Falls back to debug key when the file is absent so `flutter run --release` still works in fresh clones and CI debug jobs.
+- `storeFile` is relative to `android/app/` (Gradle module root), so the entry is `../upload-keystore.jks` pointing to `android/upload-keystore.jks`.
+- Template: `android/key.properties.example` (committed, passwords omitted).
+
+**Adaptive icon** — configured via `flutter_launcher_icons` in `pubspec.yaml`. Run `dart run flutter_launcher_icons` after any icon asset change. Current foreground reuses `assets/images/icon_launcher.png` as a placeholder — replace with a 1024×1024 PNG padded to the inner 66% safe zone before the first Play Store upload.
+
+**CI / GitHub Actions:**
+- `release.yml` — triggered by `v*.*.*` tags; builds split-per-ABI APKs for GitHub Releases.
+- `playstore.yml` — triggered manually (`workflow_dispatch`); builds a signed AAB and uploads it as a workflow artifact (30-day retention) for manual upload to Play Console. Placeholder comment marks where `r0adkll/upload-google-play` can be added once a Google service account is available.
+
+**GitHub secrets vs variables:**
+
+| Kind | Name | Purpose |
+|------|------|---------|
+| Secret | `KEYSTORE_BASE64` | Base64-encoded `upload-keystore.jks` |
+| Variable | `KEY_ALIAS` | Keystore key alias (non-sensitive) |
+| Secret | `KEY_PASSWORD` | Key password |
+| Secret | `STORE_PASSWORD` | Keystore password |
+| Variable | `SUPABASE_URL` | Project URL (already bundled in APK) |
+| Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
 
 ---
 
@@ -484,7 +531,14 @@ The fix is defense-in-depth, currency-aware:
 | [lib/l10n/generated/app_l10n.dart](lib/l10n/generated/app_l10n.dart) | Auto-generated localization class (do not edit) |
 | [lib/core/format/currency_formatter.dart](lib/core/format/currency_formatter.dart) | Multi-currency `NumberFormat` factory (IDR/USD/MYR/AUD/SGD/SAR) |
 | [lib/presentation/settings/screens/settings_screen.dart](lib/presentation/settings/screens/settings_screen.dart) | Profile & Settings UI; hides Change-Name tile for anonymous users; About entry point |
-| [lib/presentation/about/screens/about_screen.dart](lib/presentation/about/screens/about_screen.dart) | About page: version (`package_info_plus`), author, donation/profile links via `url_launcher` |
+| [lib/presentation/about/screens/about_screen.dart](lib/presentation/about/screens/about_screen.dart) | About page: version (`package_info_plus`), author, donation/profile links via `url_launcher`, Privacy Policy tile |
+| [lib/presentation/about/screens/privacy_policy_screen.dart](lib/presentation/about/screens/privacy_policy_screen.dart) | In-app privacy policy — bilingual (ID/EN) based on active locale; required for Play Store |
+| [docs/privacy-policy.md](docs/privacy-policy.md) | Public Markdown privacy policy — host on GitHub Pages or similar, submit URL to Play Console |
+| [android/app/build.gradle.kts](android/app/build.gradle.kts) | Android build config: package `com.alamaby.bagistruk`, SDK 36, R8, release signing via `key.properties` |
+| [android/key.properties.example](android/key.properties.example) | Signing credentials template (committed); copy to `key.properties` and fill in passwords |
+| [android/app/proguard-rules.pro](android/app/proguard-rules.pro) | R8 keep rules for Flutter embedding and plugins |
+| [.github/workflows/playstore.yml](.github/workflows/playstore.yml) | Manual `workflow_dispatch` workflow — builds signed AAB and uploads as artifact for Play Console |
+| [.github/workflows/release.yml](.github/workflows/release.yml) | Tag-triggered workflow — builds split-per-ABI APKs for GitHub Releases |
 | [lib/presentation/settings/providers/profile_notifier.dart](lib/presentation/settings/providers/profile_notifier.dart) | `keepAlive` profile state — cold-start safe |
 | [lib/presentation/settings/providers/preferences_providers.dart](lib/presentation/settings/providers/preferences_providers.dart) | Locale / ThemeMode / currency pref providers |
 | [supabase/migrations/20260501120000_profiles_preferences.sql](supabase/migrations/20260501120000_profiles_preferences.sql) | Profiles preference columns + auto-create trigger |
