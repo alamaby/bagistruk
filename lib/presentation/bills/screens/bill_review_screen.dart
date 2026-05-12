@@ -53,6 +53,11 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     _taxFocus.addListener(() => _selectAllOnFocus(_taxCtrl, _taxFocus));
     _serviceFocus
         .addListener(() => _selectAllOnFocus(_serviceCtrl, _serviceFocus));
+    // Rebuild ketika fokus Pajak/Service berubah, agar _StickyBottom dapat
+    // tampil/sembunyi sesuai aturan "hide sticky saat keyboard terbuka dan
+    // fokus bukan di Pajak/Service".
+    _taxFocus.addListener(_onSummaryFocusChange);
+    _serviceFocus.addListener(_onSummaryFocusChange);
     for (final it in initial.items) {
       _itemCtrls[it.localId] = _ItemControllers.fromItem(it);
     }
@@ -69,6 +74,10 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
       c.dispose();
     }
     super.dispose();
+  }
+
+  void _onSummaryFocusChange() {
+    if (mounted) setState(() {});
   }
 
   void _syncItemControllers(BillReviewState state) {
@@ -106,6 +115,12 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     final currency = AppFormat.currency();
     final lowConfidence =
         state.confidence < AppConstants.ocrLowConfidenceThreshold;
+
+    // Saat keyboard terbuka dan user TIDAK sedang mengedit Pajak/Service,
+    // sembunyikan _StickyBottom agar ListView item dapat ruang penuh.
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final summaryFocused = _taxFocus.hasFocus || _serviceFocus.hasFocus;
+    final showSticky = !keyboardOpen || summaryFocused;
 
     return AppScaffold(
       title: 'Review bill',
@@ -205,19 +220,20 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
                 },
               ),
             ),
-            _StickyBottom(
-              state: state,
-              currency: currency,
-              taxCtrl: _taxCtrl,
-              serviceCtrl: _serviceCtrl,
-              taxFocus: _taxFocus,
-              serviceFocus: _serviceFocus,
-              onTaxChanged: (v) =>
-                  _notifier.setTax(double.tryParse(v.trim()) ?? 0),
-              onServiceChanged: (v) =>
-                  _notifier.setService(double.tryParse(v.trim()) ?? 0),
-              onSave: _onSave,
-            ),
+            if (showSticky)
+              _StickyBottom(
+                state: state,
+                currency: currency,
+                taxCtrl: _taxCtrl,
+                serviceCtrl: _serviceCtrl,
+                taxFocus: _taxFocus,
+                serviceFocus: _serviceFocus,
+                onTaxChanged: (v) =>
+                    _notifier.setTax(double.tryParse(v.trim()) ?? 0),
+                onServiceChanged: (v) =>
+                    _notifier.setService(double.tryParse(v.trim()) ?? 0),
+                onSave: _onSave,
+              ),
           ],
         ),
       ),
@@ -534,7 +550,7 @@ class _StickyBottom extends StatelessWidget {
                 ),
                 child: ExpansionTile(
                   tilePadding: EdgeInsets.zero,
-                  childrenPadding: EdgeInsets.only(bottom: 8.h),
+                  childrenPadding: EdgeInsets.only(top: 10.h, bottom: 8.h),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

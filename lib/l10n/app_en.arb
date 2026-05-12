@@ -125,5 +125,12 @@
   "privacyPolicyTitle": "Privacy Policy",
   "linkUnavailable": "Link is not available yet",
 
-  "reviewSuspectThousandsBug": "Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving."
+  "reviewSuspectThousandsBug": "Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.",
+
+  "paywallTitle": "Save history & track debts",
+  "paywallSubtitle": "Sign up or log in to save your history and track money you’re owed.",
+  "paywallRegister": "Sign Up",
+  "paywallLogin": "Sign In",
+
+  "scanEmptyHint": "Take a photo of a shopping or dining receipt to start splitting fairly!"
 }

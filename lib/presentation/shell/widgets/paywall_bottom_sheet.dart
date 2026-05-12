@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/routes.dart';
+import '../../../l10n/generated/app_l10n.dart';
 
 /// [from] — optional path to return to after the user successfully signs in
 /// from this sheet. When omitted, login lands on `/history` (legacy default
@@ -24,6 +25,7 @@ class _PaywallSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 24.h),
@@ -47,7 +49,7 @@ class _PaywallSheet extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              'Simpan riwayat & lacak piutang',
+              l10n.paywallTitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20.sp,
@@ -57,7 +59,7 @@ class _PaywallSheet extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             Text(
-              'Daftar atau masuk untuk menyimpan riwayat dan melacak piutangmu.',
+              l10n.paywallSubtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
@@ -76,7 +78,7 @@ class _PaywallSheet extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.h),
                 child: Text(
-                  'Daftar',
+                  l10n.paywallRegister,
                   style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -93,7 +95,7 @@ class _PaywallSheet extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.h),
                 child: Text(
-                  'Masuk',
+                  l10n.paywallLogin,
                   style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
                 ),
               ),

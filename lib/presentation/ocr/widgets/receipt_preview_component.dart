@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../l10n/generated/app_l10n.dart';
+
 enum ReceiptPreviewMode { carousel, grid }
 
 /// Reusable preview for one or many receipt images.
@@ -180,6 +182,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     return SizedBox(
       height: 320.h,
       child: Center(
@@ -209,7 +212,7 @@ class _EmptyState extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.w),
               child: Text(
-                'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!',
+                l10n.scanEmptyHint,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: scheme.onSurfaceVariant,
