@@ -362,7 +362,7 @@ Reads `SUPABASE_URL` and `SUPABASE_ANON_KEY` from `.env`. Exit 0 only on HTTP 20
 - **Lottie asset** at `assets/lottie/scanning.json` is still a placeholder — replace with the final animation before release.
 - **Edge Function has no self-rate-limit** — relies on the Supabase project quota. Consider a `cooldown_until` column in `llm_configs` for a circuit-breaker pattern.
 - **Weekly `llm_logs` audit** is not automated — a candidate for a scheduled agent.
-- **Partial i18n** — bill review/split/detail, OCR error messages, and the paywall sheet still have hardcoded Indonesian strings. See §12 TODO table.
+- **Partial i18n** — bill review/split/detail and OCR error messages still have hardcoded Indonesian strings. See §12 TODO table.
 
 ---
 
@@ -480,8 +480,6 @@ The following files still contain hardcoded Indonesian strings. Localize in a fu
 | `lib/presentation/bills/screens/bill_split_screen.dart` | Participant add/edit UI, item assignment labels |
 | `lib/presentation/bills/screens/bill_detail_screen.dart` | Settlement labels, participant toggle text |
 | `lib/presentation/ocr/utils/ocr_messages.dart` | Error title/body strings for all `OcrFailure` cases |
-| `lib/presentation/shell/widgets/paywall_bottom_sheet.dart` | Sheet title, subtitle, and CTA buttons |
-| `lib/presentation/ocr/widgets/receipt_preview_component.dart` | Empty-state copy |
 | `lib/main.dart` | Supabase initialization error message |
 | `lib/presentation/bills/widgets/split_summary_sheet.dart` (`_buildShareText`) | WhatsApp message body (non-UI, lower priority) |
 

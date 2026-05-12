@@ -125,5 +125,12 @@
   "privacyPolicyTitle": "Kebijakan Privasi",
   "linkUnavailable": "Tautan belum tersedia",
 
-  "reviewSuspectThousandsBug": "Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan."
+  "reviewSuspectThousandsBug": "Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.",
+
+  "paywallTitle": "Simpan riwayat & lacak piutang",
+  "paywallSubtitle": "Daftar atau masuk untuk menyimpan riwayat dan melacak piutangmu.",
+  "paywallRegister": "Daftar",
+  "paywallLogin": "Masuk",
+
+  "scanEmptyHint": "Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!"
 }
