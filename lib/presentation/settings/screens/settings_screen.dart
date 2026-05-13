@@ -10,7 +10,6 @@ import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../auth/providers/auth_providers.dart';
-import '../../shell/widgets/paywall_bottom_sheet.dart';
 import '../providers/profile_notifier.dart';
 import '../providers/settings_actions.dart';
 import '../widgets/confirm_dialog.dart';
@@ -19,27 +18,43 @@ import '../widgets/edit_name_sheet.dart';
 import '../widgets/language_picker_dialog.dart';
 import '../widgets/theme_picker_dialog.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  // Guard supaya `ensureSignedIn` hanya dipicu sekali per mount, walaupun
+  // build dijalankan ulang oleh perubahan state lain.
+  bool _ensuringSession = false;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
     final authSnap = switch (ref.watch(authStateProvider)) {
       AsyncData<AuthSnapshot>(:final value) => value,
       _ => null,
     };
 
-    // No session at all (cold start before lazy anon kicks in). Mirror the
-    // dashboard tab's pattern: show the paywall sheet inviting register/login
-    // rather than a generic error. Once a session exists (anon or email) the
-    // normal settings body renders.
+    // Belum ada session sama sekali (cold start sebelum lazy anon dijalankan).
+    // Settings adalah surface read-only ringan (bahasa, tema, mata uang) yang
+    // historis selalu bisa diakses — kita pakai jalur lazy anon yang sama
+    // dengan scan/save bill supaya UX tidak berubah dari versi sebelumnya:
+    // langsung tampilkan settings dengan profil anon ketimbang memaksa user
+    // melalui paywall login.
     if (authSnap?.userId == null) {
+      if (!_ensuringSession) {
+        _ensuringSession = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          ref.read(authRepositoryProvider).ensureSignedIn();
+        });
+      }
       return Scaffold(
         appBar: AppBar(title: Text(l10n.settingsTitle)),
-        body: _NoSessionView(
-          onTap: () => showPaywallSheet(context, from: Routes.settings),
-        ),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -53,60 +68,6 @@ class SettingsScreen extends ConsumerWidget {
           onRetry: () => ref.invalidate(profileProvider),
         ),
         data: (profile) => _SettingsBody(profile: profile),
-      ),
-    );
-  }
-}
-
-class _NoSessionView extends StatefulWidget {
-  const _NoSessionView({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  State<_NoSessionView> createState() => _NoSessionViewState();
-}
-
-class _NoSessionViewState extends State<_NoSessionView> {
-  @override
-  void initState() {
-    super.initState();
-    // Auto-open the paywall on first frame so the user sees the register/login
-    // prompt immediately, matching the dashboard tab's UX. Tapping the
-    // placeholder button reopens it in case the user dismisses the sheet.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) widget.onTap();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppL10n.of(context);
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.lock_outline,
-              size: 48.r,
-              color: theme.colorScheme.primary,
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              l10n.noSessionMessage,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
-            ),
-            SizedBox(height: 16.h),
-            FilledButton(
-              onPressed: widget.onTap,
-              child: Text(l10n.registerOrLogin),
-            ),
-          ],
-        ),
       ),
     );
   }

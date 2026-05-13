@@ -181,6 +181,18 @@ abstract class AppL10n {
   /// **'Selesai'**
   String get scanCameraDone;
 
+  /// No description provided for @scanNotReceiptTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto bukan struk'**
+  String get scanNotReceiptTitle;
+
+  /// No description provided for @scanNotReceiptHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.'**
+  String get scanNotReceiptHint;
+
   /// No description provided for @retry.
   ///
   /// In id, this message translates to:
@@ -714,6 +726,36 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.'**
   String get reviewSuspectThousandsBug;
+
+  /// No description provided for @paywallTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan riwayat & lacak piutang'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar atau masuk untuk menyimpan riwayat dan melacak piutangmu.'**
+  String get paywallSubtitle;
+
+  /// No description provided for @paywallRegister.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar'**
+  String get paywallRegister;
+
+  /// No description provided for @paywallLogin.
+  ///
+  /// In id, this message translates to:
+  /// **'Masuk'**
+  String get paywallLogin;
+
+  /// No description provided for @scanEmptyHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!'**
+  String get scanEmptyHint;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
