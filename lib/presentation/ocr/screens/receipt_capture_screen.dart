@@ -157,8 +157,34 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
   Widget build(BuildContext context) {
     ref.listen<OcrState>(ocrProvider, (prev, next) {
       if (next is OcrSuccess && prev is! OcrSuccess) {
+        final result = next.result;
+        // Safety net: provider lama yang belum kenal `is_receipt` bisa lolos
+        // dengan items kosong + confidence sangat rendah. Edge Function juga
+        // sudah memfilter kasus ini, tapi double-guard di client agar user
+        // tidak masuk BillReviewScreen kosong tanpa konteks.
+        if (result.items.isEmpty && result.confidence < 0.3) {
+          ref.read(ocrProvider.notifier).reset();
+          final scheme = Theme.of(context).colorScheme;
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                backgroundColor: scheme.errorContainer,
+                behavior: SnackBarBehavior.floating,
+                content: Text(
+                  AppL10n.of(context).scanNotReceiptHint,
+                  style: TextStyle(
+                    color: scheme.onErrorContainer,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            );
+          return;
+        }
         ref.read(ocrProvider.notifier).reset();
-        context.pushNamed(Routes.billReviewName, extra: next.result);
+        context.pushNamed(Routes.billReviewName, extra: result);
       }
       if (next is OcrFailure) {
         final msg = friendlyOcrMessage(next.failure);

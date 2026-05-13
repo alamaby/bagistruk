@@ -40,6 +40,7 @@ const BASE_SYSTEM_PROMPT =
 
 Return STRICTLY this JSON shape, no prose:
 {
+  "is_receipt": boolean,            // false if the image is clearly NOT a receipt/invoice/bill/order
   "items": [{"name": string, "price": number, "qty": integer}],
   "detected_total": number | null,
   "detected_tax": number | null,
@@ -48,6 +49,11 @@ Return STRICTLY this JSON shape, no prose:
   "receipt_date": string | null,   // ISO 8601
   "confidence": number              // 0..1
 }
+
+Non-receipt detection (IMPORTANT):
+- If the image is clearly NOT a receipt, invoice, bill, or order summary — for example a photo of a person, animal, landscape, screenshot of an app UI, random document, meme, etc. — set "is_receipt": false, "items": [], all detected_* fields to null, and "confidence": 0.
+- Only set "is_receipt": false when you are confident the image is unrelated. A blurry, partial, or low-quality receipt is still a receipt — set is_receipt: true and extract what you can, with a low confidence value.
+- When multiple images are attached, set is_receipt: true if ANY of them looks like a receipt (the others may be supporting photos of the same receipt). Set is_receipt: false only when NONE of the images is a receipt.
 
 Rules:
 - Combine duplicate line items by summing qty when names match exactly.
@@ -72,6 +78,7 @@ function buildSystemPrompt(currency: string): string {
 }
 
 interface OcrPayload {
+  is_receipt?: boolean;
   items: { name: string; price: number; qty: number }[];
   detected_total: number | null;
   detected_tax: number | null;
@@ -398,6 +405,21 @@ Deno.serve(async (req: Request): Promise<Response> => {
     try {
       const rawPayload = await callProvider(cfg, images, currency, hint);
       const payload = normalizePayload(rawPayload, currency);
+
+      // Non-receipt gate. Trust an explicit `is_receipt: false`; otherwise
+      // infer from an empty result with zero confidence. Skip failover —
+      // another provider will agree the same image is not a receipt.
+      const isReceiptFalse = payload.is_receipt === false;
+      const looksEmpty = payload.items.length === 0 && payload.confidence < 0.3;
+      if (isReceiptFalse || looksEmpty) {
+        logAttempt(cfg, 422, Date.now() - start, false, {
+          error: "not_a_receipt",
+          is_receipt: payload.is_receipt ?? null,
+          confidence: payload.confidence,
+        });
+        return jsonResponse({ error: "not_a_receipt" }, 422);
+      }
+
       logAttempt(cfg, 200, Date.now() - start, true, payload);
       return jsonResponse({
         items: payload.items,

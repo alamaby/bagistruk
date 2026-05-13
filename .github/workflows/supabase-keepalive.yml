@@ -17,12 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Mask URL in logs
-        run: echo "::add-mask::${{ secrets.SUPABASE_URL }}"
-
       - name: Ping auth health
         env:
-          URL: ${{ secrets.SUPABASE_URL }}
+          URL: ${{ vars.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           curl --silent --show-error --fail-with-body \
@@ -31,7 +28,7 @@ jobs:
 
       - name: Ping PostgREST (DB activity)
         env:
-          URL: ${{ secrets.SUPABASE_URL }}
+          URL: ${{ vars.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           curl --silent --show-error --fail-with-body -I \

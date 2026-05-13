@@ -40,6 +40,13 @@ OcrMessage friendlyOcrMessage(Failure failure) {
 OcrMessage _serverMessage(int? code, String raw) {
   final lower = raw.toLowerCase();
 
+  if (lower.contains('not_a_receipt')) {
+    return const OcrMessage(
+      title: 'Foto bukan struk',
+      body:
+          'Gambar yang dipilih sepertinya bukan struk belanja. Coba foto struk yang jelas dan tidak terpotong.',
+    );
+  }
   if (lower.contains('all_providers_failed') ||
       lower.contains('unavailable') ||
       lower.contains('high demand') ||

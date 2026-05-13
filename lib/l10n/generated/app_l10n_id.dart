@@ -51,6 +51,13 @@ class AppL10nId extends AppL10n {
   String get scanCameraDone => 'Selesai';
 
   @override
+  String get scanNotReceiptTitle => 'Foto bukan struk';
+
+  @override
+  String get scanNotReceiptHint =>
+      'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.';
+
+  @override
   String get retry => 'Coba Lagi';
 
   @override
@@ -324,4 +331,21 @@ class AppL10nId extends AppL10n {
   @override
   String get reviewSuspectThousandsBug =>
       'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.';
+
+  @override
+  String get paywallTitle => 'Simpan riwayat & lacak piutang';
+
+  @override
+  String get paywallSubtitle =>
+      'Daftar atau masuk untuk menyimpan riwayat dan melacak piutangmu.';
+
+  @override
+  String get paywallRegister => 'Daftar';
+
+  @override
+  String get paywallLogin => 'Masuk';
+
+  @override
+  String get scanEmptyHint =>
+      'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!';
 }

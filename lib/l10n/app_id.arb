@@ -16,6 +16,8 @@
   "scanCameraContinuePrompt": "Foto lagi untuk struk panjang?",
   "scanCameraTakeAnother": "Foto Lagi",
   "scanCameraDone": "Selesai",
+  "scanNotReceiptTitle": "Foto bukan struk",
+  "scanNotReceiptHint": "Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.",
 
   "retry": "Coba Lagi",
 

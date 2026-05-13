@@ -52,6 +52,13 @@ class AppL10nEn extends AppL10n {
   String get scanCameraDone => 'Done';
 
   @override
+  String get scanNotReceiptTitle => 'Not a receipt';
+
+  @override
+  String get scanNotReceiptHint =>
+      'The selected image doesn\'t look like a receipt. Try a clear photo of a receipt.';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -324,4 +331,21 @@ class AppL10nEn extends AppL10n {
   @override
   String get reviewSuspectThousandsBug =>
       'Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.';
+
+  @override
+  String get paywallTitle => 'Save history & track debts';
+
+  @override
+  String get paywallSubtitle =>
+      'Sign up or log in to save your history and track money you’re owed.';
+
+  @override
+  String get paywallRegister => 'Sign Up';
+
+  @override
+  String get paywallLogin => 'Sign In';
+
+  @override
+  String get scanEmptyHint =>
+      'Take a photo of a shopping or dining receipt to start splitting fairly!';
 }
