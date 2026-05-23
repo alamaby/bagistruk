@@ -11,6 +11,15 @@ class AppConstants {
   /// Edge Function name registered in Supabase.
   static const String ocrEdgeFunctionName = 'process-receipt';
 
+  /// External links shown on the About screen. Keep placeholders as '#'
+  /// until the final public URLs are ready.
+  static const String websiteUrl = 'https://alamaby.gitlab.io/';
+  static const String githubUrl = 'https://github.com/alamaby';
+  static const String linkedinUrl = 'https://linkedin.com/in/alamaby';
+  static const String buyMeACoffeeUrl = 'https://buymeacoffee.com/alamaby';
+  static const String saweriaUrl = 'https://saweria.co/alamaby';
+  static const String patreonUrl = 'https://patreon.com/alamaby';
+
   /// Long-edge target for OCR uploads. Anything larger only inflates token
   /// cost without improving extraction accuracy in our spike tests.
   static const int ocrMaxImageEdgePx = 1600;

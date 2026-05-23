@@ -4,16 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/config/app_constants.dart';
 import '../../../core/router/routes.dart';
 import '../../../l10n/generated/app_l10n.dart';
-
-// Placeholder URLs — ganti dengan URL final saat sudah tersedia.
-const String kWebsiteUrl = '#';
-const String kGithubUrl = '#';
-const String kLinkedinUrl = '#';
-const String kBuyMeACoffeeUrl = '#';
-const String kSaweriaUrl = '#';
-const String kPatreonUrl = '#';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -34,7 +27,7 @@ class AboutScreen extends StatelessWidget {
           _LinkTile(
             icon: Icons.public_outlined,
             label: l10n.aboutWebsite,
-            url: kWebsiteUrl,
+            url: AppConstants.websiteUrl,
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
@@ -51,29 +44,29 @@ class AboutScreen extends StatelessWidget {
           _LinkTile(
             icon: Icons.code,
             label: l10n.aboutGithub,
-            url: kGithubUrl,
+            url: AppConstants.githubUrl,
           ),
           _LinkTile(
             icon: Icons.work_outline,
             label: l10n.aboutLinkedin,
-            url: kLinkedinUrl,
+            url: AppConstants.linkedinUrl,
           ),
           const Divider(),
           _SectionHeader(l10n.aboutSectionSupport),
           _LinkTile(
             icon: Icons.local_cafe_outlined,
             label: l10n.aboutBuyMeACoffee,
-            url: kBuyMeACoffeeUrl,
+            url: AppConstants.buyMeACoffeeUrl,
           ),
           _LinkTile(
             icon: Icons.volunteer_activism_outlined,
             label: l10n.aboutSaweria,
-            url: kSaweriaUrl,
+            url: AppConstants.saweriaUrl,
           ),
           _LinkTile(
             icon: Icons.favorite_outline,
             label: l10n.aboutPatreon,
-            url: kPatreonUrl,
+            url: AppConstants.patreonUrl,
           ),
           SizedBox(height: 24.h),
           Padding(
@@ -162,11 +155,7 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _LinkTile extends StatelessWidget {
-  const _LinkTile({
-    required this.icon,
-    required this.label,
-    required this.url,
-  });
+  const _LinkTile({required this.icon, required this.label, required this.url});
 
   final IconData icon;
   final String label;
@@ -185,17 +174,18 @@ class _LinkTile extends StatelessWidget {
   Future<void> _open(BuildContext context, String url) async {
     final l10n = AppL10n.of(context);
     if (url == '#' || url.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.linkUnavailable)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.linkUnavailable)));
       return;
     }
     final uri = Uri.tryParse(url);
     if (uri == null) return;
-    final ok =
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.linkUnavailable)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.linkUnavailable)));
     }
   }
 }
