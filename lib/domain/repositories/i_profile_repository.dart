@@ -16,4 +16,7 @@ abstract interface class IProfileRepository {
 
   /// [mode] must be `light`, `dark`, or `system`.
   Future<Result<void>> updateThemePref(String mode);
+
+  /// Refreshes the user's app activity timestamp. No-op when signed out.
+  Future<Result<void>> touchLastActive();
 }

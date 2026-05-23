@@ -10,17 +10,17 @@ class ProfileRepositoryImpl implements IProfileRepository {
 
   @override
   Future<Result<UserProfile>> getCurrentProfile() => guardAsync(() async {
-        final dto = await _ds.getCurrentProfile();
-        return UserProfile(
-          id: dto.id,
-          displayName: dto.displayName,
-          email: _ds.currentEmail,
-          defaultCurrency: dto.defaultCurrency,
-          languagePref: dto.languagePref,
-          themePref: dto.themePref,
-          isAnonymous: _ds.isAnonymous,
-        );
-      });
+    final dto = await _ds.getCurrentProfile();
+    return UserProfile(
+      id: dto.id,
+      displayName: dto.displayName,
+      email: _ds.currentEmail,
+      defaultCurrency: dto.defaultCurrency,
+      languagePref: dto.languagePref,
+      themePref: dto.themePref,
+      isAnonymous: _ds.isAnonymous,
+    );
+  });
 
   @override
   Future<Result<void>> updateDisplayName(String name) =>
@@ -37,4 +37,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
   @override
   Future<Result<void>> updateThemePref(String mode) =>
       guardAsync(() => _ds.updateField('theme_pref', mode));
+
+  @override
+  Future<Result<void>> touchLastActive() => guardAsync(_ds.touchLastActive);
 }

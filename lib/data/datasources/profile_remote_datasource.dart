@@ -25,8 +25,7 @@ class ProfileRemoteDataSource {
     await _client
         .from(_table)
         .upsert({'id': uid}, onConflict: 'id', ignoreDuplicates: true);
-    final row =
-        await _client.from(_table).select().eq('id', uid).maybeSingle();
+    final row = await _client.from(_table).select().eq('id', uid).maybeSingle();
     if (row == null) {
       // Fallback: brand-new row that didn't return from upsert above.
       return ProfileDto(id: uid);
@@ -40,5 +39,10 @@ class ProfileRemoteDataSource {
       throw const AuthException('No active session');
     }
     await _client.from(_table).update({column: value}).eq('id', uid);
+  }
+
+  Future<void> touchLastActive() async {
+    if (currentUserId == null) return;
+    await _client.rpc<void>('touch_last_active_at');
   }
 }

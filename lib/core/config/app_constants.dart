@@ -20,6 +20,10 @@ class AppConstants {
   static const String saweriaUrl = 'https://saweria.co/alamaby';
   static const String patreonUrl = 'https://patreon.com/alamaby';
 
+  /// Minimum interval between app activity writes. This keeps `last_active_at`
+  /// useful without writing on every rebuild or quick foreground/background hop.
+  static const Duration lastActiveTouchInterval = Duration(minutes: 10);
+
   /// Long-edge target for OCR uploads. Anything larger only inflates token
   /// cost without improving extraction accuracy in our spike tests.
   static const int ocrMaxImageEdgePx = 1600;
