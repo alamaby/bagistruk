@@ -32,6 +32,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   bool _loading = false;
+  bool _googleLoading = false;
+
+  bool get _busy => _loading || _googleLoading;
 
   @override
   void dispose() {
@@ -41,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _submit() async {
-    if (_loading) return;
+    if (_busy) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _loading = true);
     final repo = ref.read(authRepositoryProvider);
@@ -60,12 +63,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _googleSignIn() async {
-    if (_loading) return;
+    if (_busy) return;
+    setState(() => _googleLoading = true);
     final repo = ref.read(authRepositoryProvider);
     final res = await repo.signInWithGoogle();
     if (!mounted) return;
-    if (res case ResultFailure(:final failure)) {
-      _showError(friendlyAuthMessage(failure));
+    setState(() => _googleLoading = false);
+    switch (res) {
+      case Success():
+        context.go(widget.from ?? Routes.history);
+      case ResultFailure(:final failure):
+        _showError(friendlyAuthMessage(failure));
     }
   }
 
@@ -78,12 +86,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           backgroundColor: scheme.errorContainer,
           content: Row(
             children: [
-              Icon(Icons.error_outline, color: scheme.onErrorContainer, size: 20.r),
+              Icon(
+                Icons.error_outline,
+                color: scheme.onErrorContainer,
+                size: 20.r,
+              ),
               SizedBox(width: 12.w),
               Expanded(
                 child: Text(
                   message,
-                  style: TextStyle(color: scheme.onErrorContainer, fontSize: 13.sp),
+                  style: TextStyle(
+                    color: scheme.onErrorContainer,
+                    fontSize: 13.sp,
+                  ),
                 ),
               ),
             ],
@@ -120,7 +135,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.bookmark_outline, color: Color(0xFFFFA726)),
+                        const Icon(
+                          Icons.bookmark_outline,
+                          color: Color(0xFFFFA726),
+                        ),
                         SizedBox(width: 12.w),
                         Expanded(
                           child: Text(
@@ -149,7 +167,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(height: 8.h),
                 Text(
                   l10n.loginSubtitle,
-                  style: TextStyle(fontSize: 14.sp, color: scheme.onSurfaceVariant),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: scheme.onSurfaceVariant,
+                  ),
                 ),
                 SizedBox(height: 32.h),
                 AuthTextField(
@@ -160,7 +181,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   validator: validateEmail,
-                  autofillHints: const [AutofillHints.username, AutofillHints.email],
+                  autofillHints: const [
+                    AutofillHints.username,
+                    AutofillHints.email,
+                  ],
                 ),
                 SizedBox(height: 16.h),
                 AuthTextField(
@@ -175,19 +199,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(height: 24.h),
                 FilledButton(
-                  onPressed: _loading ? null : _submit,
+                  onPressed: _busy ? null : _submit,
                   child: _loading
                       ? SizedBox(
                           height: 20.r,
                           width: 20.r,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.5,
-                            valueColor: AlwaysStoppedAnimation(scheme.onPrimary),
+                            valueColor: AlwaysStoppedAnimation(
+                              scheme.onPrimary,
+                            ),
                           ),
                         )
                       : Text(
                           l10n.loginButton,
-                          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                 ),
                 SizedBox(height: 20.h),
@@ -198,7 +227,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Text(
                         l10n.loginOr,
-                        style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                     Expanded(child: Divider(color: scheme.outlineVariant)),
@@ -206,7 +238,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(height: 20.h),
                 GoogleSignInButton(
-                  enabled: !_loading,
+                  enabled: !_busy,
+                  loading: _googleLoading,
                   onPressed: _googleSignIn,
                 ),
                 SizedBox(height: 24.h),
@@ -215,10 +248,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Text(
                       l10n.loginNoAccount,
-                      style: TextStyle(fontSize: 13.sp, color: scheme.onSurfaceVariant),
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                     GestureDetector(
-                      onTap: _loading ? null : () => context.go(Routes.register),
+                      onTap: _busy ? null : () => context.go(Routes.register),
                       child: Text(
                         l10n.loginRegisterLink,
                         style: TextStyle(
