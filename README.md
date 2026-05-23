@@ -94,11 +94,18 @@ In Supabase Dashboard: **Authentication → Providers → Google → Enable**, t
 
 On iOS, also add `CFBundleURLTypes` to `ios/Runner/Info.plist` using the `REVERSED_CLIENT_ID` from Google's iOS client config.
 
-### 6. Deploy the Edge Function
+### 6. Deploy the Edge Functions
 
 ```bash
 supabase functions deploy process-receipt
+supabase functions deploy inactive-user-cleanup --no-verify-jwt
 ```
+
+The `inactive-user-cleanup` function is intended for Supabase Cron. It uses
+`SUPABASE_SERVICE_ROLE_KEY` server-side, optionally sends reminders with Resend
+(`RESEND_API_KEY`, `INACTIVE_REMINDER_FROM`), deletes user bills first, then
+soft-deletes expired Auth users. If `INACTIVE_CLEANUP_SECRET` is set, invoke it
+with the `x-cleanup-secret` header from Cron.
 
 ### 7. Code generation & run
 
