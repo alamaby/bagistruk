@@ -78,3 +78,54 @@ android {
 flutter {
     source = "../.."
 }
+
+fun readPubspecValue(key: String): String? {
+    val pubspec = rootProject.projectDir.parentFile.resolve("pubspec.yaml")
+    if (!pubspec.exists()) return null
+    return pubspec.readLines()
+        .firstOrNull { it.startsWith("$key:") }
+        ?.substringAfter(":")
+        ?.trim()
+        ?.trim('"', '\'')
+}
+
+fun readAndroidAppLabel(): String? {
+    val manifest = projectDir.resolve("src/main/AndroidManifest.xml")
+    if (!manifest.exists()) return null
+    val labelRegex = Regex("""android:label\s*=\s*"([^"]+)"""")
+    return labelRegex.find(manifest.readText())?.groupValues?.getOrNull(1)
+}
+
+fun String.asApkFileSegment(): String =
+    replace(Regex("""[^\w.-]+"""), "-").trim('-').ifEmpty { "app" }
+
+val copyNamedReleaseApk = tasks.register<Copy>("copyNamedReleaseApk") {
+    group = "build"
+    description = "Copies the release APK using the app name and pubspec version."
+
+    val flutterProjectDir = rootProject.projectDir.parentFile
+    val appName = (readAndroidAppLabel() ?: readPubspecValue("name") ?: "app")
+        .asApkFileSegment()
+    val version = (readPubspecValue("version") ?: "0.0.0")
+        .replace("+", "-")
+        .asApkFileSegment()
+    val apkName = "$appName-$version.apk"
+    val releaseApk = flutterProjectDir.resolve("build/app/outputs/apk/release/app-release.apk")
+    val flutterApkOutputDir = flutterProjectDir.resolve("build/app/outputs/flutter-apk")
+
+    from(releaseApk) {
+        rename { "app-release.apk" }
+    }
+    from(releaseApk) {
+        rename { apkName }
+    }
+    into(flutterApkOutputDir)
+
+    doLast {
+        println("Named APK created: build/app/outputs/flutter-apk/$apkName")
+    }
+}
+
+tasks.matching { it.name == "assembleRelease" }.configureEach {
+    finalizedBy(copyNamedReleaseApk)
+}
