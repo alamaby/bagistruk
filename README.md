@@ -82,13 +82,25 @@ In your Supabase Dashboard: **Authentication → Providers → Anonymous Sign-In
 
 Without this, inserts into `bills` will be rejected by Row Level Security.
 
-### 5. Deploy the Edge Function
+### 5. Enable Google Sign-In
+
+In Google Cloud Console, create OAuth clients for:
+
+- Web application: put this value in `.env` as `GOOGLE_WEB_CLIENT_ID`.
+- Android: package name `com.alamaby.bagistruk`, with the debug and release SHA-1 fingerprints.
+- iOS: bundle id `com.alamaby.bagistruk`, then put the client id in `.env` as `GOOGLE_IOS_CLIENT_ID`.
+
+In Supabase Dashboard: **Authentication → Providers → Google → Enable**, then add the Google web OAuth client id and secret.
+
+On iOS, also add `CFBundleURLTypes` to `ios/Runner/Info.plist` using the `REVERSED_CLIENT_ID` from Google's iOS client config.
+
+### 6. Deploy the Edge Function
 
 ```bash
 supabase functions deploy process-receipt
 ```
 
-### 6. Code generation & run
+### 7. Code generation & run
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs

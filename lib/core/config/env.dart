@@ -10,12 +10,20 @@ class Env {
 
   static String get supabaseUrl => _required('SUPABASE_URL');
   static String get supabaseAnonKey => _required('SUPABASE_ANON_KEY');
+  static String get googleWebClientId => _required('GOOGLE_WEB_CLIENT_ID');
+  static String? get googleIosClientId => _optional('GOOGLE_IOS_CLIENT_ID');
 
   static String _required(String key) {
     final value = dotenv.maybeGet(key);
     if (value == null || value.isEmpty) {
       throw StateError('Missing required env var: $key. See .env.example.');
     }
+    return value;
+  }
+
+  static String? _optional(String key) {
+    final value = dotenv.maybeGet(key);
+    if (value == null || value.isEmpty) return null;
     return value;
   }
 }

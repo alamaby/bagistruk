@@ -1,5 +1,4 @@
 import '../../core/error/exception_mapper.dart';
-import '../../core/error/failure.dart';
 import '../../core/error/result.dart';
 import '../../domain/entities/auth_snapshot.dart';
 import '../../domain/repositories/i_auth_repository.dart';
@@ -29,20 +28,27 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<Result<String>> ensureSignedIn() => guardAsync(_ds.ensureSignedIn);
 
   @override
-  Future<Result<void>> linkEmail({required String email, required String password}) =>
-      guardAsync(() => _ds.linkEmail(email: email, password: password));
+  Future<Result<void>> linkEmail({
+    required String email,
+    required String password,
+  }) => guardAsync(() => _ds.linkEmail(email: email, password: password));
 
   @override
-  Future<Result<void>> signUp({required String email, required String password}) =>
-      guardAsync(() => _ds.signUp(email: email, password: password));
+  Future<Result<void>> signUp({
+    required String email,
+    required String password,
+  }) => guardAsync(() => _ds.signUp(email: email, password: password));
 
   @override
-  Future<Result<void>> signInWithPassword({required String email, required String password}) =>
-      guardAsync(() => _ds.signInWithPassword(email: email, password: password));
+  Future<Result<void>> signInWithPassword({
+    required String email,
+    required String password,
+  }) => guardAsync(
+    () => _ds.signInWithPassword(email: email, password: password),
+  );
 
   @override
-  Future<Result<void>> signInWithGoogle() async =>
-      const Result.failure(Failure.auth('Google sign-in coming soon'));
+  Future<Result<void>> signInWithGoogle() => guardAsync(_ds.signInWithGoogle);
 
   @override
   Future<Result<void>> resendEmailChange({required String email}) =>

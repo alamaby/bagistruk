@@ -30,6 +30,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
 
   # Backend
+  google_sign_in: ^7.2.0
   supabase_flutter: ^2.8.1
 
   # OCR pipeline support

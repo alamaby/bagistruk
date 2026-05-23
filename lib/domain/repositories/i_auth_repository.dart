@@ -23,18 +23,27 @@ abstract interface class IAuthRepository {
 
   /// Promotes an anonymous account to a permanent identity (email/password)
   /// without changing `auth.uid()`, so existing rows keep their owner.
-  Future<Result<void>> linkEmail({required String email, required String password});
+  Future<Result<void>> linkEmail({
+    required String email,
+    required String password,
+  });
 
   /// Sign-up flow used by the Register screen. Same uid-preserving semantics
   /// as [linkEmail] — anon data stays accessible after upgrade.
-  Future<Result<void>> signUp({required String email, required String password});
+  Future<Result<void>> signUp({
+    required String email,
+    required String password,
+  });
 
   /// Sign-in to an existing account. When called from an anonymous session,
   /// the impl reassigns rows owned by the old anon uid to the new uid via
   /// the `migrate_anon_data` RPC so in-progress receipts are not lost.
-  Future<Result<void>> signInWithPassword({required String email, required String password});
+  Future<Result<void>> signInWithPassword({
+    required String email,
+    required String password,
+  });
 
-  /// UI placeholder. Real OAuth flow is out of scope for this iteration.
+  /// Native Google Sign-In bridged into Supabase auth.
   Future<Result<void>> signInWithGoogle();
 
   /// Resends the verification email after [signUp] / [linkEmail].
