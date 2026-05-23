@@ -99,9 +99,21 @@ fun readAndroidAppLabel(): String? {
 fun String.asApkFileSegment(): String =
     replace(Regex("""[^\w.-]+"""), "-").trim('-').ifEmpty { "app" }
 
+fun namedReleaseApkName(originalName: String, appName: String, version: String): String {
+    val abi = Regex("""^app-(.+)-release\.apk$""")
+        .matchEntire(originalName)
+        ?.groupValues
+        ?.getOrNull(1)
+    return if (abi == null) {
+        "$appName-$version.apk"
+    } else {
+        "$appName-$version-$abi.apk"
+    }
+}
+
 val copyNamedReleaseApk = tasks.register<Copy>("copyNamedReleaseApk") {
     group = "build"
-    description = "Copies the release APK using the app name and pubspec version."
+    description = "Copies release APKs using the app name, pubspec version, and ABI when split."
 
     val flutterProjectDir = rootProject.projectDir.parentFile
     val appName = (readAndroidAppLabel() ?: readPubspecValue("name") ?: "app")
@@ -109,20 +121,24 @@ val copyNamedReleaseApk = tasks.register<Copy>("copyNamedReleaseApk") {
     val version = (readPubspecValue("version") ?: "0.0.0")
         .replace("+", "-")
         .asApkFileSegment()
-    val apkName = "$appName-$version.apk"
-    val releaseApk = flutterProjectDir.resolve("build/app/outputs/apk/release/app-release.apk")
+    val releaseApkOutputDir = flutterProjectDir.resolve("build/app/outputs/apk/release")
     val flutterApkOutputDir = flutterProjectDir.resolve("build/app/outputs/flutter-apk")
 
-    from(releaseApk) {
-        rename { "app-release.apk" }
+    from(releaseApkOutputDir) {
+        include("*.apk")
     }
-    from(releaseApk) {
-        rename { apkName }
+    from(releaseApkOutputDir) {
+        include("*.apk")
+        rename { originalName -> namedReleaseApkName(originalName, appName, version) }
     }
     into(flutterApkOutputDir)
 
     doLast {
-        println("Named APK created: build/app/outputs/flutter-apk/$apkName")
+        val namedApks = flutterApkOutputDir
+            .listFiles { file -> file.extension == "apk" && file.name.startsWith("$appName-") }
+            ?.joinToString { it.name }
+            ?: "none"
+        println("Named APKs created in build/app/outputs/flutter-apk: $namedApks")
     }
 }
 
