@@ -49,6 +49,7 @@ dependencies:
   share_plus: ^10.1.4
   package_info_plus: ^8.0.0
   url_launcher: ^6.3.0
+  flutter_markdown_plus: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,8 @@ flutter:
     - .env
     - assets/lottie/
     - assets/images/
+    - docs/privacy-policy.md
+    - docs/terms-of-service.md
 
 # Run `dart run flutter_launcher_icons` after editing this block.
 # `image_path` is the legacy square icon (used on pre-Android 8 devices).

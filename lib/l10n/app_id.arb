@@ -125,6 +125,8 @@
   "aboutPatreon": "Patreon",
   "aboutPrivacyPolicy": "Kebijakan Privasi",
   "privacyPolicyTitle": "Kebijakan Privasi",
+  "aboutTermsOfService": "Syarat dan Ketentuan",
+  "termsOfServiceTitle": "Syarat dan Ketentuan",
   "linkUnavailable": "Tautan belum tersedia",
 
   "reviewSuspectThousandsBug": "Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.",

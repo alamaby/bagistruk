@@ -15,6 +15,7 @@ import '../../presentation/history/screens/history_screen.dart';
 import '../../presentation/ocr/screens/receipt_capture_screen.dart';
 import '../../presentation/about/screens/about_screen.dart';
 import '../../presentation/about/screens/privacy_policy_screen.dart';
+import '../../presentation/about/screens/terms_of_service_screen.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
 import '../../presentation/shell/screens/main_shell_screen.dart';
 import 'routes.dart';
@@ -57,7 +58,8 @@ GoRouter appRouter(Ref ref) {
 
       final loc = state.matchedLocation;
       final goingToProtected = loc.startsWith(Routes.history);
-      final onAuthScreen = loc == Routes.login ||
+      final onAuthScreen =
+          loc == Routes.login ||
           loc == Routes.register ||
           loc == Routes.verifyEmail;
 
@@ -142,9 +144,8 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: Routes.verifyEmail,
         name: Routes.verifyEmailName,
-        builder: (context, state) => VerifyEmailScreen(
-          email: state.uri.queryParameters['email'] ?? '',
-        ),
+        builder: (context, state) =>
+            VerifyEmailScreen(email: state.uri.queryParameters['email'] ?? ''),
       ),
       GoRoute(
         path: Routes.about,
@@ -155,6 +156,11 @@ GoRouter appRouter(Ref ref) {
         path: Routes.privacyPolicy,
         name: Routes.privacyPolicyName,
         builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: Routes.termsOfService,
+        name: Routes.termsOfServiceName,
+        builder: (context, state) => const TermsOfServiceScreen(),
       ),
     ],
   );

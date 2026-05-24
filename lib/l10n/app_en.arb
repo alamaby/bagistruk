@@ -125,6 +125,8 @@
   "aboutPatreon": "Patreon",
   "aboutPrivacyPolicy": "Privacy Policy",
   "privacyPolicyTitle": "Privacy Policy",
+  "aboutTermsOfService": "Terms of Service",
+  "termsOfServiceTitle": "Terms of Service",
   "linkUnavailable": "Link is not available yet",
 
   "reviewSuspectThousandsBug": "Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.",

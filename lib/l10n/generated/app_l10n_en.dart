@@ -326,6 +326,12 @@ class AppL10nEn extends AppL10n {
   String get privacyPolicyTitle => 'Privacy Policy';
 
   @override
+  String get aboutTermsOfService => 'Terms of Service';
+
+  @override
+  String get termsOfServiceTitle => 'Terms of Service';
+
+  @override
   String get linkUnavailable => 'Link is not available yet';
 
   @override

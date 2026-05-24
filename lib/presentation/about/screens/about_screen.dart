@@ -35,6 +35,12 @@ class AboutScreen extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(Routes.privacyPolicyName),
           ),
+          ListTile(
+            leading: const Icon(Icons.description_outlined),
+            title: Text(l10n.aboutTermsOfService),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(Routes.termsOfServiceName),
+          ),
           const Divider(),
           _SectionHeader(l10n.aboutSectionAuthor),
           ListTile(

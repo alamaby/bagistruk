@@ -36,4 +36,7 @@ class Routes {
 
   static const String privacyPolicy = '/privacy-policy';
   static const String privacyPolicyName = 'privacy-policy';
+
+  static const String termsOfService = '/terms-of-service';
+  static const String termsOfServiceName = 'terms-of-service';
 }

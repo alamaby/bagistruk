@@ -715,6 +715,18 @@ abstract class AppL10n {
   /// **'Kebijakan Privasi'**
   String get privacyPolicyTitle;
 
+  /// No description provided for @aboutTermsOfService.
+  ///
+  /// In id, this message translates to:
+  /// **'Syarat dan Ketentuan'**
+  String get aboutTermsOfService;
+
+  /// No description provided for @termsOfServiceTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Syarat dan Ketentuan'**
+  String get termsOfServiceTitle;
+
   /// No description provided for @linkUnavailable.
   ///
   /// In id, this message translates to:

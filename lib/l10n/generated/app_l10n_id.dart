@@ -326,6 +326,12 @@ class AppL10nId extends AppL10n {
   String get privacyPolicyTitle => 'Kebijakan Privasi';
 
   @override
+  String get aboutTermsOfService => 'Syarat dan Ketentuan';
+
+  @override
+  String get termsOfServiceTitle => 'Syarat dan Ketentuan';
+
+  @override
   String get linkUnavailable => 'Tautan belum tersedia';
 
   @override
