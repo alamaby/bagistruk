@@ -43,6 +43,20 @@ abstract interface class IAuthRepository {
     required String password,
   });
 
+  /// Sends a passwordless email OTP. Existing users sign in; new users are
+  /// created by Supabase so the flow can also upgrade guest users.
+  Future<Result<void>> sendEmailOtp({
+    required String email,
+    required String languageCode,
+  });
+
+  /// Verifies a passwordless email OTP and migrates any rows owned by the
+  /// previous anonymous uid to the verified user.
+  Future<Result<void>> verifyEmailOtp({
+    required String email,
+    required String token,
+  });
+
   /// Native Google Sign-In bridged into Supabase auth.
   Future<Result<void>> signInWithGoogle();
 

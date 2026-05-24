@@ -7,6 +7,7 @@ import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../settings/providers/preferences_providers.dart';
 import '../utils/auth_messages.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_validators.dart';
@@ -33,8 +34,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _password = TextEditingController();
   bool _loading = false;
   bool _googleLoading = false;
+  bool _otpLoading = false;
 
-  bool get _busy => _loading || _googleLoading;
+  bool get _busy => _loading || _googleLoading || _otpLoading;
 
   @override
   void dispose() {
@@ -72,6 +74,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     switch (res) {
       case Success():
         context.go(widget.from ?? Routes.history);
+      case ResultFailure(:final failure):
+        _showError(friendlyAuthMessage(failure));
+    }
+  }
+
+  Future<void> _sendEmailOtp() async {
+    if (_busy) return;
+    final emailError = validateEmail(_email.text);
+    if (emailError != null) {
+      _showError(emailError);
+      return;
+    }
+
+    setState(() => _otpLoading = true);
+    final repo = ref.read(authRepositoryProvider);
+    final email = _email.text.trim();
+    final languageCode = ref.read(localePrefProvider).languageCode;
+    final res = await repo.sendEmailOtp(
+      email: email,
+      languageCode: languageCode,
+    );
+    if (!mounted) return;
+    setState(() => _otpLoading = false);
+
+    switch (res) {
+      case Success():
+        context.go(
+          Uri(
+            path: Routes.verifyOtp,
+            queryParameters: {
+              'email': email,
+              if (widget.from != null && widget.from!.isNotEmpty)
+                'from': widget.from!,
+            },
+          ).toString(),
+        );
       case ResultFailure(:final failure):
         _showError(friendlyAuthMessage(failure));
     }
@@ -218,6 +256,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                ),
+                SizedBox(height: 12.h),
+                OutlinedButton.icon(
+                  onPressed: _busy ? null : _sendEmailOtp,
+                  icon: _otpLoading
+                      ? SizedBox(
+                          height: 18.r,
+                          width: 18.r,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.mark_email_unread_outlined),
+                  label: Text(
+                    _otpLoading ? l10n.loginOtpSending : l10n.loginOtpButton,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 Row(

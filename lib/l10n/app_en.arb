@@ -70,6 +70,8 @@
   "loginButton": "Sign In",
   "loginOr": "or",
   "loginEmailHint": "you@email.com",
+  "loginOtpButton": "Send email code",
+  "loginOtpSending": "Sending code…",
   "loginNoAccount": "Don't have an account? ",
   "loginRegisterLink": "Sign Up",
 
@@ -92,6 +94,21 @@
   "verifyEmailResending": "Sending…",
   "verifyEmailResent": "Verification email has been resent.",
   "verifyEmailUseDifferent": "Use a different email",
+
+  "verifyOtpTitle": "Enter code",
+  "verifyOtpHeading": "Check your email code",
+  "verifyOtpBodyPrefix": "We sent a 6-digit code to ",
+  "verifyOtpBodySuffix": ". Enter it to sign in to your account.",
+  "verifyOtpInvalid": "Enter the 6-digit code.",
+  "verifyOtpButton": "Verify & sign in",
+  "verifyOtpResend": "Resend code",
+  "verifyOtpResending": "Sending…",
+  "verifyOtpResent": "A new code has been sent.",
+  "verifyOtpResendCountdown": "Resend in {seconds}s",
+  "@verifyOtpResendCountdown": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "verifyOtpUseDifferent": "Use a different email",
 
   "historySignOutTooltip": "Sign Out",
   "historySignedOut": "You have been signed out.",

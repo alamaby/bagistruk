@@ -8,6 +8,7 @@ import '../../presentation/auth/providers/auth_providers.dart';
 import '../../presentation/auth/screens/login_screen.dart';
 import '../../presentation/auth/screens/register_screen.dart';
 import '../../presentation/auth/screens/verify_email_screen.dart';
+import '../../presentation/auth/screens/verify_otp_screen.dart';
 import '../../presentation/bills/screens/bill_detail_screen.dart';
 import '../../presentation/bills/screens/bill_review_screen.dart';
 import '../../presentation/bills/screens/bill_split_screen.dart';
@@ -61,7 +62,8 @@ GoRouter appRouter(Ref ref) {
       final onAuthScreen =
           loc == Routes.login ||
           loc == Routes.register ||
-          loc == Routes.verifyEmail;
+          loc == Routes.verifyEmail ||
+          loc == Routes.verifyOtp;
 
       if (goingToProtected && !isSignedIn) {
         return '${Routes.login}?reason=save_history';
@@ -146,6 +148,14 @@ GoRouter appRouter(Ref ref) {
         name: Routes.verifyEmailName,
         builder: (context, state) =>
             VerifyEmailScreen(email: state.uri.queryParameters['email'] ?? ''),
+      ),
+      GoRoute(
+        path: Routes.verifyOtp,
+        name: Routes.verifyOtpName,
+        builder: (context, state) => VerifyOtpScreen(
+          email: state.uri.queryParameters['email'] ?? '',
+          from: state.uri.queryParameters['from'],
+        ),
       ),
       GoRoute(
         path: Routes.about,

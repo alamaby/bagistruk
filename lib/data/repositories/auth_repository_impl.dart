@@ -48,6 +48,20 @@ class AuthRepositoryImpl implements IAuthRepository {
   );
 
   @override
+  Future<Result<void>> sendEmailOtp({
+    required String email,
+    required String languageCode,
+  }) => guardAsync(
+    () => _ds.sendEmailOtp(email: email, languageCode: languageCode),
+  );
+
+  @override
+  Future<Result<void>> verifyEmailOtp({
+    required String email,
+    required String token,
+  }) => guardAsync(() => _ds.verifyEmailOtp(email: email, token: token));
+
+  @override
   Future<Result<void>> signInWithGoogle() => guardAsync(_ds.signInWithGoogle);
 
   @override

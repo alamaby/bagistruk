@@ -415,6 +415,18 @@ abstract class AppL10n {
   /// **'kamu@email.com'**
   String get loginEmailHint;
 
+  /// No description provided for @loginOtpButton.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim kode email'**
+  String get loginOtpButton;
+
+  /// No description provided for @loginOtpSending.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengirim kode…'**
+  String get loginOtpSending;
+
   /// No description provided for @loginNoAccount.
   ///
   /// In id, this message translates to:
@@ -534,6 +546,72 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Pakai email lain'**
   String get verifyEmailUseDifferent;
+
+  /// No description provided for @verifyOtpTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan kode'**
+  String get verifyOtpTitle;
+
+  /// No description provided for @verifyOtpHeading.
+  ///
+  /// In id, this message translates to:
+  /// **'Cek kode email'**
+  String get verifyOtpHeading;
+
+  /// No description provided for @verifyOtpBodyPrefix.
+  ///
+  /// In id, this message translates to:
+  /// **'Kami sudah mengirim kode 6 digit ke '**
+  String get verifyOtpBodyPrefix;
+
+  /// No description provided for @verifyOtpBodySuffix.
+  ///
+  /// In id, this message translates to:
+  /// **'. Masukkan kode itu untuk masuk ke akunmu.'**
+  String get verifyOtpBodySuffix;
+
+  /// No description provided for @verifyOtpInvalid.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan kode 6 digit.'**
+  String get verifyOtpInvalid;
+
+  /// No description provided for @verifyOtpButton.
+  ///
+  /// In id, this message translates to:
+  /// **'Verifikasi & masuk'**
+  String get verifyOtpButton;
+
+  /// No description provided for @verifyOtpResend.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim ulang kode'**
+  String get verifyOtpResend;
+
+  /// No description provided for @verifyOtpResending.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengirim…'**
+  String get verifyOtpResending;
+
+  /// No description provided for @verifyOtpResent.
+  ///
+  /// In id, this message translates to:
+  /// **'Kode baru sudah dikirim.'**
+  String get verifyOtpResent;
+
+  /// No description provided for @verifyOtpResendCountdown.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim ulang dalam {seconds}d'**
+  String verifyOtpResendCountdown(int seconds);
+
+  /// No description provided for @verifyOtpUseDifferent.
+  ///
+  /// In id, this message translates to:
+  /// **'Pakai email lain'**
+  String get verifyOtpUseDifferent;
 
   /// No description provided for @historySignOutTooltip.
   ///

@@ -79,6 +79,38 @@ class AuthRemoteDataSource {
     }
   }
 
+  /// Sends a six-digit passwordless email code when the Supabase Magic Link
+  /// template contains `{{ .Token }}`. The language metadata is available in
+  /// the template as `{{ .Data.language }}` for localized email content.
+  Future<void> sendEmailOtp({
+    required String email,
+    required String languageCode,
+  }) => _auth.signInWithOtp(
+    email: email,
+    shouldCreateUser: true,
+    data: {'language': languageCode},
+  );
+
+  /// Verifies the email code and preserves any guest-owned bill rows by moving
+  /// them from the previous anonymous uid to the new verified uid.
+  Future<void> verifyEmailOtp({
+    required String email,
+    required String token,
+  }) async {
+    final oldUid = _auth.currentUser?.id;
+    final wasAnon = _auth.currentUser?.isAnonymous ?? false;
+
+    await _auth.verifyOTP(email: email, token: token, type: OtpType.email);
+
+    final newUid = _auth.currentUser?.id;
+    if (wasAnon && oldUid != null && newUid != null && oldUid != newUid) {
+      await _client.rpc<void>(
+        'migrate_anon_data',
+        params: {'p_old_uid': oldUid},
+      );
+    }
+  }
+
   /// Native Google Sign-In bridged into Supabase via the Google ID token.
   /// If the app had an anonymous session, any in-progress bills are migrated
   /// to the Google-backed Supabase user after the new session is established.

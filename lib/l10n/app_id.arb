@@ -70,6 +70,8 @@
   "loginButton": "Masuk",
   "loginOr": "atau",
   "loginEmailHint": "kamu@email.com",
+  "loginOtpButton": "Kirim kode email",
+  "loginOtpSending": "Mengirim kode…",
   "loginNoAccount": "Belum punya akun? ",
   "loginRegisterLink": "Daftar",
 
@@ -92,6 +94,21 @@
   "verifyEmailResending": "Mengirim…",
   "verifyEmailResent": "Email verifikasi sudah dikirim ulang.",
   "verifyEmailUseDifferent": "Pakai email lain",
+
+  "verifyOtpTitle": "Masukkan kode",
+  "verifyOtpHeading": "Cek kode email",
+  "verifyOtpBodyPrefix": "Kami sudah mengirim kode 6 digit ke ",
+  "verifyOtpBodySuffix": ". Masukkan kode itu untuk masuk ke akunmu.",
+  "verifyOtpInvalid": "Masukkan kode 6 digit.",
+  "verifyOtpButton": "Verifikasi & masuk",
+  "verifyOtpResend": "Kirim ulang kode",
+  "verifyOtpResending": "Mengirim…",
+  "verifyOtpResent": "Kode baru sudah dikirim.",
+  "verifyOtpResendCountdown": "Kirim ulang dalam {seconds}d",
+  "@verifyOtpResendCountdown": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "verifyOtpUseDifferent": "Pakai email lain",
 
   "historySignOutTooltip": "Keluar",
   "historySignedOut": "Kamu sudah keluar.",

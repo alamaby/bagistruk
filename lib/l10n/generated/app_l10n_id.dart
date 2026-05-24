@@ -173,6 +173,12 @@ class AppL10nId extends AppL10n {
   String get loginEmailHint => 'kamu@email.com';
 
   @override
+  String get loginOtpButton => 'Kirim kode email';
+
+  @override
+  String get loginOtpSending => 'Mengirim kode…';
+
+  @override
   String get loginNoAccount => 'Belum punya akun? ';
 
   @override
@@ -233,6 +239,42 @@ class AppL10nId extends AppL10n {
 
   @override
   String get verifyEmailUseDifferent => 'Pakai email lain';
+
+  @override
+  String get verifyOtpTitle => 'Masukkan kode';
+
+  @override
+  String get verifyOtpHeading => 'Cek kode email';
+
+  @override
+  String get verifyOtpBodyPrefix => 'Kami sudah mengirim kode 6 digit ke ';
+
+  @override
+  String get verifyOtpBodySuffix =>
+      '. Masukkan kode itu untuk masuk ke akunmu.';
+
+  @override
+  String get verifyOtpInvalid => 'Masukkan kode 6 digit.';
+
+  @override
+  String get verifyOtpButton => 'Verifikasi & masuk';
+
+  @override
+  String get verifyOtpResend => 'Kirim ulang kode';
+
+  @override
+  String get verifyOtpResending => 'Mengirim…';
+
+  @override
+  String get verifyOtpResent => 'Kode baru sudah dikirim.';
+
+  @override
+  String verifyOtpResendCountdown(int seconds) {
+    return 'Kirim ulang dalam ${seconds}d';
+  }
+
+  @override
+  String get verifyOtpUseDifferent => 'Pakai email lain';
 
   @override
   String get historySignOutTooltip => 'Keluar';

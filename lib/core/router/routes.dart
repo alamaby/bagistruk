@@ -31,6 +31,9 @@ class Routes {
   static const String verifyEmail = '/verify-email';
   static const String verifyEmailName = 'verify-email';
 
+  static const String verifyOtp = '/verify-otp';
+  static const String verifyOtpName = 'verify-otp';
+
   static const String about = '/about';
   static const String aboutName = 'about';
 

@@ -173,6 +173,12 @@ class AppL10nEn extends AppL10n {
   String get loginEmailHint => 'you@email.com';
 
   @override
+  String get loginOtpButton => 'Send email code';
+
+  @override
+  String get loginOtpSending => 'Sending code…';
+
+  @override
   String get loginNoAccount => 'Don\'t have an account? ';
 
   @override
@@ -233,6 +239,41 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get verifyEmailUseDifferent => 'Use a different email';
+
+  @override
+  String get verifyOtpTitle => 'Enter code';
+
+  @override
+  String get verifyOtpHeading => 'Check your email code';
+
+  @override
+  String get verifyOtpBodyPrefix => 'We sent a 6-digit code to ';
+
+  @override
+  String get verifyOtpBodySuffix => '. Enter it to sign in to your account.';
+
+  @override
+  String get verifyOtpInvalid => 'Enter the 6-digit code.';
+
+  @override
+  String get verifyOtpButton => 'Verify & sign in';
+
+  @override
+  String get verifyOtpResend => 'Resend code';
+
+  @override
+  String get verifyOtpResending => 'Sending…';
+
+  @override
+  String get verifyOtpResent => 'A new code has been sent.';
+
+  @override
+  String verifyOtpResendCountdown(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get verifyOtpUseDifferent => 'Use a different email';
 
   @override
   String get historySignOutTooltip => 'Sign Out';
