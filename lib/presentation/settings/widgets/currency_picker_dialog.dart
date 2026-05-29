@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../l10n/generated/app_l10n.dart';
 
-Future<String?> showCurrencyPickerDialog(
-  BuildContext context,
-  String current,
-) {
+Future<String?> showCurrencyPickerDialog(BuildContext context, String current) {
   return showDialog<String>(
     context: context,
     builder: (ctx) {

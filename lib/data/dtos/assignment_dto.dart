@@ -20,16 +20,16 @@ abstract class AssignmentDto with _$AssignmentDto {
       _$AssignmentDtoFromJson(json);
 
   factory AssignmentDto.fromEntity(Assignment a) => AssignmentDto(
-        id: a.id,
-        itemId: a.itemId,
-        participantId: a.participantId,
-        shareWeight: a.shareWeight,
-      );
+    id: a.id,
+    itemId: a.itemId,
+    participantId: a.participantId,
+    shareWeight: a.shareWeight,
+  );
 
   Assignment toEntity() => Assignment(
-        id: id,
-        itemId: itemId,
-        participantId: participantId,
-        shareWeight: shareWeight,
-      );
+    id: id,
+    itemId: itemId,
+    participantId: participantId,
+    shareWeight: shareWeight,
+  );
 }

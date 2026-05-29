@@ -56,8 +56,10 @@ class BillRemoteDataSource {
   }
 
   Future<List<ParticipantDto>> listParticipants(String billId) async {
-    final rows =
-        await _client.from(_participants).select().eq('bill_id', billId);
+    final rows = await _client
+        .from(_participants)
+        .select()
+        .eq('bill_id', billId);
     return rows.map((r) => ParticipantDto.fromJson(r)).toList(growable: false);
   }
 

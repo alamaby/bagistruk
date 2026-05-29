@@ -76,11 +76,8 @@ class BillSplitScreen extends ConsumerWidget {
               child: Text(e.toString(), textAlign: TextAlign.center),
             ),
           ),
-          data: (state) => _SplitBody(
-            state: state,
-            billId: billId,
-            currency: currency,
-          ),
+          data: (state) =>
+              _SplitBody(state: state, billId: billId, currency: currency),
         ),
       ),
     );
@@ -102,8 +99,7 @@ class _SplitBody extends ConsumerWidget {
       ref.read(splitFamily(billId).notifier);
 
   void _toast(BuildContext context, String msg) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   Future<void> _addParticipant(BuildContext context, WidgetRef ref) async {
@@ -160,13 +156,15 @@ class _SplitBody extends ConsumerWidget {
                   itemBuilder: (context, i) {
                     final item = state.items[i];
                     final assignees = state.participants
-                        .where((p) => state.assignments.any(
-                              (a) =>
-                                  a.itemId == item.id &&
-                                  a.participantId == p.id,
-                            ))
+                        .where(
+                          (p) => state.assignments.any(
+                            (a) =>
+                                a.itemId == item.id && a.participantId == p.id,
+                          ),
+                        )
                         .toList(growable: false);
-                    final isMine = state.selectedParticipantId != null &&
+                    final isMine =
+                        state.selectedParticipantId != null &&
                         assignees.any(
                           (p) => p.id == state.selectedParticipantId,
                         );
@@ -177,8 +175,9 @@ class _SplitBody extends ConsumerWidget {
                       activeMine: isMine,
                       hasSelected: state.selectedParticipantId != null,
                       onTap: () async {
-                        final err =
-                            await _notifier(ref).toggleAssignment(item.id);
+                        final err = await _notifier(
+                          ref,
+                        ).toggleAssignment(item.id);
                         if (err != null && context.mounted) {
                           _toast(context, err);
                         }
@@ -188,7 +187,8 @@ class _SplitBody extends ConsumerWidget {
                 ),
         ),
         _SummaryButton(
-          visible: state.unassignedSubtotal <= 0.0001 &&
+          visible:
+              state.unassignedSubtotal <= 0.0001 &&
               state.participants.isNotEmpty &&
               state.items.isNotEmpty,
           onTap: () => SplitSummarySheet.show(context, state),
@@ -249,9 +249,7 @@ class _Header extends StatelessWidget {
           Row(
             children: [
               Icon(
-                allAssigned
-                    ? Icons.check_circle
-                    : Icons.pending_outlined,
+                allAssigned ? Icons.check_circle : Icons.pending_outlined,
                 size: 16.r,
                 color: allAssigned
                     ? Colors.green.shade700
@@ -408,7 +406,10 @@ class _AvatarStack extends StatelessWidget {
                 ),
                 child: Text(
                   '+$extra',
-                  style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
@@ -467,19 +468,19 @@ class _ParticipantBar extends StatelessWidget {
                       children: [
                         active
                             ? avatar
-                                .animate(
-                                  key: ValueKey('avatar-${p.id}-active'),
-                                  onPlay: (c) => c.repeat(reverse: true),
-                                )
-                                .scaleXY(
-                                  begin: 1.0,
-                                  end: 1.06,
-                                  duration: 700.ms,
-                                  curve: Curves.easeInOut,
-                                )
+                                  .animate(
+                                    key: ValueKey('avatar-${p.id}-active'),
+                                    onPlay: (c) => c.repeat(reverse: true),
+                                  )
+                                  .scaleXY(
+                                    begin: 1.0,
+                                    end: 1.06,
+                                    duration: 700.ms,
+                                    curve: Curves.easeInOut,
+                                  )
                             : avatar
-                                .animate(key: ValueKey('avatar-${p.id}-idle'))
-                                .fadeIn(duration: 200.ms),
+                                  .animate(key: ValueKey('avatar-${p.id}-idle'))
+                                  .fadeIn(duration: 200.ms),
                         SizedBox(height: 4.h),
                         SizedBox(
                           width: 60.w,
@@ -490,8 +491,9 @@ class _ParticipantBar extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 11.sp,
-                              fontWeight:
-                                  active ? FontWeight.w700 : FontWeight.w500,
+                              fontWeight: active
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
                             ),
                           ),
                         ),
@@ -502,11 +504,7 @@ class _ParticipantBar extends StatelessWidget {
               ),
               // Pinned divider + add button — always visible at the right
               // edge no matter how many participants exist.
-              Container(
-                width: 1,
-                height: 64.h,
-                color: scheme.outlineVariant,
-              ),
+              Container(width: 1, height: 64.h, color: scheme.outlineVariant),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                 child: _AddButton(onTap: onAdd),
@@ -546,8 +544,11 @@ class _AddButton extends StatelessWidget {
                 style: BorderStyle.solid,
               ),
             ),
-            child: Icon(Icons.person_add_alt_1,
-                color: scheme.primary, size: 22.r),
+            child: Icon(
+              Icons.person_add_alt_1,
+              color: scheme.primary,
+              size: 22.r,
+            ),
           ),
         ),
         SizedBox(height: 4.h),
@@ -575,29 +576,30 @@ class _SummaryButton extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
-      child: SizedBox(
-        width: double.infinity,
-        height: 48.h,
-        child: FilledButton.icon(
-          onPressed: onTap,
-          icon: const Icon(Icons.receipt_long),
-          label: const Text('Lihat Rincian'),
-          style: FilledButton.styleFrom(
-            backgroundColor: scheme.primary,
-            foregroundColor: scheme.onPrimary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14.r),
-            ),
-            textStyle: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      )
-          .animate()
-          .fadeIn(duration: 220.ms)
-          .slideY(begin: 0.4, end: 0, curve: Curves.easeOutCubic),
+      child:
+          SizedBox(
+                width: double.infinity,
+                height: 48.h,
+                child: FilledButton.icon(
+                  onPressed: onTap,
+                  icon: const Icon(Icons.receipt_long),
+                  label: const Text('Lihat Rincian'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: scheme.primary,
+                    foregroundColor: scheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    ),
+                    textStyle: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 220.ms)
+              .slideY(begin: 0.4, end: 0, curve: Curves.easeOutCubic),
     );
   }
 }

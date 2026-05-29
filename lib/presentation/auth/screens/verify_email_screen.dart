@@ -142,8 +142,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
-                        color: scheme.primary, size: 20.r),
+                    Icon(Icons.info_outline, color: scheme.primary, size: 20.r),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
@@ -168,8 +167,13 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
                       )
                     : const Icon(Icons.refresh),
                 label: Text(
-                  _resending ? l10n.verifyEmailResending : l10n.verifyEmailResend,
-                  style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                  _resending
+                      ? l10n.verifyEmailResending
+                      : l10n.verifyEmailResend,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               SizedBox(height: 12.h),

@@ -58,7 +58,8 @@ class MainShellScreen extends ConsumerWidget {
     );
   }
 
-  AuthSnapshot? _snapshot(WidgetRef ref) => switch (ref.read(authStateProvider)) {
+  AuthSnapshot? _snapshot(WidgetRef ref) =>
+      switch (ref.read(authStateProvider)) {
         AsyncData<AuthSnapshot>(:final value) => value,
         _ => null,
       };

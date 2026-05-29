@@ -78,8 +78,11 @@ class _StartupErrorApp extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.error_outline,
-                    size: 56, color: Colors.redAccent),
+                const Icon(
+                  Icons.error_outline,
+                  size: 56,
+                  color: Colors.redAccent,
+                ),
                 const SizedBox(height: 16),
                 const Text(
                   'BagiStruk gagal dimulai',

@@ -45,7 +45,10 @@ class ParticipantAvatar extends StatelessWidget {
   static String initialsFor(String name) {
     final trimmed = name.trim();
     if (trimmed.isEmpty) return '?';
-    final parts = trimmed.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    final parts = trimmed
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
     if (parts.length == 1) return parts[0].substring(0, 1).toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
@@ -63,7 +66,10 @@ class ParticipantAvatar extends StatelessWidget {
         shape: BoxShape.circle,
         border: active
             ? Border.all(color: scheme.primary, width: 3.r)
-            : Border.all(color: Colors.white.withValues(alpha: 0.6), width: 1.r),
+            : Border.all(
+                color: Colors.white.withValues(alpha: 0.6),
+                width: 1.r,
+              ),
         boxShadow: active
             ? [
                 BoxShadow(

@@ -21,18 +21,18 @@ abstract class ParticipantDto with _$ParticipantDto {
       _$ParticipantDtoFromJson(json);
 
   factory ParticipantDto.fromEntity(Participant p) => ParticipantDto(
-        id: p.id,
-        billId: p.billId,
-        name: p.name,
-        isPaid: p.isPaid,
-        paidAt: p.paidAt,
-      );
+    id: p.id,
+    billId: p.billId,
+    name: p.name,
+    isPaid: p.isPaid,
+    paidAt: p.paidAt,
+  );
 
   Participant toEntity() => Participant(
-        id: id,
-        billId: billId,
-        name: name,
-        isPaid: isPaid,
-        paidAt: paidAt,
-      );
+    id: id,
+    billId: billId,
+    name: name,
+    isPaid: isPaid,
+    paidAt: paidAt,
+  );
 }

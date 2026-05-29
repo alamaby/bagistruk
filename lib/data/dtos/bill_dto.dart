@@ -20,27 +20,28 @@ abstract class BillDto with _$BillDto {
     @JsonKey(name: 'created_at') required DateTime createdAt,
   }) = _BillDto;
 
-  factory BillDto.fromJson(Map<String, dynamic> json) => _$BillDtoFromJson(json);
+  factory BillDto.fromJson(Map<String, dynamic> json) =>
+      _$BillDtoFromJson(json);
 
   factory BillDto.fromEntity(Bill b) => BillDto(
-        id: b.id,
-        title: b.title,
-        totalAmount: b.totalAmount,
-        tax: b.tax,
-        service: b.service,
-        isSettled: b.isSettled,
-        receiptDate: b.receiptDate,
-        createdAt: b.createdAt,
-      );
+    id: b.id,
+    title: b.title,
+    totalAmount: b.totalAmount,
+    tax: b.tax,
+    service: b.service,
+    isSettled: b.isSettled,
+    receiptDate: b.receiptDate,
+    createdAt: b.createdAt,
+  );
 
   Bill toEntity() => Bill(
-        id: id,
-        title: title,
-        totalAmount: totalAmount,
-        tax: tax,
-        service: service,
-        isSettled: isSettled,
-        receiptDate: receiptDate,
-        createdAt: createdAt,
-      );
+    id: id,
+    title: title,
+    totalAmount: totalAmount,
+    tax: tax,
+    service: service,
+    isSettled: isSettled,
+    receiptDate: receiptDate,
+    createdAt: createdAt,
+  );
 }

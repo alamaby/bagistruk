@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_l10n.dart';
 
-Future<String?> showLanguagePickerDialog(
-  BuildContext context,
-  String current,
-) {
+Future<String?> showLanguagePickerDialog(BuildContext context, String current) {
   return showDialog<String>(
     context: context,
     builder: (ctx) {

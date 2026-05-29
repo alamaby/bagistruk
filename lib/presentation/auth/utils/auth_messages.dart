@@ -9,10 +9,8 @@ String friendlyAuthMessage(Failure failure) {
       'Tidak ada koneksi internet. Coba lagi setelah jaringan stabil.',
     ServerFailure(:final message) =>
       'Server bermasalah: $message. Coba lagi sebentar lagi.',
-    ParsingFailure() =>
-      'Respons server tidak terbaca. Coba lagi.',
-    UnknownFailure() =>
-      'Terjadi kesalahan tak terduga. Coba lagi.',
+    ParsingFailure() => 'Respons server tidak terbaca. Coba lagi.',
+    UnknownFailure() => 'Terjadi kesalahan tak terduga. Coba lagi.',
   };
 }
 
@@ -22,8 +20,7 @@ String _humanizeAuth(String raw) {
       lower.contains('invalid credentials')) {
     return 'Email atau password salah.';
   }
-  if (lower.contains('already registered') ||
-      lower.contains('user already')) {
+  if (lower.contains('already registered') || lower.contains('user already')) {
     return 'Email sudah terdaftar. Coba login.';
   }
   if (lower.contains('weak password') || lower.contains('password should')) {

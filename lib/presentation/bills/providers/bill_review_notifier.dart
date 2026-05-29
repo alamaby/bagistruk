@@ -46,8 +46,7 @@ abstract class BillReviewState with _$BillReviewState {
 
   const BillReviewState._();
 
-  double get subtotal =>
-      items.fold<double>(0, (s, i) => s + i.price * i.qty);
+  double get subtotal => items.fold<double>(0, (s, i) => s + i.price * i.qty);
   double get grandTotal => subtotal + tax + service;
   bool get hasMismatch {
     final d = detectedTotal;
@@ -80,8 +79,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     // di Settings, state ini tidak rebuild (review state spesifik per OCR
     // result), dan itu sengaja: angka di review berasal dari OCR yg dipanggil
     // dengan currency saat itu.
-    final currency =
-        ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
+    final currency = ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
     return BillReviewState(
       title: ocr.merchant?.trim().isNotEmpty == true
           ? ocr.merchant!.trim()
@@ -109,12 +107,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
   void setTax(double value) => state = state.copyWith(tax: value);
   void setService(double value) => state = state.copyWith(service: value);
 
-  void updateItem(
-    String localId, {
-    String? name,
-    double? price,
-    double? qty,
-  }) {
+  void updateItem(String localId, {String? name, double? price, double? qty}) {
     state = state.copyWith(
       items: [
         for (final it in state.items)
@@ -134,12 +127,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     state = state.copyWith(
       items: [
         ...state.items,
-        BillReviewItem(
-          localId: _uuid.v4(),
-          name: '',
-          price: 0,
-          qty: 1,
-        ),
+        BillReviewItem(localId: _uuid.v4(), name: '', price: 0, qty: 1),
       ],
     );
   }
@@ -199,7 +187,9 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     final itemsRes = await repo.upsertItems(items);
     if (itemsRes is ResultFailure<List<Item>>) {
       state = state.copyWith(saving: false);
-      return SaveError('Bill tersimpan tapi item gagal: ${_msg(itemsRes.failure)}');
+      return SaveError(
+        'Bill tersimpan tapi item gagal: ${_msg(itemsRes.failure)}',
+      );
     }
 
     state = state.copyWith(saving: false);

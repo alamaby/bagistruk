@@ -94,12 +94,10 @@ class _SettingsBody extends ConsumerWidget {
             isAnon
                 ? l10n.anonDisplayName
                 : (profile.displayName?.trim().isNotEmpty == true
-                    ? profile.displayName!
-                    : l10n.displayNameFallback),
+                      ? profile.displayName!
+                      : l10n.displayNameFallback),
           ),
-          subtitle: Text(
-            isAnon ? l10n.guestAccount : (profile.email ?? '—'),
-          ),
+          subtitle: Text(isAnon ? l10n.guestAccount : (profile.email ?? '—')),
         ),
         if (!isAnon)
           ListTile(
@@ -174,10 +172,10 @@ class _SettingsBody extends ConsumerWidget {
   }
 
   String _themeLabel(AppL10n l10n, String pref) => switch (pref) {
-        'light' => l10n.themeLight,
-        'dark' => l10n.themeDark,
-        _ => l10n.themeSystem,
-      };
+    'light' => l10n.themeLight,
+    'dark' => l10n.themeDark,
+    _ => l10n.themeSystem,
+  };
 
   Future<void> _onChangeName(BuildContext context, WidgetRef ref) async {
     final next = await showEditNameSheet(context, profile.displayName ?? '');
@@ -186,7 +184,8 @@ class _SettingsBody extends ConsumerWidget {
         .read(profileProvider.notifier)
         .updateDisplayName(next);
     if (!context.mounted) return;
-    if (res is ResultFailure<void>) _snack(context, AppL10n.of(context).errorGeneric);
+    if (res is ResultFailure<void>)
+      _snack(context, AppL10n.of(context).errorGeneric);
   }
 
   Future<void> _onResetPassword(
@@ -203,8 +202,9 @@ class _SettingsBody extends ConsumerWidget {
       confirmLabel: l10n.saveAction,
     );
     if (ok != true || !context.mounted) return;
-    final res =
-        await ref.read(authRepositoryProvider).resetPasswordForEmail(email);
+    final res = await ref
+        .read(authRepositoryProvider)
+        .resetPasswordForEmail(email);
     if (!context.mounted) return;
     _snack(
       context,
@@ -219,10 +219,10 @@ class _SettingsBody extends ConsumerWidget {
   ) async {
     final code = await showCurrencyPickerDialog(context, current);
     if (code == null || code == current) return;
-    final res =
-        await ref.read(profileProvider.notifier).updateCurrency(code);
+    final res = await ref.read(profileProvider.notifier).updateCurrency(code);
     if (!context.mounted) return;
-    if (res is ResultFailure<void>) _snack(context, AppL10n.of(context).errorGeneric);
+    if (res is ResultFailure<void>)
+      _snack(context, AppL10n.of(context).errorGeneric);
   }
 
   Future<void> _onPickLanguage(
@@ -232,10 +232,10 @@ class _SettingsBody extends ConsumerWidget {
   ) async {
     final code = await showLanguagePickerDialog(context, current);
     if (code == null || code == current) return;
-    final res =
-        await ref.read(profileProvider.notifier).updateLanguage(code);
+    final res = await ref.read(profileProvider.notifier).updateLanguage(code);
     if (!context.mounted) return;
-    if (res is ResultFailure<void>) _snack(context, AppL10n.of(context).errorGeneric);
+    if (res is ResultFailure<void>)
+      _snack(context, AppL10n.of(context).errorGeneric);
   }
 
   Future<void> _onPickTheme(
@@ -245,10 +245,10 @@ class _SettingsBody extends ConsumerWidget {
   ) async {
     final mode = await showThemePickerDialog(context, current);
     if (mode == null || mode == current) return;
-    final res =
-        await ref.read(profileProvider.notifier).updateTheme(mode);
+    final res = await ref.read(profileProvider.notifier).updateTheme(mode);
     if (!context.mounted) return;
-    if (res is ResultFailure<void>) _snack(context, AppL10n.of(context).errorGeneric);
+    if (res is ResultFailure<void>)
+      _snack(context, AppL10n.of(context).errorGeneric);
   }
 
   Future<void> _onLogout(BuildContext context, WidgetRef ref) async {
@@ -316,4 +316,3 @@ class _ErrorView extends StatelessWidget {
     );
   }
 }
-

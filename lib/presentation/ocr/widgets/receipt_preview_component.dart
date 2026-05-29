@@ -79,10 +79,7 @@ class _ReceiptPreviewComponentState extends State<ReceiptPreviewComponent> {
                         clipBehavior: Clip.antiAlias,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.r),
-                          side: BorderSide(
-                            color: scheme.primary,
-                            width: 2,
-                          ),
+                          side: BorderSide(color: scheme.primary, width: 2),
                         ),
                         child: InteractiveViewer(
                           child: _ImageThumb(file: file, fit: BoxFit.contain),
@@ -99,9 +96,7 @@ class _ReceiptPreviewComponentState extends State<ReceiptPreviewComponent> {
                     Positioned(
                       top: -6.h,
                       right: -6.w,
-                      child: _RemoveButton(
-                        onPressed: () => widget.onRemove(i),
-                      ),
+                      child: _RemoveButton(onPressed: () => widget.onRemove(i)),
                     ),
                   ],
                 ),
@@ -120,9 +115,7 @@ class _ReceiptPreviewComponentState extends State<ReceiptPreviewComponent> {
               width: i == _page ? 14.w : 6.w,
               height: 6.h,
               decoration: BoxDecoration(
-                color: i == _page
-                    ? scheme.primary
-                    : scheme.outlineVariant,
+                color: i == _page ? scheme.primary : scheme.outlineVariant,
                 borderRadius: BorderRadius.circular(3.r),
               ),
             ),
@@ -186,47 +179,51 @@ class _EmptyState extends StatelessWidget {
     return SizedBox(
       height: 320.h,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // TODO: ganti placeholder ini dengan Lottie/SVG ilustrasi final.
-            Container(
-              width: 180.w,
-              height: 180.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: scheme.primary.withValues(alpha: 0.08),
-                border: Border.all(
-                  color: scheme.primary.withValues(alpha: 0.25),
-                  width: 1.5,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.receipt_long_rounded,
-                size: 96.r,
-                color: scheme.primary.withValues(alpha: 0.6),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32.w),
-              child: Text(
-                l10n.scanEmptyHint,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                      height: 1.4,
+        child:
+            Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // TODO: ganti placeholder ini dengan Lottie/SVG ilustrasi final.
+                    Container(
+                      width: 180.w,
+                      height: 180.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: scheme.primary.withValues(alpha: 0.08),
+                        border: Border.all(
+                          color: scheme.primary.withValues(alpha: 0.25),
+                          width: 1.5,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.receipt_long_rounded,
+                        size: 96.r,
+                        color: scheme.primary.withValues(alpha: 0.6),
+                      ),
                     ),
-              ),
-            ),
-          ],
-        ).animate().fadeIn(duration: 400.ms).slideY(
-              begin: 0.05,
-              end: 0,
-              duration: 400.ms,
-              curve: Curves.easeOut,
-            ),
+                    SizedBox(height: 20.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32.w),
+                      child: Text(
+                        l10n.scanEmptyHint,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                .animate()
+                .fadeIn(duration: 400.ms)
+                .slideY(
+                  begin: 0.05,
+                  end: 0,
+                  duration: 400.ms,
+                  curve: Curves.easeOut,
+                ),
       ),
     );
   }
@@ -291,11 +288,7 @@ class _RemoveButton extends StatelessWidget {
         onTap: onPressed,
         child: Padding(
           padding: EdgeInsets.all(6.r),
-          child: Icon(
-            Icons.close_rounded,
-            color: scheme.onSurface,
-            size: 18.r,
-          ),
+          child: Icon(Icons.close_rounded, color: scheme.onSurface, size: 18.r),
         ),
       ),
     );

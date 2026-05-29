@@ -51,8 +51,9 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
       text: initial.service > 0 ? _fmtNum(initial.service) : '',
     );
     _taxFocus.addListener(() => _selectAllOnFocus(_taxCtrl, _taxFocus));
-    _serviceFocus
-        .addListener(() => _selectAllOnFocus(_serviceCtrl, _serviceFocus));
+    _serviceFocus.addListener(
+      () => _selectAllOnFocus(_serviceCtrl, _serviceFocus),
+    );
     // Rebuild ketika fokus Pajak/Service berubah, agar _StickyBottom dapat
     // tampil/sembunyi sesuai aturan "hide sticky saat keyboard terbuka dan
     // fokus bukan di Pajak/Service".
@@ -97,8 +98,9 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     if (!mounted) return;
     switch (result) {
       case SaveError(:final message):
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
       case SaveSuccess(:final billId):
         context.goNamed(
           Routes.billSplitName,
@@ -177,8 +179,8 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
                     direction: DismissDirection.endToStart,
                     background: _SwipeBackground(),
                     confirmDismiss: (_) async {
-                      final hasContent = item.name.trim().isNotEmpty ||
-                          item.price > 0;
+                      final hasContent =
+                          item.name.trim().isNotEmpty || item.price > 0;
                       if (!hasContent) return true;
                       return await showDialog<bool>(
                             context: context,
@@ -261,10 +263,10 @@ class _ItemControllers {
   }
 
   factory _ItemControllers.fromItem(BillReviewItem it) => _ItemControllers(
-        name: TextEditingController(text: it.name),
-        price: TextEditingController(text: _fmtNum(it.price)),
-        qty: TextEditingController(text: _fmtNum(it.qty)),
-      );
+    name: TextEditingController(text: it.name),
+    price: TextEditingController(text: _fmtNum(it.price)),
+    qty: TextEditingController(text: _fmtNum(it.qty)),
+  );
 
   final TextEditingController name;
   final TextEditingController price;
@@ -274,8 +276,7 @@ class _ItemControllers {
 
   static void _selectAll(TextEditingController c, FocusNode node) {
     if (node.hasFocus && c.text.isNotEmpty) {
-      c.selection =
-          TextSelection(baseOffset: 0, extentOffset: c.text.length);
+      c.selection = TextSelection(baseOffset: 0, extentOffset: c.text.length);
     }
   }
 
@@ -343,15 +344,15 @@ class _Header extends StatelessWidget {
               padding: EdgeInsets.only(left: 32.w),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined,
-                      size: 14.r, color: scheme.outline),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 14.r,
+                    color: scheme.outline,
+                  ),
                   SizedBox(width: 6.w),
                   Text(
                     AppFormat.longDate().format(receiptDate!),
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: scheme.outline,
-                    ),
+                    style: TextStyle(fontSize: 12.sp, color: scheme.outline),
                   ),
                 ],
               ),
@@ -368,8 +369,11 @@ class _Header extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.info_outline,
-                      size: 14.r, color: scheme.onTertiaryContainer),
+                  Icon(
+                    Icons.info_outline,
+                    size: 14.r,
+                    color: scheme.onTertiaryContainer,
+                  ),
                   SizedBox(width: 6.w),
                   Flexible(
                     child: Text(
@@ -412,9 +416,7 @@ class _ItemCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14.r),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(14.w, 12.h, 14.w, 12.h),
@@ -440,8 +442,9 @@ class _ItemCard extends StatelessWidget {
                   child: TextField(
                     controller: controllers.qty,
                     focusNode: controllers.qtyFocus,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                     ],
@@ -461,8 +464,9 @@ class _ItemCard extends StatelessWidget {
                   child: TextField(
                     controller: controllers.price,
                     focusNode: controllers.priceFocus,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                     ],
@@ -531,8 +535,9 @@ class _StickyBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final totalColor =
-        state.hasMismatch ? Colors.orange.shade700 : scheme.onSurface;
+    final totalColor = state.hasMismatch
+        ? Colors.orange.shade700
+        : scheme.onSurface;
 
     return Material(
       elevation: 8,
@@ -545,19 +550,16 @@ class _StickyBottom extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Theme(
-                data: Theme.of(context).copyWith(
-                  dividerColor: Colors.transparent,
-                ),
+                data: Theme.of(
+                  context,
+                ).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   tilePadding: EdgeInsets.zero,
                   childrenPadding: EdgeInsets.only(top: 10.h, bottom: 8.h),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Subtotal',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
+                      Text('Subtotal', style: TextStyle(fontSize: 14.sp)),
                       Text(
                         currency.format(state.subtotal),
                         style: TextStyle(fontSize: 14.sp),
@@ -701,15 +703,17 @@ class _SaveButton extends StatelessWidget {
                       height: 22.w,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        valueColor:
-                            AlwaysStoppedAnimation(scheme.onPrimary),
+                        valueColor: AlwaysStoppedAnimation(scheme.onPrimary),
                       ),
                     )
                   : Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.check_circle,
-                            color: scheme.onPrimary, size: 20.r),
+                        Icon(
+                          Icons.check_circle,
+                          color: scheme.onPrimary,
+                          size: 20.r,
+                        ),
                         SizedBox(width: 8.w),
                         Text(
                           'Simpan Bill',
@@ -744,16 +748,12 @@ class _SuspectThousandsBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline,
-              color: Colors.red.shade700, size: 20.r),
+          Icon(Icons.error_outline, color: Colors.red.shade700, size: 20.r),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               l10n.reviewSuspectThousandsBug,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.red.shade900,
-              ),
+              style: TextStyle(fontSize: 12.sp, color: Colors.red.shade900),
             ),
           ),
         ],
@@ -784,17 +784,17 @@ class _MismatchBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_rounded,
-              color: Colors.orange.shade700, size: 20.r),
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.orange.shade700,
+            size: 20.r,
+          ),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               'Total ${currency.format(computed)} berbeda dari struk '
               '(${currency.format(detected)}). Periksa lagi.',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.orange.shade900,
-              ),
+              style: TextStyle(fontSize: 12.sp, color: Colors.orange.shade900),
             ),
           ),
         ],

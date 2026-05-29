@@ -64,11 +64,8 @@ class BillDetailScreen extends ConsumerWidget {
             message: e.toString(),
             onRetry: () => ref.invalidate(billDetailFamily(billId)),
           ),
-          data: (state) => _Body(
-            state: state,
-            billId: billId,
-            currency: currency,
-          ),
+          data: (state) =>
+              _Body(state: state, billId: billId, currency: currency),
         ),
       ),
     );
@@ -91,8 +88,7 @@ class _Body extends ConsumerWidget {
         .read(billDetailFamily(billId).notifier)
         .toggleParticipantPaymentStatus(pid);
     if (err != null && context.mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
     }
   }
 
@@ -195,8 +191,11 @@ class _HeaderCard extends StatelessWidget {
           SizedBox(height: 4.h),
           Row(
             children: [
-              Icon(Icons.event_outlined,
-                  size: 14.r, color: scheme.onSurfaceVariant),
+              Icon(
+                Icons.event_outlined,
+                size: 14.r,
+                color: scheme.onSurfaceVariant,
+              ),
               SizedBox(width: 4.w),
               Text(
                 AppFormat.longDate().format(receiptDate),
@@ -210,10 +209,7 @@ class _HeaderCard extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             'Total tagihan',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: scheme.onSurfaceVariant,
-            ),
+            style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
           ),
           SizedBox(height: 2.h),
           Text(
@@ -271,8 +267,9 @@ class _StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final bg = isSettled ? scheme.primaryContainer : scheme.secondaryContainer;
-    final fg =
-        isSettled ? scheme.onPrimaryContainer : scheme.onSecondaryContainer;
+    final fg = isSettled
+        ? scheme.onPrimaryContainer
+        : scheme.onSecondaryContainer;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeOut,
@@ -324,65 +321,64 @@ class _ParticipantTile extends StatelessWidget {
     final amount = total?.total ?? 0;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: scheme.outlineVariant),
-      ),
-      child: Row(
-        children: [
-          ParticipantAvatar(
-            id: participant.id,
-            name: participant.name,
-            size: 40,
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(14.r),
+            border: Border.all(color: scheme.outlineVariant),
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w600,
-                    color: paid
-                        ? scheme.onSurface.withValues(alpha: 0.55)
-                        : scheme.onSurface,
-                    decoration:
-                        paid ? TextDecoration.lineThrough : TextDecoration.none,
-                    decorationColor: scheme.onSurfaceVariant,
-                  ),
-                  child: Text(participant.name),
+          child: Row(
+            children: [
+              ParticipantAvatar(
+                id: participant.id,
+                name: participant.name,
+                size: 40,
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOut,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600,
+                        color: paid
+                            ? scheme.onSurface.withValues(alpha: 0.55)
+                            : scheme.onSurface,
+                        decoration: paid
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        decorationColor: scheme.onSurfaceVariant,
+                      ),
+                      child: Text(participant.name),
+                    ),
+                    SizedBox(height: 2.h),
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOut,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w500,
+                        color: paid
+                            ? scheme.primary.withValues(alpha: 0.6)
+                            : scheme.primary,
+                        decoration: paid
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        decorationColor: scheme.onSurfaceVariant,
+                      ),
+                      child: Text(currency.format(amount)),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 2.h),
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                    color: paid
-                        ? scheme.primary.withValues(alpha: 0.6)
-                        : scheme.primary,
-                    decoration:
-                        paid ? TextDecoration.lineThrough : TextDecoration.none,
-                    decorationColor: scheme.onSurfaceVariant,
-                  ),
-                  child: Text(currency.format(amount)),
-                ),
-              ],
-            ),
+              ),
+              Switch.adaptive(value: paid, onChanged: (_) => onChanged()),
+            ],
           ),
-          Switch.adaptive(
-            value: paid,
-            onChanged: (_) => onChanged(),
-          ),
-        ],
-      ),
-    )
+        )
         .animate(target: paid ? 1 : 0)
         .fade(begin: 1.0, end: 0.7, duration: 220.ms);
   }
@@ -405,15 +401,16 @@ class _EmptyParticipants extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(Icons.group_outlined, size: 40.r, color: scheme.onSurfaceVariant),
+          Icon(
+            Icons.group_outlined,
+            size: 40.r,
+            color: scheme.onSurfaceVariant,
+          ),
           SizedBox(height: 8.h),
           Text(
             'Belum ada partisipan untuk tagihan ini.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: scheme.onSurfaceVariant,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: scheme.onSurfaceVariant),
           ),
           SizedBox(height: 12.h),
           FilledButton.tonalIcon(

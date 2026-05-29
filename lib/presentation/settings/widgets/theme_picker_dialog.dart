@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_l10n.dart';
 
-Future<String?> showThemePickerDialog(
-  BuildContext context,
-  String current,
-) {
+Future<String?> showThemePickerDialog(BuildContext context, String current) {
   return showDialog<String>(
     context: context,
     builder: (ctx) {

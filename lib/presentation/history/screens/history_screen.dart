@@ -54,7 +54,10 @@ class HistoryScreen extends ConsumerWidget {
                   )
                 else
                   SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
                     sliver: SliverList.separated(
                       itemCount: list.length,
                       separatorBuilder: (_, _) => SizedBox(height: 8.h),
@@ -65,8 +68,10 @@ class HistoryScreen extends ConsumerWidget {
                             title: Text(bill.title),
                             subtitle: Text(currency.format(bill.totalAmount)),
                             trailing: bill.isSettled
-                                ? const Icon(Icons.check_circle,
-                                    color: Colors.green)
+                                ? const Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                  )
                                 : const Icon(Icons.chevron_right),
                             onTap: () => context.pushNamed(
                               Routes.billDetailName,
@@ -209,16 +214,16 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.inbox_outlined,
-                size: 56.r, color: scheme.onSurfaceVariant),
+            Icon(
+              Icons.inbox_outlined,
+              size: 56.r,
+              color: scheme.onSurfaceVariant,
+            ),
             SizedBox(height: 12.h),
             Text(
               l10n.historyEmptyMessage,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: scheme.onSurfaceVariant,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: scheme.onSurfaceVariant),
             ),
           ],
         ),
@@ -242,12 +247,17 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline,
-                color: Theme.of(context).colorScheme.error, size: 48.r),
+            Icon(
+              Icons.error_outline,
+              color: Theme.of(context).colorScheme.error,
+              size: 48.r,
+            ),
             SizedBox(height: 12.h),
-            Text(message,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14.sp)),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14.sp),
+            ),
             SizedBox(height: 16.h),
             FilledButton.tonal(onPressed: onRetry, child: Text(l10n.retry)),
           ],

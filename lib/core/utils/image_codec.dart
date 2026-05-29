@@ -36,8 +36,9 @@ String _downscaleToBase64Sync(Uint8List bytes) {
   if (decoded == null) {
     throw const FormatException('Unsupported or corrupt image bytes');
   }
-  final longEdge =
-      decoded.width > decoded.height ? decoded.width : decoded.height;
+  final longEdge = decoded.width > decoded.height
+      ? decoded.width
+      : decoded.height;
   final resized = longEdge <= AppConstants.ocrMaxImageEdgePx
       ? decoded
       : img.copyResize(

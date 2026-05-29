@@ -56,16 +56,19 @@ abstract class SplitState with _$SplitState {
   List<ParticipantItemShare> itemsForParticipant(String participantId) {
     final out = <ParticipantItemShare>[];
     for (final it in items) {
-      final assignees =
-          assignments.where((a) => a.itemId == it.id).toList(growable: false);
+      final assignees = assignments
+          .where((a) => a.itemId == it.id)
+          .toList(growable: false);
       if (assignees.isEmpty) continue;
       if (!assignees.any((a) => a.participantId == participantId)) continue;
       final share = (it.price * it.qty) / assignees.length;
-      out.add(ParticipantItemShare(
-        item: it,
-        sharedWith: assignees.length,
-        share: share,
-      ));
+      out.add(
+        ParticipantItemShare(
+          item: it,
+          sharedWith: assignees.length,
+          share: share,
+        ),
+      );
     }
     return out;
   }
@@ -84,30 +87,35 @@ abstract class SplitState with _$SplitState {
     for (final p in participants) {
       var pSub = 0.0;
       for (final it in items) {
-        final assignees =
-            assignments.where((a) => a.itemId == it.id).toList(growable: false);
+        final assignees = assignments
+            .where((a) => a.itemId == it.id)
+            .toList(growable: false);
         if (assignees.isEmpty) continue;
         if (assignees.any((a) => a.participantId == p.id)) {
           pSub += (it.price * it.qty) / assignees.length;
         }
       }
       final share = totalSubtotal == 0 ? 0.0 : pSub / totalSubtotal;
-      raw.add(_RawTotal(
-        participantId: p.id,
-        subtotal: pSub,
-        tax: bill.tax * share,
-        service: bill.service * share,
-      ));
+      raw.add(
+        _RawTotal(
+          participantId: p.id,
+          subtotal: pSub,
+          tax: bill.tax * share,
+          service: bill.service * share,
+        ),
+      );
     }
 
     final result = raw
-        .map((r) => ParticipantTotal(
-              participantId: r.participantId,
-              subtotal: _round(r.subtotal),
-              tax: _round(r.tax),
-              service: _round(r.service),
-              total: _round(r.subtotal + r.tax + r.service),
-            ))
+        .map(
+          (r) => ParticipantTotal(
+            participantId: r.participantId,
+            subtotal: _round(r.subtotal),
+            tax: _round(r.tax),
+            service: _round(r.service),
+            total: _round(r.subtotal + r.tax + r.service),
+          ),
+        )
         .toList();
 
     // Absorb rounding drift on the last assigned participant so the sum of
@@ -196,11 +204,7 @@ class SplitNotifier extends _$SplitNotifier {
           name = null;
         }
         if (name != null && name.isNotEmpty) {
-          final p = Participant(
-            id: _uuid.v4(),
-            billId: bill.id,
-            name: name,
-          );
+          final p = Participant(id: _uuid.v4(), billId: bill.id, name: name);
           final res = await repo.upsertParticipant(p);
           if (res is Success<Participant>) {
             effectiveParticipants = [res.data];
@@ -274,11 +278,7 @@ class SplitNotifier extends _$SplitNotifier {
     } else {
       next = [
         ...s.assignments,
-        Assignment(
-          id: _uuid.v4(),
-          itemId: itemId,
-          participantId: pid,
-        ),
+        Assignment(id: _uuid.v4(), itemId: itemId, participantId: pid),
       ];
     }
 
@@ -295,9 +295,9 @@ class SplitNotifier extends _$SplitNotifier {
   }
 
   static T _unwrap<T>(Result<T> r) => switch (r) {
-        Success(:final data) => data,
-        ResultFailure(:final failure) => throw _FailureException(failure),
-      };
+    Success(:final data) => data,
+    ResultFailure(:final failure) => throw _FailureException(failure),
+  };
 }
 
 class _FailureException implements Exception {

@@ -17,15 +17,17 @@ abstract class ItemDto with _$ItemDto {
     @Default(1.0) double qty,
   }) = _ItemDto;
 
-  factory ItemDto.fromJson(Map<String, dynamic> json) => _$ItemDtoFromJson(json);
+  factory ItemDto.fromJson(Map<String, dynamic> json) =>
+      _$ItemDtoFromJson(json);
 
   factory ItemDto.fromEntity(Item i) => ItemDto(
-        id: i.id,
-        billId: i.billId,
-        name: i.name,
-        price: i.price,
-        qty: i.qty,
-      );
+    id: i.id,
+    billId: i.billId,
+    name: i.name,
+    price: i.price,
+    qty: i.qty,
+  );
 
-  Item toEntity() => Item(id: id, billId: billId, name: name, price: price, qty: qty);
+  Item toEntity() =>
+      Item(id: id, billId: billId, name: name, price: price, qty: qty);
 }

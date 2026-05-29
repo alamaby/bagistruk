@@ -30,8 +30,11 @@ class BillCalculator {
     final itemsById = {for (final i in items) i.id: i};
     final weightByItem = <String, double>{};
     for (final a in assignments) {
-      weightByItem.update(a.itemId, (w) => w + a.shareWeight,
-          ifAbsent: () => a.shareWeight);
+      weightByItem.update(
+        a.itemId,
+        (w) => w + a.shareWeight,
+        ifAbsent: () => a.shareWeight,
+      );
     }
 
     final subtotalByParticipant = <String, double>{};
@@ -48,8 +51,10 @@ class BillCalculator {
       );
     }
 
-    final grandSubtotal =
-        subtotalByParticipant.values.fold<double>(0, (a, b) => a + b);
+    final grandSubtotal = subtotalByParticipant.values.fold<double>(
+      0,
+      (a, b) => a + b,
+    );
     if (grandSubtotal == 0) return const {};
 
     final extras = tax + service;
@@ -71,8 +76,9 @@ class BillCalculator {
     final actual = owed.values.fold<double>(0, (a, b) => a + b);
     final residual = _round2(expected - actual);
     if (residual == 0 || owed.isEmpty) return;
-    final topPayer =
-        owed.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
+    final topPayer = owed.entries
+        .reduce((a, b) => a.value >= b.value ? a : b)
+        .key;
     owed[topPayer] = _round2(owed[topPayer]! + residual);
   }
 }

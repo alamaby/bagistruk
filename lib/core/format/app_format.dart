@@ -10,11 +10,8 @@ class AppFormat {
   static const String locale = 'id_ID';
 
   /// Rupiah currency. Example: `Rp 104.002`.
-  static NumberFormat currency() => NumberFormat.currency(
-        locale: locale,
-        symbol: 'Rp ',
-        decimalDigits: 0,
-      );
+  static NumberFormat currency() =>
+      NumberFormat.currency(locale: locale, symbol: 'Rp ', decimalDigits: 0);
 
   /// Long-form date in Indonesian. Example: `29 April 2026`.
   static DateFormat longDate() => DateFormat.yMMMMd(locale);

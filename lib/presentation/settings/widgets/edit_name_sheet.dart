@@ -22,8 +22,9 @@ class _EditNameSheet extends StatefulWidget {
 }
 
 class _EditNameSheetState extends State<_EditNameSheet> {
-  late final TextEditingController _ctrl =
-      TextEditingController(text: widget.initial);
+  late final TextEditingController _ctrl = TextEditingController(
+    text: widget.initial,
+  );
 
   @override
   void dispose() {

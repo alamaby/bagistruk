@@ -37,8 +37,9 @@ class ProfileNotifier extends _$ProfileNotifier {
   }
 
   Future<Result<void>> updateDisplayName(String name) async {
-    final res =
-        await ref.read(profileRepositoryProvider).updateDisplayName(name);
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .updateDisplayName(name);
     if (res is Success<void>) {
       _patch((p) => p.copyWith(displayName: name.trim()));
     }
@@ -46,8 +47,9 @@ class ProfileNotifier extends _$ProfileNotifier {
   }
 
   Future<Result<void>> updateCurrency(String code) async {
-    final res =
-        await ref.read(profileRepositoryProvider).updateDefaultCurrency(code);
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .updateDefaultCurrency(code);
     if (res is Success<void>) {
       _patch((p) => p.copyWith(defaultCurrency: code));
     }

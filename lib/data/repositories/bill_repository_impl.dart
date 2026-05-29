@@ -17,10 +17,10 @@ class BillRepositoryImpl implements IBillRepository {
 
   @override
   Future<Result<List<Bill>>> listBills() => guardAsync(
-        () async => (await _ds.listBills())
-            .map((d) => d.toEntity())
-            .toList(growable: false),
-      );
+    () async => (await _ds.listBills())
+        .map((d) => d.toEntity())
+        .toList(growable: false),
+  );
 
   @override
   Future<Result<Bill>> getBill(String id) =>
@@ -28,9 +28,8 @@ class BillRepositoryImpl implements IBillRepository {
 
   @override
   Future<Result<Bill>> createBill(Bill bill) => guardAsync(
-        () async =>
-            (await _ds.upsertBill(BillDto.fromEntity(bill))).toEntity(),
-      );
+    () async => (await _ds.upsertBill(BillDto.fromEntity(bill))).toEntity(),
+  );
 
   @override
   Future<Result<Bill>> updateBill(Bill bill) => createBill(bill);
@@ -41,25 +40,24 @@ class BillRepositoryImpl implements IBillRepository {
 
   @override
   Future<Result<List<Item>>> listItems(String billId) => guardAsync(
-        () async => (await _ds.listItems(billId))
-            .map((d) => d.toEntity())
-            .toList(growable: false),
-      );
+    () async => (await _ds.listItems(
+      billId,
+    )).map((d) => d.toEntity()).toList(growable: false),
+  );
 
   @override
   Future<Result<List<Item>>> upsertItems(List<Item> items) => guardAsync(
-        () async => (await _ds.upsertItems(
-                items.map(ItemDto.fromEntity).toList()))
-            .map((d) => d.toEntity())
-            .toList(growable: false),
-      );
+    () async => (await _ds.upsertItems(
+      items.map(ItemDto.fromEntity).toList(),
+    )).map((d) => d.toEntity()).toList(growable: false),
+  );
 
   @override
   Future<Result<List<Participant>>> listParticipants(String billId) =>
       guardAsync(
-        () async => (await _ds.listParticipants(billId))
-            .map((d) => d.toEntity())
-            .toList(growable: false),
+        () async => (await _ds.listParticipants(
+          billId,
+        )).map((d) => d.toEntity()).toList(growable: false),
       );
 
   @override
@@ -67,27 +65,24 @@ class BillRepositoryImpl implements IBillRepository {
       guardAsync(
         () async => (await _ds.upsertParticipant(
           ParticipantDto.fromEntity(participant),
-        ))
-            .toEntity(),
+        )).toEntity(),
       );
 
   @override
-  Future<Result<List<Assignment>>> listAssignments(String billId) =>
-      guardAsync(
-        () async => (await _ds.listAssignments(billId))
-            .map((d) => d.toEntity())
-            .toList(growable: false),
-      );
+  Future<Result<List<Assignment>>> listAssignments(String billId) => guardAsync(
+    () async => (await _ds.listAssignments(
+      billId,
+    )).map((d) => d.toEntity()).toList(growable: false),
+  );
 
   @override
   Future<Result<List<Assignment>>> replaceAssignments(
     String billId,
     List<Assignment> assignments,
-  ) =>
-      guardAsync(
-        () async => (await _ds.replaceAssignments(
-                billId, assignments.map(AssignmentDto.fromEntity).toList()))
-            .map((d) => d.toEntity())
-            .toList(growable: false),
-      );
+  ) => guardAsync(
+    () async => (await _ds.replaceAssignments(
+      billId,
+      assignments.map(AssignmentDto.fromEntity).toList(),
+    )).map((d) => d.toEntity()).toList(growable: false),
+  );
 }

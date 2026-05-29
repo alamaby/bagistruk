@@ -18,12 +18,12 @@ extension ResultX<T> on Result<T> {
   bool get isFailure => this is ResultFailure<T>;
 
   T? get dataOrNull => switch (this) {
-        Success(:final data) => data,
-        ResultFailure() => null,
-      };
+    Success(:final data) => data,
+    ResultFailure() => null,
+  };
 
   Failure? get failureOrNull => switch (this) {
-        Success() => null,
-        ResultFailure(:final failure) => failure,
-      };
+    Success() => null,
+    ResultFailure(:final failure) => failure,
+  };
 }

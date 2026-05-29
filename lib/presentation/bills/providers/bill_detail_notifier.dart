@@ -30,8 +30,7 @@ abstract class BillDetailState with _$BillDetailState {
   /// — duplicated here intentionally to keep the detail screen decoupled from
   /// split-screen state shape; refactor to a shared util if drift appears.
   List<ParticipantTotal> calculateTotals() {
-    final totalSubtotal =
-        items.fold<double>(0, (s, i) => s + i.price * i.qty);
+    final totalSubtotal = items.fold<double>(0, (s, i) => s + i.price * i.qty);
     final raw = <_RawTotal>[];
     for (final p in participants) {
       var pSub = 0.0;
@@ -45,22 +44,26 @@ abstract class BillDetailState with _$BillDetailState {
         }
       }
       final share = totalSubtotal == 0 ? 0.0 : pSub / totalSubtotal;
-      raw.add(_RawTotal(
-        participantId: p.id,
-        subtotal: pSub,
-        tax: bill.tax * share,
-        service: bill.service * share,
-      ));
+      raw.add(
+        _RawTotal(
+          participantId: p.id,
+          subtotal: pSub,
+          tax: bill.tax * share,
+          service: bill.service * share,
+        ),
+      );
     }
 
     final result = raw
-        .map((r) => ParticipantTotal(
-              participantId: r.participantId,
-              subtotal: _round(r.subtotal),
-              tax: _round(r.tax),
-              service: _round(r.service),
-              total: _round(r.subtotal + r.tax + r.service),
-            ))
+        .map(
+          (r) => ParticipantTotal(
+            participantId: r.participantId,
+            subtotal: _round(r.subtotal),
+            tax: _round(r.tax),
+            service: _round(r.service),
+            total: _round(r.subtotal + r.tax + r.service),
+          ),
+        )
         .toList();
 
     // Absorb rounding drift on the last participant when every item is
@@ -152,8 +155,7 @@ class BillDetailNotifier extends _$BillDetailNotifier {
       return 'Gagal simpan status: ${res.failure}';
     }
 
-    final allPaid =
-        nextList.isNotEmpty && nextList.every((p) => p.isPaid);
+    final allPaid = nextList.isNotEmpty && nextList.every((p) => p.isPaid);
     if (allPaid != s.bill.isSettled) {
       final newBill = s.bill.copyWith(isSettled: allPaid);
       final billRes = await repo.updateBill(newBill);
@@ -168,9 +170,9 @@ class BillDetailNotifier extends _$BillDetailNotifier {
   }
 
   static T _unwrap<T>(Result<T> r) => switch (r) {
-        Success(:final data) => data,
-        ResultFailure(:final failure) => throw _FailureException(failure),
-      };
+    Success(:final data) => data,
+    ResultFailure(:final failure) => throw _FailureException(failure),
+  };
 }
 
 class _FailureException implements Exception {

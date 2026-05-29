@@ -106,8 +106,7 @@ class _ParticipantSummaryCard extends StatelessWidget {
       buf.writeln('*Item:*');
       for (final s in items) {
         final name = s.item.name.isEmpty ? '(tanpa nama)' : s.item.name;
-        final shareNote =
-            s.sharedWith > 1 ? ' (dibagi ${s.sharedWith})' : '';
+        final shareNote = s.sharedWith > 1 ? ' (dibagi ${s.sharedWith})' : '';
         buf.writeln('• $name$shareNote — ${currency.format(s.share)}');
       }
     }
@@ -129,9 +128,9 @@ class _ParticipantSummaryCard extends StatelessWidget {
       );
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.splitShareFailed)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.splitShareFailed)));
       }
     }
   }
@@ -141,9 +140,7 @@ class _ParticipantSummaryCard extends StatelessWidget {
     if (context.mounted) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(content: Text(l10n.splitSummaryCopied)),
-        );
+        ..showSnackBar(SnackBar(content: Text(l10n.splitSummaryCopied)));
     }
   }
 

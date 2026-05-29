@@ -145,9 +145,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       // profile belum siap — sesuai pasar utama aplikasi.
       final currency =
           ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
-      await ref
-          .read(ocrProvider.notifier)
-          .process(bytes, currency: currency);
+      await ref.read(ocrProvider.notifier).process(bytes, currency: currency);
     } finally {
       if (mounted) setState(() => _starting = false);
     }
@@ -197,8 +195,11 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
               behavior: SnackBarBehavior.floating,
               content: Row(
                 children: [
-                  Icon(Icons.error_outline,
-                      color: scheme.onErrorContainer, size: 20.r),
+                  Icon(
+                    Icons.error_outline,
+                    color: scheme.onErrorContainer,
+                    size: 20.r,
+                  ),
                   SizedBox(width: 12.w),
                   Expanded(
                     child: Text(
@@ -224,13 +225,16 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       title: l10n.scanScreenTitle,
       actions: [
         IconButton(
-          icon: Icon(_mode == ReceiptPreviewMode.carousel
-              ? Icons.grid_view
-              : Icons.view_carousel),
-          onPressed: () => setState(() => _mode =
-              _mode == ReceiptPreviewMode.carousel
-                  ? ReceiptPreviewMode.grid
-                  : ReceiptPreviewMode.carousel),
+          icon: Icon(
+            _mode == ReceiptPreviewMode.carousel
+                ? Icons.grid_view
+                : Icons.view_carousel,
+          ),
+          onPressed: () => setState(
+            () => _mode = _mode == ReceiptPreviewMode.carousel
+                ? ReceiptPreviewMode.grid
+                : ReceiptPreviewMode.carousel,
+          ),
         ),
       ],
       body: Padding(
@@ -269,28 +273,31 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
                 Expanded(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 250),
-                    child: FilledButton.icon(
-                      key: ValueKey<bool>(scanActive),
-                      onPressed: scanActive ? _process : null,
-                      icon: busy
-                          ? SizedBox(
-                              width: 16.w,
-                              height: 16.w,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 2,
+                    child:
+                        FilledButton.icon(
+                              key: ValueKey<bool>(scanActive),
+                              onPressed: scanActive ? _process : null,
+                              icon: busy
+                                  ? SizedBox(
+                                      width: 16.w,
+                                      height: 16.w,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(Icons.auto_awesome),
+                              label: Text(
+                                busy ? l10n.scanInProgress : l10n.scanAction,
                               ),
                             )
-                          : const Icon(Icons.auto_awesome),
-                      label: Text(busy ? l10n.scanInProgress : l10n.scanAction),
-                    )
-                        .animate(target: scanActive ? 1 : 0)
-                        .fadeIn(duration: 300.ms)
-                        .slideY(
-                          begin: 0.3,
-                          end: 0,
-                          duration: 300.ms,
-                          curve: Curves.easeOut,
-                        ),
+                            .animate(target: scanActive ? 1 : 0)
+                            .fadeIn(duration: 300.ms)
+                            .slideY(
+                              begin: 0.3,
+                              end: 0,
+                              duration: 300.ms,
+                              curve: Curves.easeOut,
+                            ),
                   ),
                 ),
               ],
@@ -334,10 +341,7 @@ class _StatusLabel extends StatelessWidget {
     if (!isProcessing) return label;
     return label
         .animate(onPlay: (c) => c.repeat())
-        .shimmer(
-          duration: 1200.ms,
-          color: scheme.primary,
-        );
+        .shimmer(duration: 1200.ms, color: scheme.primary);
   }
 }
 
@@ -355,9 +359,7 @@ class _ErrorCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.errorContainer.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(
-          color: scheme.error.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: scheme.error.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

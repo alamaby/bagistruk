@@ -5,7 +5,11 @@ import '../../../core/error/failure.dart';
 /// useful for debugging but unreadable in the UI — we surface a clean message
 /// and keep the technical details for logs only.
 class OcrMessage {
-  const OcrMessage({required this.title, required this.body, this.canRetry = true});
+  const OcrMessage({
+    required this.title,
+    required this.body,
+    this.canRetry = true,
+  });
 
   final String title;
   final String body;
@@ -15,25 +19,24 @@ class OcrMessage {
 OcrMessage friendlyOcrMessage(Failure failure) {
   return switch (failure) {
     NetworkFailure() => const OcrMessage(
-        title: 'Tidak ada koneksi',
-        body:
-            'Periksa koneksi internetmu, lalu coba scan ulang.',
-      ),
+      title: 'Tidak ada koneksi',
+      body: 'Periksa koneksi internetmu, lalu coba scan ulang.',
+    ),
     AuthFailure() => const OcrMessage(
-        title: 'Sesi berakhir',
-        body: 'Sesi kamu sudah habis. Silakan masuk lagi untuk melanjutkan.',
-        canRetry: false,
-      ),
+      title: 'Sesi berakhir',
+      body: 'Sesi kamu sudah habis. Silakan masuk lagi untuk melanjutkan.',
+      canRetry: false,
+    ),
     ParsingFailure() => const OcrMessage(
-        title: 'Respons tidak terbaca',
-        body:
-            'Hasil scan dari server tidak dapat diproses. Coba foto ulang dengan pencahayaan lebih baik.',
-      ),
+      title: 'Respons tidak terbaca',
+      body:
+          'Hasil scan dari server tidak dapat diproses. Coba foto ulang dengan pencahayaan lebih baik.',
+    ),
     ServerFailure(:final code, :final message) => _serverMessage(code, message),
     UnknownFailure() => const OcrMessage(
-        title: 'Terjadi kesalahan',
-        body: 'Sesuatu tidak berjalan semestinya. Coba lagi sebentar.',
-      ),
+      title: 'Terjadi kesalahan',
+      body: 'Sesuatu tidak berjalan semestinya. Coba lagi sebentar.',
+    ),
   };
 }
 
@@ -60,7 +63,8 @@ OcrMessage _serverMessage(int? code, String raw) {
   if (code == 429 || lower.contains('rate limit') || lower.contains('quota')) {
     return const OcrMessage(
       title: 'Terlalu banyak permintaan',
-      body: 'Kamu mencapai batas scan untuk saat ini. Coba lagi dalam beberapa menit.',
+      body:
+          'Kamu mencapai batas scan untuk saat ini. Coba lagi dalam beberapa menit.',
     );
   }
   if (code == 401 || code == 403) {
@@ -84,6 +88,7 @@ OcrMessage _serverMessage(int? code, String raw) {
   }
   return const OcrMessage(
     title: 'Scan gagal',
-    body: 'Tidak bisa memproses struk ini. Coba foto ulang atau gunakan gambar lain.',
+    body:
+        'Tidak bisa memproses struk ini. Coba foto ulang atau gunakan gambar lain.',
   );
 }

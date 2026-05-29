@@ -26,7 +26,10 @@ class FailureView extends StatelessWidget {
             ),
             if (onRetry != null) ...[
               SizedBox(height: 16.h),
-              FilledButton.tonal(onPressed: onRetry, child: const Text('Retry')),
+              FilledButton.tonal(
+                onPressed: onRetry,
+                child: const Text('Retry'),
+              ),
             ],
           ],
         ),
@@ -35,11 +38,11 @@ class FailureView extends StatelessWidget {
   }
 
   static String _label(Failure f) => switch (f) {
-        NetworkFailure(:final message) => 'Network: $message',
-        ServerFailure(:final message, :final code) =>
-          'Server${code != null ? ' ($code)' : ''}: $message',
-        ParsingFailure(:final message) => 'Could not parse response: $message',
-        AuthFailure(:final message) => 'Auth: $message',
-        UnknownFailure(:final error) => 'Unexpected: $error',
-      };
+    NetworkFailure(:final message) => 'Network: $message',
+    ServerFailure(:final message, :final code) =>
+      'Server${code != null ? ' ($code)' : ''}: $message',
+    ParsingFailure(:final message) => 'Could not parse response: $message',
+    AuthFailure(:final message) => 'Auth: $message',
+    UnknownFailure(:final error) => 'Unexpected: $error',
+  };
 }

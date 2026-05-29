@@ -21,7 +21,10 @@ Future<Result<T>> guardAsync<T>(Future<T> Function() body) async {
     return Result.failure(Failure.auth(e.message));
   } on FunctionException catch (e) {
     return Result.failure(
-      Failure.server(code: e.status, message: e.details?.toString() ?? 'Edge function error'),
+      Failure.server(
+        code: e.status,
+        message: e.details?.toString() ?? 'Edge function error',
+      ),
     );
   } on SocketException catch (e) {
     return Result.failure(Failure.network(e.message));

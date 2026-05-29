@@ -40,13 +40,13 @@ abstract class OcrResponseDto with _$OcrResponseDto {
       _$OcrResponseDtoFromJson(json);
 
   OcrResult toEntity() => OcrResult(
-        items: items.map((e) => e.toEntity()).toList(growable: false),
-        detectedTotal: detectedTotal,
-        detectedTax: detectedTax,
-        detectedService: detectedService,
-        merchant: merchant,
-        receiptDate: receiptDate,
-        confidence: confidence,
-        providerUsed: providerUsed,
-      );
+    items: items.map((e) => e.toEntity()).toList(growable: false),
+    detectedTotal: detectedTotal,
+    detectedTax: detectedTax,
+    detectedService: detectedService,
+    merchant: merchant,
+    receiptDate: receiptDate,
+    confidence: confidence,
+    providerUsed: providerUsed,
+  );
 }

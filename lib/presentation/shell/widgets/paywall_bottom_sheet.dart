@@ -71,15 +71,19 @@ class _PaywallSheet extends StatelessWidget {
             FilledButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                final fromQ =
-                    from != null ? '?from=${Uri.encodeComponent(from!)}' : '';
+                final fromQ = from != null
+                    ? '?from=${Uri.encodeComponent(from!)}'
+                    : '';
                 context.push('${Routes.register}$fromQ');
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.h),
                 child: Text(
                   l10n.paywallRegister,
-                  style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -96,7 +100,10 @@ class _PaywallSheet extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 4.h),
                 child: Text(
                   l10n.paywallLogin,
-                  style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

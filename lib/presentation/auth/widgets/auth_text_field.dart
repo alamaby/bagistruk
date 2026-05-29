@@ -61,7 +61,9 @@ class _AuthTextFieldState extends State<AuthTextField> {
                   size: 20.r,
                 ),
                 onPressed: () => setState(() => _obscured = !_obscured),
-                tooltip: _obscured ? 'Tampilkan password' : 'Sembunyikan password',
+                tooltip: _obscured
+                    ? 'Tampilkan password'
+                    : 'Sembunyikan password',
               )
             : null,
         filled: true,
