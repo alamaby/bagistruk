@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">Settlement placeholder</title>
+  <desc id="desc">Placeholder for the BagiStruk settlement tracking screen.</desc>
+  <rect width="390" height="844" rx="32" fill="#f8fafc"/>
+  <rect x="24" y="40" width="342" height="764" rx="28" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="48" y="92" fill="#111827" font-family="Arial, sans-serif" font-size="24" font-weight="700">Settlement</text>
+  <rect x="48" y="126" width="294" height="98" rx="16" fill="#ccfbf1"/>
+  <text x="68" y="164" fill="#134e4a" font-family="Arial, sans-serif" font-size="16" font-weight="700">Total bill</text>
+  <text x="68" y="198" fill="#0f766e" font-family="Arial, sans-serif" font-size="30" font-weight="700">Rp 73.000</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="48" y="264" width="294" height="74" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="82" cy="301" r="18" fill="#0f766e"/><text x="77" y="307" fill="#ffffff" font-size="14" font-weight="700">A</text>
+    <text x="116" y="294" fill="#111827" font-size="17" font-weight="700">Alya</text>
+    <text x="116" y="318" fill="#64748b" font-size="14">Paid</text>
+    <path d="M282 302l12 12 24-28" fill="none" stroke="#16a34a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="48" y="362" width="294" height="74" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="82" cy="399" r="18" fill="#f97316"/><text x="77" y="405" fill="#ffffff" font-size="14" font-weight="700">B</text>
+    <text x="116" y="392" fill="#111827" font-size="17" font-weight="700">Bima</text>
+    <text x="116" y="416" fill="#64748b" font-size="14">Waiting</text>
+    <rect x="286" y="386" width="34" height="26" rx="13" fill="#e5e7eb"/>
+    <rect x="48" y="460" width="294" height="74" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="82" cy="497" r="18" fill="#0f766e"/><text x="77" y="503" fill="#ffffff" font-size="14" font-weight="700">C</text>
+    <text x="116" y="490" fill="#111827" font-size="17" font-weight="700">Citra</text>
+    <text x="116" y="514" fill="#64748b" font-size="14">Paid</text>
+    <path d="M282 498l12 12 24-28" fill="none" stroke="#16a34a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="48" y="722" fill="#64748b" font-family="Arial, sans-serif" font-size="15">Replace with final app screenshot.</text>
+</svg>

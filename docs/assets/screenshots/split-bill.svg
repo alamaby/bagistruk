@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">Split bill placeholder</title>
+  <desc id="desc">Placeholder for the BagiStruk split assignment screen.</desc>
+  <rect width="390" height="844" rx="32" fill="#f8fafc"/>
+  <rect x="24" y="40" width="342" height="764" rx="28" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="48" y="92" fill="#111827" font-family="Arial, sans-serif" font-size="24" font-weight="700">Split</text>
+  <rect x="48" y="126" width="294" height="54" rx="14" fill="#dcfce7"/>
+  <text x="68" y="160" fill="#166534" font-family="Arial, sans-serif" font-size="16" font-weight="700">3 participants</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="48" y="220" width="294" height="100" rx="16" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="68" y="254" fill="#111827" font-size="17" font-weight="700">Nasi Goreng</text>
+    <circle cx="82" cy="288" r="18" fill="#0f766e"/><text x="77" y="294" fill="#ffffff" font-size="14" font-weight="700">A</text>
+    <circle cx="130" cy="288" r="18" fill="#0f766e"/><text x="125" y="294" fill="#ffffff" font-size="14" font-weight="700">B</text>
+    <circle cx="178" cy="288" r="18" fill="#e5e7eb"/><text x="173" y="294" fill="#475569" font-size="14" font-weight="700">C</text>
+    <rect x="48" y="348" width="294" height="100" rx="16" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="68" y="382" fill="#111827" font-size="17" font-weight="700">Es Teh</text>
+    <circle cx="82" cy="416" r="18" fill="#0f766e"/><text x="77" y="422" fill="#ffffff" font-size="14" font-weight="700">A</text>
+    <circle cx="130" cy="416" r="18" fill="#0f766e"/><text x="125" y="422" fill="#ffffff" font-size="14" font-weight="700">B</text>
+    <circle cx="178" cy="416" r="18" fill="#0f766e"/><text x="173" y="422" fill="#ffffff" font-size="14" font-weight="700">C</text>
+  </g>
+  <rect x="48" y="584" width="294" height="52" rx="12" fill="#0f766e"/>
+  <text x="164" y="617" fill="#ffffff" font-family="Arial, sans-serif" font-size="17" font-weight="700">Save</text>
+  <text x="48" y="722" fill="#64748b" font-family="Arial, sans-serif" font-size="15">Replace with final app screenshot.</text>
+</svg>

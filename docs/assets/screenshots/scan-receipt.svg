@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">Scan receipts placeholder</title>
+  <desc id="desc">Placeholder for the BagiStruk receipt scan screen.</desc>
+  <rect width="390" height="844" rx="32" fill="#f8fafc"/>
+  <rect x="24" y="40" width="342" height="764" rx="28" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="48" y="92" fill="#111827" font-family="Arial, sans-serif" font-size="24" font-weight="700">Scan</text>
+  <rect x="48" y="124" width="294" height="420" rx="18" fill="#ecfeff" stroke="#06b6d4"/>
+  <path d="M118 178h154v288H118z" fill="#ffffff" stroke="#0891b2" stroke-width="3"/>
+  <path d="M142 226h106M142 268h96M142 310h112M142 352h82M142 394h118" stroke="#64748b" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="284" cy="500" r="34" fill="#14b8a6"/>
+  <path d="M269 500h30M284 485v30" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <rect x="48" y="586" width="140" height="48" rx="12" fill="#e5e7eb"/>
+  <rect x="202" y="586" width="140" height="48" rx="12" fill="#0f766e"/>
+  <text x="82" y="617" fill="#111827" font-family="Arial, sans-serif" font-size="16" font-weight="700">Gallery</text>
+  <text x="252" y="617" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">Scan</text>
+  <text x="48" y="722" fill="#64748b" font-family="Arial, sans-serif" font-size="15">Replace with final app screenshot.</text>
+</svg>
