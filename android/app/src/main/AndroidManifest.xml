@@ -6,11 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- Receipt capture via image_picker. CAMERA is required to launch the
-         camera intent; READ_MEDIA_IMAGES covers gallery picking on Android
-         13+ (replaces the legacy READ_EXTERNAL_STORAGE). -->
+    <!-- Receipt capture via image_picker. Gallery selection uses the Android
+         Photo Picker flow, so no broad media-read permission is needed. -->
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
     <application
