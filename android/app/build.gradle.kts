@@ -82,9 +82,12 @@ flutter {
 fun readPubspecValue(key: String): String? {
     val pubspec = rootProject.projectDir.parentFile.resolve("pubspec.yaml")
     if (!pubspec.exists()) return null
-    return pubspec.readLines()
-        .firstOrNull { it.startsWith("$key:") }
-        ?.substringAfter(":")
+    val keyRegex = Regex("""^\s*${Regex.escape(key)}\s*:\s*(.+?)\s*$""")
+    return pubspec
+        .readLines()
+        .firstNotNullOfOrNull { line ->
+            keyRegex.matchEntire(line)?.groupValues?.getOrNull(1)
+        }
         ?.trim()
         ?.trim('"', '\'')
 }
@@ -97,9 +100,23 @@ fun readAndroidAppLabel(): String? {
 }
 
 fun String.asApkFileSegment(): String =
-    replace(Regex("""[^\w.-]+"""), "-").trim('-').ifEmpty { "app" }
+    replace(Regex("""[^\w.+-]+"""), "-").trim('-').ifEmpty { "app" }
 
-fun namedReleaseApkName(originalName: String, appName: String, version: String): String {
+fun requirePubspecSemanticVersion(): String {
+    val version = readPubspecValue("version")
+        ?: error("Missing version in pubspec.yaml")
+    val semanticVersionRegex = Regex(
+        """^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$""",
+    )
+
+    require(semanticVersionRegex.matches(version)) {
+        "pubspec.yaml version must use semantic versioning, for example 1.2.3+4. Current value: $version"
+    }
+
+    return version
+}
+
+fun releaseApkName(originalName: String, appName: String, version: String): String {
     val abi = Regex("""^app-(.+)-release\.apk$""")
         .matchEntire(originalName)
         ?.groupValues
@@ -111,25 +128,21 @@ fun namedReleaseApkName(originalName: String, appName: String, version: String):
     }
 }
 
-val copyNamedReleaseApk = tasks.register<Copy>("copyNamedReleaseApk") {
+val renameReleaseApk = tasks.register<Copy>("renameReleaseApk") {
     group = "build"
-    description = "Copies release APKs using the app name, pubspec version, and ABI when split."
+    description = "Copies release APKs using the Android app name and semantic version from pubspec.yaml."
 
     val flutterProjectDir = rootProject.projectDir.parentFile
     val appName = (readAndroidAppLabel() ?: readPubspecValue("name") ?: "app")
         .asApkFileSegment()
-    val version = (readPubspecValue("version") ?: "0.0.0")
-        .replace("+", "-")
+    val version = requirePubspecSemanticVersion()
         .asApkFileSegment()
     val releaseApkOutputDir = flutterProjectDir.resolve("build/app/outputs/apk/release")
     val flutterApkOutputDir = flutterProjectDir.resolve("build/app/outputs/flutter-apk")
 
     from(releaseApkOutputDir) {
         include("*.apk")
-    }
-    from(releaseApkOutputDir) {
-        include("*.apk")
-        rename { originalName -> namedReleaseApkName(originalName, appName, version) }
+        rename { originalName -> releaseApkName(originalName, appName, version) }
     }
     into(flutterApkOutputDir)
 
@@ -143,5 +156,5 @@ val copyNamedReleaseApk = tasks.register<Copy>("copyNamedReleaseApk") {
 }
 
 tasks.matching { it.name == "assembleRelease" }.configureEach {
-    finalizedBy(copyNamedReleaseApk)
+    finalizedBy(renameReleaseApk)
 }
