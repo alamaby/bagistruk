@@ -82,7 +82,7 @@ The workflow uploads the signed AAB as a workflow artifact with 30-day retention
 1. Go to **Play Console -> Internal testing** and upload `app-release.aab`.
 2. Use package name `com.alamaby.bagistruk`.
 3. Under **App content**:
-   - Submit a public Privacy Policy URL.
+   - Submit the public Privacy Policy URL: `https://bagistruk.vercel.app/privacy`.
    - Complete the Data safety form for email, receipt photos, bill data, Supabase, Google Sign-In, OCR providers, and reminder email provider if enabled.
    - Complete content rating, target audience, and app access declarations.
 4. Promote to **Closed testing -> Production** once internal testing passes.
@@ -94,4 +94,4 @@ Place final source assets under `docs/assets/play-store/` or another tracked doc
 - Feature graphic: 1024x500.
 - Phone screenshots for scan, review, split, and settlement flows.
 - Tablet screenshots if tablet support is part of the release target.
-- Public Privacy Policy URL.
+- Public Privacy Policy URL: `https://bagistruk.vercel.app/privacy`.

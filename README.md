@@ -1,5 +1,9 @@
 # BagiStruk
 
+<p align="center">
+  <img src="assets/images/app_logo.png" alt="BagiStruk app logo" width="128">
+</p>
+
 [![Flutter](https://img.shields.io/badge/Flutter-stable-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11.5%2B-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![License](https://img.shields.io/github/license/alamaby/bagistruk)](LICENSE)
@@ -172,7 +176,7 @@ The Android release build targets `compileSdk = 36` / `targetSdk = 36`, uses R8 
 ## Links
 
 - [License](LICENSE)
-- [Privacy Policy](docs/privacy-policy.md)
+- [Privacy Policy](https://bagistruk.vercel.app/privacy)
 - [Terms of Service](docs/terms-of-service.md)
 - [Release TODO](TODO_RELEASE.md)
 - [Technical Documentation](PROJECT_SUMMARY.md)
