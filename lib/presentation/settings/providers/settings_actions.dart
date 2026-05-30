@@ -23,3 +23,15 @@ Future<Result<void>> performLogout(WidgetRef ref) async {
 
   return res;
 }
+
+/// Deletes the active account on the server and drops all user-scoped client
+/// caches. A fresh anonymous session is created lazily by the next gated flow.
+Future<Result<void>> performDeleteAccount(WidgetRef ref) async {
+  final auth = ref.read(authRepositoryProvider);
+  final res = await auth.deleteAccount();
+
+  ref.invalidate(profileProvider);
+  ref.invalidate(billListProvider);
+
+  return res;
+}

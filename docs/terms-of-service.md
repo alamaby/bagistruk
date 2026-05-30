@@ -1,6 +1,6 @@
 # Terms of Service — BagiStruk
 
-**Effective date:** 2026-05-23
+**Effective date:** 2026-05-30
 
 These Terms explain the basic rules for using BagiStruk. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -58,7 +58,7 @@ We may update, suspend, limit, or discontinue parts of the app at any time, incl
 
 ## 11. Termination
 
-We may suspend or delete accounts or data when required by law, for security reasons, for abuse prevention, or according to the inactivity policy. You may request account deletion by contacting us.
+We may suspend or delete accounts or data when required by law, for security reasons, for abuse prevention, or according to the inactivity policy. You may delete your account from Profile & Settings in the app or request account deletion by contacting us.
 
 ## 12. Disclaimer
 
@@ -80,7 +80,7 @@ Questions about these Terms: **alam.aby.b@gmail.com**
 
 # Syarat dan Ketentuan — BagiStruk
 
-**Tanggal berlaku:** 2026-05-23
+**Tanggal berlaku:** 2026-05-30
 
 Syarat ini menjelaskan aturan dasar penggunaan BagiStruk. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -138,7 +138,7 @@ Kami dapat memperbarui, menangguhkan, membatasi, atau menghentikan bagian aplika
 
 ## 11. Pengakhiran
 
-Kami dapat menangguhkan atau menghapus akun atau data jika diwajibkan hukum, untuk alasan keamanan, pencegahan penyalahgunaan, atau sesuai kebijakan akun tidak aktif. Anda dapat meminta penghapusan akun dengan menghubungi kami.
+Kami dapat menangguhkan atau menghapus akun atau data jika diwajibkan hukum, untuk alasan keamanan, pencegahan penyalahgunaan, atau sesuai kebijakan akun tidak aktif. Anda dapat menghapus akun dari Profil & Pengaturan di aplikasi atau meminta penghapusan akun dengan menghubungi kami.
 
 ## 12. Penafian
 

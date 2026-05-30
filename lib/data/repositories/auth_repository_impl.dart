@@ -72,6 +72,9 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<Result<void>> signOut() => guardAsync(_ds.signOut);
 
   @override
+  Future<Result<void>> deleteAccount() => guardAsync(_ds.deleteAccount);
+
+  @override
   Future<Result<void>> resetPasswordForEmail(String email) =>
       guardAsync(() => _ds.resetPasswordForEmail(email));
 }

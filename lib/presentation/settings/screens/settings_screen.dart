@@ -111,6 +111,18 @@ class _SettingsBody extends ConsumerWidget {
             title: Text(l10n.resetPassword),
             onTap: () => _onResetPassword(context, ref, profile.email ?? ''),
           ),
+        ListTile(
+          leading: Icon(
+            Icons.delete_forever_outlined,
+            color: theme.colorScheme.error,
+          ),
+          title: Text(
+            l10n.deleteAccount,
+            style: TextStyle(color: theme.colorScheme.error),
+          ),
+          subtitle: Text(l10n.deleteAccountSubtitle),
+          onTap: () => _onDeleteAccount(context, ref),
+        ),
         const Divider(),
         _SectionHeader(l10n.preferencesSection),
         ListTile(
@@ -263,6 +275,117 @@ class _SettingsBody extends ConsumerWidget {
     if (ok != true || !context.mounted) return;
     await performLogout(ref);
     // Router redirect handles navigation back to /scan when authState emits.
+  }
+
+  Future<void> _onDeleteAccount(BuildContext context, WidgetRef ref) async {
+    final l10n = AppL10n.of(context);
+    final firstOk = await showConfirmDialog(
+      context,
+      title: l10n.deleteAccountConfirmTitle,
+      body: l10n.deleteAccountConfirmBody,
+      confirmLabel: l10n.deleteAccount,
+      destructive: true,
+    );
+    if (firstOk != true || !context.mounted) return;
+
+    final phraseOk = await _showDeleteAccountPhraseDialog(context);
+    if (phraseOk != true || !context.mounted) return;
+
+    _showBlockingProgress(context, l10n.deleteAccountInProgress);
+    final res = await performDeleteAccount(ref);
+    if (context.mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+    if (!context.mounted) return;
+
+    if (res is Success<void>) {
+      context.goNamed(Routes.scanName);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.deleteAccountSuccess)));
+    } else {
+      _snack(context, l10n.errorGeneric);
+    }
+  }
+
+  Future<bool?> _showDeleteAccountPhraseDialog(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final phrase = l10n.deleteAccountConfirmPhrase;
+    final controller = TextEditingController();
+
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setState) {
+            final canDelete = controller.text.trim() == phrase;
+            return AlertDialog(
+              title: Text(l10n.deleteAccountTypeTitle),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.deleteAccountTypeBody(phrase)),
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: controller,
+                    autofocus: true,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: phrase,
+                    ),
+                    onChanged: (_) => setState(() {}),
+                    onSubmitted: (_) {
+                      if (canDelete) Navigator.of(ctx).pop(true);
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: Text(l10n.cancelAction),
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(ctx).colorScheme.errorContainer,
+                    foregroundColor: Theme.of(ctx).colorScheme.onErrorContainer,
+                  ),
+                  onPressed: canDelete
+                      ? () => Navigator.of(ctx).pop(true)
+                      : null,
+                  child: Text(l10n.deleteAccount),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    ).whenComplete(controller.dispose);
+  }
+
+  void _showBlockingProgress(BuildContext context, String message) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Row(
+            children: [
+              const SizedBox.square(
+                dimension: 24,
+                child: CircularProgressIndicator(strokeWidth: 2.5),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(child: Text(message)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _snack(BuildContext context, String msg) {

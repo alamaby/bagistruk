@@ -143,6 +143,38 @@ class AppL10nEn extends AppL10n {
       'You will be logged out and returned as a guest user.';
 
   @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountSubtitle =>
+      'Permanently remove your account and saved bill data.';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'This will permanently delete your account, profile, saved bills, bill items, participants, assignments, and settlement status. This action cannot be undone.';
+
+  @override
+  String get deleteAccountConfirmPhrase => 'DELETE';
+
+  @override
+  String get deleteAccountTypeTitle => 'Type DELETE to confirm';
+
+  @override
+  String deleteAccountTypeBody(String phrase) {
+    return 'Type $phrase to permanently delete your account.';
+  }
+
+  @override
+  String get deleteAccountInProgress => 'Deleting account...';
+
+  @override
+  String get deleteAccountSuccess =>
+      'Your account and saved data have been deleted.';
+
+  @override
   String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override

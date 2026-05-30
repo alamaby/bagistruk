@@ -57,6 +57,18 @@
   "registerPermanent": "Create Permanent Account",
   "confirmLogoutTitle": "Log out of your account?",
   "confirmLogoutBody": "You will be logged out and returned as a guest user.",
+  "deleteAccount": "Delete Account",
+  "deleteAccountSubtitle": "Permanently remove your account and saved bill data.",
+  "deleteAccountConfirmTitle": "Delete your account?",
+  "deleteAccountConfirmBody": "This will permanently delete your account, profile, saved bills, bill items, participants, assignments, and settlement status. This action cannot be undone.",
+  "deleteAccountConfirmPhrase": "DELETE",
+  "deleteAccountTypeTitle": "Type DELETE to confirm",
+  "deleteAccountTypeBody": "Type {phrase} to permanently delete your account.",
+  "@deleteAccountTypeBody": {
+    "placeholders": { "phrase": { "type": "String" } }
+  },
+  "deleteAccountInProgress": "Deleting account...",
+  "deleteAccountSuccess": "Your account and saved data have been deleted.",
 
   "errorGeneric": "Something went wrong. Please try again.",
   "loading": "Loading...",

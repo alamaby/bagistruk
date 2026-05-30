@@ -142,6 +142,37 @@ class AppL10nId extends AppL10n {
       'Anda akan keluar dan kembali sebagai pengguna tamu.';
 
   @override
+  String get deleteAccount => 'Hapus Akun';
+
+  @override
+  String get deleteAccountSubtitle =>
+      'Hapus permanen akun dan data bill tersimpan.';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Hapus akun kamu?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'Tindakan ini akan menghapus permanen akun, profil, bill tersimpan, item bill, peserta, pembagian item, dan status pelunasan. Tindakan ini tidak bisa dibatalkan.';
+
+  @override
+  String get deleteAccountConfirmPhrase => 'HAPUS';
+
+  @override
+  String get deleteAccountTypeTitle => 'Ketik HAPUS untuk konfirmasi';
+
+  @override
+  String deleteAccountTypeBody(String phrase) {
+    return 'Ketik $phrase untuk menghapus akun secara permanen.';
+  }
+
+  @override
+  String get deleteAccountInProgress => 'Menghapus akun...';
+
+  @override
+  String get deleteAccountSuccess => 'Akun dan data tersimpan sudah dihapus.';
+
+  @override
   String get errorGeneric => 'Terjadi kesalahan. Coba lagi.';
 
   @override

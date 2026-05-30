@@ -120,8 +120,13 @@ On iOS, also add `CFBundleURLTypes` to `ios/Runner/Info.plist` using the `REVERS
 
 ```bash
 supabase functions deploy process-receipt
+supabase functions deploy delete-account
 supabase functions deploy inactive-user-cleanup --no-verify-jwt
 ```
+
+The `delete-account` function requires an authenticated user JWT and uses
+`SUPABASE_SERVICE_ROLE_KEY` server-side to delete the user's bills before
+deleting the Supabase Auth user.
 
 The `inactive-user-cleanup` function is intended for Supabase Cron. It uses
 `SUPABASE_SERVICE_ROLE_KEY` server-side, optionally sends reminders with Resend

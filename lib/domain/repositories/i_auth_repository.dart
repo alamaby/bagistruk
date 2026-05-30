@@ -65,6 +65,9 @@ abstract interface class IAuthRepository {
 
   Future<Result<void>> signOut();
 
+  /// Permanently deletes the current user's app data and Auth account.
+  Future<Result<void>> deleteAccount();
+
   /// Sends a password-reset email to [email].
   Future<Result<void>> resetPasswordForEmail(String email);
 }

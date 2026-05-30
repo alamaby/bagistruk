@@ -1,6 +1,6 @@
 # Privacy Policy — BagiStruk
 
-**Effective date:** 2026-05-23
+**Effective date:** 2026-05-30
 
 This policy explains how BagiStruk collects, uses, stores, and deletes data. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -59,8 +59,9 @@ We do not use third-party advertising SDKs.
 - If a registered user remains inactive for 30 days after the reminder, the account may be deleted.
 - When an inactive user is deleted, bills owned by that user are deleted first, then the authentication user is deleted.
 - If a user opens the app after receiving a reminder, the pending deletion state is reset.
+- You can delete your account and associated app data from **Profile & Settings > Delete Account** in the app.
 
-You may request account and data deletion by contacting us at the email below.
+You may also request account and data deletion by contacting us at the email below or through the public privacy page: https://bagistruk.vercel.app/privacy
 
 ## Security
 
@@ -82,7 +83,7 @@ For privacy questions or deletion requests, contact: **alam.aby.b@gmail.com**
 
 # Kebijakan Privasi — BagiStruk
 
-**Tanggal berlaku:** 2026-05-23
+**Tanggal berlaku:** 2026-05-30
 
 Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimpan, dan menghapus data. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -141,8 +142,9 @@ Kami tidak menggunakan SDK iklan pihak ketiga.
 - Jika pengguna terdaftar tetap tidak aktif selama 30 hari setelah reminder, akun dapat dihapus.
 - Saat pengguna tidak aktif dihapus, bill milik pengguna dihapus terlebih dahulu, lalu user autentikasi dihapus.
 - Jika pengguna membuka aplikasi setelah menerima reminder, jadwal penghapusan akan direset.
+- Anda dapat menghapus akun dan data aplikasi terkait dari **Profil & Pengaturan > Hapus Akun** di dalam aplikasi.
 
-Anda dapat meminta penghapusan akun dan data dengan menghubungi email di bawah.
+Anda juga dapat meminta penghapusan akun dan data dengan menghubungi email di bawah atau melalui halaman privacy publik: https://bagistruk.vercel.app/privacy
 
 ## Keamanan
 

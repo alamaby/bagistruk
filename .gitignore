@@ -112,6 +112,7 @@ app.*.symbols
 
 # Local secrets (use .env.example as template)
 .env
+.env.local
 !.env.example
 
 # Supabase CLI local state (per-developer, not source code)

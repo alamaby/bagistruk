@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../core/config/app_constants.dart';
 import '../../core/config/env.dart';
 import '../../domain/entities/auth_snapshot.dart';
 
@@ -168,6 +169,10 @@ class AuthRemoteDataSource {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    await _signOutGoogleBestEffort();
+  }
+
+  Future<void> _signOutGoogleBestEffort() async {
     if (_googleInitFuture == null) return;
     try {
       await _googleInitFuture;
@@ -175,6 +180,17 @@ class AuthRemoteDataSource {
     } catch (_) {
       // Supabase sign-out is the source of truth; local Google cleanup is best-effort.
     }
+  }
+
+  Future<void> deleteAccount() async {
+    final response = await _client.functions.invoke(
+      AppConstants.deleteAccountEdgeFunctionName,
+    );
+    if (response.status >= 400) {
+      throw FunctionException(status: response.status, details: response.data);
+    }
+    await _auth.signOut(scope: SignOutScope.local);
+    await _signOutGoogleBestEffort();
   }
 
   /// Triggers a password reset email for [email]. The link in the email opens

@@ -10,6 +10,7 @@ class AppConstants {
 
   /// Edge Function name registered in Supabase.
   static const String ocrEdgeFunctionName = 'process-receipt';
+  static const String deleteAccountEdgeFunctionName = 'delete-account';
 
   /// External links shown on the About screen. Keep placeholders as '#'
   /// until the final public URLs are ready.

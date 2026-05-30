@@ -355,6 +355,60 @@ abstract class AppL10n {
   /// **'Anda akan keluar dan kembali sebagai pengguna tamu.'**
   String get confirmLogoutBody;
 
+  /// No description provided for @deleteAccount.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus Akun'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus permanen akun dan data bill tersimpan.'**
+  String get deleteAccountSubtitle;
+
+  /// No description provided for @deleteAccountConfirmTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus akun kamu?'**
+  String get deleteAccountConfirmTitle;
+
+  /// No description provided for @deleteAccountConfirmBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tindakan ini akan menghapus permanen akun, profil, bill tersimpan, item bill, peserta, pembagian item, dan status pelunasan. Tindakan ini tidak bisa dibatalkan.'**
+  String get deleteAccountConfirmBody;
+
+  /// No description provided for @deleteAccountConfirmPhrase.
+  ///
+  /// In id, this message translates to:
+  /// **'HAPUS'**
+  String get deleteAccountConfirmPhrase;
+
+  /// No description provided for @deleteAccountTypeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketik HAPUS untuk konfirmasi'**
+  String get deleteAccountTypeTitle;
+
+  /// No description provided for @deleteAccountTypeBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Ketik {phrase} untuk menghapus akun secara permanen.'**
+  String deleteAccountTypeBody(String phrase);
+
+  /// No description provided for @deleteAccountInProgress.
+  ///
+  /// In id, this message translates to:
+  /// **'Menghapus akun...'**
+  String get deleteAccountInProgress;
+
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Akun dan data tersimpan sudah dihapus.'**
+  String get deleteAccountSuccess;
+
   /// No description provided for @errorGeneric.
   ///
   /// In id, this message translates to:

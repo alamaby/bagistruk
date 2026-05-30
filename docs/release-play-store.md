@@ -77,17 +77,30 @@ Required repository secrets and variables:
 
 The workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using `r0adkll/upload-google-play` for automated internal-track releases.
 
-## 7. Upload to Play Console
+## 7. Deploy Edge Functions
+
+Deploy the server functions used by release builds:
+
+```bash
+supabase functions deploy process-receipt
+supabase functions deploy delete-account
+supabase functions deploy inactive-user-cleanup --no-verify-jwt
+```
+
+`delete-account` must keep JWT verification enabled because it deletes the currently authenticated user's data and Auth account. `inactive-user-cleanup` is intended for Supabase Cron and can be protected with `INACTIVE_CLEANUP_SECRET`.
+
+## 8. Upload to Play Console
 
 1. Go to **Play Console -> Internal testing** and upload `app-release.aab`.
 2. Use package name `com.alamaby.bagistruk`.
 3. Under **App content**:
    - Submit the public Privacy Policy URL: `https://bagistruk.vercel.app/privacy`.
+   - Complete Data deletion questions and disclose the in-app path: **Profile & Settings -> Delete Account**.
    - Complete the Data safety form for email, receipt photos, bill data, Supabase, Google Sign-In, OCR providers, and reminder email provider if enabled.
    - Complete content rating, target audience, and app access declarations.
 4. Promote to **Closed testing -> Production** once internal testing passes.
 
-## 8. Store listing assets
+## 9. Store listing assets
 
 Place final source assets under `docs/assets/play-store/` or another tracked docs folder:
 

@@ -57,6 +57,18 @@
   "registerPermanent": "Daftar Akun Permanen",
   "confirmLogoutTitle": "Keluar dari akun?",
   "confirmLogoutBody": "Anda akan keluar dan kembali sebagai pengguna tamu.",
+  "deleteAccount": "Hapus Akun",
+  "deleteAccountSubtitle": "Hapus permanen akun dan data bill tersimpan.",
+  "deleteAccountConfirmTitle": "Hapus akun kamu?",
+  "deleteAccountConfirmBody": "Tindakan ini akan menghapus permanen akun, profil, bill tersimpan, item bill, peserta, pembagian item, dan status pelunasan. Tindakan ini tidak bisa dibatalkan.",
+  "deleteAccountConfirmPhrase": "HAPUS",
+  "deleteAccountTypeTitle": "Ketik HAPUS untuk konfirmasi",
+  "deleteAccountTypeBody": "Ketik {phrase} untuk menghapus akun secara permanen.",
+  "@deleteAccountTypeBody": {
+    "placeholders": { "phrase": { "type": "String" } }
+  },
+  "deleteAccountInProgress": "Menghapus akun...",
+  "deleteAccountSuccess": "Akun dan data tersimpan sudah dihapus.",
 
   "errorGeneric": "Terjadi kesalahan. Coba lagi.",
   "loading": "Memuat...",
