@@ -46,7 +46,7 @@ Opening the app after receiving a reminder resets the pending inactivity deletio
 
 ## 8. Third-Party Services
 
-BagiStruk depends on third-party services such as Supabase, Google Sign-In, OCR providers, and email providers. Their availability, policies, and behavior may affect the app. We are not responsible for outages or changes made by third-party providers.
+BagiStruk depends on third-party services such as Supabase, Google Sign-In, OCR providers, Google Mobile Ads / AdMob if ads are enabled, and email providers. Their availability, policies, and behavior may affect the app. We are not responsible for outages or changes made by third-party providers.
 
 ## 9. Donations And External Links
 
@@ -126,7 +126,7 @@ Membuka aplikasi setelah menerima reminder akan mereset status penghapusan tidak
 
 ## 8. Layanan Pihak Ketiga
 
-BagiStruk bergantung pada layanan pihak ketiga seperti Supabase, Google Sign-In, penyedia OCR, dan penyedia email. Ketersediaan, kebijakan, dan perilaku layanan tersebut dapat memengaruhi aplikasi. Kami tidak bertanggung jawab atas gangguan atau perubahan dari penyedia pihak ketiga.
+BagiStruk bergantung pada layanan pihak ketiga seperti Supabase, Google Sign-In, penyedia OCR, Google Mobile Ads / AdMob jika iklan diaktifkan, dan penyedia email. Ketersediaan, kebijakan, dan perilaku layanan tersebut dapat memengaruhi aplikasi. Kami tidak bertanggung jawab atas gangguan atau perubahan dari penyedia pihak ketiga.
 
 ## 9. Donasi Dan Link Eksternal
 

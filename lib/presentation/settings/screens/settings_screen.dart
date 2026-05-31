@@ -9,6 +9,7 @@ import '../../../data/providers.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../ads/widgets/banner_ad_widget.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../providers/profile_notifier.dart';
 import '../providers/settings_actions.dart';
@@ -179,6 +180,8 @@ class _SettingsBody extends ConsumerWidget {
                 ),
         ),
         SizedBox(height: 24.h),
+        const BannerAdWidget(),
+        SizedBox(height: 12.h),
       ],
     );
   }

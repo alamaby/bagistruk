@@ -53,6 +53,7 @@ Placeholder assets are included so the README and Play Store listing can be fill
 | Backend | Supabase (Postgres + RLS, Auth, Edge Functions / Deno) |
 | LLM | Gemini, OpenRouter, NvidiaNIM — provider config stored in DB |
 | Localization | flutter_localizations + ARB gen-l10n (ID / EN) |
+| Ads | Google Mobile Ads / AdMob, feature-flagged with `ADS_ENABLED` |
 
 ---
 
@@ -72,6 +73,7 @@ cp .env.example .env
 # Fill in your values:
 # SUPABASE_URL=https://<project>.supabase.co
 # SUPABASE_ANON_KEY=<anon-key>
+# ADS_ENABLED=false
 ```
 
 ### 2. Database schema

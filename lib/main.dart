@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'core/ads/ad_service.dart';
 import 'core/config/env.dart';
 import 'core/format/app_format.dart';
 
@@ -49,6 +50,13 @@ Future<String?> _bootstrap() async {
     ).timeout(const Duration(seconds: 10));
   } catch (e) {
     return 'Gagal inisialisasi Supabase: $e';
+  }
+
+  try {
+    await AdService.initialize().timeout(const Duration(seconds: 8));
+  } catch (_) {
+    // Ads are optional monetization; startup should not fail if consent or the
+    // Mobile Ads SDK cannot initialize.
   }
 
   // Sengaja TIDAK eager-anonymous sign-in di sini. supabase_flutter sudah

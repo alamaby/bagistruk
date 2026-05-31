@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.2.0+2
+version: 0.3.0+3
 
 environment:
   sdk: ^3.11.5
@@ -31,6 +31,7 @@ dependencies:
 
   # Backend
   google_sign_in: ^7.2.0
+  google_mobile_ads: ^8.0.0
   supabase_flutter: ^2.8.1
 
   # OCR pipeline support

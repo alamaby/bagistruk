@@ -52,6 +52,8 @@ Test on an emulator running API 36 and, ideally, a physical device. Verify:
 
 - Sign-in with Supabase works.
 - Google Sign-In works with the release/upload key fingerprint.
+- Ads stay hidden when `ADS_ENABLED=false`.
+- If `ADS_ENABLED=true`, consent flow and banner ads load on History and Settings only.
 - Receipt camera capture succeeds.
 - Gallery multi-image picker succeeds without broad media-read permission.
 - OCR pipeline succeeds for camera and gallery images.
@@ -74,6 +76,11 @@ Required repository secrets and variables:
 | Secret | `STORE_PASSWORD` | Keystore password |
 | Variable | `SUPABASE_URL` | Supabase project URL |
 | Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
+| Variable | `GOOGLE_WEB_CLIENT_ID` | Google OAuth web client ID used by Supabase auth |
+| Variable | `GOOGLE_IOS_CLIENT_ID` | Google OAuth iOS client ID, required for iOS builds |
+| Variable | `ADS_ENABLED` | `false` by default; set `true` only after AdMob production IDs and Play disclosures are ready |
+| Variable | `ADMOB_ANDROID_BANNER_ID` | Android AdMob banner unit ID, currently `ca-app-pub-4082765898994990/8733289141` |
+| Variable | `ADMOB_IOS_BANNER_ID` | iOS AdMob banner unit ID |
 
 The workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using `r0adkll/upload-google-play` for automated internal-track releases.
 
@@ -96,7 +103,8 @@ supabase functions deploy inactive-user-cleanup --no-verify-jwt
 3. Under **App content**:
    - Submit the public Privacy Policy URL: `https://bagistruk.vercel.app/privacy`.
    - Complete Data deletion questions and disclose the in-app path: **Profile & Settings -> Delete Account**.
-   - Complete the Data safety form for email, receipt photos, bill data, Supabase, Google Sign-In, OCR providers, and reminder email provider if enabled.
+   - If `ADS_ENABLED=true`, declare that the app contains ads. Declare Advertising ID while the build includes Google Mobile Ads/AdMob and the `AD_ID` permission. Android AdMob App ID is configured as `ca-app-pub-4082765898994990~1671692391`.
+   - Complete the Data safety form for email, receipt photos, bill data, Supabase, Google Sign-In, OCR providers, Google Mobile Ads/AdMob if ads are enabled, and reminder email provider if enabled.
    - Complete content rating, target audience, and app access declarations.
 4. Promote to **Closed testing -> Production** once internal testing passes.
 

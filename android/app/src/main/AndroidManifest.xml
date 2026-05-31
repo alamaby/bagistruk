@@ -5,6 +5,9 @@
          signInAnonymously, leaving the user stuck on the Flutter splash. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Used by Google Mobile Ads for ad delivery/measurement. This must be
+         disclosed in Play Console Advertising ID and Data safety sections. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <!-- Receipt capture via image_picker. Gallery selection uses the Android
          Photo Picker flow, so no broad media-read permission is needed. -->
@@ -15,6 +18,10 @@
         android:label="Bagi Struk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Google Mobile Ads Android App ID. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4082765898994990~1671692391" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

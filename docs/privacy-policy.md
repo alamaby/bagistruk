@@ -6,7 +6,7 @@ This policy explains how BagiStruk collects, uses, stores, and deletes data. Thi
 
 ## Summary
 
-BagiStruk is a split-bill app that helps users scan receipts, extract bill items with OCR, and divide payments among participants. We collect only the data needed to provide these features. We do not sell personal data and we do not use advertising SDKs.
+BagiStruk is a split-bill app that helps users scan receipts, extract bill items with OCR, and divide payments among participants. We collect only the data needed to provide these features. We do not sell personal data. If ads are enabled, we use Google Mobile Ads / AdMob to show ads and measure ad performance.
 
 ## Data We Collect
 
@@ -19,6 +19,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, and settlement status.
 - Support and reminder data: email address and inactivity reminder timestamps when reminders are sent.
 - Basic technical data sent by app/framework/network services, such as device and request metadata needed for diagnostics and security.
+- Advertising data when ads are enabled: advertising identifiers such as the Android Advertising ID, device/ad interaction data, approximate location inferred by ad services, and consent status used by Google Mobile Ads / AdMob for ad delivery, frequency capping, fraud prevention, and measurement.
 
 ## Permissions Used
 
@@ -35,6 +36,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - To store user preferences and personalize the app.
 - To track last activity for account retention and cleanup.
 - To send inactivity reminders to registered users before account cleanup.
+- To show ads, measure ad performance, prevent ad fraud, and respect consent choices when ads are enabled.
 - To diagnose errors, prevent abuse, and enforce database rate limits.
 
 ## Storage And Processing
@@ -49,8 +51,7 @@ BagiStruk may use:
 - Google Sign-In: optional account login.
 - Google Gemini and/or OpenRouter: OCR and receipt parsing.
 - Resend or another email provider: inactivity reminder emails, if configured.
-
-We do not use third-party advertising SDKs.
+- Google Mobile Ads / AdMob: optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging.
 
 ## Account Retention And Deletion
 
@@ -89,7 +90,7 @@ Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimp
 
 ## Ringkasan
 
-BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk, mengekstrak item tagihan dengan OCR, dan membagi pembayaran antar peserta. Kami hanya mengumpulkan data yang diperlukan agar fitur aplikasi berjalan. Kami tidak menjual data pribadi dan tidak menggunakan SDK iklan.
+BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk, mengekstrak item tagihan dengan OCR, dan membagi pembayaran antar peserta. Kami hanya mengumpulkan data yang diperlukan agar fitur aplikasi berjalan. Kami tidak menjual data pribadi. Jika iklan diaktifkan, kami memakai Google Mobile Ads / AdMob untuk menampilkan iklan dan mengukur performa iklan.
 
 ## Data Yang Kami Kumpulkan
 
@@ -102,6 +103,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, dan status pembayaran.
 - Data dukungan dan reminder: alamat email dan timestamp reminder tidak aktif saat reminder dikirim.
 - Data teknis dasar dari app/framework/network service, seperti metadata perangkat dan request yang dibutuhkan untuk diagnostik dan keamanan.
+- Data iklan saat iklan diaktifkan: identifier iklan seperti Android Advertising ID, data perangkat/interaksi iklan, perkiraan lokasi yang disimpulkan layanan iklan, dan status consent yang digunakan Google Mobile Ads / AdMob untuk penayangan iklan, pembatasan frekuensi, pencegahan fraud, dan pengukuran.
 
 ## Izin Yang Digunakan
 
@@ -118,6 +120,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Menyimpan preferensi pengguna dan menyesuaikan pengalaman aplikasi.
 - Melacak aktivitas terakhir untuk retensi dan pembersihan akun.
 - Mengirim reminder tidak aktif kepada pengguna terdaftar sebelum pembersihan akun.
+- Menampilkan iklan, mengukur performa iklan, mencegah fraud iklan, dan menghormati pilihan consent saat iklan diaktifkan.
 - Mendiagnosis error, mencegah penyalahgunaan, dan menerapkan rate limit database.
 
 ## Penyimpanan Dan Pemrosesan
@@ -132,8 +135,7 @@ BagiStruk dapat menggunakan:
 - Google Sign-In: login akun opsional.
 - Google Gemini dan/atau OpenRouter: OCR dan parsing struk.
 - Resend atau penyedia email lain: email reminder tidak aktif, jika dikonfigurasi.
-
-Kami tidak menggunakan SDK iklan pihak ketiga.
+- Google Mobile Ads / AdMob: penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi.
 
 ## Retensi Dan Penghapusan Akun
 
