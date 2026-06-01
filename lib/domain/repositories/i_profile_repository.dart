@@ -17,6 +17,9 @@ abstract interface class IProfileRepository {
   /// [mode] must be `light`, `dark`, or `system`.
   Future<Result<void>> updateThemePref(String mode);
 
+  /// Reads the number of OCR scan attempts consumed while anonymous.
+  Future<Result<int>> getAnonymousScanCount();
+
   /// Refreshes the user's app activity timestamp. No-op when signed out.
   Future<Result<void>> touchLastActive();
 }

@@ -39,5 +39,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
       guardAsync(() => _ds.updateField('theme_pref', mode));
 
   @override
+  Future<Result<int>> getAnonymousScanCount() =>
+      guardAsync(_ds.getAnonymousScanCount);
+
+  @override
   Future<Result<void>> touchLastActive() => guardAsync(_ds.touchLastActive);
 }

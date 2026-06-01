@@ -10,6 +10,10 @@ class AppConstants {
 
   /// Edge Function name registered in Supabase.
   static const String ocrEdgeFunctionName = 'process-receipt';
+
+  /// Anonymous users can try OCR a small number of times before registration.
+  /// The Edge Function enforces the same limit server-side.
+  static const int anonymousScanLimit = 5;
   static const String deleteAccountEdgeFunctionName = 'delete-account';
 
   /// External links shown on the About screen. Keep placeholders as '#'

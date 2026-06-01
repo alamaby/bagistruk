@@ -50,6 +50,13 @@ OcrMessage _serverMessage(int? code, String raw) {
           'Gambar yang dipilih sepertinya bukan struk belanja. Coba foto struk yang jelas dan tidak terpotong.',
     );
   }
+  if (lower.contains('anonymous_scan_limit_reached')) {
+    return const OcrMessage(
+      title: 'Batas scan gratis tercapai',
+      body: 'Daftar akun untuk melanjutkan scan struk berikutnya.',
+      canRetry: false,
+    );
+  }
   if (lower.contains('all_providers_failed') ||
       lower.contains('unavailable') ||
       lower.contains('high demand') ||

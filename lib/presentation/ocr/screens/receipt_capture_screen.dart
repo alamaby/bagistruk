@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/config/app_constants.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
@@ -138,6 +139,8 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         );
         return;
       }
+      final canScan = await _checkAnonymousScanQuota();
+      if (!canScan) return;
       final bytes = await Future.wait(_images.map((f) => f.readAsBytes()));
       // Pass currency dari profile user supaya Edge Function bisa pakai
       // konvensi locale yg tepat saat parsing harga (mis. IDR gunakan '.'
@@ -149,6 +152,55 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
     } finally {
       if (mounted) setState(() => _starting = false);
     }
+  }
+
+  Future<bool> _checkAnonymousScanQuota() async {
+    final auth = ref.read(authRepositoryProvider);
+    if (!auth.isAnonymous) return true;
+
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .getAnonymousScanCount();
+    if (!mounted) return false;
+
+    switch (res) {
+      case Success(:final data):
+        if (data < AppConstants.anonymousScanLimit) return true;
+        await _showAnonymousScanLimitDialog();
+        return false;
+      case ResultFailure(:final failure):
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal cek batas scan: $failure')),
+        );
+        return false;
+    }
+  }
+
+  Future<void> _showAnonymousScanLimitDialog() {
+    return showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Batas scan gratis tercapai'),
+        content: const Text(
+          'Kamu sudah memakai 5x scan sebagai pengguna anonim. Daftar akun '
+          'untuk melanjutkan scan struk berikutnya.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Nanti'),
+          ),
+          FilledButton.icon(
+            icon: const Icon(Icons.person_add_alt_1),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.goNamed(Routes.registerName);
+            },
+            label: const Text('Daftar'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

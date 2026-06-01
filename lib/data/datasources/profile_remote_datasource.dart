@@ -41,6 +41,23 @@ class ProfileRemoteDataSource {
     await _client.from(_table).update({column: value}).eq('id', uid);
   }
 
+  Future<int> getAnonymousScanCount() async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    await _client
+        .from(_table)
+        .upsert({'id': uid}, onConflict: 'id', ignoreDuplicates: true);
+    final row = await _client
+        .from(_table)
+        .select('anonymous_scan_count')
+        .eq('id', uid)
+        .maybeSingle();
+    final raw = row?['anonymous_scan_count'];
+    return raw is int ? raw : int.tryParse(raw?.toString() ?? '') ?? 0;
+  }
+
   Future<void> touchLastActive() async {
     if (currentUserId == null) return;
     await _client.rpc<void>('touch_last_active_at');
