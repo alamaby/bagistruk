@@ -1,5 +1,6 @@
 import '../../core/error/exception_mapper.dart';
 import '../../core/error/result.dart';
+import '../../domain/entities/ocr_credit_status.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/i_profile_repository.dart';
 import '../datasources/profile_remote_datasource.dart';
@@ -39,8 +40,10 @@ class ProfileRepositoryImpl implements IProfileRepository {
       guardAsync(() => _ds.updateField('theme_pref', mode));
 
   @override
-  Future<Result<int>> getAnonymousScanCount() =>
-      guardAsync(_ds.getAnonymousScanCount);
+  Future<Result<OcrCreditStatus>> getOcrCreditStatus() => guardAsync(() async {
+    final row = await _ds.getOcrCreditStatus();
+    return OcrCreditStatus.fromJson(row);
+  });
 
   @override
   Future<Result<void>> touchLastActive() => guardAsync(_ds.touchLastActive);

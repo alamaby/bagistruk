@@ -1,4 +1,5 @@
 import '../../core/error/result.dart';
+import '../entities/ocr_credit_status.dart';
 import '../entities/user_profile.dart';
 
 abstract interface class IProfileRepository {
@@ -17,8 +18,8 @@ abstract interface class IProfileRepository {
   /// [mode] must be `light`, `dark`, or `system`.
   Future<Result<void>> updateThemePref(String mode);
 
-  /// Reads the number of OCR scan attempts consumed while anonymous.
-  Future<Result<int>> getAnonymousScanCount();
+  /// Reads the current OCR credit status for the active user.
+  Future<Result<OcrCreditStatus>> getOcrCreditStatus();
 
   /// Refreshes the user's app activity timestamp. No-op when signed out.
   Future<Result<void>> touchLastActive();

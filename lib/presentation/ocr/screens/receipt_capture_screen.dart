@@ -6,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/config/app_constants.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/profile_notifier.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/ocr_notifier.dart';
@@ -139,7 +139,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         );
         return;
       }
-      final canScan = await _checkAnonymousScanQuota();
+      final canScan = await _checkOcrCredit();
       if (!canScan) return;
       final bytes = await Future.wait(_images.map((f) => f.readAsBytes()));
       // Pass currency dari profile user supaya Edge Function bisa pakai
@@ -154,50 +154,68 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
     }
   }
 
-  Future<bool> _checkAnonymousScanQuota() async {
-    final auth = ref.read(authRepositoryProvider);
-    if (!auth.isAnonymous) return true;
-
-    final res = await ref
-        .read(profileRepositoryProvider)
-        .getAnonymousScanCount();
+  Future<bool> _checkOcrCredit() async {
+    final res = await ref.read(profileRepositoryProvider).getOcrCreditStatus();
     if (!mounted) return false;
 
     switch (res) {
       case Success(:final data):
-        if (data < AppConstants.anonymousScanLimit) return true;
-        await _showAnonymousScanLimitDialog();
+        if (data.balance > 0) return true;
+        await _showNoCreditDialog(
+          planCode: data.planCode,
+          monthlyAllowance: data.monthlyAllowance,
+        );
         return false;
       case ResultFailure(:final failure):
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal cek batas scan: $failure')),
+          SnackBar(content: Text('Gagal cek credit scan: $failure')),
         );
         return false;
     }
   }
 
-  Future<void> _showAnonymousScanLimitDialog() {
+  Future<void> _showNoCreditDialog({
+    required String planCode,
+    required int monthlyAllowance,
+  }) {
+    final isAnonymous = planCode == 'anonymous';
+    final title = isAnonymous
+        ? 'Batas scan gratis tercapai'
+        : 'Credit scan bulan ini habis';
+    final body = isAnonymous
+        ? 'Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar '
+              'akun untuk mendapat 20 credit gratis setiap bulan.'
+        : planCode == 'plus'
+        ? 'Kamu sudah memakai $monthlyAllowance credit Plus bulan ini. Credit '
+              'akan tersedia lagi pada periode berikutnya.'
+        : 'Kamu sudah memakai $monthlyAllowance credit gratis bulan ini. '
+              'Upgrade ke Plus untuk 50 credit/bulan, tanpa iklan, dan fitur '
+              'khusus Plus.';
     return showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Batas scan gratis tercapai'),
-        content: const Text(
-          'Kamu sudah memakai 5x scan sebagai pengguna anonim. Daftar akun '
-          'untuk melanjutkan scan struk berikutnya.',
-        ),
+        title: Text(title),
+        content: Text(body),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: const Text('Nanti'),
           ),
-          FilledButton.icon(
-            icon: const Icon(Icons.person_add_alt_1),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-              context.goNamed(Routes.registerName);
-            },
-            label: const Text('Daftar'),
-          ),
+          if (isAnonymous)
+            FilledButton.icon(
+              icon: const Icon(Icons.person_add_alt_1),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                context.goNamed(Routes.registerName);
+              },
+              label: const Text('Daftar'),
+            )
+          else if (planCode == 'free')
+            FilledButton.icon(
+              icon: const Icon(Icons.workspace_premium),
+              onPressed: () => Navigator.of(ctx).pop(),
+              label: const Text('Plus segera hadir'),
+            ),
         ],
       ),
     );
@@ -233,6 +251,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
             );
           return;
         }
+        ref.invalidate(ocrCreditStatusProvider);
         ref.read(ocrProvider.notifier).reset();
         context.pushNamed(Routes.billReviewName, extra: result);
       }

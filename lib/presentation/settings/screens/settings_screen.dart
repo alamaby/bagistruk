@@ -11,6 +11,7 @@ import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../auth/providers/auth_providers.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../providers/profile_notifier.dart';
 import '../providers/settings_actions.dart';
 import '../widgets/confirm_dialog.dart';
@@ -84,6 +85,7 @@ class _SettingsBody extends ConsumerWidget {
     final l10n = AppL10n.of(context);
     final theme = Theme.of(context);
     final isAnon = profile.isAnonymous;
+    final creditStatus = ref.watch(ocrCreditStatusProvider).valueOrNull;
 
     return ListView(
       padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -99,6 +101,15 @@ class _SettingsBody extends ConsumerWidget {
                       : l10n.displayNameFallback),
           ),
           subtitle: Text(isAnon ? l10n.guestAccount : (profile.email ?? '—')),
+        ),
+        ListTile(
+          leading: const Icon(Icons.document_scanner_outlined),
+          title: const Text('Credit scan'),
+          subtitle: Text(
+            creditStatus == null
+                ? 'Memuat status credit...'
+                : '${creditStatus.balance}/${creditStatus.monthlyAllowance} tersisa (${creditStatus.planCode})',
+          ),
         ),
         if (!isAnon)
           ListTile(

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../core/ads/ad_config.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 
-class BannerAdWidget extends StatefulWidget {
+class BannerAdWidget extends ConsumerStatefulWidget {
   const BannerAdWidget({super.key});
 
   @override
-  State<BannerAdWidget> createState() => _BannerAdWidgetState();
+  ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends State<BannerAdWidget> {
+class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   BannerAd? _ad;
   bool _loaded = false;
 
@@ -29,6 +31,11 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final creditStatusAsync = ref.watch(ocrCreditStatusProvider);
+    if (creditStatusAsync.isLoading) return const SizedBox.shrink();
+    final creditStatus = creditStatusAsync.valueOrNull;
+    if (creditStatus?.adsEnabled == false) return const SizedBox.shrink();
+
     final ad = _ad;
     if (!_loaded || ad == null) return const SizedBox.shrink();
 

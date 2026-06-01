@@ -18,6 +18,8 @@ You may use some features with an anonymous session. You may also register or si
 
 Anonymous accounts are intended for temporary or lightweight use. Registered accounts allow data to persist across devices and sessions, depending on the authentication provider and backend availability.
 
+OCR scanning may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features. Unused monthly credits may expire at the end of the applicable period.
+
 ## 4. User Content
 
 You are responsible for receipt photos, bill data, participant names, and any other content you enter or upload. Do not upload content that is illegal, abusive, harmful, or violates another person's rights.
@@ -97,6 +99,8 @@ Dengan menggunakan BagiStruk, Anda menyetujui Syarat ini dan Kebijakan Privasi. 
 Sebagian fitur dapat digunakan dengan sesi anonim. Anda juga dapat mendaftar atau login menggunakan email/password atau Google Sign-In. Anda bertanggung jawab menjaga keamanan perangkat dan akses akun.
 
 Akun anonim ditujukan untuk penggunaan sementara atau ringan. Akun terdaftar memungkinkan data bertahan lintas perangkat dan sesi, tergantung penyedia autentikasi dan ketersediaan backend.
+
+Scan OCR dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
 
 ## 4. Konten Pengguna
 
