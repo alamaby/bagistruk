@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/format/app_format.dart';
+import '../../../core/billing/plus_feature_limits.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../bills/providers/bill_list_notifier.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../shared/widgets/loading_view.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -20,7 +22,12 @@ class HistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
     final bills = ref.watch(billListProvider);
+    final creditStatus = ref.watch(ocrCreditStatusProvider);
     final currency = AppFormat.currency();
+    final planCode = creditStatus.valueOrNull?.planCode;
+    final isPlus = creditStatus.valueOrNull?.isPlus ?? false;
+    final historyDays = PlusFeatureLimits.historyDays(planCode: planCode);
+    final hasHistoryAccess = historyDays > 0;
 
     return Scaffold(
       body: SafeArea(
@@ -47,6 +54,13 @@ class HistoryScreen extends ConsumerWidget {
                 ),
                 SliverToBoxAdapter(
                   child: _SummaryCards(bills: list, currency: currency),
+                ),
+                SliverToBoxAdapter(
+                  child: _HistoryAccessBanner(
+                    isPlus: isPlus,
+                    hasHistoryAccess: hasHistoryAccess,
+                    days: historyDays,
+                  ),
                 ),
                 if (list.isEmpty)
                   const SliverFillRemaining(
@@ -104,6 +118,116 @@ class HistoryScreen extends ConsumerWidget {
       SnackBar(
         content: Text(l10n.historySignedOut),
         behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+}
+
+class _HistoryAccessBanner extends StatelessWidget {
+  const _HistoryAccessBanner({
+    required this.isPlus,
+    required this.hasHistoryAccess,
+    required this.days,
+  });
+
+  final bool isPlus;
+  final bool hasHistoryAccess;
+  final int days;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final bg = isPlus ? scheme.primaryContainer : scheme.surfaceContainerHigh;
+    final fg = isPlus ? scheme.onPrimaryContainer : scheme.onSurfaceVariant;
+    final title = isPlus
+        ? l10n.historyWindowPlus
+        : hasHistoryAccess
+        ? l10n.historyWindowFree
+        : l10n.historyWindowAnonymous;
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 8.h),
+      child: Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(color: fg.withValues(alpha: 0.12)),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isPlus
+                  ? Icons.workspace_premium
+                  : hasHistoryAccess
+                  ? Icons.history_toggle_off_outlined
+                  : Icons.lock_outline,
+              color: fg,
+              size: 22.r,
+            ),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 4.h,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: fg,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      if (isPlus)
+                        Semantics(
+                          label: 'Plus',
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 2.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: fg.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(999.r),
+                            ),
+                            child: Text(
+                              'Plus',
+                              style: TextStyle(
+                                color: fg,
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    hasHistoryAccess
+                        ? l10n.historyWindowSubtitle(days)
+                        : l10n.historyWindowAnonymousSubtitle,
+                    style: TextStyle(color: fg, fontSize: 12.sp, height: 1.3),
+                  ),
+                ],
+              ),
+            ),
+            if (!isPlus) ...[
+              SizedBox(width: 8.w),
+              IconButton.filledTonal(
+                tooltip: l10n.historyUpgradeCta,
+                onPressed: () => context.goNamed(Routes.settingsName),
+                icon: const Icon(Icons.workspace_premium_outlined),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

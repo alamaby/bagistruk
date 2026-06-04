@@ -16,10 +16,10 @@ class BillRepositoryImpl implements IBillRepository {
   final BillRemoteDataSource _ds;
 
   @override
-  Future<Result<List<Bill>>> listBills() => guardAsync(
-    () async => (await _ds.listBills())
-        .map((d) => d.toEntity())
-        .toList(growable: false),
+  Future<Result<List<Bill>>> listBills({DateTime? createdAfter}) => guardAsync(
+    () async => (await _ds.listBills(
+      createdAfter: createdAfter,
+    )).map((d) => d.toEntity()).toList(growable: false),
   );
 
   @override

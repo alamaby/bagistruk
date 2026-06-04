@@ -128,6 +128,15 @@
   "historyTotalBills": "Total bill",
   "historyOutstanding": "Piutang outstanding",
   "historyEmptyMessage": "Belum ada bill tersimpan.\nMulai scan struk dari tab Scan.",
+  "historyWindowFree": "Riwayat Free",
+  "historyWindowPlus": "Riwayat Plus",
+  "historyWindowAnonymous": "Riwayat terkunci",
+  "historyWindowAnonymousSubtitle": "Daftar untuk menyimpan dan melihat riwayat bill.",
+  "historyWindowSubtitle": "Menampilkan bill dari {days} hari terakhir.",
+  "@historyWindowSubtitle": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "historyUpgradeCta": "Upgrade ke Plus",
 
   "splitSummaryTitle": "Rincian per Orang",
   "splitSummaryNoItems": "Belum ambil item.",

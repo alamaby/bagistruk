@@ -5,7 +5,7 @@ import '../entities/item.dart';
 import '../entities/participant.dart';
 
 abstract interface class IBillRepository {
-  Future<Result<List<Bill>>> listBills();
+  Future<Result<List<Bill>>> listBills({DateTime? createdAfter});
   Future<Result<Bill>> getBill(String id);
   Future<Result<Bill>> createBill(Bill bill);
   Future<Result<Bill>> updateBill(Bill bill);

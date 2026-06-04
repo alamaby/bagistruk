@@ -189,7 +189,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         ? 'Kamu sudah memakai $monthlyAllowance credit Plus bulan ini. Credit '
               'akan tersedia lagi pada periode berikutnya.'
         : 'Kamu sudah memakai $monthlyAllowance credit gratis bulan ini. '
-              'Upgrade ke Plus untuk 50 credit/bulan, tanpa iklan, dan fitur '
+              'Upgrade ke Plus untuk 60 credit/bulan, tanpa iklan, dan fitur '
               'khusus Plus.';
     return showDialog<void>(
       context: context,

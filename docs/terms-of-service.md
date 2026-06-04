@@ -20,6 +20,8 @@ Anonymous accounts are intended for temporary or lightweight use. Registered acc
 
 OCR scanning may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features. Unused monthly credits may expire at the end of the applicable period.
 
+Paid subscriptions and one-time OCR credit packs, when available, are processed through Google Play Billing on Android. Subscription access continues while Google Play reports the subscription as active. One-time OCR credit packs are added to your account after server-side purchase verification. Refunds, cancellations, renewal timing, grace periods, and payment issues may affect access or available credits according to Google Play policies and the app's server-side entitlement records.
+
 ## 4. User Content
 
 You are responsible for receipt photos, bill data, participant names, and any other content you enter or upload. Do not upload content that is illegal, abusive, harmful, or violates another person's rights.
@@ -101,6 +103,8 @@ Sebagian fitur dapat digunakan dengan sesi anonim. Anda juga dapat mendaftar ata
 Akun anonim ditujukan untuk penggunaan sementara atau ringan. Akun terdaftar memungkinkan data bertahan lintas perangkat dan sesi, tergantung penyedia autentikasi dan ketersediaan backend.
 
 Scan OCR dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
+
+Subscription berbayar dan paket credit OCR sekali beli, jika tersedia, diproses melalui Google Play Billing di Android. Akses subscription berlaku selama Google Play melaporkan subscription masih aktif. Paket credit OCR sekali beli ditambahkan ke akun setelah verifikasi pembelian sisi server. Refund, pembatalan, waktu renewal, grace period, dan masalah pembayaran dapat memengaruhi akses atau credit yang tersedia sesuai kebijakan Google Play dan catatan entitlement server-side aplikasi.
 
 ## 4. Konten Pengguna
 

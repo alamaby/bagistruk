@@ -2,8 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/error/failure.dart';
 import '../../../core/error/result.dart';
+import '../../../core/billing/plus_feature_limits.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 
 part 'bill_list_notifier.g.dart';
 
@@ -14,7 +16,16 @@ class BillListNotifier extends _$BillListNotifier {
   @override
   Future<List<Bill>> build() async {
     final repo = ref.watch(billRepositoryProvider);
-    final result = await repo.listBills();
+    final creditStatus = await ref.watch(ocrCreditStatusProvider.future);
+    final historyDays = PlusFeatureLimits.historyDays(
+      planCode: creditStatus?.planCode,
+    );
+    if (historyDays <= 0) return const [];
+
+    final createdAfter = PlusFeatureLimits.historyCutoff(
+      planCode: creditStatus?.planCode,
+    );
+    final result = await repo.listBills(createdAfter: createdAfter);
     return switch (result) {
       Success(:final data) => data,
       ResultFailure(:final failure) => throw _FailureException(failure),

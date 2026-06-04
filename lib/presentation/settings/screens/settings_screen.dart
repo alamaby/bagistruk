@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../../core/billing/google_play_billing_catalog.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
+import '../../../data/services/google_play_billing_service.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
@@ -110,6 +115,10 @@ class _SettingsBody extends ConsumerWidget {
                 ? 'Memuat status credit...'
                 : '${creditStatus.balance}/${creditStatus.monthlyAllowance} tersisa (${creditStatus.planCode})',
           ),
+        ),
+        _BillingSection(
+          isAnonymous: isAnon,
+          isPlus: creditStatus?.isPlus ?? false,
         ),
         if (!isAnon)
           ListTile(
@@ -425,6 +434,217 @@ class _SectionHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _BillingSection extends ConsumerStatefulWidget {
+  const _BillingSection({required this.isAnonymous, required this.isPlus});
+
+  final bool isAnonymous;
+  final bool isPlus;
+
+  @override
+  ConsumerState<_BillingSection> createState() => _BillingSectionState();
+}
+
+class _BillingSectionState extends ConsumerState<_BillingSection> {
+  StreamSubscription<List<PurchaseDetails>>? _purchaseSub;
+  List<ProductDetails> _products = const [];
+  bool _loading = true;
+  bool _busy = false;
+  String? _message;
+
+  @override
+  void initState() {
+    super.initState();
+    final billing = ref.read(googlePlayBillingServiceProvider);
+    _purchaseSub = billing.purchaseStream.listen(_handlePurchases);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadProducts());
+  }
+
+  @override
+  void dispose() {
+    _purchaseSub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final plus = _product(GooglePlayBillingCatalog.plusMonthly.id);
+    final pack = _product(GooglePlayBillingCatalog.creditPacks.first.id);
+
+    if (widget.isAnonymous) {
+      return ListTile(
+        leading: const Icon(Icons.workspace_premium_outlined),
+        title: const Text('Plus dan paket credit'),
+        subtitle: const Text(
+          'Daftar akun dulu untuk membeli Plus atau top-up credit.',
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => context.pushNamed(Routes.registerName),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('Plus dan paket credit', style: theme.textTheme.titleMedium),
+          if (_message != null) ...[
+            SizedBox(height: 6.h),
+            Text(_message!, style: theme.textTheme.bodySmall),
+          ],
+          SizedBox(height: 10.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              FilledButton.icon(
+                icon: const Icon(Icons.workspace_premium_outlined),
+                onPressed: _canBuy(plus) && !widget.isPlus
+                    ? () => _buy(plus!)
+                    : null,
+                label: Text(
+                  widget.isPlus
+                      ? 'Plus aktif'
+                      : _buttonLabel('Upgrade Plus', plus),
+                ),
+              ),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.add_card_outlined),
+                onPressed: _canBuy(pack) ? () => _buy(pack!) : null,
+                label: Text(_buttonLabel('Beli 50 credit', pack)),
+              ),
+              IconButton.outlined(
+                tooltip: 'Pulihkan pembelian',
+                onPressed: _busy ? null : _restore,
+                icon: const Icon(Icons.restore_outlined),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool _canBuy(ProductDetails? product) =>
+      !_loading && !_busy && product != null;
+
+  String _buttonLabel(String fallback, ProductDetails? product) {
+    if (_loading) return 'Memuat...';
+    if (product == null) return fallback;
+    return '$fallback ${product.price}';
+  }
+
+  ProductDetails? _product(String id) {
+    for (final product in _products) {
+      if (product.id == id) return product;
+    }
+    return null;
+  }
+
+  Future<void> _loadProducts() async {
+    if (!mounted) return;
+    setState(() {
+      _loading = true;
+      _message = null;
+    });
+    try {
+      final billing = ref.read(googlePlayBillingServiceProvider);
+      final available = await billing.isAvailable();
+      if (!available) {
+        if (!mounted) return;
+        setState(() {
+          _products = const [];
+          _message = 'Google Play Billing belum tersedia di perangkat ini.';
+        });
+        return;
+      }
+      final response = await billing.loadProducts();
+      if (!mounted) return;
+      setState(() {
+        _products = response.productDetails;
+        _message = response.notFoundIDs.isEmpty
+            ? null
+            : 'Beberapa produk belum aktif di Play Console.';
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _message = 'Produk belum bisa dimuat.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _buy(ProductDetails product) async {
+    setState(() {
+      _busy = true;
+      _message = 'Membuka Google Play...';
+    });
+    try {
+      await ref.read(googlePlayBillingServiceProvider).buy(product);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _message = 'Pembelian belum bisa dimulai.';
+      });
+    }
+  }
+
+  Future<void> _restore() async {
+    setState(() {
+      _busy = true;
+      _message = 'Memulihkan pembelian...';
+    });
+    try {
+      await ref.read(googlePlayBillingServiceProvider).restorePurchases();
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _message = 'Pembelian belum bisa dipulihkan.';
+      });
+    }
+  }
+
+  Future<void> _handlePurchases(List<PurchaseDetails> purchases) async {
+    for (final purchase in purchases) {
+      if (!mounted) return;
+      if (purchase.status == PurchaseStatus.pending) {
+        setState(() {
+          _busy = true;
+          _message = 'Menunggu pembayaran Google Play...';
+        });
+        continue;
+      }
+      if (purchase.status == PurchaseStatus.error) {
+        setState(() {
+          _busy = false;
+          _message = 'Pembelian dibatalkan atau gagal.';
+        });
+        continue;
+      }
+      final result = await ref
+          .read(googlePlayBillingServiceProvider)
+          .verifyAndFinish(purchase);
+      if (!mounted) return;
+      switch (result) {
+        case Success<void>():
+          ref.invalidate(ocrCreditStatusProvider);
+          setState(() {
+            _busy = false;
+            _message = 'Pembelian berhasil diproses.';
+          });
+        case ResultFailure<void>():
+          setState(() {
+            _busy = false;
+            _message = 'Pembelian belum bisa diverifikasi.';
+          });
+      }
+    }
   }
 }
 

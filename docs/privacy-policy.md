@@ -18,6 +18,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - Receipt photos: images you choose or capture for OCR processing.
 - Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, and settlement status.
 - OCR credit data: plan/entitlement status, monthly credit grants, credit usage, and audit records needed to enforce scan limits.
+- Google Play Billing data when purchases are available: product IDs, purchase tokens, order IDs, subscription status/expiry, and verification responses needed to grant Plus access or OCR credit packs.
 - Support and reminder data: email address and inactivity reminder timestamps when reminders are sent.
 - Basic technical data sent by app/framework/network services, such as device and request metadata needed for diagnostics and security. For anonymous anti-abuse, we may store a server-side HMAC hash derived from coarse request signals; we do not store the raw IP address or raw device fingerprint for this purpose.
 - Advertising data when ads are enabled: advertising identifiers such as the Android Advertising ID, device/ad interaction data, approximate location inferred by ad services, and consent status used by Google Mobile Ads / AdMob for ad delivery, frequency capping, fraud prevention, and measurement.
@@ -35,6 +36,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - To save, display, edit, split, and settle bills.
 - To preserve anonymous data when a user upgrades to a registered account.
 - To enforce OCR credit limits, including anonymous, free, and Plus plan limits.
+- To verify Google Play purchases server-side and grant Plus subscriptions or one-time OCR credit packs.
 - To store user preferences and personalize the app.
 - To track last activity for account retention and cleanup.
 - To send inactivity reminders to registered users before account cleanup.
@@ -54,6 +56,7 @@ BagiStruk may use:
 - Google Gemini and/or OpenRouter: OCR and receipt parsing.
 - Resend or another email provider: inactivity reminder emails, if configured.
 - Google Mobile Ads / AdMob: optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging.
+- Google Play Billing / Google Play Developer API: purchase processing and server-side purchase verification for subscriptions and one-time OCR credit packs.
 
 ## Account Retention And Deletion
 
@@ -104,6 +107,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Foto struk: gambar yang Anda pilih atau ambil untuk pemrosesan OCR.
 - Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, dan status pembayaran.
 - Data credit OCR: status plan/entitlement, grant credit bulanan, penggunaan credit, dan audit yang dibutuhkan untuk menerapkan batas scan.
+- Data Google Play Billing saat pembelian tersedia: product ID, purchase token, order ID, status/expiry subscription, dan respons verifikasi yang dibutuhkan untuk memberi akses Plus atau paket credit OCR.
 - Data dukungan dan reminder: alamat email dan timestamp reminder tidak aktif saat reminder dikirim.
 - Data teknis dasar dari app/framework/network service, seperti metadata perangkat dan request yang dibutuhkan untuk diagnostik dan keamanan. Untuk anti-abuse pengguna anonim, kami dapat menyimpan hash HMAC sisi server yang diturunkan dari sinyal request terbatas; kami tidak menyimpan alamat IP mentah atau fingerprint perangkat mentah untuk tujuan ini.
 - Data iklan saat iklan diaktifkan: identifier iklan seperti Android Advertising ID, data perangkat/interaksi iklan, perkiraan lokasi yang disimpulkan layanan iklan, dan status consent yang digunakan Google Mobile Ads / AdMob untuk penayangan iklan, pembatasan frekuensi, pencegahan fraud, dan pengukuran.
@@ -121,6 +125,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Menyimpan, menampilkan, mengedit, membagi, dan menyelesaikan tagihan.
 - Mempertahankan data anonim saat pengguna upgrade ke akun terdaftar.
 - Menerapkan batas credit OCR, termasuk batas untuk pengguna anonim, Free, dan Plus.
+- Memverifikasi pembelian Google Play dari sisi server dan memberi subscription Plus atau paket credit OCR sekali beli.
 - Menyimpan preferensi pengguna dan menyesuaikan pengalaman aplikasi.
 - Melacak aktivitas terakhir untuk retensi dan pembersihan akun.
 - Mengirim reminder tidak aktif kepada pengguna terdaftar sebelum pembersihan akun.
@@ -140,6 +145,7 @@ BagiStruk dapat menggunakan:
 - Google Gemini dan/atau OpenRouter: OCR dan parsing struk.
 - Resend atau penyedia email lain: email reminder tidak aktif, jika dikonfigurasi.
 - Google Mobile Ads / AdMob: penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi.
+- Google Play Billing / Google Play Developer API: pemrosesan pembelian dan verifikasi pembelian sisi server untuk subscription dan paket credit OCR sekali beli.
 
 ## Retensi Dan Penghapusan Akun
 

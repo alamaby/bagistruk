@@ -327,6 +327,27 @@ class AppL10nId extends AppL10n {
       'Belum ada bill tersimpan.\nMulai scan struk dari tab Scan.';
 
   @override
+  String get historyWindowFree => 'Riwayat Free';
+
+  @override
+  String get historyWindowPlus => 'Riwayat Plus';
+
+  @override
+  String get historyWindowAnonymous => 'Riwayat terkunci';
+
+  @override
+  String get historyWindowAnonymousSubtitle =>
+      'Daftar untuk menyimpan dan melihat riwayat bill.';
+
+  @override
+  String historyWindowSubtitle(int days) {
+    return 'Menampilkan bill dari $days hari terakhir.';
+  }
+
+  @override
+  String get historyUpgradeCta => 'Upgrade ke Plus';
+
+  @override
   String get splitSummaryTitle => 'Rincian per Orang';
 
   @override

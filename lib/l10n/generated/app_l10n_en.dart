@@ -327,6 +327,27 @@ class AppL10nEn extends AppL10n {
       'No saved bills yet.\nStart scanning a receipt from the Scan tab.';
 
   @override
+  String get historyWindowFree => 'Free history';
+
+  @override
+  String get historyWindowPlus => 'Plus history';
+
+  @override
+  String get historyWindowAnonymous => 'History locked';
+
+  @override
+  String get historyWindowAnonymousSubtitle =>
+      'Sign up to save and view bill history.';
+
+  @override
+  String historyWindowSubtitle(int days) {
+    return 'Showing bills from the last $days days.';
+  }
+
+  @override
+  String get historyUpgradeCta => 'Upgrade to Plus';
+
+  @override
   String get splitSummaryTitle => 'Summary per Person';
 
   @override

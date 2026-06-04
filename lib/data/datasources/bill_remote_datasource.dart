@@ -16,11 +16,13 @@ class BillRemoteDataSource {
   static const _participants = 'participants';
   static const _assignments = 'item_assignments';
 
-  Future<List<BillDto>> listBills() async {
-    final rows = await _client
-        .from(_bills)
-        .select()
-        .order('created_at', ascending: false);
+  Future<List<BillDto>> listBills({DateTime? createdAfter}) async {
+    var query = _client.from(_bills).select();
+    if (createdAfter != null) {
+      query = query.gte('created_at', createdAfter.toUtc().toIso8601String());
+    }
+
+    final rows = await query.order('created_at', ascending: false);
     return rows.map((r) => BillDto.fromJson(r)).toList(growable: false);
   }
 

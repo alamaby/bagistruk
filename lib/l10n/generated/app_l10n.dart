@@ -703,6 +703,42 @@ abstract class AppL10n {
   /// **'Belum ada bill tersimpan.\nMulai scan struk dari tab Scan.'**
   String get historyEmptyMessage;
 
+  /// No description provided for @historyWindowFree.
+  ///
+  /// In id, this message translates to:
+  /// **'Riwayat Free'**
+  String get historyWindowFree;
+
+  /// No description provided for @historyWindowPlus.
+  ///
+  /// In id, this message translates to:
+  /// **'Riwayat Plus'**
+  String get historyWindowPlus;
+
+  /// No description provided for @historyWindowAnonymous.
+  ///
+  /// In id, this message translates to:
+  /// **'Riwayat terkunci'**
+  String get historyWindowAnonymous;
+
+  /// No description provided for @historyWindowAnonymousSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar untuk menyimpan dan melihat riwayat bill.'**
+  String get historyWindowAnonymousSubtitle;
+
+  /// No description provided for @historyWindowSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Menampilkan bill dari {days} hari terakhir.'**
+  String historyWindowSubtitle(int days);
+
+  /// No description provided for @historyUpgradeCta.
+  ///
+  /// In id, this message translates to:
+  /// **'Upgrade ke Plus'**
+  String get historyUpgradeCta;
+
   /// No description provided for @splitSummaryTitle.
   ///
   /// In id, this message translates to:
