@@ -1,4 +1,4 @@
-name: Release Android APK
+name: Release Android Artifacts
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build split-per-ABI APKs
+    name: Build split-per-ABI APKs and AAB
     runs-on: ubuntu-latest
 
     steps:
@@ -113,6 +113,28 @@ jobs:
           done
           ls -la dist
 
+      - name: Build release App Bundle
+        run: |
+          flutter build appbundle \
+            --release \
+            --build-name="${{ steps.version.outputs.build_name }}" \
+            --build-number="${{ steps.version.outputs.build_number }}"
+
+      - name: Verify App Bundle signing (must NOT be debug key)
+        run: |
+          AAB="build/app/outputs/bundle/release/app-release.aab"
+          jarsigner -verify -verbose -certs "$AAB" | tee /tmp/jarsigner-aab.log
+          if grep -qi "Android Debug" /tmp/jarsigner-aab.log; then
+            echo "::error::AAB is signed with debug key — check KEYSTORE_BASE64 / key.properties wiring."
+            exit 1
+          fi
+
+      - name: Rename App Bundle
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          cp build/app/outputs/bundle/release/app-release.aab "dist/bagistruk-${TAG}.aab"
+          ls -la dist
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -121,3 +143,4 @@ jobs:
             dist/bagistruk-${{ steps.version.outputs.tag }}-armeabi-v7a.apk
             dist/bagistruk-${{ steps.version.outputs.tag }}-arm64-v8a.apk
             dist/bagistruk-${{ steps.version.outputs.tag }}-x86_64.apk
+            dist/bagistruk-${{ steps.version.outputs.tag }}.aab

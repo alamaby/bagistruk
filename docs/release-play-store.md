@@ -65,6 +65,9 @@ Test on an emulator running API 36 and, ideally, a physical device. Verify:
 ## 6. Build the AAB via GitHub Actions
 
 Trigger the **Build Play Store AAB** workflow manually from the Actions tab. It uses `workflow_dispatch`.
+For tagged releases, the **Release Android Artifacts** workflow also builds and
+attaches a signed `bagistruk-vX.Y.Z.aab` alongside the split APKs in the GitHub
+Release.
 
 Required repository secrets and variables:
 
