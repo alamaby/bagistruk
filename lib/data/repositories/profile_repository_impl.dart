@@ -1,5 +1,6 @@
 import '../../core/error/exception_mapper.dart';
 import '../../core/error/result.dart';
+import '../../domain/entities/monthly_spending_insight.dart';
 import '../../domain/entities/ocr_credit_status.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/i_profile_repository.dart';
@@ -44,6 +45,13 @@ class ProfileRepositoryImpl implements IProfileRepository {
     final row = await _ds.getOcrCreditStatus();
     return OcrCreditStatus.fromJson(row);
   });
+
+  @override
+  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight() =>
+      guardAsync(() async {
+        final row = await _ds.getMonthlySpendingInsight();
+        return MonthlySpendingInsight.fromJson(row);
+      });
 
   @override
   Future<Result<void>> touchLastActive() => guardAsync(_ds.touchLastActive);

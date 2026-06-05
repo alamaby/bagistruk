@@ -1,4 +1,5 @@
 import '../../core/error/result.dart';
+import '../entities/monthly_spending_insight.dart';
 import '../entities/ocr_credit_status.dart';
 import '../entities/user_profile.dart';
 
@@ -20,6 +21,9 @@ abstract interface class IProfileRepository {
 
   /// Reads the current OCR credit status for the active user.
   Future<Result<OcrCreditStatus>> getOcrCreditStatus();
+
+  /// Reads Plus-gated monthly spending insight for the active user.
+  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight();
 
   /// Refreshes the user's app activity timestamp. No-op when signed out.
   Future<Result<void>> touchLastActive();

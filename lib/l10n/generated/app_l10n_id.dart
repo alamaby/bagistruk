@@ -348,6 +348,52 @@ class AppL10nId extends AppL10n {
   String get historyUpgradeCta => 'Upgrade ke Plus';
 
   @override
+  String get monthlyInsightTitle => 'Insight bulanan';
+
+  @override
+  String monthlyInsightMonth(String month) {
+    return 'Pengeluaran $month';
+  }
+
+  @override
+  String get monthlyInsightLoading => 'Memuat insight bulanan...';
+
+  @override
+  String get monthlyInsightError => 'Insight bulanan belum bisa dimuat.';
+
+  @override
+  String get monthlyInsightLockedSubtitle =>
+      'Lihat total bulanan, tren, piutang outstanding, dan merchant terbesar dengan Plus.';
+
+  @override
+  String get monthlyInsightTotal => 'Bulan ini';
+
+  @override
+  String get monthlyInsightAverage => 'Rata-rata bill';
+
+  @override
+  String get monthlyInsightBills => 'Bill';
+
+  @override
+  String get monthlyInsightOutstanding => 'Outstanding';
+
+  @override
+  String get monthlyInsightTopMerchants => 'Merchant terbesar';
+
+  @override
+  String monthlyInsightIncrease(String percent) {
+    return 'Naik $percent% dibanding bulan lalu';
+  }
+
+  @override
+  String monthlyInsightDecrease(String percent) {
+    return 'Turun $percent% dibanding bulan lalu';
+  }
+
+  @override
+  String get monthlyInsightNoChange => 'Tidak berubah dibanding bulan lalu';
+
+  @override
   String get splitSummaryTitle => 'Rincian per Orang';
 
   @override

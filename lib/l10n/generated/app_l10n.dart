@@ -739,6 +739,84 @@ abstract class AppL10n {
   /// **'Upgrade ke Plus'**
   String get historyUpgradeCta;
 
+  /// No description provided for @monthlyInsightTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Insight bulanan'**
+  String get monthlyInsightTitle;
+
+  /// No description provided for @monthlyInsightMonth.
+  ///
+  /// In id, this message translates to:
+  /// **'Pengeluaran {month}'**
+  String monthlyInsightMonth(String month);
+
+  /// No description provided for @monthlyInsightLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'Memuat insight bulanan...'**
+  String get monthlyInsightLoading;
+
+  /// No description provided for @monthlyInsightError.
+  ///
+  /// In id, this message translates to:
+  /// **'Insight bulanan belum bisa dimuat.'**
+  String get monthlyInsightError;
+
+  /// No description provided for @monthlyInsightLockedSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat total bulanan, tren, piutang outstanding, dan merchant terbesar dengan Plus.'**
+  String get monthlyInsightLockedSubtitle;
+
+  /// No description provided for @monthlyInsightTotal.
+  ///
+  /// In id, this message translates to:
+  /// **'Bulan ini'**
+  String get monthlyInsightTotal;
+
+  /// No description provided for @monthlyInsightAverage.
+  ///
+  /// In id, this message translates to:
+  /// **'Rata-rata bill'**
+  String get monthlyInsightAverage;
+
+  /// No description provided for @monthlyInsightBills.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill'**
+  String get monthlyInsightBills;
+
+  /// No description provided for @monthlyInsightOutstanding.
+  ///
+  /// In id, this message translates to:
+  /// **'Outstanding'**
+  String get monthlyInsightOutstanding;
+
+  /// No description provided for @monthlyInsightTopMerchants.
+  ///
+  /// In id, this message translates to:
+  /// **'Merchant terbesar'**
+  String get monthlyInsightTopMerchants;
+
+  /// No description provided for @monthlyInsightIncrease.
+  ///
+  /// In id, this message translates to:
+  /// **'Naik {percent}% dibanding bulan lalu'**
+  String monthlyInsightIncrease(String percent);
+
+  /// No description provided for @monthlyInsightDecrease.
+  ///
+  /// In id, this message translates to:
+  /// **'Turun {percent}% dibanding bulan lalu'**
+  String monthlyInsightDecrease(String percent);
+
+  /// No description provided for @monthlyInsightNoChange.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak berubah dibanding bulan lalu'**
+  String get monthlyInsightNoChange;
+
   /// No description provided for @splitSummaryTitle.
   ///
   /// In id, this message translates to:

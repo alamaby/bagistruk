@@ -137,6 +137,28 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade ke Plus",
+  "monthlyInsightTitle": "Insight bulanan",
+  "monthlyInsightMonth": "Pengeluaran {month}",
+  "@monthlyInsightMonth": {
+    "placeholders": { "month": { "type": "String" } }
+  },
+  "monthlyInsightLoading": "Memuat insight bulanan...",
+  "monthlyInsightError": "Insight bulanan belum bisa dimuat.",
+  "monthlyInsightLockedSubtitle": "Lihat total bulanan, tren, piutang outstanding, dan merchant terbesar dengan Plus.",
+  "monthlyInsightTotal": "Bulan ini",
+  "monthlyInsightAverage": "Rata-rata bill",
+  "monthlyInsightBills": "Bill",
+  "monthlyInsightOutstanding": "Outstanding",
+  "monthlyInsightTopMerchants": "Merchant terbesar",
+  "monthlyInsightIncrease": "Naik {percent}% dibanding bulan lalu",
+  "@monthlyInsightIncrease": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "monthlyInsightDecrease": "Turun {percent}% dibanding bulan lalu",
+  "@monthlyInsightDecrease": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "monthlyInsightNoChange": "Tidak berubah dibanding bulan lalu",
 
   "splitSummaryTitle": "Rincian per Orang",
   "splitSummaryNoItems": "Belum ambil item.",

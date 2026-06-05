@@ -137,6 +137,28 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade to Plus",
+  "monthlyInsightTitle": "Monthly insight",
+  "monthlyInsightMonth": "{month} spending",
+  "@monthlyInsightMonth": {
+    "placeholders": { "month": { "type": "String" } }
+  },
+  "monthlyInsightLoading": "Loading monthly insight...",
+  "monthlyInsightError": "Could not load monthly insight.",
+  "monthlyInsightLockedSubtitle": "See monthly totals, trends, outstanding amount, and top merchants with Plus.",
+  "monthlyInsightTotal": "This month",
+  "monthlyInsightAverage": "Average bill",
+  "monthlyInsightBills": "Bills",
+  "monthlyInsightOutstanding": "Outstanding",
+  "monthlyInsightTopMerchants": "Top merchants",
+  "monthlyInsightIncrease": "Up {percent}% vs last month",
+  "@monthlyInsightIncrease": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "monthlyInsightDecrease": "Down {percent}% vs last month",
+  "@monthlyInsightDecrease": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "monthlyInsightNoChange": "No change vs last month",
 
   "splitSummaryTitle": "Summary per Person",
   "splitSummaryNoItems": "No items selected.",

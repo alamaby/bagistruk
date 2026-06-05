@@ -348,6 +348,52 @@ class AppL10nEn extends AppL10n {
   String get historyUpgradeCta => 'Upgrade to Plus';
 
   @override
+  String get monthlyInsightTitle => 'Monthly insight';
+
+  @override
+  String monthlyInsightMonth(String month) {
+    return '$month spending';
+  }
+
+  @override
+  String get monthlyInsightLoading => 'Loading monthly insight...';
+
+  @override
+  String get monthlyInsightError => 'Could not load monthly insight.';
+
+  @override
+  String get monthlyInsightLockedSubtitle =>
+      'See monthly totals, trends, outstanding amount, and top merchants with Plus.';
+
+  @override
+  String get monthlyInsightTotal => 'This month';
+
+  @override
+  String get monthlyInsightAverage => 'Average bill';
+
+  @override
+  String get monthlyInsightBills => 'Bills';
+
+  @override
+  String get monthlyInsightOutstanding => 'Outstanding';
+
+  @override
+  String get monthlyInsightTopMerchants => 'Top merchants';
+
+  @override
+  String monthlyInsightIncrease(String percent) {
+    return 'Up $percent% vs last month';
+  }
+
+  @override
+  String monthlyInsightDecrease(String percent) {
+    return 'Down $percent% vs last month';
+  }
+
+  @override
+  String get monthlyInsightNoChange => 'No change vs last month';
+
+  @override
   String get splitSummaryTitle => 'Summary per Person';
 
   @override

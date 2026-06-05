@@ -52,6 +52,17 @@ class ProfileRemoteDataSource {
     return Map<String, dynamic>.from(row as Map);
   }
 
+  Future<Map<String, dynamic>> getMonthlySpendingInsight() async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    final row = await _client
+        .rpc('get_monthly_spending_insight', params: {'p_user_id': uid})
+        .single();
+    return Map<String, dynamic>.from(row as Map);
+  }
+
   Future<void> touchLastActive() async {
     if (currentUserId == null) return;
     await _client.rpc<void>('touch_last_active_at');

@@ -9,10 +9,12 @@ import '../../../core/billing/plus_feature_limits.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
+import '../../../domain/entities/monthly_spending_insight.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../bills/providers/bill_list_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../insights/providers/monthly_spending_insight_provider.dart';
 import '../../shared/widgets/loading_view.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -28,6 +30,7 @@ class HistoryScreen extends ConsumerWidget {
     final isPlus = creditStatus.valueOrNull?.isPlus ?? false;
     final historyDays = PlusFeatureLimits.historyDays(planCode: planCode);
     final hasHistoryAccess = historyDays > 0;
+    final monthlyInsight = ref.watch(monthlySpendingInsightProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -62,6 +65,14 @@ class HistoryScreen extends ConsumerWidget {
                     days: historyDays,
                   ),
                 ),
+                if (hasHistoryAccess)
+                  SliverToBoxAdapter(
+                    child: _MonthlyInsightSection(
+                      isPlus: isPlus,
+                      insight: monthlyInsight,
+                      currency: currency,
+                    ),
+                  ),
                 if (list.isEmpty)
                   const SliverFillRemaining(
                     hasScrollBody: false,
@@ -119,6 +130,472 @@ class HistoryScreen extends ConsumerWidget {
         content: Text(l10n.historySignedOut),
         behavior: SnackBarBehavior.floating,
       ),
+    );
+  }
+}
+
+class _MonthlyInsightSection extends StatelessWidget {
+  const _MonthlyInsightSection({
+    required this.isPlus,
+    required this.insight,
+    required this.currency,
+  });
+
+  final bool isPlus;
+  final AsyncValue<MonthlySpendingInsight?> insight;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isPlus) {
+      return _InsightShell(
+        locked: true,
+        child: _LockedInsightPreview(currency: currency),
+      );
+    }
+
+    return insight.when(
+      loading: () => _InsightShell(
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 18.r,
+                height: 18.r,
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              ),
+              SizedBox(width: 12.w),
+              Text(
+                AppL10n.of(context).monthlyInsightLoading,
+                style: TextStyle(fontSize: 13.sp),
+              ),
+            ],
+          ),
+        ),
+      ),
+      error: (_, _) => _InsightShell(
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Text(
+            AppL10n.of(context).monthlyInsightError,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+      data: (data) {
+        if (data == null || !data.isPlus) {
+          return _InsightShell(
+            locked: true,
+            child: _LockedInsightPreview(currency: currency),
+          );
+        }
+        return _InsightShell(
+          child: _MonthlyInsightCard(insight: data, currency: currency),
+        );
+      },
+    );
+  }
+}
+
+class _InsightShell extends StatelessWidget {
+  const _InsightShell({required this.child, this.locked = false});
+
+  final Widget child;
+  final bool locked;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 8.h),
+      child: Container(
+        decoration: BoxDecoration(
+          color: locked ? scheme.surfaceContainerHigh : scheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(color: scheme.outlineVariant),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class _LockedInsightPreview extends StatelessWidget {
+  const _LockedInsightPreview({required this.currency});
+
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.all(16.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.insights_outlined, color: scheme.onSurfaceVariant),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.monthlyInsightTitle,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    _SmallPlusPill(color: scheme.onSurfaceVariant),
+                  ],
+                ),
+                SizedBox(height: 6.h),
+                Text(
+                  l10n.monthlyInsightLockedSubtitle,
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 12.sp,
+                    height: 1.35,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                _BlurredMetricRow(currency: currency),
+              ],
+            ),
+          ),
+          SizedBox(width: 8.w),
+          IconButton.filledTonal(
+            tooltip: l10n.historyUpgradeCta,
+            onPressed: () => context.goNamed(Routes.settingsName),
+            icon: const Icon(Icons.workspace_premium_outlined),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MonthlyInsightCard extends StatelessWidget {
+  const _MonthlyInsightCard({required this.insight, required this.currency});
+
+  final MonthlySpendingInsight insight;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final month = DateFormat.MMMM().format(insight.monthStart);
+    final mom = insight.monthOverMonthPercent;
+
+    return Padding(
+      padding: EdgeInsets.all(16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.insights, color: scheme.primary, size: 22.r),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(
+                  l10n.monthlyInsightTitle,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              _SmallPlusPill(color: scheme.primary),
+            ],
+          ),
+          SizedBox(height: 2.h),
+          Text(
+            l10n.monthlyInsightMonth(month),
+            style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12.sp),
+          ),
+          SizedBox(height: 14.h),
+          Row(
+            children: [
+              Expanded(
+                child: _MetricTile(
+                  label: l10n.monthlyInsightTotal,
+                  value: currency.format(insight.totalAmount),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: _MetricTile(
+                  label: l10n.monthlyInsightAverage,
+                  value: currency.format(insight.averageBillAmount),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          Row(
+            children: [
+              Expanded(
+                child: _MetricTile(
+                  label: l10n.monthlyInsightBills,
+                  value: '${insight.billCount}',
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: _MetricTile(
+                  label: l10n.monthlyInsightOutstanding,
+                  value: currency.format(insight.outstandingAmount),
+                ),
+              ),
+            ],
+          ),
+          if (mom != null) ...[
+            SizedBox(height: 12.h),
+            _MonthComparison(percent: mom),
+          ],
+          if (insight.monthlyTrend.isNotEmpty) ...[
+            SizedBox(height: 14.h),
+            _TrendBars(points: insight.monthlyTrend, currency: currency),
+          ],
+          if (insight.topMerchants.isNotEmpty) ...[
+            SizedBox(height: 14.h),
+            Text(
+              l10n.monthlyInsightTopMerchants,
+              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 6.h),
+            ...insight.topMerchants.map(
+              (m) => _MerchantRow(merchant: m, currency: currency),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _MetricTile extends StatelessWidget {
+  const _MetricTile({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.all(10.w),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11.sp),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MonthComparison extends StatelessWidget {
+  const _MonthComparison({required this.percent});
+
+  final double percent;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final isUp = percent > 0;
+    final isFlat = percent.abs() < 0.01;
+    final icon = isFlat
+        ? Icons.trending_flat
+        : isUp
+        ? Icons.trending_up
+        : Icons.trending_down;
+    final label = isFlat
+        ? l10n.monthlyInsightNoChange
+        : isUp
+        ? l10n.monthlyInsightIncrease(percent.abs().toStringAsFixed(1))
+        : l10n.monthlyInsightDecrease(percent.abs().toStringAsFixed(1));
+
+    return Row(
+      children: [
+        Icon(icon, color: scheme.primary, size: 18.r),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TrendBars extends StatelessWidget {
+  const _TrendBars({required this.points, required this.currency});
+
+  final List<MonthlySpendingTrendPoint> points;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final maxAmount = points.fold<double>(
+      0,
+      (max, p) => p.totalAmount > max ? p.totalAmount : max,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: points
+          .map((point) {
+            final ratio = maxAmount <= 0 ? 0.04 : point.totalAmount / maxAmount;
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: Column(
+                  children: [
+                    Tooltip(
+                      message: currency.format(point.totalAmount),
+                      child: Container(
+                        height: (52.h * ratio.clamp(0.04, 1)).toDouble(),
+                        decoration: BoxDecoration(
+                          color: scheme.primary,
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      DateFormat.MMM().format(point.monthStart),
+                      style: TextStyle(
+                        color: scheme.onSurfaceVariant,
+                        fontSize: 11.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          })
+          .toList(growable: false),
+    );
+  }
+}
+
+class _MerchantRow extends StatelessWidget {
+  const _MerchantRow({required this.merchant, required this.currency});
+
+  final MerchantSpendingInsight merchant;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              merchant.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12.sp),
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Text(
+            currency.format(merchant.totalAmount),
+            style: TextStyle(
+              color: scheme.onSurfaceVariant,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SmallPlusPill extends StatelessWidget {
+  const _SmallPlusPill({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Plus',
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(999.r),
+        ),
+        child: Text(
+          'Plus',
+          style: TextStyle(
+            color: color,
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BlurredMetricRow extends StatelessWidget {
+  const _BlurredMetricRow({required this.currency});
+
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _MetricTile(
+            label: AppL10n.of(context).monthlyInsightTotal,
+            value: currency.format(0),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: _MetricTile(
+            label: AppL10n.of(context).monthlyInsightBills,
+            value: '--',
+          ),
+        ),
+      ],
     );
   }
 }
