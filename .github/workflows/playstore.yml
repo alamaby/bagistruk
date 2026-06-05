@@ -86,6 +86,19 @@ jobs:
             echo "ADMOB_IOS_BANNER_ID=${ADMOB_IOS_BANNER_ID}"
           } > .env
 
+      - name: Validate required app env
+        run: |
+          missing=()
+          for key in SUPABASE_URL SUPABASE_ANON_KEY GOOGLE_WEB_CLIENT_ID; do
+            if ! grep -Eq "^${key}=.+" .env; then
+              missing+=("$key")
+            fi
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing required app env vars: ${missing[*]}. Add them in GitHub Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
       - name: Flutter pub get
         run: flutter pub get
 

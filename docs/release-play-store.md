@@ -79,7 +79,7 @@ Required repository secrets and variables:
 | Secret | `STORE_PASSWORD` | Keystore password |
 | Variable | `SUPABASE_URL` | Supabase project URL |
 | Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
-| Variable | `GOOGLE_WEB_CLIENT_ID` | Google OAuth web client ID used by Supabase auth |
+| Variable | `GOOGLE_WEB_CLIENT_ID` | Required. Google OAuth web client ID used as Android `serverClientId` and by Supabase auth |
 | Variable | `GOOGLE_IOS_CLIENT_ID` | Google OAuth iOS client ID, required for iOS builds |
 | Variable | `ADS_ENABLED` | `false` by default; set `true` only after AdMob production IDs and Play disclosures are ready |
 | Variable | `ADMOB_ANDROID_BANNER_ID` | Android AdMob banner unit ID, currently `ca-app-pub-4082765898994990/8733289141` |
@@ -93,6 +93,12 @@ builds installed from Play testing tracks. A missing SHA can appear in-app as a
 canceled sign-in immediately after account selection.
 
 The workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using `r0adkll/upload-google-play` for automated internal-track releases.
+
+The Android workflows fail early when `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or
+`GOOGLE_WEB_CLIENT_ID` is missing from the generated `.env`. If Google Sign-In
+shows `Missing required env var: GOOGLE_WEB_CLIENT_ID`, add
+`GOOGLE_WEB_CLIENT_ID` under repository **Variables**, rebuild the AAB, and
+upload the new artifact to Play Console.
 
 ## 7. Deploy Edge Functions
 
