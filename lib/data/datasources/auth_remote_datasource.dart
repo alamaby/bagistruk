@@ -133,7 +133,9 @@ class AuthRemoteDataSource {
       throw AuthException(e.message);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
-        throw const AuthException('Google sign-in dibatalkan');
+        throw const AuthException(
+          'Google sign-in dibatalkan atau konfigurasi OAuth Android belum cocok',
+        );
       }
       final description = e.description;
       throw AuthException(

@@ -29,6 +29,9 @@ String _humanizeAuth(String raw) {
   if (lower.contains('email not confirmed')) {
     return 'Email belum dikonfirmasi. Cek kotak masuk.';
   }
+  if (lower.contains('oauth android') || lower.contains('google sign-in')) {
+    return 'Google Sign-In gagal setelah memilih akun. Coba lagi; jika tetap terjadi, cek OAuth Android package name, SHA-1 debug/release, dan Google Web Client ID.';
+  }
   if (lower.contains('coming soon')) {
     return 'Fitur ini akan segera hadir.';
   }

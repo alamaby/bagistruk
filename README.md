@@ -111,12 +111,17 @@ Without this, inserts into `bills` will be rejected by Row Level Security.
 In Google Cloud Console, create OAuth clients for:
 
 - Web application: put this value in `.env` as `GOOGLE_WEB_CLIENT_ID`.
-- Android: package name `com.alamaby.bagistruk`, with the debug and release SHA-1 fingerprints.
+- Android: package name `com.alamaby.bagistruk`, with every debug/release SHA-1 fingerprint used to install the app. The Android client ID is not bundled in `.env`, but Google still needs it registered for native sign-in.
 - iOS: bundle id `com.alamaby.bagistruk`, then put the client id in `.env` as `GOOGLE_IOS_CLIENT_ID`.
 
 In Supabase Dashboard: **Authentication → Providers → Google → Enable**, then add the Google web OAuth client id and secret.
 
 On iOS, also add `CFBundleURLTypes` to `ios/Runner/Info.plist` using the `REVERSED_CLIENT_ID` from Google's iOS client config.
+
+If Android shows "Google Sign-In dibatalkan" right after choosing an account,
+check the Android OAuth package name/SHA-1 for the build you installed and the
+web client ID used in `GOOGLE_WEB_CLIENT_ID`; Credential Manager can report
+some configuration errors as a canceled sign-in.
 
 ### 6. Deploy the Edge Functions
 

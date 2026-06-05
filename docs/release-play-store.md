@@ -82,6 +82,13 @@ Required repository secrets and variables:
 | Variable | `ADMOB_ANDROID_BANNER_ID` | Android AdMob banner unit ID, currently `ca-app-pub-4082765898994990/8733289141` |
 | Variable | `ADMOB_IOS_BANNER_ID` | iOS AdMob banner unit ID |
 
+Before smoke testing Google Sign-In on Android, confirm Google Cloud Console has
+an Android OAuth client for package `com.alamaby.bagistruk` with the SHA-1 of
+the exact installed build: debug keystore for `flutter run`, upload/release
+keystore for locally signed release APKs, and Play app-signing certificate for
+builds installed from Play testing tracks. A missing SHA can appear in-app as a
+canceled sign-in immediately after account selection.
+
 The workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using `r0adkll/upload-google-play` for automated internal-track releases.
 
 ## 7. Deploy Edge Functions
