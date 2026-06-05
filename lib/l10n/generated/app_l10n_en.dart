@@ -340,6 +340,11 @@ class AppL10nEn extends AppL10n {
       'Sign up to save and view bill history.';
 
   @override
+  String historyWindowFreeSubtitle(int freeDays, int plusDays) {
+    return 'Showing bills from the last $freeDays days. Plus can show up to the last $plusDays days.';
+  }
+
+  @override
   String historyWindowSubtitle(int days) {
     return 'Showing bills from the last $days days.';
   }

@@ -340,6 +340,11 @@ class AppL10nId extends AppL10n {
       'Daftar untuk menyimpan dan melihat riwayat bill.';
 
   @override
+  String historyWindowFreeSubtitle(int freeDays, int plusDays) {
+    return 'Menampilkan bill dari $freeDays hari terakhir. Plus bisa melihat sampai $plusDays hari terakhir.';
+  }
+
+  @override
   String historyWindowSubtitle(int days) {
     return 'Menampilkan bill dari $days hari terakhir.';
   }

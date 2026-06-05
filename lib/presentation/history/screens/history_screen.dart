@@ -626,6 +626,14 @@ class _HistoryAccessBanner extends StatelessWidget {
         : hasHistoryAccess
         ? l10n.historyWindowFree
         : l10n.historyWindowAnonymous;
+    final subtitle = isPlus
+        ? l10n.historyWindowSubtitle(days)
+        : hasHistoryAccess
+        ? l10n.historyWindowFreeSubtitle(
+            PlusFeatureLimits.freeHistoryDays,
+            PlusFeatureLimits.plusHistoryDays,
+          )
+        : l10n.historyWindowAnonymousSubtitle;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 8.h),
@@ -691,9 +699,7 @@ class _HistoryAccessBanner extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    hasHistoryAccess
-                        ? l10n.historyWindowSubtitle(days)
-                        : l10n.historyWindowAnonymousSubtitle,
+                    subtitle,
                     style: TextStyle(color: fg, fontSize: 12.sp, height: 1.3),
                   ),
                 ],

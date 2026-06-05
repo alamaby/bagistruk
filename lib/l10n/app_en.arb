@@ -132,6 +132,17 @@
   "historyWindowPlus": "Plus history",
   "historyWindowAnonymous": "History locked",
   "historyWindowAnonymousSubtitle": "Sign up to save and view bill history.",
+  "historyWindowFreeSubtitle": "Showing bills from the last {freeDays} days. Plus can show up to the last {plusDays} days.",
+  "@historyWindowFreeSubtitle": {
+    "placeholders": {
+      "freeDays": {
+        "type": "int"
+      },
+      "plusDays": {
+        "type": "int"
+      }
+    }
+  },
   "historyWindowSubtitle": "Showing bills from the last {days} days.",
   "@historyWindowSubtitle": {
     "placeholders": { "days": { "type": "int" } }

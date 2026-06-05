@@ -727,6 +727,12 @@ abstract class AppL10n {
   /// **'Daftar untuk menyimpan dan melihat riwayat bill.'**
   String get historyWindowAnonymousSubtitle;
 
+  /// No description provided for @historyWindowFreeSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Menampilkan bill dari {freeDays} hari terakhir. Plus bisa melihat sampai {plusDays} hari terakhir.'**
+  String historyWindowFreeSubtitle(int freeDays, int plusDays);
+
   /// No description provided for @historyWindowSubtitle.
   ///
   /// In id, this message translates to:

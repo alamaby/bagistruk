@@ -132,6 +132,17 @@
   "historyWindowPlus": "Riwayat Plus",
   "historyWindowAnonymous": "Riwayat terkunci",
   "historyWindowAnonymousSubtitle": "Daftar untuk menyimpan dan melihat riwayat bill.",
+  "historyWindowFreeSubtitle": "Menampilkan bill dari {freeDays} hari terakhir. Plus bisa melihat sampai {plusDays} hari terakhir.",
+  "@historyWindowFreeSubtitle": {
+    "placeholders": {
+      "freeDays": {
+        "type": "int"
+      },
+      "plusDays": {
+        "type": "int"
+      }
+    }
+  },
   "historyWindowSubtitle": "Menampilkan bill dari {days} hari terakhir.",
   "@historyWindowSubtitle": {
     "placeholders": { "days": { "type": "int" } }
