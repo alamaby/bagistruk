@@ -176,6 +176,10 @@ class _SettingsBody extends ConsumerWidget {
           ),
           onTap: () => _onPickTheme(context, ref, profile.themePref),
         ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: const BannerAdWidget(),
+        ),
         const Divider(),
         _SectionHeader(l10n.aboutTitle),
         ListTile(
@@ -203,7 +207,6 @@ class _SettingsBody extends ConsumerWidget {
                 ),
         ),
         SizedBox(height: 24.h),
-        const BannerAdWidget(),
         SizedBox(height: 12.h),
       ],
     );
