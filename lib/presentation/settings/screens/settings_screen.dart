@@ -90,7 +90,10 @@ class _SettingsBody extends ConsumerWidget {
     final l10n = AppL10n.of(context);
     final theme = Theme.of(context);
     final isAnon = profile.isAnonymous;
-    final creditStatus = ref.watch(ocrCreditStatusProvider).valueOrNull;
+    final creditStatus = switch (ref.watch(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
 
     return ListView(
       padding: EdgeInsets.symmetric(vertical: 8.h),

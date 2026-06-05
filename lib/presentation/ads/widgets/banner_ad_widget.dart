@@ -33,7 +33,10 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   Widget build(BuildContext context) {
     final creditStatusAsync = ref.watch(ocrCreditStatusProvider);
     if (creditStatusAsync.isLoading) return const SizedBox.shrink();
-    final creditStatus = creditStatusAsync.valueOrNull;
+    final creditStatus = switch (creditStatusAsync) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
     if (creditStatus?.adsEnabled == false) return const SizedBox.shrink();
 
     final ad = _ad;

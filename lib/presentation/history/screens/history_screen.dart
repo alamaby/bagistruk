@@ -24,10 +24,14 @@ class HistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
     final bills = ref.watch(billListProvider);
-    final creditStatus = ref.watch(ocrCreditStatusProvider);
+    final creditStatusAsync = ref.watch(ocrCreditStatusProvider);
+    final creditStatus = switch (creditStatusAsync) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
     final currency = AppFormat.currency();
-    final planCode = creditStatus.valueOrNull?.planCode;
-    final isPlus = creditStatus.valueOrNull?.isPlus ?? false;
+    final planCode = creditStatus?.planCode;
+    final isPlus = creditStatus?.isPlus ?? false;
     final historyDays = PlusFeatureLimits.historyDays(planCode: planCode);
     final hasHistoryAccess = historyDays > 0;
     final monthlyInsight = ref.watch(monthlySpendingInsightProvider);
