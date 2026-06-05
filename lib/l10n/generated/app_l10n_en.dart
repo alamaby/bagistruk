@@ -421,6 +421,69 @@ class AppL10nEn extends AppL10n {
   String get splitShareFailed => 'Could not share';
 
   @override
+  String get settlementTemplateBasic => 'Basic';
+
+  @override
+  String get settlementTemplateCompact => 'Compact message';
+
+  @override
+  String get settlementTemplateDetailed => 'Detailed message';
+
+  @override
+  String get settlementTemplateAll => 'All participants recap';
+
+  @override
+  String get settlementTemplatePlusLocked =>
+      'Neater WhatsApp templates are available with Plus.';
+
+  @override
+  String get settlementMessageBillPrefix => 'Details for';
+
+  @override
+  String get settlementMessageRecapPrefix => 'BagiStruk recap -';
+
+  @override
+  String get settlementMessageFor => 'For';
+
+  @override
+  String settlementMessageGreeting(String name) {
+    return 'Hi $name, your share is:';
+  }
+
+  @override
+  String get settlementMessageTransferNote =>
+      'Please transfer if everything looks right. Thank you.';
+
+  @override
+  String get settlementMessageItems => 'Your items';
+
+  @override
+  String get settlementMessageUnnamedItem => '(unnamed item)';
+
+  @override
+  String settlementMessageSharedWith(int count) {
+    return 'split by $count';
+  }
+
+  @override
+  String get settlementMessageTotal => 'Total';
+
+  @override
+  String get settlementMessageStatus => 'Status';
+
+  @override
+  String get settlementMessagePaid => 'paid';
+
+  @override
+  String get settlementMessageUnpaid => 'unpaid';
+
+  @override
+  String get settlementMessageGrandTotal => 'Total bill';
+
+  @override
+  String get settlementMessageOutstanding => 'Outstanding';
+
+  @override
   String get aboutTitle => 'About';
 
   @override

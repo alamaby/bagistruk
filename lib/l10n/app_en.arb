@@ -169,6 +169,31 @@
   "splitSummaryCopy": "Copy",
   "splitSummaryCopied": "Copied to clipboard",
   "splitShareFailed": "Could not share",
+  "settlementTemplateBasic": "Basic",
+  "settlementTemplateCompact": "Compact message",
+  "settlementTemplateDetailed": "Detailed message",
+  "settlementTemplateAll": "All participants recap",
+  "settlementTemplatePlusLocked": "Neater WhatsApp templates are available with Plus.",
+  "settlementMessageBillPrefix": "Details for",
+  "settlementMessageRecapPrefix": "BagiStruk recap -",
+  "settlementMessageFor": "For",
+  "settlementMessageGreeting": "Hi {name}, your share is:",
+  "@settlementMessageGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "settlementMessageTransferNote": "Please transfer if everything looks right. Thank you.",
+  "settlementMessageItems": "Your items",
+  "settlementMessageUnnamedItem": "(unnamed item)",
+  "settlementMessageSharedWith": "split by {count}",
+  "@settlementMessageSharedWith": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "settlementMessageTotal": "Total",
+  "settlementMessageStatus": "Status",
+  "settlementMessagePaid": "paid",
+  "settlementMessageUnpaid": "unpaid",
+  "settlementMessageGrandTotal": "Total bill",
+  "settlementMessageOutstanding": "Outstanding",
 
   "aboutTitle": "About",
   "aboutSettingsTile": "About App",

@@ -421,6 +421,69 @@ class AppL10nId extends AppL10n {
   String get splitShareFailed => 'Tidak bisa membagikan';
 
   @override
+  String get settlementTemplateBasic => 'Basic';
+
+  @override
+  String get settlementTemplateCompact => 'Pesan ringkas';
+
+  @override
+  String get settlementTemplateDetailed => 'Pesan rinci';
+
+  @override
+  String get settlementTemplateAll => 'Rekap semua peserta';
+
+  @override
+  String get settlementTemplatePlusLocked =>
+      'Template WhatsApp yang lebih rapi tersedia dengan Plus.';
+
+  @override
+  String get settlementMessageBillPrefix => 'Rincian';
+
+  @override
+  String get settlementMessageRecapPrefix => 'Rekap BagiStruk -';
+
+  @override
+  String get settlementMessageFor => 'Untuk';
+
+  @override
+  String settlementMessageGreeting(String name) {
+    return 'Halo $name, bagianmu:';
+  }
+
+  @override
+  String get settlementMessageTransferNote =>
+      'Mohon transfer jika sudah sesuai. Terima kasih.';
+
+  @override
+  String get settlementMessageItems => 'Item kamu';
+
+  @override
+  String get settlementMessageUnnamedItem => '(tanpa nama)';
+
+  @override
+  String settlementMessageSharedWith(int count) {
+    return 'dibagi $count';
+  }
+
+  @override
+  String get settlementMessageTotal => 'Total';
+
+  @override
+  String get settlementMessageStatus => 'Status';
+
+  @override
+  String get settlementMessagePaid => 'lunas';
+
+  @override
+  String get settlementMessageUnpaid => 'belum lunas';
+
+  @override
+  String get settlementMessageGrandTotal => 'Total bill';
+
+  @override
+  String get settlementMessageOutstanding => 'Belum lunas';
+
+  @override
   String get aboutTitle => 'Tentang';
 
   @override

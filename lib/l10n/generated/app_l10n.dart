@@ -871,6 +871,120 @@ abstract class AppL10n {
   /// **'Tidak bisa membagikan'**
   String get splitShareFailed;
 
+  /// No description provided for @settlementTemplateBasic.
+  ///
+  /// In id, this message translates to:
+  /// **'Basic'**
+  String get settlementTemplateBasic;
+
+  /// No description provided for @settlementTemplateCompact.
+  ///
+  /// In id, this message translates to:
+  /// **'Pesan ringkas'**
+  String get settlementTemplateCompact;
+
+  /// No description provided for @settlementTemplateDetailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pesan rinci'**
+  String get settlementTemplateDetailed;
+
+  /// No description provided for @settlementTemplateAll.
+  ///
+  /// In id, this message translates to:
+  /// **'Rekap semua peserta'**
+  String get settlementTemplateAll;
+
+  /// No description provided for @settlementTemplatePlusLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'Template WhatsApp yang lebih rapi tersedia dengan Plus.'**
+  String get settlementTemplatePlusLocked;
+
+  /// No description provided for @settlementMessageBillPrefix.
+  ///
+  /// In id, this message translates to:
+  /// **'Rincian'**
+  String get settlementMessageBillPrefix;
+
+  /// No description provided for @settlementMessageRecapPrefix.
+  ///
+  /// In id, this message translates to:
+  /// **'Rekap BagiStruk -'**
+  String get settlementMessageRecapPrefix;
+
+  /// No description provided for @settlementMessageFor.
+  ///
+  /// In id, this message translates to:
+  /// **'Untuk'**
+  String get settlementMessageFor;
+
+  /// No description provided for @settlementMessageGreeting.
+  ///
+  /// In id, this message translates to:
+  /// **'Halo {name}, bagianmu:'**
+  String settlementMessageGreeting(String name);
+
+  /// No description provided for @settlementMessageTransferNote.
+  ///
+  /// In id, this message translates to:
+  /// **'Mohon transfer jika sudah sesuai. Terima kasih.'**
+  String get settlementMessageTransferNote;
+
+  /// No description provided for @settlementMessageItems.
+  ///
+  /// In id, this message translates to:
+  /// **'Item kamu'**
+  String get settlementMessageItems;
+
+  /// No description provided for @settlementMessageUnnamedItem.
+  ///
+  /// In id, this message translates to:
+  /// **'(tanpa nama)'**
+  String get settlementMessageUnnamedItem;
+
+  /// No description provided for @settlementMessageSharedWith.
+  ///
+  /// In id, this message translates to:
+  /// **'dibagi {count}'**
+  String settlementMessageSharedWith(int count);
+
+  /// No description provided for @settlementMessageTotal.
+  ///
+  /// In id, this message translates to:
+  /// **'Total'**
+  String get settlementMessageTotal;
+
+  /// No description provided for @settlementMessageStatus.
+  ///
+  /// In id, this message translates to:
+  /// **'Status'**
+  String get settlementMessageStatus;
+
+  /// No description provided for @settlementMessagePaid.
+  ///
+  /// In id, this message translates to:
+  /// **'lunas'**
+  String get settlementMessagePaid;
+
+  /// No description provided for @settlementMessageUnpaid.
+  ///
+  /// In id, this message translates to:
+  /// **'belum lunas'**
+  String get settlementMessageUnpaid;
+
+  /// No description provided for @settlementMessageGrandTotal.
+  ///
+  /// In id, this message translates to:
+  /// **'Total bill'**
+  String get settlementMessageGrandTotal;
+
+  /// No description provided for @settlementMessageOutstanding.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum lunas'**
+  String get settlementMessageOutstanding;
+
   /// No description provided for @aboutTitle.
   ///
   /// In id, this message translates to:

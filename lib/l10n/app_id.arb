@@ -169,6 +169,31 @@
   "splitSummaryCopy": "Salin",
   "splitSummaryCopied": "Disalin ke clipboard",
   "splitShareFailed": "Tidak bisa membagikan",
+  "settlementTemplateBasic": "Basic",
+  "settlementTemplateCompact": "Pesan ringkas",
+  "settlementTemplateDetailed": "Pesan rinci",
+  "settlementTemplateAll": "Rekap semua peserta",
+  "settlementTemplatePlusLocked": "Template WhatsApp yang lebih rapi tersedia dengan Plus.",
+  "settlementMessageBillPrefix": "Rincian",
+  "settlementMessageRecapPrefix": "Rekap BagiStruk -",
+  "settlementMessageFor": "Untuk",
+  "settlementMessageGreeting": "Halo {name}, bagianmu:",
+  "@settlementMessageGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "settlementMessageTransferNote": "Mohon transfer jika sudah sesuai. Terima kasih.",
+  "settlementMessageItems": "Item kamu",
+  "settlementMessageUnnamedItem": "(tanpa nama)",
+  "settlementMessageSharedWith": "dibagi {count}",
+  "@settlementMessageSharedWith": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "settlementMessageTotal": "Total",
+  "settlementMessageStatus": "Status",
+  "settlementMessagePaid": "lunas",
+  "settlementMessageUnpaid": "belum lunas",
+  "settlementMessageGrandTotal": "Total bill",
+  "settlementMessageOutstanding": "Belum lunas",
 
   "aboutTitle": "Tentang",
   "aboutSettingsTile": "Tentang Aplikasi",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,14 +8,16 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/format/app_format.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../providers/split_notifier.dart';
+import '../utils/settlement_message_builder.dart';
 import 'participant_avatar.dart';
 
 /// Bottom-sheet summary listing per-participant items, proportional tax/
 /// service, and total. Each row has Copy and Share buttons — Share opens the
 /// native OS share sheet so the user can route the breakdown to any app
 /// (WhatsApp, Telegram, Email, SMS, etc.).
-class SplitSummarySheet extends StatelessWidget {
+class SplitSummarySheet extends ConsumerWidget {
   const SplitSummarySheet({super.key, required this.state});
 
   final SplitState state;
@@ -33,11 +36,16 @@ class SplitSummarySheet extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
     final currency = AppFormat.currency();
     final totals = state.calculateTotals();
     final byId = {for (final t in totals) t.participantId: t};
+    final creditStatus = switch (ref.watch(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+    final isPlus = creditStatus?.isPlus ?? false;
 
     return DraggableScrollableSheet(
       expand: false,
@@ -70,6 +78,7 @@ class SplitSummarySheet extends StatelessWidget {
                 bill: state,
                 currency: currency,
                 l10n: l10n,
+                isPlus: isPlus,
               ),
           ],
         ),
@@ -86,6 +95,7 @@ class _ParticipantSummaryCard extends StatelessWidget {
     required this.bill,
     required this.currency,
     required this.l10n,
+    required this.isPlus,
   });
 
   final Participant participant;
@@ -94,36 +104,20 @@ class _ParticipantSummaryCard extends StatelessWidget {
   final SplitState bill;
   final NumberFormat currency;
   final AppL10n l10n;
+  final bool isPlus;
 
-  String _buildShareText() {
-    final buf = StringBuffer();
-    buf.writeln('*Rincian ${bill.bill.title}*');
-    buf.writeln('Untuk: ${participant.name}');
-    buf.writeln('');
-    if (items.isEmpty) {
-      buf.writeln('_Tidak ada item._');
-    } else {
-      buf.writeln('*Item:*');
-      for (final s in items) {
-        final name = s.item.name.isEmpty ? '(tanpa nama)' : s.item.name;
-        final shareNote = s.sharedWith > 1 ? ' (dibagi ${s.sharedWith})' : '';
-        buf.writeln('• $name$shareNote — ${currency.format(s.share)}');
-      }
-    }
-    buf.writeln('');
-    buf.writeln('Subtotal: ${currency.format(total.subtotal)}');
-    if (total.tax > 0) buf.writeln('Pajak: ${currency.format(total.tax)}');
-    if (total.service > 0) {
-      buf.writeln('Service: ${currency.format(total.service)}');
-    }
-    buf.writeln('*Total: ${currency.format(total.total)}*');
-    return buf.toString();
-  }
+  SettlementMessageBuilder get _messageBuilder =>
+      SettlementMessageBuilder(state: bill, currency: currency, l10n: l10n);
 
   Future<void> _shareSystem(BuildContext context) async {
     try {
+      final template = await _chooseTemplate(context, l10n.splitSummaryShare);
+      if (template == null) return;
       await Share.share(
-        _buildShareText(),
+        _messageBuilder.build(
+          template: template,
+          participantId: participant.id,
+        ),
         subject: 'Rincian ${bill.bill.title} — ${participant.name}',
       );
     } catch (_) {
@@ -136,12 +130,81 @@ class _ParticipantSummaryCard extends StatelessWidget {
   }
 
   Future<void> _copyToClipboard(BuildContext context) async {
-    await Clipboard.setData(ClipboardData(text: _buildShareText()));
+    final template = await _chooseTemplate(context, l10n.splitSummaryCopy);
+    if (template == null) return;
+    await Clipboard.setData(
+      ClipboardData(
+        text: _messageBuilder.build(
+          template: template,
+          participantId: participant.id,
+        ),
+      ),
+    );
     if (context.mounted) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text(l10n.splitSummaryCopied)));
     }
+  }
+
+  Future<SettlementMessageTemplate?> _chooseTemplate(
+    BuildContext context,
+    String title,
+  ) async {
+    if (!isPlus) return SettlementMessageTemplate.basic;
+
+    return showModalBottomSheet<SettlementMessageTemplate>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 8.h),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            _TemplateTile(
+              icon: Icons.notes_outlined,
+              title: l10n.settlementTemplateBasic,
+              onTap: () =>
+                  Navigator.of(ctx).pop(SettlementMessageTemplate.basic),
+            ),
+            _TemplateTile(
+              icon: Icons.short_text,
+              title: l10n.settlementTemplateCompact,
+              isPlus: true,
+              onTap: () =>
+                  Navigator.of(ctx).pop(SettlementMessageTemplate.compactPlus),
+            ),
+            _TemplateTile(
+              icon: Icons.format_list_bulleted,
+              title: l10n.settlementTemplateDetailed,
+              isPlus: true,
+              onTap: () =>
+                  Navigator.of(ctx).pop(SettlementMessageTemplate.detailedPlus),
+            ),
+            _TemplateTile(
+              icon: Icons.groups_outlined,
+              title: l10n.settlementTemplateAll,
+              isPlus: true,
+              onTap: () =>
+                  Navigator.of(ctx).pop(SettlementMessageTemplate.allPlus),
+            ),
+            SizedBox(height: 8.h),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -278,8 +341,71 @@ class _ParticipantSummaryCard extends StatelessWidget {
               ),
             ],
           ),
+          if (!isPlus) ...[
+            SizedBox(height: 8.h),
+            Row(
+              children: [
+                Icon(
+                  Icons.workspace_premium_outlined,
+                  size: 16.r,
+                  color: scheme.onSurfaceVariant,
+                ),
+                SizedBox(width: 6.w),
+                Expanded(
+                  child: Text(
+                    l10n.settlementTemplatePlusLocked,
+                    style: TextStyle(
+                      color: scheme.onSurfaceVariant,
+                      fontSize: 11.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
+    );
+  }
+}
+
+class _TemplateTile extends StatelessWidget {
+  const _TemplateTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.isPlus = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool isPlus;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: isPlus
+          ? Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+              decoration: BoxDecoration(
+                color: scheme.primaryContainer,
+                borderRadius: BorderRadius.circular(999.r),
+              ),
+              child: Text(
+                'Plus',
+                style: TextStyle(
+                  color: scheme.onPrimaryContainer,
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          : null,
+      onTap: onTap,
     );
   }
 }
