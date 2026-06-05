@@ -131,6 +131,7 @@ fun releaseApkName(originalName: String, appName: String, version: String): Stri
 val renameReleaseApk = tasks.register<Copy>("renameReleaseApk") {
     group = "build"
     description = "Copies release APKs using the Android app name and semantic version from pubspec.yaml."
+    dependsOn("assembleRelease")
 
     val flutterProjectDir = rootProject.projectDir.parentFile
     val appName = (readAndroidAppLabel() ?: readPubspecValue("name") ?: "app")
@@ -153,8 +154,4 @@ val renameReleaseApk = tasks.register<Copy>("renameReleaseApk") {
             ?: "none"
         println("Named APKs created in build/app/outputs/flutter-apk: $namedApks")
     }
-}
-
-tasks.matching { it.name == "assembleRelease" }.configureEach {
-    finalizedBy(renameReleaseApk)
 }
