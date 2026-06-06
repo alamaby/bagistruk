@@ -191,9 +191,19 @@
   "splitSummaryService": "Service (proporsional)",
   "splitSummaryShare": "Bagikan",
   "participantShareAgain": "Bagikan ulang",
+  "exportPdf": "Export PDF",
+  "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",
   "exportCsvPlusLocked": "Export CSV (Plus)",
   "exportFailed": "Export belum bisa dibuat. Coba lagi.",
+  "exportPdfSubject": "Export {title}",
+  "@exportPdfSubject": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfShareText": "Export PDF untuk {title}",
+  "@exportPdfShareText": {
+    "placeholders": { "title": { "type": "String" } }
+  },
   "exportCsvSubject": "Export {title}",
   "@exportCsvSubject": {
     "placeholders": { "title": { "type": "String" } }

@@ -943,6 +943,18 @@ abstract class AppL10n {
   /// **'Bagikan ulang'**
   String get participantShareAgain;
 
+  /// No description provided for @exportPdf.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdf;
+
+  /// No description provided for @exportPdfPlusLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF (Plus)'**
+  String get exportPdfPlusLocked;
+
   /// No description provided for @exportCsv.
   ///
   /// In id, this message translates to:
@@ -960,6 +972,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Export belum bisa dibuat. Coba lagi.'**
   String get exportFailed;
+
+  /// No description provided for @exportPdfSubject.
+  ///
+  /// In id, this message translates to:
+  /// **'Export {title}'**
+  String exportPdfSubject(String title);
+
+  /// No description provided for @exportPdfShareText.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF untuk {title}'**
+  String exportPdfShareText(String title);
 
   /// No description provided for @exportCsvSubject.
   ///

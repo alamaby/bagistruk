@@ -191,9 +191,19 @@
   "splitSummaryService": "Service (proportional)",
   "splitSummaryShare": "Share",
   "participantShareAgain": "Share again",
+  "exportPdf": "Export PDF",
+  "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",
   "exportCsvPlusLocked": "Export CSV (Plus)",
   "exportFailed": "Could not create the export. Please try again.",
+  "exportPdfSubject": "Export {title}",
+  "@exportPdfSubject": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfShareText": "PDF export for {title}",
+  "@exportPdfShareText": {
+    "placeholders": { "title": { "type": "String" } }
+  },
   "exportCsvSubject": "Export {title}",
   "@exportCsvSubject": {
     "placeholders": { "title": { "type": "String" } }

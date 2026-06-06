@@ -464,6 +464,12 @@ class AppL10nEn extends AppL10n {
   String get participantShareAgain => 'Share again';
 
   @override
+  String get exportPdf => 'Export PDF';
+
+  @override
+  String get exportPdfPlusLocked => 'Export PDF (Plus)';
+
+  @override
   String get exportCsv => 'Export CSV';
 
   @override
@@ -471,6 +477,16 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get exportFailed => 'Could not create the export. Please try again.';
+
+  @override
+  String exportPdfSubject(String title) {
+    return 'Export $title';
+  }
+
+  @override
+  String exportPdfShareText(String title) {
+    return 'PDF export for $title';
+  }
 
   @override
   String exportCsvSubject(String title) {

@@ -19,6 +19,7 @@ import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../../shared/widgets/loading_view.dart';
 import '../export/bill_csv_exporter.dart';
+import '../export/bill_pdf_exporter.dart';
 import '../providers/bill_detail_notifier.dart';
 import '../providers/split_notifier.dart' show ParticipantTotal, SplitState;
 import '../utils/settlement_message_builder.dart';
@@ -178,6 +179,42 @@ class _Body extends ConsumerWidget {
     }
   }
 
+  Future<void> _exportPdf(BuildContext context, WidgetRef ref) async {
+    final l10n = AppL10n.of(context);
+    final isPlus = switch (ref.read(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value?.isPlus ?? false,
+      _ => false,
+    };
+    if (!isPlus) {
+      context.pushNamed(Routes.settingsName);
+      return;
+    }
+
+    try {
+      final bankInfo = await ref.read(transferBankInfoProvider.future);
+      final bytes = await BillPdfExporter(
+        state: state,
+        currency: currency,
+        dateFormat: AppFormat.longDate(),
+        l10n: l10n,
+        bankInfo: bankInfo,
+      ).build();
+      final filename = '${_safeFileName(state.bill.title)}.pdf';
+      await Share.shareXFiles(
+        [XFile.fromData(bytes, mimeType: 'application/pdf')],
+        subject: l10n.exportPdfSubject(state.bill.title),
+        text: l10n.exportPdfShareText(state.bill.title),
+        fileNameOverrides: [filename],
+      );
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.exportFailed)));
+      }
+    }
+  }
+
   String _safeFileName(String title) {
     final cleaned = title
         .toLowerCase()
@@ -209,9 +246,10 @@ class _Body extends ConsumerWidget {
           currency: currency,
         ),
         SizedBox(height: 12.h),
-        _ExportCsvButton(
+        _ExportActions(
           isPlus: isPlus,
-          onPressed: () => _exportCsv(context, ref),
+          onExportPdf: () => _exportPdf(context, ref),
+          onExportCsv: () => _exportCsv(context, ref),
           l10n: l10n,
         ),
         SizedBox(height: 20.h),
@@ -246,29 +284,47 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _ExportCsvButton extends StatelessWidget {
-  const _ExportCsvButton({
+class _ExportActions extends StatelessWidget {
+  const _ExportActions({
     required this.isPlus,
-    required this.onPressed,
+    required this.onExportPdf,
+    required this.onExportCsv,
     required this.l10n,
   });
 
   final bool isPlus;
-  final VoidCallback onPressed;
+  final VoidCallback onExportPdf;
+  final VoidCallback onExportCsv;
   final AppL10n l10n;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return FilledButton.tonalIcon(
-      onPressed: onPressed,
-      icon: Icon(isPlus ? Icons.file_download_outlined : Icons.lock_outline),
-      label: Text(isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked),
-      style: FilledButton.styleFrom(
-        minimumSize: Size.fromHeight(44.h),
-        backgroundColor: isPlus ? null : scheme.surfaceContainerHigh,
-        foregroundColor: isPlus ? null : scheme.onSurfaceVariant,
-      ),
+    final icon = isPlus ? Icons.file_download_outlined : Icons.lock_outline;
+    final lockedStyle = FilledButton.styleFrom(
+      minimumSize: Size.fromHeight(44.h),
+      backgroundColor: scheme.surfaceContainerHigh,
+      foregroundColor: scheme.onSurfaceVariant,
+    );
+
+    return Column(
+      children: [
+        FilledButton.tonalIcon(
+          onPressed: onExportPdf,
+          icon: Icon(isPlus ? Icons.picture_as_pdf_outlined : icon),
+          label: Text(isPlus ? l10n.exportPdf : l10n.exportPdfPlusLocked),
+          style: isPlus
+              ? FilledButton.styleFrom(minimumSize: Size.fromHeight(44.h))
+              : lockedStyle,
+        ),
+        SizedBox(height: 8.h),
+        OutlinedButton.icon(
+          onPressed: onExportCsv,
+          icon: Icon(icon),
+          label: Text(isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked),
+          style: OutlinedButton.styleFrom(minimumSize: Size.fromHeight(44.h)),
+        ),
+      ],
     );
   }
 }
