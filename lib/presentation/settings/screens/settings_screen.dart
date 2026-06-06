@@ -125,6 +125,18 @@ class _SettingsBody extends ConsumerWidget {
         ),
         if (!isAnon)
           ListTile(
+            leading: const Icon(Icons.account_balance_outlined),
+            title: Text(l10n.transferBankSettingsTitle),
+            subtitle: Text(
+              (creditStatus?.isPlus ?? false)
+                  ? l10n.transferBankSettingsSubtitle
+                  : l10n.transferBankSettingsLockedSubtitle,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(Routes.transferBankInfoName),
+          ),
+        if (!isAnon)
+          ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(l10n.changeName),
             onTap: () => _onChangeName(context, ref),

@@ -9,6 +9,8 @@ class Routes {
 
   static const String settings = '/settings';
   static const String settingsName = 'settings';
+  static const String transferBankInfo = '/settings/transfer-bank';
+  static const String transferBankInfoName = 'transfer-bank-info';
 
   static const String capture = '/capture';
   static const String captureName = 'capture';

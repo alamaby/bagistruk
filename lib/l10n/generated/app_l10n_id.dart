@@ -91,6 +91,50 @@ class AppL10nId extends AppL10n {
   String get cancelAction => 'Batal';
 
   @override
+  String get transferBankSettingsTitle => 'Info bank transfer';
+
+  @override
+  String get transferBankSettingsSubtitle =>
+      'Tambahkan rekening untuk pesan WhatsApp settlement.';
+
+  @override
+  String get transferBankSettingsLockedSubtitle =>
+      'Khusus Plus. Info bank bisa ikut di pesan WhatsApp settlement.';
+
+  @override
+  String get transferBankScreenTitle => 'Bank Transfer';
+
+  @override
+  String get transferBankNameLabel => 'Nama bank';
+
+  @override
+  String get transferAccountNameLabel => 'Nama pemilik rekening';
+
+  @override
+  String get transferAccountNumberLabel => 'Nomor rekening';
+
+  @override
+  String get transferBankShareTitle => 'Transfer ke';
+
+  @override
+  String get transferBankShareHint =>
+      'Kalau terisi, info ini ikut muncul di pesan yang dibagikan ke WhatsApp.';
+
+  @override
+  String get transferBankPlusOnly =>
+      'Info bank transfer adalah fitur Plus. Upgrade untuk menyimpan rekening dan menambahkannya ke pesan settlement.';
+
+  @override
+  String get transferBankRequired =>
+      'Lengkapi field ini atau kosongkan semuanya.';
+
+  @override
+  String get transferBankSaved => 'Info bank transfer tersimpan.';
+
+  @override
+  String get transferBankClear => 'Kosongkan info bank';
+
+  @override
   String get resetPassword => 'Reset Password';
 
   @override
@@ -415,6 +459,9 @@ class AppL10nId extends AppL10n {
 
   @override
   String get splitSummaryShare => 'Bagikan';
+
+  @override
+  String get participantShareAgain => 'Bagikan ulang';
 
   @override
   String get splitSummaryCopy => 'Salin';

@@ -2,6 +2,7 @@ import '../../core/error/exception_mapper.dart';
 import '../../core/error/result.dart';
 import '../../domain/entities/monthly_spending_insight.dart';
 import '../../domain/entities/ocr_credit_status.dart';
+import '../../domain/entities/transfer_bank_info.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/i_profile_repository.dart';
 import '../datasources/profile_remote_datasource.dart';
@@ -54,5 +55,26 @@ class ProfileRepositoryImpl implements IProfileRepository {
       });
 
   @override
+  Future<Result<TransferBankInfo?>> getTransferBankInfo() => guardAsync(
+    () async =>
+        TransferBankInfo.fromProfileRow(await _ds.getTransferBankInfo()),
+  );
+
+  @override
+  Future<Result<void>> updateTransferBankInfo(TransferBankInfo? info) =>
+      guardAsync(
+        () => _ds.updateTransferBankInfo(
+          bankName: _emptyToNull(info?.bankName),
+          accountName: _emptyToNull(info?.accountName),
+          accountNumber: _emptyToNull(info?.accountNumber),
+        ),
+      );
+
+  @override
   Future<Result<void>> touchLastActive() => guardAsync(_ds.touchLastActive);
+
+  static String? _emptyToNull(String? value) {
+    final trimmed = value?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+  }
 }

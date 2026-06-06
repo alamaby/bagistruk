@@ -259,6 +259,84 @@ abstract class AppL10n {
   /// **'Batal'**
   String get cancelAction;
 
+  /// No description provided for @transferBankSettingsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Info bank transfer'**
+  String get transferBankSettingsTitle;
+
+  /// No description provided for @transferBankSettingsSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambahkan rekening untuk pesan WhatsApp settlement.'**
+  String get transferBankSettingsSubtitle;
+
+  /// No description provided for @transferBankSettingsLockedSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Khusus Plus. Info bank bisa ikut di pesan WhatsApp settlement.'**
+  String get transferBankSettingsLockedSubtitle;
+
+  /// No description provided for @transferBankScreenTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bank Transfer'**
+  String get transferBankScreenTitle;
+
+  /// No description provided for @transferBankNameLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama bank'**
+  String get transferBankNameLabel;
+
+  /// No description provided for @transferAccountNameLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama pemilik rekening'**
+  String get transferAccountNameLabel;
+
+  /// No description provided for @transferAccountNumberLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Nomor rekening'**
+  String get transferAccountNumberLabel;
+
+  /// No description provided for @transferBankShareTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Transfer ke'**
+  String get transferBankShareTitle;
+
+  /// No description provided for @transferBankShareHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Kalau terisi, info ini ikut muncul di pesan yang dibagikan ke WhatsApp.'**
+  String get transferBankShareHint;
+
+  /// No description provided for @transferBankPlusOnly.
+  ///
+  /// In id, this message translates to:
+  /// **'Info bank transfer adalah fitur Plus. Upgrade untuk menyimpan rekening dan menambahkannya ke pesan settlement.'**
+  String get transferBankPlusOnly;
+
+  /// No description provided for @transferBankRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Lengkapi field ini atau kosongkan semuanya.'**
+  String get transferBankRequired;
+
+  /// No description provided for @transferBankSaved.
+  ///
+  /// In id, this message translates to:
+  /// **'Info bank transfer tersimpan.'**
+  String get transferBankSaved;
+
+  /// No description provided for @transferBankClear.
+  ///
+  /// In id, this message translates to:
+  /// **'Kosongkan info bank'**
+  String get transferBankClear;
+
   /// No description provided for @resetPassword.
   ///
   /// In id, this message translates to:
@@ -858,6 +936,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Bagikan'**
   String get splitSummaryShare;
+
+  /// No description provided for @participantShareAgain.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan ulang'**
+  String get participantShareAgain;
 
   /// No description provided for @splitSummaryCopy.
   ///

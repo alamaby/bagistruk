@@ -7,8 +7,10 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/format/app_format.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../providers/split_notifier.dart';
 import '../utils/settlement_message_builder.dart';
 import 'participant_avatar.dart';
@@ -46,6 +48,12 @@ class SplitSummarySheet extends ConsumerWidget {
       _ => null,
     };
     final isPlus = creditStatus?.isPlus ?? false;
+    final bankInfo = isPlus
+        ? switch (ref.watch(transferBankInfoProvider)) {
+            AsyncData(:final value) => value,
+            _ => null,
+          }
+        : null;
 
     return DraggableScrollableSheet(
       expand: false,
@@ -79,6 +87,7 @@ class SplitSummarySheet extends ConsumerWidget {
                 currency: currency,
                 l10n: l10n,
                 isPlus: isPlus,
+                bankInfo: bankInfo,
               ),
           ],
         ),
@@ -96,6 +105,7 @@ class _ParticipantSummaryCard extends StatelessWidget {
     required this.currency,
     required this.l10n,
     required this.isPlus,
+    required this.bankInfo,
   });
 
   final Participant participant;
@@ -105,9 +115,14 @@ class _ParticipantSummaryCard extends StatelessWidget {
   final NumberFormat currency;
   final AppL10n l10n;
   final bool isPlus;
+  final TransferBankInfo? bankInfo;
 
-  SettlementMessageBuilder get _messageBuilder =>
-      SettlementMessageBuilder(state: bill, currency: currency, l10n: l10n);
+  SettlementMessageBuilder get _messageBuilder => SettlementMessageBuilder(
+    state: bill,
+    currency: currency,
+    l10n: l10n,
+    bankInfo: bankInfo,
+  );
 
   Future<void> _shareSystem(BuildContext context) async {
     try {

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 
+import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../providers/split_notifier.dart';
 
@@ -10,11 +11,13 @@ class SettlementMessageBuilder {
     required this.state,
     required this.currency,
     required this.l10n,
+    this.bankInfo,
   });
 
   final SplitState state;
   final NumberFormat currency;
   final AppL10n l10n;
+  final TransferBankInfo? bankInfo;
 
   String build({
     required SettlementMessageTemplate template,
@@ -65,6 +68,7 @@ class SettlementMessageBuilder {
     _writeItems(buf, items);
     buf.writeln();
     _writeTotals(buf, total, emphasizeTotal: true);
+    _writeBankInfoIfAny(buf);
     return buf.toString();
   }
 
@@ -91,6 +95,7 @@ class SettlementMessageBuilder {
     }
     buf.writeln();
     buf.writeln(l10n.settlementMessageTransferNote);
+    _writeBankInfoIfAny(buf);
     return buf.toString();
   }
 
@@ -110,6 +115,7 @@ class SettlementMessageBuilder {
     buf.writeln(
       '${l10n.settlementMessageStatus}: ${isPaid ? l10n.settlementMessagePaid : l10n.settlementMessageUnpaid}',
     );
+    _writeBankInfoIfAny(buf);
     return buf.toString();
   }
 
@@ -137,6 +143,7 @@ class SettlementMessageBuilder {
     buf.writeln(
       '${l10n.settlementMessageOutstanding}: ${currency.format(outstanding)}',
     );
+    _writeBankInfoIfAny(buf);
     return buf.toString();
   }
 
@@ -177,5 +184,17 @@ class SettlementMessageBuilder {
     final totalLine =
         '${l10n.settlementMessageTotal}: ${currency.format(total.total)}';
     buf.writeln(emphasizeTotal ? '*$totalLine*' : totalLine);
+  }
+
+  void _writeBankInfoIfAny(StringBuffer buf) {
+    final info = bankInfo;
+    if (info == null || !info.isComplete) return;
+    buf.writeln();
+    buf.writeln('*${l10n.transferBankShareTitle}:*');
+    buf.writeln('${l10n.transferBankNameLabel}: ${info.bankName.trim()}');
+    buf.writeln('${l10n.transferAccountNameLabel}: ${info.accountName.trim()}');
+    buf.writeln(
+      '${l10n.transferAccountNumberLabel}: ${info.accountNumber.trim()}',
+    );
   }
 }

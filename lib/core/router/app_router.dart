@@ -18,6 +18,7 @@ import '../../presentation/about/screens/about_screen.dart';
 import '../../presentation/about/screens/privacy_policy_screen.dart';
 import '../../presentation/about/screens/terms_of_service_screen.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
+import '../../presentation/settings/screens/transfer_bank_info_screen.dart';
 import '../../presentation/shell/screens/main_shell_screen.dart';
 import 'routes.dart';
 
@@ -111,6 +112,11 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: Routes.transferBankInfo,
+        name: Routes.transferBankInfoName,
+        builder: (context, state) => const TransferBankInfoScreen(),
       ),
       GoRoute(
         path: Routes.billReview,

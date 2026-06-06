@@ -92,6 +92,50 @@ class AppL10nEn extends AppL10n {
   String get cancelAction => 'Cancel';
 
   @override
+  String get transferBankSettingsTitle => 'Bank transfer info';
+
+  @override
+  String get transferBankSettingsSubtitle =>
+      'Add an account for WhatsApp settlement messages.';
+
+  @override
+  String get transferBankSettingsLockedSubtitle =>
+      'Plus only. Bank info can be added to WhatsApp settlement messages.';
+
+  @override
+  String get transferBankScreenTitle => 'Bank Transfer';
+
+  @override
+  String get transferBankNameLabel => 'Bank name';
+
+  @override
+  String get transferAccountNameLabel => 'Account holder name';
+
+  @override
+  String get transferAccountNumberLabel => 'Account number';
+
+  @override
+  String get transferBankShareTitle => 'Transfer to';
+
+  @override
+  String get transferBankShareHint =>
+      'When filled, this info appears in settlement messages shared to WhatsApp.';
+
+  @override
+  String get transferBankPlusOnly =>
+      'Bank transfer info is a Plus feature. Upgrade to save an account and add it to settlement messages.';
+
+  @override
+  String get transferBankRequired =>
+      'Fill this field or leave everything empty.';
+
+  @override
+  String get transferBankSaved => 'Bank transfer info saved.';
+
+  @override
+  String get transferBankClear => 'Clear bank info';
+
+  @override
   String get resetPassword => 'Reset Password';
 
   @override
@@ -415,6 +459,9 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get splitSummaryShare => 'Share';
+
+  @override
+  String get participantShareAgain => 'Share again';
 
   @override
   String get splitSummaryCopy => 'Copy';

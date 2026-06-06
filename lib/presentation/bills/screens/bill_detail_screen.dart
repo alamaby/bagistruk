@@ -4,15 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/format/app_format.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../l10n/generated/app_l10n.dart';
 import '../../auth/providers/auth_providers.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../../shared/widgets/loading_view.dart';
 import '../providers/bill_detail_notifier.dart';
-import '../providers/split_notifier.dart' show ParticipantTotal;
+import '../providers/split_notifier.dart' show ParticipantTotal, SplitState;
+import '../utils/settlement_message_builder.dart';
 import '../widgets/participant_avatar.dart';
 
 /// Settlement loop screen. Shows the bill header (merchant, total, settled
@@ -92,6 +97,49 @@ class _Body extends ConsumerWidget {
     }
   }
 
+  Future<void> _shareParticipant(
+    BuildContext context,
+    WidgetRef ref,
+    Participant participant,
+  ) async {
+    final l10n = AppL10n.of(context);
+    try {
+      final isPlus = switch (ref.read(ocrCreditStatusProvider)) {
+        AsyncData(:final value) => value?.isPlus ?? false,
+        _ => false,
+      };
+      final bankInfo = isPlus
+          ? await ref.read(transferBankInfoProvider.future)
+          : null;
+      final splitState = SplitState(
+        bill: state.bill,
+        items: state.items,
+        participants: state.participants,
+        assignments: state.assignments,
+      );
+      final text =
+          SettlementMessageBuilder(
+            state: splitState,
+            currency: currency,
+            l10n: l10n,
+            bankInfo: bankInfo,
+          ).build(
+            template: SettlementMessageTemplate.basic,
+            participantId: participant.id,
+          );
+      await Share.share(
+        text,
+        subject: '${l10n.settlementMessageBillPrefix} ${state.bill.title}',
+      );
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.splitShareFailed)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final totals = state.calculateTotals();
@@ -133,6 +181,7 @@ class _Body extends ConsumerWidget {
                 total: byId[p.id],
                 currency: currency,
                 onChanged: () => _toggle(context, ref, p.id),
+                onShare: () => _shareParticipant(context, ref, p),
               ),
             ),
       ],
@@ -307,12 +356,14 @@ class _ParticipantTile extends StatelessWidget {
     required this.total,
     required this.currency,
     required this.onChanged,
+    required this.onShare,
   });
 
   final Participant participant;
   final ParticipantTotal? total;
   final NumberFormat currency;
   final VoidCallback onChanged;
+  final VoidCallback onShare;
 
   @override
   Widget build(BuildContext context) {
@@ -327,55 +378,68 @@ class _ParticipantTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(14.r),
             border: Border.all(color: scheme.outlineVariant),
           ),
-          child: Row(
+          child: Column(
             children: [
-              ParticipantAvatar(
-                id: participant.id,
-                name: participant.name,
-                size: 40,
+              Row(
+                children: [
+                  ParticipantAvatar(
+                    id: participant.id,
+                    name: participant.name,
+                    size: 40,
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeOut,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                            color: paid
+                                ? scheme.onSurface.withValues(alpha: 0.55)
+                                : scheme.onSurface,
+                            decoration: paid
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            decorationColor: scheme.onSurfaceVariant,
+                          ),
+                          child: Text(participant.name),
+                        ),
+                        SizedBox(height: 2.h),
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeOut,
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            color: paid
+                                ? scheme.primary.withValues(alpha: 0.6)
+                                : scheme.primary,
+                            decoration: paid
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            decorationColor: scheme.onSurfaceVariant,
+                          ),
+                          child: Text(currency.format(amount)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Switch.adaptive(value: paid, onChanged: (_) => onChanged()),
+                ],
               ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AnimatedDefaultTextStyle(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeOut,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w600,
-                        color: paid
-                            ? scheme.onSurface.withValues(alpha: 0.55)
-                            : scheme.onSurface,
-                        decoration: paid
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                        decorationColor: scheme.onSurfaceVariant,
-                      ),
-                      child: Text(participant.name),
-                    ),
-                    SizedBox(height: 2.h),
-                    AnimatedDefaultTextStyle(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeOut,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w500,
-                        color: paid
-                            ? scheme.primary.withValues(alpha: 0.6)
-                            : scheme.primary,
-                        decoration: paid
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                        decorationColor: scheme.onSurfaceVariant,
-                      ),
-                      child: Text(currency.format(amount)),
-                    ),
-                  ],
+              SizedBox(height: 8.h),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: onShare,
+                  icon: const Icon(Icons.share_outlined, size: 18),
+                  label: Text(AppL10n.of(context).participantShareAgain),
                 ),
               ),
-              Switch.adaptive(value: paid, onChanged: (_) => onChanged()),
             ],
           ),
         )

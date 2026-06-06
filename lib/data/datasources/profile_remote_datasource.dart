@@ -41,6 +41,40 @@ class ProfileRemoteDataSource {
     await _client.from(_table).update({column: value}).eq('id', uid);
   }
 
+  Future<Map<String, dynamic>> getTransferBankInfo() async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    final row = await _client
+        .from(_table)
+        .select(
+          'transfer_bank_name, transfer_account_name, transfer_account_number',
+        )
+        .eq('id', uid)
+        .maybeSingle();
+    return Map<String, dynamic>.from(row ?? const {});
+  }
+
+  Future<void> updateTransferBankInfo({
+    required String? bankName,
+    required String? accountName,
+    required String? accountNumber,
+  }) async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    await _client
+        .from(_table)
+        .update({
+          'transfer_bank_name': bankName,
+          'transfer_account_name': accountName,
+          'transfer_account_number': accountNumber,
+        })
+        .eq('id', uid);
+  }
+
   Future<Map<String, dynamic>> getOcrCreditStatus() async {
     final uid = currentUserId;
     if (uid == null) {

@@ -66,8 +66,8 @@ Test on an emulator running API 36 and, ideally, a physical device. Verify:
 
 Trigger the **Build Play Store AAB** workflow manually from the Actions tab. It uses `workflow_dispatch`.
 For tagged releases, the **Release Android Artifacts** workflow also builds and
-attaches a signed `bagistruk-vX.Y.Z.aab` alongside the split APKs in the GitHub
-Release.
+uploads a signed `bagistruk-vX.Y.Z.aab` to the Play Console `internal` track,
+then attaches it alongside the split APKs in the GitHub Release.
 
 Required repository secrets and variables:
 
@@ -77,6 +77,7 @@ Required repository secrets and variables:
 | Variable | `KEY_ALIAS` | `upload` or the alias used with `keytool` |
 | Secret | `KEY_PASSWORD` | Key password |
 | Secret | `STORE_PASSWORD` | Keystore password |
+| Secret | `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` | Raw JSON key for the Play Console service account used by the tagged release workflow upload |
 | Variable | `SUPABASE_URL` | Supabase project URL |
 | Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
 | Variable | `GOOGLE_WEB_CLIENT_ID` | Required. Google OAuth web client ID used as Android `serverClientId` and by Supabase auth |
@@ -92,13 +93,18 @@ keystore for locally signed release APKs, and Play app-signing certificate for
 builds installed from Play testing tracks. A missing SHA can appear in-app as a
 canceled sign-in immediately after account selection.
 
-The workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console. Once the Google service account is ready, add an upload step using `r0adkll/upload-google-play` for automated internal-track releases.
+The manual Play Store workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console when you need an on-demand build outside tagged releases.
 
 The Android workflows fail early when `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or
 `GOOGLE_WEB_CLIENT_ID` is missing from the generated `.env`. If Google Sign-In
 shows `Missing required env var: GOOGLE_WEB_CLIENT_ID`, add
 `GOOGLE_WEB_CLIENT_ID` under repository **Variables**, rebuild the AAB, and
 upload the new artifact to Play Console.
+
+The tagged release workflow also fails early when
+`GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` is missing. Create this service account from
+Play Console API access, grant it permission to manage releases for the app, and
+store the raw JSON key as a repository secret.
 
 ## 7. Deploy Edge Functions
 
