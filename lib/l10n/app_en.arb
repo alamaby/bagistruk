@@ -191,6 +191,17 @@
   "splitSummaryService": "Service (proportional)",
   "splitSummaryShare": "Share",
   "participantShareAgain": "Share again",
+  "exportCsv": "Export CSV",
+  "exportCsvPlusLocked": "Export CSV (Plus)",
+  "exportFailed": "Could not create the export. Please try again.",
+  "exportCsvSubject": "Export {title}",
+  "@exportCsvSubject": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvShareText": "CSV export for {title}",
+  "@exportCsvShareText": {
+    "placeholders": { "title": { "type": "String" } }
+  },
   "splitSummaryCopy": "Copy",
   "splitSummaryCopied": "Copied to clipboard",
   "splitShareFailed": "Could not share",

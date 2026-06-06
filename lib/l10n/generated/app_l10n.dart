@@ -943,6 +943,36 @@ abstract class AppL10n {
   /// **'Bagikan ulang'**
   String get participantShareAgain;
 
+  /// No description provided for @exportCsv.
+  ///
+  /// In id, this message translates to:
+  /// **'Export CSV'**
+  String get exportCsv;
+
+  /// No description provided for @exportCsvPlusLocked.
+  ///
+  /// In id, this message translates to:
+  /// **'Export CSV (Plus)'**
+  String get exportCsvPlusLocked;
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Export belum bisa dibuat. Coba lagi.'**
+  String get exportFailed;
+
+  /// No description provided for @exportCsvSubject.
+  ///
+  /// In id, this message translates to:
+  /// **'Export {title}'**
+  String exportCsvSubject(String title);
+
+  /// No description provided for @exportCsvShareText.
+  ///
+  /// In id, this message translates to:
+  /// **'Export CSV untuk {title}'**
+  String exportCsvShareText(String title);
+
   /// No description provided for @splitSummaryCopy.
   ///
   /// In id, this message translates to:

@@ -191,6 +191,17 @@
   "splitSummaryService": "Service (proporsional)",
   "splitSummaryShare": "Bagikan",
   "participantShareAgain": "Bagikan ulang",
+  "exportCsv": "Export CSV",
+  "exportCsvPlusLocked": "Export CSV (Plus)",
+  "exportFailed": "Export belum bisa dibuat. Coba lagi.",
+  "exportCsvSubject": "Export {title}",
+  "@exportCsvSubject": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvShareText": "Export CSV untuk {title}",
+  "@exportCsvShareText": {
+    "placeholders": { "title": { "type": "String" } }
+  },
   "splitSummaryCopy": "Salin",
   "splitSummaryCopied": "Disalin ke clipboard",
   "splitShareFailed": "Tidak bisa membagikan",

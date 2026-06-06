@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +18,7 @@ import '../../auth/providers/auth_providers.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../../shared/widgets/loading_view.dart';
+import '../export/bill_csv_exporter.dart';
 import '../providers/bill_detail_notifier.dart';
 import '../providers/split_notifier.dart' show ParticipantTotal, SplitState;
 import '../utils/settlement_message_builder.dart';
@@ -140,10 +144,57 @@ class _Body extends ConsumerWidget {
     }
   }
 
+  Future<void> _exportCsv(BuildContext context, WidgetRef ref) async {
+    final l10n = AppL10n.of(context);
+    final isPlus = switch (ref.read(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value?.isPlus ?? false,
+      _ => false,
+    };
+    if (!isPlus) {
+      context.pushNamed(Routes.settingsName);
+      return;
+    }
+
+    try {
+      final csv = BillCsvExporter(state).build();
+      final filename = '${_safeFileName(state.bill.title)}.csv';
+      await Share.shareXFiles(
+        [
+          XFile.fromData(
+            Uint8List.fromList(utf8.encode(csv)),
+            mimeType: 'text/csv',
+          ),
+        ],
+        subject: l10n.exportCsvSubject(state.bill.title),
+        text: l10n.exportCsvShareText(state.bill.title),
+        fileNameOverrides: [filename],
+      );
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.exportFailed)));
+      }
+    }
+  }
+
+  String _safeFileName(String title) {
+    final cleaned = title
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+        .replaceAll(RegExp(r'^-+|-+$'), '');
+    return cleaned.isEmpty ? 'bagistruk-bill' : 'bagistruk-$cleaned';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final totals = state.calculateTotals();
     final byId = {for (final t in totals) t.participantId: t};
+    final isPlus = switch (ref.watch(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value?.isPlus ?? false,
+      _ => false,
+    };
+    final l10n = AppL10n.of(context);
 
     return ListView(
       padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
@@ -156,6 +207,12 @@ class _Body extends ConsumerWidget {
           totalCount: state.participants.length,
           receiptDate: state.bill.receiptDate ?? state.bill.createdAt,
           currency: currency,
+        ),
+        SizedBox(height: 12.h),
+        _ExportCsvButton(
+          isPlus: isPlus,
+          onPressed: () => _exportCsv(context, ref),
+          l10n: l10n,
         ),
         SizedBox(height: 20.h),
         Padding(
@@ -185,6 +242,33 @@ class _Body extends ConsumerWidget {
               ),
             ),
       ],
+    );
+  }
+}
+
+class _ExportCsvButton extends StatelessWidget {
+  const _ExportCsvButton({
+    required this.isPlus,
+    required this.onPressed,
+    required this.l10n,
+  });
+
+  final bool isPlus;
+  final VoidCallback onPressed;
+  final AppL10n l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return FilledButton.tonalIcon(
+      onPressed: onPressed,
+      icon: Icon(isPlus ? Icons.file_download_outlined : Icons.lock_outline),
+      label: Text(isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked),
+      style: FilledButton.styleFrom(
+        minimumSize: Size.fromHeight(44.h),
+        backgroundColor: isPlus ? null : scheme.surfaceContainerHigh,
+        foregroundColor: isPlus ? null : scheme.onSurfaceVariant,
+      ),
     );
   }
 }

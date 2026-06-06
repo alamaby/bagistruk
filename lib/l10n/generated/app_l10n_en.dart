@@ -464,6 +464,25 @@ class AppL10nEn extends AppL10n {
   String get participantShareAgain => 'Share again';
 
   @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get exportCsvPlusLocked => 'Export CSV (Plus)';
+
+  @override
+  String get exportFailed => 'Could not create the export. Please try again.';
+
+  @override
+  String exportCsvSubject(String title) {
+    return 'Export $title';
+  }
+
+  @override
+  String exportCsvShareText(String title) {
+    return 'CSV export for $title';
+  }
+
+  @override
   String get splitSummaryCopy => 'Copy';
 
   @override
