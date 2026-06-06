@@ -137,9 +137,12 @@ deleting the Supabase Auth user.
 
 The `inactive-user-cleanup` function is intended for Supabase Cron. It uses
 `SUPABASE_SERVICE_ROLE_KEY` server-side, optionally sends reminders with Resend
-(`RESEND_API_KEY`, `INACTIVE_REMINDER_FROM`), deletes user bills first, then
-soft-deletes expired Auth users. If `INACTIVE_CLEANUP_SECRET` is set, invoke it
-with the `x-cleanup-secret` header from Cron.
+(`RESEND_API_KEY`, `INACTIVE_REMINDER_FROM`), excludes registered users with an
+active Plus entitlement from inactivity cleanup, uses the later of last app
+activity and latest Plus entitlement end as the cleanup baseline after Plus
+ends, deletes eligible user bills first, then soft-deletes expired Auth users.
+If `INACTIVE_CLEANUP_SECRET` is set, invoke it with the `x-cleanup-secret`
+header from Cron.
 
 ### 7. Code generation & run
 

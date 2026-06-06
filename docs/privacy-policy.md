@@ -61,8 +61,10 @@ BagiStruk may use:
 ## Account Retention And Deletion
 
 - Anonymous users may be deleted after 30 days of inactivity.
-- Registered users may receive an inactivity reminder after 6 months of inactivity.
-- If a registered user remains inactive for 30 days after the reminder, the account may be deleted.
+- Registered Free users may receive an inactivity reminder after 6 months of inactivity.
+- If a registered Free user remains inactive for 30 days after the reminder, the account may be deleted.
+- Registered users with an active Plus entitlement are excluded from inactivity cleanup while the entitlement remains active.
+- When Plus entitlement ends, the inactivity window for cleanup is counted from the later of the user's last app activity and the latest Plus entitlement end time.
 - When an inactive user is deleted, bills owned by that user are deleted first, then the authentication user is deleted.
 - If a user opens the app after receiving a reminder, the pending deletion state is reset.
 - You can delete your account and associated app data from **Profile & Settings > Delete Account** in the app.
@@ -150,8 +152,10 @@ BagiStruk dapat menggunakan:
 ## Retensi Dan Penghapusan Akun
 
 - Pengguna anonim dapat dihapus setelah 30 hari tidak aktif.
-- Pengguna terdaftar dapat menerima reminder setelah 6 bulan tidak aktif.
-- Jika pengguna terdaftar tetap tidak aktif selama 30 hari setelah reminder, akun dapat dihapus.
+- Pengguna terdaftar Free dapat menerima reminder setelah 6 bulan tidak aktif.
+- Jika pengguna terdaftar Free tetap tidak aktif selama 30 hari setelah reminder, akun dapat dihapus.
+- Pengguna terdaftar dengan entitlement Plus aktif dikecualikan dari pembersihan akun tidak aktif selama entitlement tersebut masih aktif.
+- Setelah entitlement Plus berakhir, jendela tidak aktif untuk cleanup dihitung dari waktu yang lebih baru antara aktivitas terakhir pengguna dan waktu entitlement Plus terakhir berakhir.
 - Saat pengguna tidak aktif dihapus, bill milik pengguna dihapus terlebih dahulu, lalu user autentikasi dihapus.
 - Jika pengguna membuka aplikasi setelah menerima reminder, jadwal penghapusan akan direset.
 - Anda dapat menghapus akun dan data aplikasi terkait dari **Profil & Pengaturan > Hapus Akun** di dalam aplikasi.

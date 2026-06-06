@@ -44,7 +44,7 @@ You agree not to:
 
 ## 7. Data Retention And Inactive Accounts
 
-Anonymous accounts may be deleted after 30 days of inactivity. Registered accounts may receive an inactivity reminder after 6 months of inactivity. If there is no activity within 30 days after the reminder, the account and associated app data may be deleted.
+Anonymous accounts may be deleted after 30 days of inactivity. Registered Free accounts may receive an inactivity reminder after 6 months of inactivity. If there is no activity within 30 days after the reminder, the account and associated app data may be deleted. Registered accounts with an active Plus entitlement are excluded from inactivity cleanup while the entitlement remains active. When Plus entitlement ends, the inactivity window for cleanup is counted from the later of the user's last app activity and the latest Plus entitlement end time.
 
 Opening the app after receiving a reminder resets the pending inactivity deletion state.
 
@@ -128,7 +128,7 @@ Anda setuju untuk tidak:
 
 ## 7. Retensi Data Dan Akun Tidak Aktif
 
-Akun anonim dapat dihapus setelah 30 hari tidak aktif. Akun terdaftar dapat menerima reminder setelah 6 bulan tidak aktif. Jika tidak ada aktivitas dalam 30 hari setelah reminder, akun dan data aplikasi terkait dapat dihapus.
+Akun anonim dapat dihapus setelah 30 hari tidak aktif. Akun terdaftar Free dapat menerima reminder setelah 6 bulan tidak aktif. Jika tidak ada aktivitas dalam 30 hari setelah reminder, akun dan data aplikasi terkait dapat dihapus. Akun terdaftar dengan entitlement Plus aktif dikecualikan dari pembersihan akun tidak aktif selama entitlement tersebut masih aktif. Setelah entitlement Plus berakhir, jendela tidak aktif untuk cleanup dihitung dari waktu yang lebih baru antara aktivitas terakhir pengguna dan waktu entitlement Plus terakhir berakhir.
 
 Membuka aplikasi setelah menerima reminder akan mereset status penghapusan tidak aktif yang tertunda.
 
