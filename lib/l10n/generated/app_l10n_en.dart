@@ -77,21 +77,6 @@ class AppL10nEn extends AppL10n {
   String get guestAccount => 'Guest Account';
 
   @override
-  String get changeName => 'Change Name';
-
-  @override
-  String get changeNameSheetTitle => 'Change Display Name';
-
-  @override
-  String get changeNameHint => 'Display name';
-
-  @override
-  String get saveAction => 'Save';
-
-  @override
-  String get cancelAction => 'Cancel';
-
-  @override
   String get creditScanTitle => 'Scan credits';
 
   @override
@@ -127,6 +112,21 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get billingRestorePurchases => 'Restore purchases';
+
+  @override
+  String get changeName => 'Change Name';
+
+  @override
+  String get changeNameSheetTitle => 'Change Display Name';
+
+  @override
+  String get changeNameHint => 'Display name';
+
+  @override
+  String get saveAction => 'Save';
+
+  @override
+  String get cancelAction => 'Cancel';
 
   @override
   String get transferBankSettingsTitle => 'Bank transfer info';

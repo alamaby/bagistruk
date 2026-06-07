@@ -229,36 +229,6 @@ abstract class AppL10n {
   /// **'Akun Tamu'**
   String get guestAccount;
 
-  /// No description provided for @changeName.
-  ///
-  /// In id, this message translates to:
-  /// **'Ubah Nama'**
-  String get changeName;
-
-  /// No description provided for @changeNameSheetTitle.
-  ///
-  /// In id, this message translates to:
-  /// **'Ubah Nama Tampilan'**
-  String get changeNameSheetTitle;
-
-  /// No description provided for @changeNameHint.
-  ///
-  /// In id, this message translates to:
-  /// **'Nama tampilan'**
-  String get changeNameHint;
-
-  /// No description provided for @saveAction.
-  ///
-  /// In id, this message translates to:
-  /// **'Simpan'**
-  String get saveAction;
-
-  /// No description provided for @cancelAction.
-  ///
-  /// In id, this message translates to:
-  /// **'Batal'**
-  String get cancelAction;
-
   /// No description provided for @creditScanTitle.
   ///
   /// In id, this message translates to:
@@ -322,6 +292,36 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Pulihkan pembelian'**
   String get billingRestorePurchases;
+
+  /// No description provided for @changeName.
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Nama'**
+  String get changeName;
+
+  /// No description provided for @changeNameSheetTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Ubah Nama Tampilan'**
+  String get changeNameSheetTitle;
+
+  /// No description provided for @changeNameHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama tampilan'**
+  String get changeNameHint;
+
+  /// No description provided for @saveAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan'**
+  String get saveAction;
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Batal'**
+  String get cancelAction;
 
   /// No description provided for @transferBankSettingsTitle.
   ///
