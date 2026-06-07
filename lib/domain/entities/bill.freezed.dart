@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Bill {
 
- String get id; String get title; double get totalAmount; double get tax; double get service; bool get isSettled; DateTime? get receiptDate; DateTime get createdAt;
+ String get id; String get title; double get totalAmount; String get currencyCode; double get tax; double get service; bool get isSettled; DateTime? get receiptDate; DateTime get createdAt;
 /// Create a copy of Bill
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $BillCopyWith<Bill> get copyWith => _$BillCopyWithImpl<Bill>(this as Bill, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Bill&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Bill&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,totalAmount,tax,service,isSettled,receiptDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,totalAmount,currencyCode,tax,service,isSettled,receiptDate,createdAt);
 
 @override
 String toString() {
-  return 'Bill(id: $id, title: $title, totalAmount: $totalAmount, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
+  return 'Bill(id: $id, title: $title, totalAmount: $totalAmount, currencyCode: $currencyCode, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $BillCopyWith<$Res>  {
   factory $BillCopyWith(Bill value, $Res Function(Bill) _then) = _$BillCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, double totalAmount, double tax, double service, bool isSettled, DateTime? receiptDate, DateTime createdAt
+ String id, String title, double totalAmount, String currencyCode, double tax, double service, bool isSettled, DateTime? receiptDate, DateTime createdAt
 });
 
 
@@ -62,12 +62,13 @@ class _$BillCopyWithImpl<$Res>
 
 /// Create a copy of Bill
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? currencyCode = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
+as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
+as String,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
 as double,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as double,isSettled: null == isSettled ? _self.isSettled : isSettled // ignore: cast_nullable_to_non_nullable
 as bool,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  double totalAmount,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  double totalAmount,  String currencyCode,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Bill() when $default != null:
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  double totalAmount,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  double totalAmount,  String currencyCode,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Bill():
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  double totalAmount,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  double totalAmount,  String currencyCode,  double tax,  double service,  bool isSettled,  DateTime? receiptDate,  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Bill() when $default != null:
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   return null;
 
 }
@@ -213,12 +214,13 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 
 
 class _Bill implements Bill {
-  const _Bill({required this.id, required this.title, required this.totalAmount, this.tax = 0, this.service = 0, this.isSettled = false, this.receiptDate, required this.createdAt});
+  const _Bill({required this.id, required this.title, required this.totalAmount, this.currencyCode = 'IDR', this.tax = 0, this.service = 0, this.isSettled = false, this.receiptDate, required this.createdAt});
   
 
 @override final  String id;
 @override final  String title;
 @override final  double totalAmount;
+@override@JsonKey() final  String currencyCode;
 @override@JsonKey() final  double tax;
 @override@JsonKey() final  double service;
 @override@JsonKey() final  bool isSettled;
@@ -235,16 +237,16 @@ _$BillCopyWith<_Bill> get copyWith => __$BillCopyWithImpl<_Bill>(this, _$identit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Bill&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Bill&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,totalAmount,tax,service,isSettled,receiptDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,totalAmount,currencyCode,tax,service,isSettled,receiptDate,createdAt);
 
 @override
 String toString() {
-  return 'Bill(id: $id, title: $title, totalAmount: $totalAmount, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
+  return 'Bill(id: $id, title: $title, totalAmount: $totalAmount, currencyCode: $currencyCode, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$BillCopyWith<$Res> implements $BillCopyWith<$Res> {
   factory _$BillCopyWith(_Bill value, $Res Function(_Bill) _then) = __$BillCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, double totalAmount, double tax, double service, bool isSettled, DateTime? receiptDate, DateTime createdAt
+ String id, String title, double totalAmount, String currencyCode, double tax, double service, bool isSettled, DateTime? receiptDate, DateTime createdAt
 });
 
 
@@ -272,12 +274,13 @@ class __$BillCopyWithImpl<$Res>
 
 /// Create a copy of Bill
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? currencyCode = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
   return _then(_Bill(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
+as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
+as String,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
 as double,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as double,isSettled: null == isSettled ? _self.isSettled : isSettled // ignore: cast_nullable_to_non_nullable
 as bool,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable

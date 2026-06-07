@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BillDto {
 
- String get id; String get title;@JsonKey(name: 'total_amount') double get totalAmount;@JsonKey(name: 'tax_amount') double get tax;@JsonKey(name: 'service_charge') double get service;@JsonKey(name: 'is_settled') bool get isSettled;@JsonKey(name: 'receipt_date') DateTime? get receiptDate;@JsonKey(name: 'created_at') DateTime get createdAt;
+ String get id; String get title;@JsonKey(name: 'total_amount') double get totalAmount;@JsonKey(name: 'currency_code') String get currencyCode;@JsonKey(name: 'tax_amount') double get tax;@JsonKey(name: 'service_charge') double get service;@JsonKey(name: 'is_settled') bool get isSettled;@JsonKey(name: 'receipt_date') DateTime? get receiptDate;@JsonKey(name: 'created_at') DateTime get createdAt;
 /// Create a copy of BillDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $BillDtoCopyWith<BillDto> get copyWith => _$BillDtoCopyWithImpl<BillDto>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BillDto&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BillDto&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,totalAmount,tax,service,isSettled,receiptDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,totalAmount,currencyCode,tax,service,isSettled,receiptDate,createdAt);
 
 @override
 String toString() {
-  return 'BillDto(id: $id, title: $title, totalAmount: $totalAmount, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
+  return 'BillDto(id: $id, title: $title, totalAmount: $totalAmount, currencyCode: $currencyCode, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $BillDtoCopyWith<$Res>  {
   factory $BillDtoCopyWith(BillDto value, $Res Function(BillDto) _then) = _$BillDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String title,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'tax_amount') double tax,@JsonKey(name: 'service_charge') double service,@JsonKey(name: 'is_settled') bool isSettled,@JsonKey(name: 'receipt_date') DateTime? receiptDate,@JsonKey(name: 'created_at') DateTime createdAt
+ String id, String title,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'currency_code') String currencyCode,@JsonKey(name: 'tax_amount') double tax,@JsonKey(name: 'service_charge') double service,@JsonKey(name: 'is_settled') bool isSettled,@JsonKey(name: 'receipt_date') DateTime? receiptDate,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 
@@ -65,12 +65,13 @@ class _$BillDtoCopyWithImpl<$Res>
 
 /// Create a copy of BillDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? currencyCode = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
+as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
+as String,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
 as double,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as double,isSettled: null == isSettled ? _self.isSettled : isSettled // ignore: cast_nullable_to_non_nullable
 as bool,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable
@@ -160,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'currency_code')  String currencyCode, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BillDto() when $default != null:
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   return orElse();
 
 }
@@ -181,10 +182,10 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'currency_code')  String currencyCode, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _BillDto():
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +202,10 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'currency_code')  String currencyCode, @JsonKey(name: 'tax_amount')  double tax, @JsonKey(name: 'service_charge')  double service, @JsonKey(name: 'is_settled')  bool isSettled, @JsonKey(name: 'receipt_date')  DateTime? receiptDate, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _BillDto() when $default != null:
-return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.totalAmount,_that.currencyCode,_that.tax,_that.service,_that.isSettled,_that.receiptDate,_that.createdAt);case _:
   return null;
 
 }
@@ -216,12 +217,13 @@ return $default(_that.id,_that.title,_that.totalAmount,_that.tax,_that.service,_
 @JsonSerializable()
 
 class _BillDto extends BillDto {
-  const _BillDto({required this.id, required this.title, @JsonKey(name: 'total_amount') required this.totalAmount, @JsonKey(name: 'tax_amount') this.tax = 0, @JsonKey(name: 'service_charge') this.service = 0, @JsonKey(name: 'is_settled') this.isSettled = false, @JsonKey(name: 'receipt_date') this.receiptDate, @JsonKey(name: 'created_at') required this.createdAt}): super._();
+  const _BillDto({required this.id, required this.title, @JsonKey(name: 'total_amount') required this.totalAmount, @JsonKey(name: 'currency_code') this.currencyCode = 'IDR', @JsonKey(name: 'tax_amount') this.tax = 0, @JsonKey(name: 'service_charge') this.service = 0, @JsonKey(name: 'is_settled') this.isSettled = false, @JsonKey(name: 'receipt_date') this.receiptDate, @JsonKey(name: 'created_at') required this.createdAt}): super._();
   factory _BillDto.fromJson(Map<String, dynamic> json) => _$BillDtoFromJson(json);
 
 @override final  String id;
 @override final  String title;
 @override@JsonKey(name: 'total_amount') final  double totalAmount;
+@override@JsonKey(name: 'currency_code') final  String currencyCode;
 @override@JsonKey(name: 'tax_amount') final  double tax;
 @override@JsonKey(name: 'service_charge') final  double service;
 @override@JsonKey(name: 'is_settled') final  bool isSettled;
@@ -241,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BillDto&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BillDto&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.tax, tax) || other.tax == tax)&&(identical(other.service, service) || other.service == service)&&(identical(other.isSettled, isSettled) || other.isSettled == isSettled)&&(identical(other.receiptDate, receiptDate) || other.receiptDate == receiptDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,totalAmount,tax,service,isSettled,receiptDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,totalAmount,currencyCode,tax,service,isSettled,receiptDate,createdAt);
 
 @override
 String toString() {
-  return 'BillDto(id: $id, title: $title, totalAmount: $totalAmount, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
+  return 'BillDto(id: $id, title: $title, totalAmount: $totalAmount, currencyCode: $currencyCode, tax: $tax, service: $service, isSettled: $isSettled, receiptDate: $receiptDate, createdAt: $createdAt)';
 }
 
 
@@ -261,7 +263,7 @@ abstract mixin class _$BillDtoCopyWith<$Res> implements $BillDtoCopyWith<$Res> {
   factory _$BillDtoCopyWith(_BillDto value, $Res Function(_BillDto) _then) = __$BillDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'tax_amount') double tax,@JsonKey(name: 'service_charge') double service,@JsonKey(name: 'is_settled') bool isSettled,@JsonKey(name: 'receipt_date') DateTime? receiptDate,@JsonKey(name: 'created_at') DateTime createdAt
+ String id, String title,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'currency_code') String currencyCode,@JsonKey(name: 'tax_amount') double tax,@JsonKey(name: 'service_charge') double service,@JsonKey(name: 'is_settled') bool isSettled,@JsonKey(name: 'receipt_date') DateTime? receiptDate,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 
@@ -278,12 +280,13 @@ class __$BillDtoCopyWithImpl<$Res>
 
 /// Create a copy of BillDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? totalAmount = null,Object? currencyCode = null,Object? tax = null,Object? service = null,Object? isSettled = null,Object? receiptDate = freezed,Object? createdAt = null,}) {
   return _then(_BillDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
-as double,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
+as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
+as String,tax: null == tax ? _self.tax : tax // ignore: cast_nullable_to_non_nullable
 as double,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as double,isSettled: null == isSettled ? _self.isSettled : isSettled // ignore: cast_nullable_to_non_nullable
 as bool,receiptDate: freezed == receiptDate ? _self.receiptDate : receiptDate // ignore: cast_nullable_to_non_nullable
