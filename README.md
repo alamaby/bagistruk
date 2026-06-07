@@ -74,6 +74,7 @@ cp .env.example .env
 # Fill in your values:
 # SUPABASE_URL=https://<project>.supabase.co
 # SUPABASE_ANON_KEY=<anon-key>
+# AUTH_EMAIL_REDIRECT_TO=bagistruk://auth/callback
 # ADS_ENABLED=false
 ```
 
@@ -107,7 +108,24 @@ In your Supabase Dashboard: **Authentication → Providers → Anonymous Sign-In
 
 Without this, inserts into `bills` will be rejected by Row Level Security.
 
-### 5. Enable Google Sign-In
+### 5. Configure Supabase Auth Email Links
+
+In Supabase Dashboard, open **Authentication -> URL Configuration**:
+
+- Set **Site URL** to a public app/support URL such as `https://bagistruk.vercel.app`, not `localhost`.
+- Add `bagistruk://auth/callback` to **Redirect URLs**.
+- If you override `AUTH_EMAIL_REDIRECT_TO`, add that exact value to **Redirect URLs** too.
+
+The Flutter app passes `AUTH_EMAIL_REDIRECT_TO` for email confirmation, email
+change confirmation, resend, and password reset links. Android and iOS register
+the `bagistruk://auth/callback` scheme so the Supabase link can return to the
+installed app after verification.
+
+For production email delivery, configure Supabase Auth custom SMTP with Resend
+and copy the branded HTML templates from `supabase/templates/`. See
+[`docs/supabase-auth-email.md`](docs/supabase-auth-email.md).
+
+### 6. Enable Google Sign-In
 
 In Google Cloud Console, create OAuth clients for:
 
@@ -124,7 +142,7 @@ check the Android OAuth package name/SHA-1 for the build you installed and the
 web client ID used in `GOOGLE_WEB_CLIENT_ID`; Credential Manager can report
 some configuration errors as a canceled sign-in.
 
-### 6. Deploy the Edge Functions
+### 7. Deploy the Edge Functions
 
 ```bash
 supabase functions deploy process-receipt

@@ -53,7 +53,10 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    await _auth.updateUser(UserAttributes(email: email, password: password));
+    await _auth.updateUser(
+      UserAttributes(email: email, password: password),
+      emailRedirectTo: _authEmailRedirectTo,
+    );
   }
 
   /// Same uid-preserving upgrade as [linkEmail] — exposed under a name that
@@ -166,8 +169,11 @@ class AuthRemoteDataSource {
 
   /// Resends the email-change confirmation. Used after [signUp] / [linkEmail]
   /// when the user wants another copy of the verification link.
-  Future<void> resendEmailChange({required String email}) =>
-      _auth.resend(type: OtpType.emailChange, email: email);
+  Future<void> resendEmailChange({required String email}) => _auth.resend(
+    type: OtpType.emailChange,
+    email: email,
+    emailRedirectTo: _authEmailRedirectTo,
+  );
 
   Future<void> signOut() async {
     await _auth.signOut();
@@ -199,7 +205,7 @@ class AuthRemoteDataSource {
   /// the Supabase recovery flow; the app's router catches `type=recovery`
   /// fragments and lands the user on a real route.
   Future<void> resetPasswordForEmail(String email) =>
-      _auth.resetPasswordForEmail(email);
+      _auth.resetPasswordForEmail(email, redirectTo: _authEmailRedirectTo);
 
   Future<void> _ensureGoogleInitialized() {
     return _googleInitFuture ??= GoogleSignIn.instance.initialize(
@@ -210,4 +216,6 @@ class AuthRemoteDataSource {
       serverClientId: Env.googleWebClientId,
     );
   }
+
+  String get _authEmailRedirectTo => Env.authEmailRedirectTo;
 }

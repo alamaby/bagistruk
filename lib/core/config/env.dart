@@ -12,6 +12,8 @@ class Env {
   static String get supabaseAnonKey => _required('SUPABASE_ANON_KEY');
   static String get googleWebClientId => _required('GOOGLE_WEB_CLIENT_ID');
   static String? get googleIosClientId => _optional('GOOGLE_IOS_CLIENT_ID');
+  static String get authEmailRedirectTo =>
+      _optional('AUTH_EMAIL_REDIRECT_TO') ?? 'bagistruk://auth/callback';
   static bool get adsEnabled => _optionalBool('ADS_ENABLED');
   static String? get admobAndroidBannerId =>
       _optional('ADMOB_ANDROID_BANNER_ID');

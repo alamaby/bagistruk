@@ -82,9 +82,22 @@ Required repository secrets and variables:
 | Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
 | Variable | `GOOGLE_WEB_CLIENT_ID` | Required. Google OAuth web client ID used as Android `serverClientId` and by Supabase auth |
 | Variable | `GOOGLE_IOS_CLIENT_ID` | Google OAuth iOS client ID, required for iOS builds |
+| Variable | `AUTH_EMAIL_REDIRECT_TO` | Optional; defaults to `bagistruk://auth/callback` for Supabase email verification/password reset links |
 | Variable | `ADS_ENABLED` | `false` by default; set `true` only after AdMob production IDs and Play disclosures are ready |
 | Variable | `ADMOB_ANDROID_BANNER_ID` | Android AdMob banner unit ID, currently `ca-app-pub-4082765898994990/8733289141` |
 | Variable | `ADMOB_IOS_BANNER_ID` | iOS AdMob banner unit ID |
+
+Before smoke testing email sign-up or password reset, configure Supabase
+Dashboard **Authentication -> URL Configuration**:
+
+- **Site URL**: set a public URL such as `https://bagistruk.vercel.app`, not `localhost`.
+- **Redirect URLs**: add `bagistruk://auth/callback`.
+- If `AUTH_EMAIL_REDIRECT_TO` is overridden in GitHub/environment config, add that exact URL too.
+
+Also configure Supabase Auth custom SMTP with Resend and copy the branded Auth
+email templates from `supabase/templates/`. Follow
+[`docs/supabase-auth-email.md`](supabase-auth-email.md) before running release
+email sign-up QA.
 
 Before smoke testing Google Sign-In on Android, confirm Google Cloud Console has
 an Android OAuth client for package `com.alamaby.bagistruk` with the SHA-1 of
