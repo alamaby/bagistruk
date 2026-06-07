@@ -571,17 +571,22 @@ class _ParticipantTile extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Switch.adaptive(value: paid, onChanged: (_) => onChanged()),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton.outlined(
+                        tooltip: AppL10n.of(context).participantShareAgain,
+                        onPressed: onShare,
+                        icon: const Icon(Icons.share_outlined),
+                      ),
+                      SizedBox(width: 4.w),
+                      Switch.adaptive(
+                        value: paid,
+                        onChanged: (_) => onChanged(),
+                      ),
+                    ],
+                  ),
                 ],
-              ),
-              SizedBox(height: 8.h),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  onPressed: onShare,
-                  icon: const Icon(Icons.share_outlined, size: 18),
-                  label: Text(AppL10n.of(context).participantShareAgain),
-                ),
               ),
             ],
           ),
