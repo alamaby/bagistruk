@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../data/providers.dart';
 import '../../domain/entities/auth_snapshot.dart';
 import '../../domain/entities/ocr_result.dart';
 import '../../presentation/auth/providers/auth_providers.dart';
