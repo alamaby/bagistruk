@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/format/app_format.dart';
+import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/item.dart';
@@ -50,7 +50,6 @@ class BillSplitScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(splitFamily(billId));
-    final currency = AppFormat.currency();
 
     return Scaffold(
       appBar: AppBar(
@@ -76,8 +75,11 @@ class BillSplitScreen extends ConsumerWidget {
               child: Text(e.toString(), textAlign: TextAlign.center),
             ),
           ),
-          data: (state) =>
-              _SplitBody(state: state, billId: billId, currency: currency),
+          data: (state) => _SplitBody(
+            state: state,
+            billId: billId,
+            currency: CurrencyFormatter.of(state.bill.currencyCode),
+          ),
         ),
       ),
     );

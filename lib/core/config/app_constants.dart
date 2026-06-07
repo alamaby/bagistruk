@@ -49,9 +49,12 @@ class AppConstants {
   /// user verifikasi sebelum simpan.
   static const Set<String> zeroDecimalCurrencies = {
     'IDR',
+    'KHR',
+    'LAK',
+    'MMK',
+    'VND',
     'JPY',
     'KRW',
-    'VND',
     'CLP',
     'ISK',
     'HUF',

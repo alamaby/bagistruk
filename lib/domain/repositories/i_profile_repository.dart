@@ -11,7 +11,7 @@ abstract interface class IProfileRepository {
 
   Future<Result<void>> updateDisplayName(String name);
 
-  /// [code] must be one of `IDR`, `USD`, `MYR`, `AUD`, `SGD`, `SAR`.
+  /// [code] must be one of the supported ISO-4217 currencies.
   Future<Result<void>> updateDefaultCurrency(String code);
 
   /// [code] must be `id` or `en`.
@@ -24,7 +24,9 @@ abstract interface class IProfileRepository {
   Future<Result<OcrCreditStatus>> getOcrCreditStatus();
 
   /// Reads Plus-gated monthly spending insight for the active user.
-  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight();
+  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight({
+    required String currencyCode,
+  });
 
   /// Reads the optional bank transfer destination saved on the current profile.
   Future<Result<TransferBankInfo?>> getTransferBankInfo();

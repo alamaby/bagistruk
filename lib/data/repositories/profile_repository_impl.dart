@@ -48,11 +48,12 @@ class ProfileRepositoryImpl implements IProfileRepository {
   });
 
   @override
-  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight() =>
-      guardAsync(() async {
-        final row = await _ds.getMonthlySpendingInsight();
-        return MonthlySpendingInsight.fromJson(row);
-      });
+  Future<Result<MonthlySpendingInsight>> getMonthlySpendingInsight({
+    required String currencyCode,
+  }) => guardAsync(() async {
+    final row = await _ds.getMonthlySpendingInsight(currencyCode: currencyCode);
+    return MonthlySpendingInsight.fromJson(row);
+  });
 
   @override
   Future<Result<TransferBankInfo?>> getTransferBankInfo() => guardAsync(

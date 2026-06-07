@@ -11,6 +11,7 @@ class BillCsvExporter {
       [],
       ['Bill'],
       ['Title', state.bill.title],
+      ['Currency', state.bill.currencyCode],
       ['Receipt date', state.bill.receiptDate?.toIso8601String() ?? ''],
       ['Created at', state.bill.createdAt.toIso8601String()],
       ['Total amount', state.bill.totalAmount],

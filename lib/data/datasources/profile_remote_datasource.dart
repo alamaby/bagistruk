@@ -86,13 +86,18 @@ class ProfileRemoteDataSource {
     return Map<String, dynamic>.from(row as Map);
   }
 
-  Future<Map<String, dynamic>> getMonthlySpendingInsight() async {
+  Future<Map<String, dynamic>> getMonthlySpendingInsight({
+    required String currencyCode,
+  }) async {
     final uid = currentUserId;
     if (uid == null) {
       throw const AuthException('No active session');
     }
     final row = await _client
-        .rpc('get_monthly_spending_insight', params: {'p_user_id': uid})
+        .rpc(
+          'get_monthly_spending_insight',
+          params: {'p_user_id': uid, 'p_currency_code': currencyCode},
+        )
         .single();
     return Map<String, dynamic>.from(row as Map);
   }

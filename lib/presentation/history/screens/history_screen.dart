@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/format/app_format.dart';
 import '../../../core/billing/plus_feature_limits.dart';
+import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
@@ -15,6 +15,7 @@ import '../../ads/widgets/banner_ad_widget.dart';
 import '../../bills/providers/bill_list_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../insights/providers/monthly_spending_insight_provider.dart';
+import '../../settings/providers/preferences_providers.dart';
 import '../../shared/widgets/loading_view.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -29,7 +30,8 @@ class HistoryScreen extends ConsumerWidget {
       AsyncData(:final value) => value,
       _ => null,
     };
-    final currency = AppFormat.currency();
+    final defaultCurrency = ref.watch(currencyPrefProvider);
+    final insightCurrency = CurrencyFormatter.of(defaultCurrency);
     final planCode = creditStatus?.planCode;
     final isPlus = creditStatus?.isPlus ?? false;
     final historyDays = PlusFeatureLimits.historyDays(planCode: planCode);
@@ -59,9 +61,7 @@ class HistoryScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                SliverToBoxAdapter(
-                  child: _SummaryCards(bills: list, currency: currency),
-                ),
+                SliverToBoxAdapter(child: _SummaryCards(bills: list)),
                 SliverToBoxAdapter(
                   child: _HistoryAccessBanner(
                     isPlus: isPlus,
@@ -74,7 +74,7 @@ class HistoryScreen extends ConsumerWidget {
                     child: _MonthlyInsightSection(
                       isPlus: isPlus,
                       insight: monthlyInsight,
-                      currency: currency,
+                      currency: insightCurrency,
                     ),
                   ),
                 if (list.isEmpty)
@@ -93,6 +93,9 @@ class HistoryScreen extends ConsumerWidget {
                       separatorBuilder: (_, _) => SizedBox(height: 8.h),
                       itemBuilder: (context, i) {
                         final bill = list[i];
+                        final currency = CurrencyFormatter.of(
+                          bill.currencyCode,
+                        );
                         return Card(
                           child: ListTile(
                             title: Text(bill.title),
@@ -721,19 +724,24 @@ class _HistoryAccessBanner extends StatelessWidget {
 }
 
 class _SummaryCards extends StatelessWidget {
-  const _SummaryCards({required this.bills, required this.currency});
+  const _SummaryCards({required this.bills});
 
   final List<Bill> bills;
-  final NumberFormat currency;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
     final scheme = Theme.of(context).colorScheme;
     final totalBills = bills.length;
-    final outstanding = bills
-        .where((b) => !b.isSettled)
-        .fold<double>(0, (sum, b) => sum + b.totalAmount);
+    final outstanding = <String, double>{};
+    for (final bill in bills.where((b) => !b.isSettled)) {
+      outstanding.update(
+        bill.currencyCode,
+        (value) => value + bill.totalAmount,
+        ifAbsent: () => bill.totalAmount,
+      );
+    }
+    final outstandingText = _formatOutstanding(outstanding);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 8.h),
@@ -752,7 +760,7 @@ class _SummaryCards extends StatelessWidget {
           Expanded(
             child: _StatCard(
               label: l10n.historyOutstanding,
-              value: currency.format(outstanding),
+              value: outstandingText,
               icon: Icons.account_balance_wallet_outlined,
               color: scheme.tertiaryContainer,
               onColor: scheme.onTertiaryContainer,
@@ -761,6 +769,17 @@ class _SummaryCards extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _formatOutstanding(Map<String, double> totalsByCurrency) {
+    if (totalsByCurrency.isEmpty) {
+      return CurrencyFormatter.of('IDR').format(0);
+    }
+    final entries = totalsByCurrency.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+    return entries
+        .map((entry) => CurrencyFormatter.of(entry.key).format(entry.value))
+        .join('\n');
   }
 }
 
@@ -802,6 +821,8 @@ class _StatCard extends StatelessWidget {
           SizedBox(height: 2.h),
           Text(
             value,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,

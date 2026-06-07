@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../core/format/app_format.dart';
+import '../../../core/format/currency_formatter.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
@@ -40,7 +40,7 @@ class SplitSummarySheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
-    final currency = AppFormat.currency();
+    final currency = CurrencyFormatter.of(state.bill.currencyCode);
     final totals = state.calculateTotals();
     final byId = {for (final t in totals) t.participantId: t};
     final creditStatus = switch (ref.watch(ocrCreditStatusProvider)) {

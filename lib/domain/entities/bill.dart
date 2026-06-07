@@ -8,6 +8,7 @@ abstract class Bill with _$Bill {
     required String id,
     required String title,
     required double totalAmount,
+    @Default('IDR') String currencyCode,
     @Default(0) double tax,
     @Default(0) double service,
     @Default(false) bool isSettled,

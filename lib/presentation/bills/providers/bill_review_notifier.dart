@@ -104,6 +104,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
   }
 
   void setTitle(String value) => state = state.copyWith(title: value);
+  void setCurrency(String value) => state = state.copyWith(currency: value);
   void setTax(double value) => state = state.copyWith(tax: value);
   void setService(double value) => state = state.copyWith(service: value);
 
@@ -161,6 +162,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       id: billId,
       title: state.title.trim(),
       totalAmount: state.grandTotal,
+      currencyCode: state.currency,
       tax: state.tax,
       service: state.service,
       receiptDate: state.receiptDate,

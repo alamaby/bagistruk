@@ -7,9 +7,12 @@ import 'package:intl/intl.dart';
 
 import '../../../core/config/app_constants.dart';
 import '../../../core/format/app_format.dart';
+import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/ocr_result.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../settings/widgets/currency_picker_dialog.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/bill_review_notifier.dart';
 
@@ -109,12 +112,22 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     }
   }
 
+  Future<void> _onPickCurrency(String current) async {
+    final code = await showCurrencyPickerDialog(context, current);
+    if (code == null) return;
+    _notifier.setCurrency(code);
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(billReviewFamily(widget.ocr));
     _syncItemControllers(state);
 
-    final currency = AppFormat.currency();
+    final currency = CurrencyFormatter.of(state.currency);
+    final isPlus = switch (ref.watch(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value?.isPlus ?? false,
+      _ => false,
+    };
     final lowConfidence =
         state.confidence < AppConstants.ocrLowConfidenceThreshold;
 
@@ -133,9 +146,12 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
             _Header(
               titleCtrl: _titleCtrl,
               receiptDate: state.receiptDate,
+              currencyCode: state.currency,
+              isPlus: isPlus,
               lowConfidence: lowConfidence,
               confidence: state.confidence,
               onTitleChanged: _notifier.setTitle,
+              onCurrencyChanged: () => _onPickCurrency(state.currency),
             ),
             if (state.suspectThousandsBug)
               Padding(
@@ -293,16 +309,22 @@ class _Header extends StatelessWidget {
   const _Header({
     required this.titleCtrl,
     required this.receiptDate,
+    required this.currencyCode,
+    required this.isPlus,
     required this.lowConfidence,
     required this.confidence,
     required this.onTitleChanged,
+    required this.onCurrencyChanged,
   });
 
   final TextEditingController titleCtrl;
   final DateTime? receiptDate;
+  final String currencyCode;
+  final bool isPlus;
   final bool lowConfidence;
   final double confidence;
   final ValueChanged<String> onTitleChanged;
+  final VoidCallback onCurrencyChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -358,6 +380,37 @@ class _Header extends StatelessWidget {
               ),
             ),
           ],
+          SizedBox(height: 8.h),
+          Padding(
+            padding: EdgeInsets.only(left: 32.w),
+            child: Wrap(
+              spacing: 8.w,
+              runSpacing: 6.h,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                ActionChip(
+                  avatar: Icon(
+                    isPlus ? Icons.payments_outlined : Icons.lock_outline,
+                    size: 16.r,
+                  ),
+                  label: Text(
+                    '$currencyCode · ${CurrencyFormatter.displayName(currencyCode)}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onPressed: isPlus ? onCurrencyChanged : null,
+                  visualDensity: VisualDensity.compact,
+                ),
+                if (!isPlus)
+                  Text(
+                    'Per-bill currency is Plus',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
+            ),
+          ),
           if (lowConfidence) ...[
             SizedBox(height: 10.h),
             Container(

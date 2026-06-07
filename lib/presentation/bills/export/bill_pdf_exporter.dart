@@ -98,6 +98,7 @@ class BillPdfExporter {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
+          _summaryTextRow('Currency', state.bill.currencyCode),
           _summaryRow(l10n.settlementMessageGrandTotal, state.bill.totalAmount),
           _summaryRow(l10n.splitSummaryTax, state.bill.tax),
           _summaryRow(l10n.splitSummaryService, state.bill.service),
@@ -117,6 +118,16 @@ class BillPdfExporter {
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [pw.Text(label), pw.Text(currency.format(value))],
+      ),
+    );
+  }
+
+  pw.Widget _summaryTextRow(String label, String value) {
+    return pw.Padding(
+      padding: const pw.EdgeInsets.only(bottom: 4),
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [pw.Text(label), pw.Text(value)],
       ),
     );
   }

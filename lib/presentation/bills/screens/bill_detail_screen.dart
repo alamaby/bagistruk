@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/format/app_format.dart';
+import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/participant.dart';
@@ -49,7 +50,6 @@ class BillDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(billDetailFamily(billId));
-    final currency = AppFormat.currency();
 
     return Scaffold(
       appBar: AppBar(
@@ -74,8 +74,11 @@ class BillDetailScreen extends ConsumerWidget {
             message: e.toString(),
             onRetry: () => ref.invalidate(billDetailFamily(billId)),
           ),
-          data: (state) =>
-              _Body(state: state, billId: billId, currency: currency),
+          data: (state) => _Body(
+            state: state,
+            billId: billId,
+            currency: CurrencyFormatter.of(state.bill.currencyCode),
+          ),
         ),
       ),
     );
