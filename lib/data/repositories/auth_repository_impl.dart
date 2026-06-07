@@ -69,6 +69,10 @@ class AuthRepositoryImpl implements IAuthRepository {
       guardAsync(() => _ds.resendEmailChange(email: email));
 
   @override
+  Future<Result<void>> recoverSessionFromUri(Uri uri) =>
+      guardAsync(() => _ds.recoverSessionFromUri(uri));
+
+  @override
   Future<Result<void>> signOut() => guardAsync(_ds.signOut);
 
   @override

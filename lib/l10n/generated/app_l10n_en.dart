@@ -92,6 +92,43 @@ class AppL10nEn extends AppL10n {
   String get cancelAction => 'Cancel';
 
   @override
+  String get creditScanTitle => 'Scan credits';
+
+  @override
+  String get creditStatusLoading => 'Loading credit status...';
+
+  @override
+  String creditStatusRemaining(
+    int balance,
+    int monthlyAllowance,
+    String planCode,
+  ) {
+    return '$balance/$monthlyAllowance remaining ($planCode)';
+  }
+
+  @override
+  String get billingTitle => 'Plus and credit packs';
+
+  @override
+  String get billingAnonSubtitle =>
+      'Create an account first to buy Plus or top up credits.';
+
+  @override
+  String get billingPlusActive => 'Plus active';
+
+  @override
+  String get billingUpgradePlus => 'Upgrade Plus';
+
+  @override
+  String get billingBuyCredits => 'Buy 50 credits';
+
+  @override
+  String get billingLoading => 'Loading...';
+
+  @override
+  String get billingRestorePurchases => 'Restore purchases';
+
+  @override
   String get transferBankSettingsTitle => 'Bank transfer info';
 
   @override

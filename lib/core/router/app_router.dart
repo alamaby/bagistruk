@@ -20,6 +20,7 @@ import '../../presentation/about/screens/terms_of_service_screen.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
 import '../../presentation/settings/screens/transfer_bank_info_screen.dart';
 import '../../presentation/shell/screens/main_shell_screen.dart';
+import '../error/result.dart';
 import 'routes.dart';
 
 part 'app_router.g.dart';
@@ -33,18 +34,22 @@ GoRouter appRouter(Ref ref) {
   return GoRouter(
     initialLocation: Routes.scan,
     refreshListenable: refresh,
-    redirect: (context, state) {
-      // Supabase email-link callback. The provider redirects to the app's Site
-      // URL with `#access_token=...&type=email_change` (or signup/recovery).
-      // supabase_flutter parses the fragment automatically and updates the
-      // session; we just need to land the user on a real route. The next
-      // redirect tick will then push them to /history because auth state is
-      // signed-in.
+    redirect: (context, state) async {
+      // Supabase email-link callback. Persist the callback session explicitly
+      // before routing so email confirmation does not leave the app in the
+      // previous anonymous session.
       final rawLoc = state.uri.toString();
       if (rawLoc.contains('access_token=') ||
+          rawLoc.contains('refresh_token=') ||
+          rawLoc.contains('code=') ||
           rawLoc.contains('type=email_change') ||
           rawLoc.contains('type=signup') ||
-          rawLoc.contains('type=recovery')) {
+          rawLoc.contains('type=recovery') ||
+          rawLoc.contains('error_description=')) {
+        final result = await ref
+            .read(authRepositoryProvider)
+            .recoverSessionFromUri(state.uri);
+        if (result is Success<void>) return Routes.history;
         return Routes.scan;
       }
 

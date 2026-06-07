@@ -259,6 +259,70 @@ abstract class AppL10n {
   /// **'Batal'**
   String get cancelAction;
 
+  /// No description provided for @creditScanTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Credit scan'**
+  String get creditScanTitle;
+
+  /// No description provided for @creditStatusLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'Memuat status credit...'**
+  String get creditStatusLoading;
+
+  /// No description provided for @creditStatusRemaining.
+  ///
+  /// In id, this message translates to:
+  /// **'{balance}/{monthlyAllowance} tersisa ({planCode})'**
+  String creditStatusRemaining(
+    int balance,
+    int monthlyAllowance,
+    String planCode,
+  );
+
+  /// No description provided for @billingTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus dan paket credit'**
+  String get billingTitle;
+
+  /// No description provided for @billingAnonSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar akun dulu untuk membeli Plus atau top-up credit.'**
+  String get billingAnonSubtitle;
+
+  /// No description provided for @billingPlusActive.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus aktif'**
+  String get billingPlusActive;
+
+  /// No description provided for @billingUpgradePlus.
+  ///
+  /// In id, this message translates to:
+  /// **'Upgrade Plus'**
+  String get billingUpgradePlus;
+
+  /// No description provided for @billingBuyCredits.
+  ///
+  /// In id, this message translates to:
+  /// **'Beli 50 credit'**
+  String get billingBuyCredits;
+
+  /// No description provided for @billingLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'Memuat...'**
+  String get billingLoading;
+
+  /// No description provided for @billingRestorePurchases.
+  ///
+  /// In id, this message translates to:
+  /// **'Pulihkan pembelian'**
+  String get billingRestorePurchases;
+
   /// No description provided for @transferBankSettingsTitle.
   ///
   /// In id, this message translates to:

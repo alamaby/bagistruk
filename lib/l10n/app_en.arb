@@ -27,6 +27,23 @@
   "displayNameFallback": "BagiStruk User",
   "anonDisplayName": "Me",
   "guestAccount": "Guest Account",
+  "creditScanTitle": "Scan credits",
+  "creditStatusLoading": "Loading credit status...",
+  "creditStatusRemaining": "{balance}/{monthlyAllowance} remaining ({planCode})",
+  "@creditStatusRemaining": {
+    "placeholders": {
+      "balance": { "type": "int" },
+      "monthlyAllowance": { "type": "int" },
+      "planCode": { "type": "String" }
+    }
+  },
+  "billingTitle": "Plus and credit packs",
+  "billingAnonSubtitle": "Create an account first to buy Plus or top up credits.",
+  "billingPlusActive": "Plus active",
+  "billingUpgradePlus": "Upgrade Plus",
+  "billingBuyCredits": "Buy 50 credits",
+  "billingLoading": "Loading...",
+  "billingRestorePurchases": "Restore purchases",
 
   "changeName": "Change Name",
   "changeNameSheetTitle": "Change Display Name",

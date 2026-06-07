@@ -27,6 +27,23 @@
   "displayNameFallback": "Pengguna BagiStruk",
   "anonDisplayName": "Saya",
   "guestAccount": "Akun Tamu",
+  "creditScanTitle": "Credit scan",
+  "creditStatusLoading": "Memuat status credit...",
+  "creditStatusRemaining": "{balance}/{monthlyAllowance} tersisa ({planCode})",
+  "@creditStatusRemaining": {
+    "placeholders": {
+      "balance": { "type": "int" },
+      "monthlyAllowance": { "type": "int" },
+      "planCode": { "type": "String" }
+    }
+  },
+  "billingTitle": "Plus dan paket credit",
+  "billingAnonSubtitle": "Daftar akun dulu untuk membeli Plus atau top-up credit.",
+  "billingPlusActive": "Plus aktif",
+  "billingUpgradePlus": "Upgrade Plus",
+  "billingBuyCredits": "Beli 50 credit",
+  "billingLoading": "Memuat...",
+  "billingRestorePurchases": "Pulihkan pembelian",
 
   "changeName": "Ubah Nama",
   "changeNameSheetTitle": "Ubah Nama Tampilan",

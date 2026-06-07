@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/error/result.dart';
 import '../../../data/providers.dart';
@@ -48,6 +49,7 @@ class _TransferBankInfoScreenState
       appBar: AppBar(title: Text(l10n.transferBankScreenTitle)),
       body: SafeArea(
         child: bankAsync.when(
+          skipLoadingOnRefresh: false,
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (_, _) => _MessageView(
             icon: Icons.error_outline,
@@ -100,7 +102,10 @@ class _TransferBankInfoScreenState
                       TextFormField(
                         controller: _accountNumber,
                         enabled: isPlus && !_saving,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                           labelText: l10n.transferAccountNumberLabel,
@@ -174,9 +179,9 @@ class _TransferBankInfoScreenState
     setState(() => _saving = true);
     final info = _hasAnyValue()
         ? TransferBankInfo(
-            bankName: _bankName.text,
-            accountName: _accountName.text,
-            accountNumber: _accountNumber.text,
+            bankName: _bankName.text.trim(),
+            accountName: _accountName.text.trim(),
+            accountNumber: _accountNumber.text.trim(),
           )
         : null;
     final res = await ref

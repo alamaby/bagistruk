@@ -175,6 +175,10 @@ class AuthRemoteDataSource {
     emailRedirectTo: _authEmailRedirectTo,
   );
 
+  Future<void> recoverSessionFromUri(Uri uri) async {
+    await _auth.getSessionFromUrl(uri);
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     await _signOutGoogleBestEffort();

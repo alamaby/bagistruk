@@ -15,7 +15,7 @@ class AppConstants {
 
   /// External links shown on the About screen. Keep placeholders as '#'
   /// until the final public URLs are ready.
-  static const String websiteUrl = 'https://alamaby.gitlab.io/';
+  static const String websiteUrl = 'https://bagistruk.vercel.app/';
   static const String githubUrl = 'https://github.com/alamaby';
   static const String linkedinUrl = 'https://linkedin.com/in/alamaby';
   static const String buyMeACoffeeUrl = 'https://buymeacoffee.com/alamaby';

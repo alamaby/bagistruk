@@ -91,6 +91,43 @@ class AppL10nId extends AppL10n {
   String get cancelAction => 'Batal';
 
   @override
+  String get creditScanTitle => 'Credit scan';
+
+  @override
+  String get creditStatusLoading => 'Memuat status credit...';
+
+  @override
+  String creditStatusRemaining(
+    int balance,
+    int monthlyAllowance,
+    String planCode,
+  ) {
+    return '$balance/$monthlyAllowance tersisa ($planCode)';
+  }
+
+  @override
+  String get billingTitle => 'Plus dan paket credit';
+
+  @override
+  String get billingAnonSubtitle =>
+      'Daftar akun dulu untuk membeli Plus atau top-up credit.';
+
+  @override
+  String get billingPlusActive => 'Plus aktif';
+
+  @override
+  String get billingUpgradePlus => 'Upgrade Plus';
+
+  @override
+  String get billingBuyCredits => 'Beli 50 credit';
+
+  @override
+  String get billingLoading => 'Memuat...';
+
+  @override
+  String get billingRestorePurchases => 'Pulihkan pembelian';
+
+  @override
   String get transferBankSettingsTitle => 'Info bank transfer';
 
   @override

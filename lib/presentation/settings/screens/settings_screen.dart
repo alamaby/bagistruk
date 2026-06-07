@@ -69,6 +69,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: profileAsync.when(
+        skipLoadingOnRefresh: false,
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _ErrorView(
           message: l10n.errorGeneric,
@@ -112,11 +113,15 @@ class _SettingsBody extends ConsumerWidget {
         ),
         ListTile(
           leading: const Icon(Icons.document_scanner_outlined),
-          title: const Text('Credit scan'),
+          title: Text(l10n.creditScanTitle),
           subtitle: Text(
             creditStatus == null
-                ? 'Memuat status credit...'
-                : '${creditStatus.balance}/${creditStatus.monthlyAllowance} tersisa (${creditStatus.planCode})',
+                ? l10n.creditStatusLoading
+                : l10n.creditStatusRemaining(
+                    creditStatus.balance,
+                    creditStatus.monthlyAllowance,
+                    creditStatus.planCode,
+                  ),
           ),
         ),
         _BillingSection(
@@ -488,6 +493,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     final theme = Theme.of(context);
     final plus = _product(GooglePlayBillingCatalog.plusMonthly.id);
     final pack = _product(GooglePlayBillingCatalog.creditPacks.first.id);
@@ -495,10 +501,8 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
     if (widget.isAnonymous) {
       return ListTile(
         leading: const Icon(Icons.workspace_premium_outlined),
-        title: const Text('Plus dan paket credit'),
-        subtitle: const Text(
-          'Daftar akun dulu untuk membeli Plus atau top-up credit.',
-        ),
+        title: Text(l10n.billingTitle),
+        subtitle: Text(l10n.billingAnonSubtitle),
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.pushNamed(Routes.registerName),
       );
@@ -509,7 +513,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Plus dan paket credit', style: theme.textTheme.titleMedium),
+          Text(l10n.billingTitle, style: theme.textTheme.titleMedium),
           if (_message != null) ...[
             SizedBox(height: 6.h),
             Text(_message!, style: theme.textTheme.bodySmall),
@@ -526,17 +530,17 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
                     : null,
                 label: Text(
                   widget.isPlus
-                      ? 'Plus aktif'
-                      : _buttonLabel('Upgrade Plus', plus),
+                      ? l10n.billingPlusActive
+                      : _buttonLabel(l10n.billingUpgradePlus, plus),
                 ),
               ),
               OutlinedButton.icon(
                 icon: const Icon(Icons.add_card_outlined),
                 onPressed: _canBuy(pack) ? () => _buy(pack!) : null,
-                label: Text(_buttonLabel('Beli 50 credit', pack)),
+                label: Text(_buttonLabel(l10n.billingBuyCredits, pack)),
               ),
               IconButton.outlined(
-                tooltip: 'Pulihkan pembelian',
+                tooltip: l10n.billingRestorePurchases,
                 onPressed: _busy ? null : _restore,
                 icon: const Icon(Icons.restore_outlined),
               ),
@@ -551,7 +555,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       !_loading && !_busy && product != null;
 
   String _buttonLabel(String fallback, ProductDetails? product) {
-    if (_loading) return 'Memuat...';
+    if (_loading) return AppL10n.of(context).billingLoading;
     if (product == null) return fallback;
     return '$fallback ${product.price}';
   }

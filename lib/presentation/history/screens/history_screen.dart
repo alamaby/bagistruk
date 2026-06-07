@@ -69,7 +69,7 @@ class HistoryScreen extends ConsumerWidget {
                     days: historyDays,
                   ),
                 ),
-                if (hasHistoryAccess)
+                if (hasHistoryAccess && list.isNotEmpty)
                   SliverToBoxAdapter(
                     child: _MonthlyInsightSection(
                       isPlus: isPlus,

@@ -63,6 +63,9 @@ abstract interface class IAuthRepository {
   /// Resends the verification email after [signUp] / [linkEmail].
   Future<Result<void>> resendEmailChange({required String email});
 
+  /// Persists a Supabase email-link callback session from a deep link URL.
+  Future<Result<void>> recoverSessionFromUri(Uri uri);
+
   Future<Result<void>> signOut();
 
   /// Permanently deletes the current user's app data and Auth account.
