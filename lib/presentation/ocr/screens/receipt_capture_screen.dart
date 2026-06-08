@@ -256,7 +256,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         context.pushNamed(Routes.billReviewName, extra: result);
       }
       if (next is OcrFailure) {
-        final msg = friendlyOcrMessage(next.failure);
+        final msg = friendlyOcrMessage(next.failure, AppL10n.of(context));
         final scheme = Theme.of(context).colorScheme;
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
@@ -325,7 +325,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
             SizedBox(height: 12.h),
             if (state is OcrFailure)
               _ErrorCard(
-                message: friendlyOcrMessage(state.failure),
+                message: friendlyOcrMessage(state.failure, l10n),
                 onDismiss: () => ref.read(ocrProvider.notifier).reset(),
               )
             else
@@ -474,7 +474,7 @@ class _ErrorCard extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           IconButton(
-            tooltip: 'Tutup',
+            tooltip: AppL10n.of(context).cancelAction,
             visualDensity: VisualDensity.compact,
             iconSize: 18.r,
             onPressed: onDismiss,

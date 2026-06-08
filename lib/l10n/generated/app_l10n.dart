@@ -193,6 +193,150 @@ abstract class AppL10n {
   /// **'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.'**
   String get scanNotReceiptHint;
 
+  /// No description provided for @ocrErrorNetworkTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada koneksi'**
+  String get ocrErrorNetworkTitle;
+
+  /// No description provided for @ocrErrorNetworkBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Periksa koneksi internetmu, lalu coba scan ulang.'**
+  String get ocrErrorNetworkBody;
+
+  /// No description provided for @ocrErrorAuthTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesi berakhir'**
+  String get ocrErrorAuthTitle;
+
+  /// No description provided for @ocrErrorAuthBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesi kamu sudah habis. Silakan masuk lagi untuk melanjutkan.'**
+  String get ocrErrorAuthBody;
+
+  /// No description provided for @ocrErrorParsingTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Respons tidak terbaca'**
+  String get ocrErrorParsingTitle;
+
+  /// No description provided for @ocrErrorParsingBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Hasil scan dari server tidak dapat diproses. Coba foto ulang dengan pencahayaan lebih baik.'**
+  String get ocrErrorParsingBody;
+
+  /// No description provided for @ocrErrorUnknownTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjadi kesalahan'**
+  String get ocrErrorUnknownTitle;
+
+  /// No description provided for @ocrErrorUnknownBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesuatu tidak berjalan semestinya. Coba lagi sebentar.'**
+  String get ocrErrorUnknownBody;
+
+  /// No description provided for @ocrErrorNotReceiptTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto bukan struk'**
+  String get ocrErrorNotReceiptTitle;
+
+  /// No description provided for @ocrErrorNotReceiptBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Gambar yang dipilih sepertinya bukan struk belanja. Coba foto struk yang jelas dan tidak terpotong.'**
+  String get ocrErrorNotReceiptBody;
+
+  /// No description provided for @ocrErrorCreditTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Credit scan habis'**
+  String get ocrErrorCreditTitle;
+
+  /// No description provided for @ocrErrorCreditBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah credit atau tunggu periode berikutnya untuk scan lagi.'**
+  String get ocrErrorCreditBody;
+
+  /// No description provided for @ocrErrorAiBusyTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Layanan AI sedang sibuk'**
+  String get ocrErrorAiBusyTitle;
+
+  /// No description provided for @ocrErrorAiBusyBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Server AI sedang menerima banyak permintaan. Tunggu beberapa saat, lalu coba scan lagi.'**
+  String get ocrErrorAiBusyBody;
+
+  /// No description provided for @ocrErrorRateLimitTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Terlalu banyak permintaan'**
+  String get ocrErrorRateLimitTitle;
+
+  /// No description provided for @ocrErrorRateLimitBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu mencapai batas scan untuk saat ini. Coba lagi dalam beberapa menit.'**
+  String get ocrErrorRateLimitBody;
+
+  /// No description provided for @ocrErrorForbiddenTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Akses ditolak'**
+  String get ocrErrorForbiddenTitle;
+
+  /// No description provided for @ocrErrorForbiddenBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Server menolak permintaan. Coba keluar dan masuk lagi.'**
+  String get ocrErrorForbiddenBody;
+
+  /// No description provided for @ocrErrorTimeoutTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Permintaan kelamaan'**
+  String get ocrErrorTimeoutTitle;
+
+  /// No description provided for @ocrErrorTimeoutBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Server butuh waktu terlalu lama merespons. Coba lagi.'**
+  String get ocrErrorTimeoutBody;
+
+  /// No description provided for @ocrErrorServerTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Server bermasalah'**
+  String get ocrErrorServerTitle;
+
+  /// No description provided for @ocrErrorServerBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Server sedang tidak stabil. Tunggu sebentar lalu coba lagi.'**
+  String get ocrErrorServerBody;
+
+  /// No description provided for @ocrErrorGenericTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Scan gagal'**
+  String get ocrErrorGenericTitle;
+
+  /// No description provided for @ocrErrorGenericBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak bisa memproses struk ini. Coba foto ulang atau gunakan gambar lain.'**
+  String get ocrErrorGenericBody;
+
   /// No description provided for @retry.
   ///
   /// In id, this message translates to:

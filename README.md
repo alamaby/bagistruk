@@ -108,7 +108,7 @@ VALUES (
   'nvidia',
   '<YOUR_NVIDIA_API_KEY>',
   'https://integrate.api.nvidia.com/v1',
-  'meta/llama-4-maverick-17b-128e-instruct',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
   3,
   true
 );

@@ -29,9 +29,7 @@ _OcrResponseDto _$OcrResponseDtoFromJson(Map<String, dynamic> json) =>
       detectedTax: (json['detected_tax'] as num?)?.toDouble(),
       detectedService: (json['detected_service'] as num?)?.toDouble(),
       merchant: json['merchant'] as String?,
-      receiptDate: json['receipt_date'] == null
-          ? null
-          : DateTime.parse(json['receipt_date'] as String),
+      receiptDate: _nullableDateTimeFromJson(json['receipt_date']),
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
       providerUsed: json['provider_used'] as String,
     );

@@ -59,6 +59,90 @@ class AppL10nEn extends AppL10n {
       'The selected image doesn\'t look like a receipt. Try a clear photo of a receipt.';
 
   @override
+  String get ocrErrorNetworkTitle => 'No connection';
+
+  @override
+  String get ocrErrorNetworkBody =>
+      'Check your internet connection, then scan again.';
+
+  @override
+  String get ocrErrorAuthTitle => 'Session expired';
+
+  @override
+  String get ocrErrorAuthBody =>
+      'Your session has expired. Sign in again to continue.';
+
+  @override
+  String get ocrErrorParsingTitle => 'Unreadable response';
+
+  @override
+  String get ocrErrorParsingBody =>
+      'The scan result from the server could not be processed. Try taking the photo again with better lighting.';
+
+  @override
+  String get ocrErrorUnknownTitle => 'Something went wrong';
+
+  @override
+  String get ocrErrorUnknownBody =>
+      'Something did not work as expected. Try again shortly.';
+
+  @override
+  String get ocrErrorNotReceiptTitle => 'Not a receipt';
+
+  @override
+  String get ocrErrorNotReceiptBody =>
+      'The selected image does not look like a shopping receipt. Try a clear, uncropped receipt photo.';
+
+  @override
+  String get ocrErrorCreditTitle => 'No scan credits left';
+
+  @override
+  String get ocrErrorCreditBody =>
+      'Add credits or wait for the next period to scan again.';
+
+  @override
+  String get ocrErrorAiBusyTitle => 'AI service is busy';
+
+  @override
+  String get ocrErrorAiBusyBody =>
+      'The AI server is receiving many requests. Wait a moment, then scan again.';
+
+  @override
+  String get ocrErrorRateLimitTitle => 'Too many requests';
+
+  @override
+  String get ocrErrorRateLimitBody =>
+      'You reached the scan limit for now. Try again in a few minutes.';
+
+  @override
+  String get ocrErrorForbiddenTitle => 'Access denied';
+
+  @override
+  String get ocrErrorForbiddenBody =>
+      'The server rejected the request. Try signing out and signing in again.';
+
+  @override
+  String get ocrErrorTimeoutTitle => 'Request took too long';
+
+  @override
+  String get ocrErrorTimeoutBody =>
+      'The server took too long to respond. Try again.';
+
+  @override
+  String get ocrErrorServerTitle => 'Server issue';
+
+  @override
+  String get ocrErrorServerBody =>
+      'The server is unstable right now. Wait a moment, then try again.';
+
+  @override
+  String get ocrErrorGenericTitle => 'Scan failed';
+
+  @override
+  String get ocrErrorGenericBody =>
+      'This receipt could not be processed. Try taking another photo or using a different image.';
+
+  @override
   String get retry => 'Retry';
 
   @override

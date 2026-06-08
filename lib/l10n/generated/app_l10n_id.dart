@@ -58,6 +58,90 @@ class AppL10nId extends AppL10n {
       'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.';
 
   @override
+  String get ocrErrorNetworkTitle => 'Tidak ada koneksi';
+
+  @override
+  String get ocrErrorNetworkBody =>
+      'Periksa koneksi internetmu, lalu coba scan ulang.';
+
+  @override
+  String get ocrErrorAuthTitle => 'Sesi berakhir';
+
+  @override
+  String get ocrErrorAuthBody =>
+      'Sesi kamu sudah habis. Silakan masuk lagi untuk melanjutkan.';
+
+  @override
+  String get ocrErrorParsingTitle => 'Respons tidak terbaca';
+
+  @override
+  String get ocrErrorParsingBody =>
+      'Hasil scan dari server tidak dapat diproses. Coba foto ulang dengan pencahayaan lebih baik.';
+
+  @override
+  String get ocrErrorUnknownTitle => 'Terjadi kesalahan';
+
+  @override
+  String get ocrErrorUnknownBody =>
+      'Sesuatu tidak berjalan semestinya. Coba lagi sebentar.';
+
+  @override
+  String get ocrErrorNotReceiptTitle => 'Foto bukan struk';
+
+  @override
+  String get ocrErrorNotReceiptBody =>
+      'Gambar yang dipilih sepertinya bukan struk belanja. Coba foto struk yang jelas dan tidak terpotong.';
+
+  @override
+  String get ocrErrorCreditTitle => 'Credit scan habis';
+
+  @override
+  String get ocrErrorCreditBody =>
+      'Tambah credit atau tunggu periode berikutnya untuk scan lagi.';
+
+  @override
+  String get ocrErrorAiBusyTitle => 'Layanan AI sedang sibuk';
+
+  @override
+  String get ocrErrorAiBusyBody =>
+      'Server AI sedang menerima banyak permintaan. Tunggu beberapa saat, lalu coba scan lagi.';
+
+  @override
+  String get ocrErrorRateLimitTitle => 'Terlalu banyak permintaan';
+
+  @override
+  String get ocrErrorRateLimitBody =>
+      'Kamu mencapai batas scan untuk saat ini. Coba lagi dalam beberapa menit.';
+
+  @override
+  String get ocrErrorForbiddenTitle => 'Akses ditolak';
+
+  @override
+  String get ocrErrorForbiddenBody =>
+      'Server menolak permintaan. Coba keluar dan masuk lagi.';
+
+  @override
+  String get ocrErrorTimeoutTitle => 'Permintaan kelamaan';
+
+  @override
+  String get ocrErrorTimeoutBody =>
+      'Server butuh waktu terlalu lama merespons. Coba lagi.';
+
+  @override
+  String get ocrErrorServerTitle => 'Server bermasalah';
+
+  @override
+  String get ocrErrorServerBody =>
+      'Server sedang tidak stabil. Tunggu sebentar lalu coba lagi.';
+
+  @override
+  String get ocrErrorGenericTitle => 'Scan gagal';
+
+  @override
+  String get ocrErrorGenericBody =>
+      'Tidak bisa memproses struk ini. Coba foto ulang atau gunakan gambar lain.';
+
+  @override
   String get retry => 'Coba Lagi';
 
   @override

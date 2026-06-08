@@ -5,6 +5,13 @@ import '../../domain/entities/ocr_result.dart';
 part 'ocr_response_dto.freezed.dart';
 part 'ocr_response_dto.g.dart';
 
+DateTime? _nullableDateTimeFromJson(Object? value) {
+  if (value == null) return null;
+  final text = value.toString().trim();
+  if (text.isEmpty) return null;
+  return DateTime.tryParse(text);
+}
+
 @freezed
 abstract class OcrLineItemDto with _$OcrLineItemDto {
   const OcrLineItemDto._();
@@ -31,7 +38,7 @@ abstract class OcrResponseDto with _$OcrResponseDto {
     double? detectedTax,
     double? detectedService,
     String? merchant,
-    DateTime? receiptDate,
+    @JsonKey(fromJson: _nullableDateTimeFromJson) DateTime? receiptDate,
     @Default(0.0) double confidence,
     required String providerUsed,
   }) = _OcrResponseDto;
