@@ -29,6 +29,15 @@ String _humanizeAuth(String raw) {
   if (lower.contains('email not confirmed')) {
     return 'Email belum dikonfirmasi. Cek kotak masuk.';
   }
+  if (lower.contains('disposable_email')) {
+    return 'Email sementara/disposable tidak bisa digunakan. Pakai email utama kamu.';
+  }
+  if (lower.contains('email_alias_already_used')) {
+    return 'Email ini terdeteksi sebagai alias dari email yang sudah pernah digunakan.';
+  }
+  if (lower.contains('invalid_email')) {
+    return 'Format email belum valid.';
+  }
   if (lower.contains('oauth android') || lower.contains('google sign-in')) {
     return 'Google Sign-In gagal setelah memilih akun. Coba lagi; jika tetap terjadi, cek OAuth Android package name, SHA-1 debug/release, dan Google Web Client ID.';
   }

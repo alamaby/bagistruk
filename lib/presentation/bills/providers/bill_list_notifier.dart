@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/error/failure.dart';
@@ -51,14 +50,8 @@ class BillListNotifier extends _$BillListNotifier {
   }
 }
 
-final deletedBillListProvider =
-    AutoDisposeAsyncNotifierProvider<
-      DeletedBillListNotifier,
-      List<DeletedBill>
-    >(DeletedBillListNotifier.new);
-
-class DeletedBillListNotifier
-    extends AutoDisposeAsyncNotifier<List<DeletedBill>> {
+@riverpod
+class DeletedBillListNotifier extends _$DeletedBillListNotifier {
   @override
   Future<List<DeletedBill>> build() async {
     final repo = ref.watch(billRepositoryProvider);

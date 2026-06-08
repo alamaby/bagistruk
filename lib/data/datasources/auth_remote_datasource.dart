@@ -53,10 +53,12 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
+    await _validateRegistrationEmail(email);
     await _auth.updateUser(
       UserAttributes(email: email, password: password),
       emailRedirectTo: _authEmailRedirectTo,
     );
+    await _recordRegisteredEmailIdentity(email);
   }
 
   /// Same uid-preserving upgrade as [linkEmail] — exposed under a name that
@@ -89,11 +91,13 @@ class AuthRemoteDataSource {
   Future<void> sendEmailOtp({
     required String email,
     required String languageCode,
-  }) => _auth.signInWithOtp(
-    email: email,
-    shouldCreateUser: true,
-    data: {'language': languageCode},
-  );
+  }) async {
+    await _auth.signInWithOtp(
+      email: email,
+      shouldCreateUser: true,
+      data: {'language': languageCode},
+    );
+  }
 
   /// Verifies the email code and preserves any guest-owned bill rows by moving
   /// them from the previous anonymous uid to the new verified uid.
@@ -105,6 +109,7 @@ class AuthRemoteDataSource {
     final wasAnon = _auth.currentUser?.isAnonymous ?? false;
 
     await _auth.verifyOTP(email: email, token: token, type: OtpType.email);
+    await _recordRegisteredEmailIdentity(email);
 
     final newUid = _auth.currentUser?.id;
     if (wasAnon && oldUid != null && newUid != null && oldUid != newUid) {
@@ -222,4 +227,26 @@ class AuthRemoteDataSource {
   }
 
   String get _authEmailRedirectTo => Env.authEmailRedirectTo;
+
+  Future<void> _validateRegistrationEmail(String email) async {
+    final rows = await _client.rpc<List<dynamic>>(
+      'validate_registration_email',
+      params: {'p_email': email},
+    );
+    final row = rows.isEmpty ? null : rows.first as Map<String, dynamic>;
+    final allowed = row?['allowed'] == true;
+    if (allowed) return;
+
+    final reason = row?['reason']?.toString() ?? 'invalid_email';
+    throw AuthException(reason);
+  }
+
+  Future<void> _recordRegisteredEmailIdentity(String email) async {
+    final userId = _auth.currentUser?.id;
+    if (userId == null) return;
+    await _client.rpc<void>(
+      'record_registered_email_identity',
+      params: {'p_user_id': userId, 'p_email': email},
+    );
+  }
 }

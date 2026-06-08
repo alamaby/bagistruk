@@ -62,3 +62,51 @@ abstract class _$BillListNotifier extends $AsyncNotifier<List<Bill>> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(DeletedBillListNotifier)
+const deletedBillListProvider = DeletedBillListNotifierProvider._();
+
+final class DeletedBillListNotifierProvider
+    extends $AsyncNotifierProvider<DeletedBillListNotifier, List<DeletedBill>> {
+  const DeletedBillListNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deletedBillListProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$deletedBillListNotifierHash();
+
+  @$internal
+  @override
+  DeletedBillListNotifier create() => DeletedBillListNotifier();
+}
+
+String _$deletedBillListNotifierHash() =>
+    r'4c2ec3d866cfb4ef4de0f6ac28dc4c306af6a794';
+
+abstract class _$DeletedBillListNotifier
+    extends $AsyncNotifier<List<DeletedBill>> {
+  FutureOr<List<DeletedBill>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref as $Ref<AsyncValue<List<DeletedBill>>, List<DeletedBill>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<DeletedBill>>, List<DeletedBill>>,
+              AsyncValue<List<DeletedBill>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
