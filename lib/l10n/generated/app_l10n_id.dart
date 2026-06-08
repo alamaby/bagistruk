@@ -290,6 +290,57 @@ class AppL10nId extends AppL10n {
   String get deleteAccountSuccess => 'Akun dan data tersimpan sudah dihapus.';
 
   @override
+  String get deletedBillsTitle => 'Bill terhapus';
+
+  @override
+  String get deletedBillsSettingsSubtitle =>
+      'Pulihkan bill yang dihapus dalam 30 hari terakhir.';
+
+  @override
+  String get deletedBillsSettingsLockedSubtitle =>
+      'Khusus Plus. Pulihkan bill yang tidak sengaja dihapus dalam 30 hari.';
+
+  @override
+  String get deletedBillsLockedTitle => 'Pulihkan bill terhapus dengan Plus';
+
+  @override
+  String get deletedBillsLockedSubtitle =>
+      'Bill terhapus disimpan selama 30 hari agar pengguna Plus bisa memulihkan penghapusan tidak sengaja.';
+
+  @override
+  String get deletedBillsEmpty => 'Belum ada bill terhapus.';
+
+  @override
+  String deletedBillDeletedAt(String date) {
+    return 'Dihapus $date';
+  }
+
+  @override
+  String deletedBillExpiresAt(String date) {
+    return 'Bisa dipulihkan sampai $date';
+  }
+
+  @override
+  String get deletedBillRestoreAction => 'Pulihkan';
+
+  @override
+  String get deletedBillRestored => 'Bill dipulihkan.';
+
+  @override
+  String get deleteBillAction => 'Hapus';
+
+  @override
+  String get deleteBillConfirmTitle => 'Hapus bill ini?';
+
+  @override
+  String deleteBillConfirmBody(String title, String total) {
+    return '$title ($total) akan dipindahkan ke Bill terhapus. Pengguna Plus bisa memulihkannya dalam 30 hari.';
+  }
+
+  @override
+  String get deleteBillSuccess => 'Bill dipindahkan ke Bill terhapus.';
+
+  @override
   String get errorGeneric => 'Terjadi kesalahan. Coba lagi.';
 
   @override

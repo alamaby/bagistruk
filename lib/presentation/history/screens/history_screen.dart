@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/billing/plus_feature_limits.dart';
+import '../../../core/error/result.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
@@ -100,12 +101,27 @@ class HistoryScreen extends ConsumerWidget {
                           child: ListTile(
                             title: Text(bill.title),
                             subtitle: Text(currency.format(bill.totalAmount)),
-                            trailing: bill.isSettled
-                                ? const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  )
-                                : const Icon(Icons.chevron_right),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  tooltip: l10n.deleteBillAction,
+                                  onPressed: () => _deleteBill(
+                                    context,
+                                    ref,
+                                    bill,
+                                    currency.format(bill.totalAmount),
+                                  ),
+                                  icon: const Icon(Icons.delete_outline),
+                                ),
+                                bill.isSettled
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : const Icon(Icons.chevron_right),
+                              ],
+                            ),
                             onTap: () => context.pushNamed(
                               Routes.billDetailName,
                               pathParameters: {'billId': bill.id},
@@ -135,6 +151,50 @@ class HistoryScreen extends ConsumerWidget {
     messenger.showSnackBar(
       SnackBar(
         content: Text(l10n.historySignedOut),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _deleteBill(
+    BuildContext context,
+    WidgetRef ref,
+    Bill bill,
+    String formattedTotal,
+  ) async {
+    final l10n = AppL10n.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.deleteBillConfirmTitle),
+        content: Text(l10n.deleteBillConfirmBody(bill.title, formattedTotal)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancelAction),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(ctx).colorScheme.errorContainer,
+              foregroundColor: Theme.of(ctx).colorScheme.onErrorContainer,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.deleteBillAction),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+
+    final result = await ref
+        .read(billListProvider.notifier)
+        .deleteBill(bill.id);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          result is Success<void> ? l10n.deleteBillSuccess : l10n.errorGeneric,
+        ),
         behavior: SnackBarBehavior.floating,
       ),
     );

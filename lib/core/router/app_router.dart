@@ -11,6 +11,7 @@ import '../../presentation/auth/screens/register_screen.dart';
 import '../../presentation/auth/screens/verify_email_screen.dart';
 import '../../presentation/auth/screens/verify_otp_screen.dart';
 import '../../presentation/bills/screens/bill_detail_screen.dart';
+import '../../presentation/bills/screens/deleted_bills_screen.dart';
 import '../../presentation/bills/screens/bill_review_screen.dart';
 import '../../presentation/bills/screens/bill_split_screen.dart';
 import '../../presentation/history/screens/history_screen.dart';
@@ -141,6 +142,11 @@ GoRouter appRouter(Ref ref) {
         name: Routes.billDetailName,
         builder: (context, state) =>
             BillDetailScreen(billId: state.pathParameters['billId']!),
+      ),
+      GoRoute(
+        path: Routes.deletedBills,
+        name: Routes.deletedBillsName,
+        builder: (context, state) => const DeletedBillsScreen(),
       ),
       GoRoute(
         path: Routes.login,

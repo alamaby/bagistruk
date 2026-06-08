@@ -617,6 +617,90 @@ abstract class AppL10n {
   /// **'Akun dan data tersimpan sudah dihapus.'**
   String get deleteAccountSuccess;
 
+  /// No description provided for @deletedBillsTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill terhapus'**
+  String get deletedBillsTitle;
+
+  /// No description provided for @deletedBillsSettingsSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pulihkan bill yang dihapus dalam 30 hari terakhir.'**
+  String get deletedBillsSettingsSubtitle;
+
+  /// No description provided for @deletedBillsSettingsLockedSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Khusus Plus. Pulihkan bill yang tidak sengaja dihapus dalam 30 hari.'**
+  String get deletedBillsSettingsLockedSubtitle;
+
+  /// No description provided for @deletedBillsLockedTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pulihkan bill terhapus dengan Plus'**
+  String get deletedBillsLockedTitle;
+
+  /// No description provided for @deletedBillsLockedSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill terhapus disimpan selama 30 hari agar pengguna Plus bisa memulihkan penghapusan tidak sengaja.'**
+  String get deletedBillsLockedSubtitle;
+
+  /// No description provided for @deletedBillsEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada bill terhapus.'**
+  String get deletedBillsEmpty;
+
+  /// No description provided for @deletedBillDeletedAt.
+  ///
+  /// In id, this message translates to:
+  /// **'Dihapus {date}'**
+  String deletedBillDeletedAt(String date);
+
+  /// No description provided for @deletedBillExpiresAt.
+  ///
+  /// In id, this message translates to:
+  /// **'Bisa dipulihkan sampai {date}'**
+  String deletedBillExpiresAt(String date);
+
+  /// No description provided for @deletedBillRestoreAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Pulihkan'**
+  String get deletedBillRestoreAction;
+
+  /// No description provided for @deletedBillRestored.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill dipulihkan.'**
+  String get deletedBillRestored;
+
+  /// No description provided for @deleteBillAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus'**
+  String get deleteBillAction;
+
+  /// No description provided for @deleteBillConfirmTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus bill ini?'**
+  String get deleteBillConfirmTitle;
+
+  /// No description provided for @deleteBillConfirmBody.
+  ///
+  /// In id, this message translates to:
+  /// **'{title} ({total}) akan dipindahkan ke Bill terhapus. Pengguna Plus bisa memulihkannya dalam 30 hari.'**
+  String deleteBillConfirmBody(String title, String total);
+
+  /// No description provided for @deleteBillSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill dipindahkan ke Bill terhapus.'**
+  String get deleteBillSuccess;
+
   /// No description provided for @errorGeneric.
   ///
   /// In id, this message translates to:

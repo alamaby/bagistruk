@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/error/failure.dart';
@@ -5,7 +6,9 @@ import '../../../core/error/result.dart';
 import '../../../core/billing/plus_feature_limits.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
+import '../../../domain/entities/deleted_bill.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../insights/providers/monthly_spending_insight_provider.dart';
 
 part 'bill_list_notifier.g.dart';
 
@@ -35,6 +38,54 @@ class BillListNotifier extends _$BillListNotifier {
   Future<void> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => build());
+  }
+
+  Future<Result<void>> deleteBill(String id) async {
+    final repo = ref.read(billRepositoryProvider);
+    final result = await repo.deleteBill(id);
+    if (result is Success<void>) {
+      ref.invalidate(monthlySpendingInsightProvider);
+      await refresh();
+    }
+    return result;
+  }
+}
+
+final deletedBillListProvider =
+    AutoDisposeAsyncNotifierProvider<
+      DeletedBillListNotifier,
+      List<DeletedBill>
+    >(DeletedBillListNotifier.new);
+
+class DeletedBillListNotifier
+    extends AutoDisposeAsyncNotifier<List<DeletedBill>> {
+  @override
+  Future<List<DeletedBill>> build() async {
+    final repo = ref.watch(billRepositoryProvider);
+    final creditStatus = await ref.watch(ocrCreditStatusProvider.future);
+    if (!(creditStatus?.isPlus ?? false)) return const [];
+
+    final result = await repo.listDeletedBills();
+    return switch (result) {
+      Success(:final data) => data,
+      ResultFailure(:final failure) => throw _FailureException(failure),
+    };
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => build());
+  }
+
+  Future<Result<void>> restoreBill(String id) async {
+    final repo = ref.read(billRepositoryProvider);
+    final result = await repo.restoreDeletedBill(id);
+    if (result is Success<void>) {
+      ref.invalidate(billListProvider);
+      ref.invalidate(monthlySpendingInsightProvider);
+      await refresh();
+    }
+    return result;
   }
 }
 

@@ -2,6 +2,7 @@ import '../../core/error/exception_mapper.dart';
 import '../../core/error/result.dart';
 import '../../domain/entities/assignment.dart';
 import '../../domain/entities/bill.dart';
+import '../../domain/entities/deleted_bill.dart';
 import '../../domain/entities/item.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/repositories/i_bill_repository.dart';
@@ -37,6 +38,28 @@ class BillRepositoryImpl implements IBillRepository {
   @override
   Future<Result<void>> deleteBill(String id) =>
       guardAsync(() => _ds.deleteBill(id));
+
+  @override
+  Future<Result<void>> restoreDeletedBill(String id) =>
+      guardAsync(() => _ds.restoreDeletedBill(id));
+
+  @override
+  Future<Result<List<DeletedBill>>> listDeletedBills() => guardAsync(
+    () async => (await _ds.listDeletedBills())
+        .map(
+          (d) => DeletedBill(
+            id: d.id,
+            title: d.title,
+            totalAmount: d.totalAmount,
+            currencyCode: d.currencyCode,
+            isSettled: d.isSettled,
+            createdAt: d.createdAt,
+            deletedAt: d.deletedAt,
+            deleteExpiresAt: d.deleteExpiresAt,
+          ),
+        )
+        .toList(growable: false),
+  );
 
   @override
   Future<Result<List<Item>>> listItems(String billId) => guardAsync(

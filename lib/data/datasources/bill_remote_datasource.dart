@@ -5,6 +5,44 @@ import '../dtos/bill_dto.dart';
 import '../dtos/item_dto.dart';
 import '../dtos/participant_dto.dart';
 
+class DeletedBillDto {
+  const DeletedBillDto({
+    required this.id,
+    required this.title,
+    required this.totalAmount,
+    required this.currencyCode,
+    required this.isSettled,
+    required this.createdAt,
+    required this.deletedAt,
+    required this.deleteExpiresAt,
+  });
+
+  final String id;
+  final String title;
+  final double totalAmount;
+  final String currencyCode;
+  final bool isSettled;
+  final DateTime createdAt;
+  final DateTime deletedAt;
+  final DateTime deleteExpiresAt;
+
+  factory DeletedBillDto.fromJson(Map<String, dynamic> json) => DeletedBillDto(
+    id: json['id'].toString(),
+    title: json['title'].toString(),
+    totalAmount: _readDouble(json['total_amount']),
+    currencyCode: json['currency_code']?.toString() ?? 'IDR',
+    isSettled: json['is_settled'] == true,
+    createdAt: DateTime.parse(json['created_at'].toString()),
+    deletedAt: DateTime.parse(json['deleted_at'].toString()),
+    deleteExpiresAt: DateTime.parse(json['delete_expires_at'].toString()),
+  );
+
+  static double _readDouble(Object? value) {
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+}
+
 /// Thin wrapper around PostgREST. No error handling here — exceptions bubble
 /// up to be translated centrally by [guardAsync] in the repository layer.
 class BillRemoteDataSource {
@@ -41,7 +79,21 @@ class BillRemoteDataSource {
   }
 
   Future<void> deleteBill(String id) =>
-      _client.from(_bills).delete().eq('id', id);
+      _client.rpc('soft_delete_bill', params: {'p_bill_id': id});
+
+  Future<void> restoreDeletedBill(String id) =>
+      _client.rpc('restore_deleted_bill', params: {'p_bill_id': id});
+
+  Future<List<DeletedBillDto>> listDeletedBills() async {
+    final rows = await _client
+        .from(_bills)
+        .select(
+          'id,title,total_amount,currency_code,is_settled,created_at,deleted_at,delete_expires_at',
+        )
+        .not('deleted_at', 'is', null)
+        .order('deleted_at', ascending: false);
+    return rows.map((r) => DeletedBillDto.fromJson(r)).toList(growable: false);
+  }
 
   Future<List<ItemDto>> listItems(String billId) async {
     final rows = await _client.from(_items).select().eq('bill_id', billId);

@@ -24,6 +24,9 @@ class Routes {
   static const String billDetail = '/detail/:billId';
   static const String billDetailName = 'bill-detail';
 
+  static const String deletedBills = '/deleted-bills';
+  static const String deletedBillsName = 'deleted-bills';
+
   static const String login = '/login';
   static const String loginName = 'login';
 

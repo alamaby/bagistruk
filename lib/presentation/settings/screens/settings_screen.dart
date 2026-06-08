@@ -142,6 +142,18 @@ class _SettingsBody extends ConsumerWidget {
           ),
         if (!isAnon)
           ListTile(
+            leading: const Icon(Icons.restore_from_trash_outlined),
+            title: Text(l10n.deletedBillsTitle),
+            subtitle: Text(
+              (creditStatus?.isPlus ?? false)
+                  ? l10n.deletedBillsSettingsSubtitle
+                  : l10n.deletedBillsSettingsLockedSubtitle,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(Routes.deletedBillsName),
+          ),
+        if (!isAnon)
+          ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(l10n.changeName),
             onTap: () => _onChangeName(context, ref),

@@ -110,6 +110,32 @@
   },
   "deleteAccountInProgress": "Menghapus akun...",
   "deleteAccountSuccess": "Akun dan data tersimpan sudah dihapus.",
+  "deletedBillsTitle": "Bill terhapus",
+  "deletedBillsSettingsSubtitle": "Pulihkan bill yang dihapus dalam 30 hari terakhir.",
+  "deletedBillsSettingsLockedSubtitle": "Khusus Plus. Pulihkan bill yang tidak sengaja dihapus dalam 30 hari.",
+  "deletedBillsLockedTitle": "Pulihkan bill terhapus dengan Plus",
+  "deletedBillsLockedSubtitle": "Bill terhapus disimpan selama 30 hari agar pengguna Plus bisa memulihkan penghapusan tidak sengaja.",
+  "deletedBillsEmpty": "Belum ada bill terhapus.",
+  "deletedBillDeletedAt": "Dihapus {date}",
+  "@deletedBillDeletedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "deletedBillExpiresAt": "Bisa dipulihkan sampai {date}",
+  "@deletedBillExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "deletedBillRestoreAction": "Pulihkan",
+  "deletedBillRestored": "Bill dipulihkan.",
+  "deleteBillAction": "Hapus",
+  "deleteBillConfirmTitle": "Hapus bill ini?",
+  "deleteBillConfirmBody": "{title} ({total}) akan dipindahkan ke Bill terhapus. Pengguna Plus bisa memulihkannya dalam 30 hari.",
+  "@deleteBillConfirmBody": {
+    "placeholders": {
+      "title": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "deleteBillSuccess": "Bill dipindahkan ke Bill terhapus.",
 
   "errorGeneric": "Terjadi kesalahan. Coba lagi.",
   "loading": "Memuat...",

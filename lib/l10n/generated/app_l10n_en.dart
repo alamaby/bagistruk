@@ -291,6 +291,57 @@ class AppL10nEn extends AppL10n {
       'Your account and saved data have been deleted.';
 
   @override
+  String get deletedBillsTitle => 'Deleted bills';
+
+  @override
+  String get deletedBillsSettingsSubtitle =>
+      'Restore bills deleted in the last 30 days.';
+
+  @override
+  String get deletedBillsSettingsLockedSubtitle =>
+      'Plus only. Restore accidentally deleted bills within 30 days.';
+
+  @override
+  String get deletedBillsLockedTitle => 'Restore deleted bills with Plus';
+
+  @override
+  String get deletedBillsLockedSubtitle =>
+      'Deleted bills are kept for 30 days so Plus users can recover accidental deletions.';
+
+  @override
+  String get deletedBillsEmpty => 'No deleted bills.';
+
+  @override
+  String deletedBillDeletedAt(String date) {
+    return 'Deleted $date';
+  }
+
+  @override
+  String deletedBillExpiresAt(String date) {
+    return 'Restorable until $date';
+  }
+
+  @override
+  String get deletedBillRestoreAction => 'Restore';
+
+  @override
+  String get deletedBillRestored => 'Bill restored.';
+
+  @override
+  String get deleteBillAction => 'Delete';
+
+  @override
+  String get deleteBillConfirmTitle => 'Delete this bill?';
+
+  @override
+  String deleteBillConfirmBody(String title, String total) {
+    return '$title ($total) will move to Deleted bills. Plus users can restore it within 30 days.';
+  }
+
+  @override
+  String get deleteBillSuccess => 'Bill moved to Deleted bills.';
+
+  @override
   String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override

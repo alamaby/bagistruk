@@ -1,6 +1,7 @@
 import '../../core/error/result.dart';
 import '../entities/assignment.dart';
 import '../entities/bill.dart';
+import '../entities/deleted_bill.dart';
 import '../entities/item.dart';
 import '../entities/participant.dart';
 
@@ -10,6 +11,8 @@ abstract interface class IBillRepository {
   Future<Result<Bill>> createBill(Bill bill);
   Future<Result<Bill>> updateBill(Bill bill);
   Future<Result<void>> deleteBill(String id);
+  Future<Result<void>> restoreDeletedBill(String id);
+  Future<Result<List<DeletedBill>>> listDeletedBills();
 
   Future<Result<List<Item>>> listItems(String billId);
   Future<Result<List<Item>>> upsertItems(List<Item> items);

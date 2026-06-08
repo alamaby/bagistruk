@@ -110,6 +110,32 @@
   },
   "deleteAccountInProgress": "Deleting account...",
   "deleteAccountSuccess": "Your account and saved data have been deleted.",
+  "deletedBillsTitle": "Deleted bills",
+  "deletedBillsSettingsSubtitle": "Restore bills deleted in the last 30 days.",
+  "deletedBillsSettingsLockedSubtitle": "Plus only. Restore accidentally deleted bills within 30 days.",
+  "deletedBillsLockedTitle": "Restore deleted bills with Plus",
+  "deletedBillsLockedSubtitle": "Deleted bills are kept for 30 days so Plus users can recover accidental deletions.",
+  "deletedBillsEmpty": "No deleted bills.",
+  "deletedBillDeletedAt": "Deleted {date}",
+  "@deletedBillDeletedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "deletedBillExpiresAt": "Restorable until {date}",
+  "@deletedBillExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "deletedBillRestoreAction": "Restore",
+  "deletedBillRestored": "Bill restored.",
+  "deleteBillAction": "Delete",
+  "deleteBillConfirmTitle": "Delete this bill?",
+  "deleteBillConfirmBody": "{title} ({total}) will move to Deleted bills. Plus users can restore it within 30 days.",
+  "@deleteBillConfirmBody": {
+    "placeholders": {
+      "title": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "deleteBillSuccess": "Bill moved to Deleted bills.",
 
   "errorGeneric": "Something went wrong. Please try again.",
   "loading": "Loading...",
