@@ -293,6 +293,72 @@ abstract class AppL10n {
   /// **'Pulihkan pembelian'**
   String get billingRestorePurchases;
 
+  /// No description provided for @billingUnavailable.
+  ///
+  /// In id, this message translates to:
+  /// **'Google Play Billing belum tersedia di perangkat ini.'**
+  String get billingUnavailable;
+
+  /// No description provided for @billingProductsNotActive.
+  ///
+  /// In id, this message translates to:
+  /// **'Beberapa produk belum aktif di Play Console.'**
+  String get billingProductsNotActive;
+
+  /// No description provided for @billingProductsLoadFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Produk belum bisa dimuat.'**
+  String get billingProductsLoadFailed;
+
+  /// No description provided for @billingOpeningPlay.
+  ///
+  /// In id, this message translates to:
+  /// **'Membuka Google Play...'**
+  String get billingOpeningPlay;
+
+  /// No description provided for @billingPurchaseStartFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembelian belum bisa dimulai.'**
+  String get billingPurchaseStartFailed;
+
+  /// No description provided for @billingRestoringPurchases.
+  ///
+  /// In id, this message translates to:
+  /// **'Memulihkan pembelian...'**
+  String get billingRestoringPurchases;
+
+  /// No description provided for @billingRestoreFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembelian belum bisa dipulihkan.'**
+  String get billingRestoreFailed;
+
+  /// No description provided for @billingPaymentPending.
+  ///
+  /// In id, this message translates to:
+  /// **'Menunggu pembayaran Google Play...'**
+  String get billingPaymentPending;
+
+  /// No description provided for @billingPurchaseFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembelian dibatalkan atau gagal.'**
+  String get billingPurchaseFailed;
+
+  /// No description provided for @billingPurchaseSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembelian berhasil diproses.'**
+  String get billingPurchaseSuccess;
+
+  /// No description provided for @billingPurchaseVerifyFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Pembelian belum bisa diverifikasi.'**
+  String get billingPurchaseVerifyFailed;
+
   /// No description provided for @changeName.
   ///
   /// In id, this message translates to:

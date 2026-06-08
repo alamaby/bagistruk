@@ -580,7 +580,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
         if (!mounted) return;
         setState(() {
           _products = const [];
-          _message = 'Google Play Billing belum tersedia di perangkat ini.';
+          _message = AppL10n.of(context).billingUnavailable;
         });
         return;
       }
@@ -590,11 +590,11 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
         _products = response.productDetails;
         _message = response.notFoundIDs.isEmpty
             ? null
-            : 'Beberapa produk belum aktif di Play Console.';
+            : AppL10n.of(context).billingProductsNotActive;
       });
     } catch (_) {
       if (!mounted) return;
-      setState(() => _message = 'Produk belum bisa dimuat.');
+      setState(() => _message = AppL10n.of(context).billingProductsLoadFailed);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -603,7 +603,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
   Future<void> _buy(ProductDetails product) async {
     setState(() {
       _busy = true;
-      _message = 'Membuka Google Play...';
+      _message = AppL10n.of(context).billingOpeningPlay;
     });
     try {
       await ref.read(googlePlayBillingServiceProvider).buy(product);
@@ -611,7 +611,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _message = 'Pembelian belum bisa dimulai.';
+        _message = AppL10n.of(context).billingPurchaseStartFailed;
       });
     }
   }
@@ -619,7 +619,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
   Future<void> _restore() async {
     setState(() {
       _busy = true;
-      _message = 'Memulihkan pembelian...';
+      _message = AppL10n.of(context).billingRestoringPurchases;
     });
     try {
       await ref.read(googlePlayBillingServiceProvider).restorePurchases();
@@ -627,7 +627,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _message = 'Pembelian belum bisa dipulihkan.';
+        _message = AppL10n.of(context).billingRestoreFailed;
       });
     }
   }
@@ -638,14 +638,14 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       if (purchase.status == PurchaseStatus.pending) {
         setState(() {
           _busy = true;
-          _message = 'Menunggu pembayaran Google Play...';
+          _message = AppL10n.of(context).billingPaymentPending;
         });
         continue;
       }
       if (purchase.status == PurchaseStatus.error) {
         setState(() {
           _busy = false;
-          _message = 'Pembelian dibatalkan atau gagal.';
+          _message = AppL10n.of(context).billingPurchaseFailed;
         });
         continue;
       }
@@ -658,12 +658,12 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
           ref.invalidate(ocrCreditStatusProvider);
           setState(() {
             _busy = false;
-            _message = 'Pembelian berhasil diproses.';
+            _message = AppL10n.of(context).billingPurchaseSuccess;
           });
         case ResultFailure<void>():
           setState(() {
             _busy = false;
-            _message = 'Pembelian belum bisa diverifikasi.';
+            _message = AppL10n.of(context).billingPurchaseVerifyFailed;
           });
       }
     }

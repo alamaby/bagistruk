@@ -114,6 +114,41 @@ class AppL10nEn extends AppL10n {
   String get billingRestorePurchases => 'Restore purchases';
 
   @override
+  String get billingUnavailable =>
+      'Google Play Billing is not available on this device.';
+
+  @override
+  String get billingProductsNotActive =>
+      'Some products are not active in Play Console yet.';
+
+  @override
+  String get billingProductsLoadFailed => 'Products could not be loaded.';
+
+  @override
+  String get billingOpeningPlay => 'Opening Google Play...';
+
+  @override
+  String get billingPurchaseStartFailed => 'Purchase could not be started.';
+
+  @override
+  String get billingRestoringPurchases => 'Restoring purchases...';
+
+  @override
+  String get billingRestoreFailed => 'Purchases could not be restored.';
+
+  @override
+  String get billingPaymentPending => 'Waiting for Google Play payment...';
+
+  @override
+  String get billingPurchaseFailed => 'Purchase was canceled or failed.';
+
+  @override
+  String get billingPurchaseSuccess => 'Purchase processed successfully.';
+
+  @override
+  String get billingPurchaseVerifyFailed => 'Purchase could not be verified.';
+
+  @override
   String get changeName => 'Change Name';
 
   @override

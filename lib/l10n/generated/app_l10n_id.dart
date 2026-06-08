@@ -113,6 +113,42 @@ class AppL10nId extends AppL10n {
   String get billingRestorePurchases => 'Pulihkan pembelian';
 
   @override
+  String get billingUnavailable =>
+      'Google Play Billing belum tersedia di perangkat ini.';
+
+  @override
+  String get billingProductsNotActive =>
+      'Beberapa produk belum aktif di Play Console.';
+
+  @override
+  String get billingProductsLoadFailed => 'Produk belum bisa dimuat.';
+
+  @override
+  String get billingOpeningPlay => 'Membuka Google Play...';
+
+  @override
+  String get billingPurchaseStartFailed => 'Pembelian belum bisa dimulai.';
+
+  @override
+  String get billingRestoringPurchases => 'Memulihkan pembelian...';
+
+  @override
+  String get billingRestoreFailed => 'Pembelian belum bisa dipulihkan.';
+
+  @override
+  String get billingPaymentPending => 'Menunggu pembayaran Google Play...';
+
+  @override
+  String get billingPurchaseFailed => 'Pembelian dibatalkan atau gagal.';
+
+  @override
+  String get billingPurchaseSuccess => 'Pembelian berhasil diproses.';
+
+  @override
+  String get billingPurchaseVerifyFailed =>
+      'Pembelian belum bisa diverifikasi.';
+
+  @override
   String get changeName => 'Ubah Nama';
 
   @override
