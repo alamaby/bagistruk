@@ -100,6 +100,20 @@ VALUES (
 );
 ```
 
+Example Nvidia fallback:
+
+```sql
+INSERT INTO llm_configs (provider_name, api_key, base_url, model_name, priority, is_active)
+VALUES (
+  'nvidia',
+  '<YOUR_NVIDIA_API_KEY>',
+  'https://integrate.api.nvidia.com/v1',
+  'meta/llama-4-maverick-17b-128e-instruct',
+  3,
+  true
+);
+```
+
 See [PROJECT_SUMMARY.md §5](PROJECT_SUMMARY.md) for adding fallback providers.
 
 ### 4. Enable Anonymous Sign-In

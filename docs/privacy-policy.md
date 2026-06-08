@@ -45,7 +45,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 
 ## Storage And Processing
 
-App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini and OpenRouter. API keys for those providers are stored server-side and are not bundled into the mobile app.
+App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, and Nvidia NIM. API keys for those providers are stored server-side and are not bundled into the mobile app.
 
 ## Third-Party Services
 
@@ -136,7 +136,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 
 ## Penyimpanan Dan Pemrosesan
 
-Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini dan OpenRouter. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
+Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, dan Nvidia NIM. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
 
 ## Layanan Pihak Ketiga
 
