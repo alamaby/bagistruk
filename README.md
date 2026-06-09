@@ -86,33 +86,60 @@ supabase db push
 
 ### 3. LLM provider
 
-Insert at least one active row into `llm_configs`:
+Insert at least one active default row into `llm_configs`:
 
 ```sql
-INSERT INTO llm_configs (provider_name, api_key, base_url, model_name, priority, is_active)
+INSERT INTO llm_configs (
+  provider_name,
+  api_key,
+  base_url,
+  model_name,
+  priority,
+  is_active,
+  route_scope,
+  fallback_policy
+)
 VALUES (
   'gemini',
   '<YOUR_GEMINI_API_KEY>',
   'https://generativelanguage.googleapis.com',
   'gemini-2.0-flash',
   1,
-  true
+  true,
+  'default',
+  'retryable_only'
 );
 ```
 
 Example Nvidia fallback:
 
 ```sql
-INSERT INTO llm_configs (provider_name, api_key, base_url, model_name, priority, is_active)
+INSERT INTO llm_configs (
+  provider_name,
+  api_key,
+  base_url,
+  model_name,
+  priority,
+  is_active,
+  route_scope,
+  fallback_policy
+)
 VALUES (
   'nvidia',
   '<YOUR_NVIDIA_API_KEY>',
   'https://integrate.api.nvidia.com/v1',
   'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
   3,
-  true
+  true,
+  'default',
+  'retryable_only'
 );
 ```
+
+Use `route_scope = 'plus_priority'` for a key/model that Plus users should try
+before the default chain. Use `route_scope = 'experiment'` together with
+`llm_user_overrides` to route one selected app user to a provider/model test
+without exposing provider selection in the client.
 
 See [PROJECT_SUMMARY.md §5](PROJECT_SUMMARY.md) for adding fallback providers.
 
