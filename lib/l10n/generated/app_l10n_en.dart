@@ -309,6 +309,12 @@ class AppL10nEn extends AppL10n {
   String get currencyLabel => 'Default Currency';
 
   @override
+  String get currencySearchHint => 'Search currency';
+
+  @override
+  String get currencySearchEmpty => 'No currency found.';
+
+  @override
   String get languageLabel => 'Language';
 
   @override

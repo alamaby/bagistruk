@@ -108,6 +108,8 @@
   "resetPasswordSent": "Email reset password telah dikirim.",
 
   "currencyLabel": "Mata Uang Default",
+  "currencySearchHint": "Cari mata uang",
+  "currencySearchEmpty": "Mata uang tidak ditemukan.",
   "languageLabel": "Bahasa",
   "themeLabel": "Tema Tampilan",
 

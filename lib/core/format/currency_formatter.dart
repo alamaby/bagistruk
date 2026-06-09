@@ -7,6 +7,7 @@ class CurrencyDefinition {
     required this.locale,
     required this.symbol,
     required this.decimalDigits,
+    this.searchAliases = const <String>[],
   });
 
   final String code;
@@ -14,6 +15,7 @@ class CurrencyDefinition {
   final String locale;
   final String symbol;
   final int decimalDigits;
+  final List<String> searchAliases;
 }
 
 /// Currency formatting per ISO-4217 code.
@@ -123,6 +125,56 @@ class CurrencyFormatter {
       decimalDigits: 2,
     ),
     CurrencyDefinition(
+      code: 'EUR',
+      displayName: 'Euro (EUR)',
+      locale: 'es_ES',
+      symbol: '€',
+      decimalDigits: 2,
+      searchAliases: [
+        'Europe',
+        'European Union',
+        'Spain',
+        'Spanyol',
+        'Portugal',
+        'Italy',
+        'Italia',
+        'France',
+        'Prancis',
+      ],
+    ),
+    CurrencyDefinition(
+      code: 'GBP',
+      displayName: 'British Pound Sterling (GBP)',
+      locale: 'en_GB',
+      symbol: '£',
+      decimalDigits: 2,
+      searchAliases: ['Pound', 'Poundsterling', 'United Kingdom', 'UK'],
+    ),
+    CurrencyDefinition(
+      code: 'RUB',
+      displayName: 'Russian Ruble (RUB)',
+      locale: 'ru_RU',
+      symbol: '₽',
+      decimalDigits: 2,
+      searchAliases: ['Russia', 'Rusia'],
+    ),
+    CurrencyDefinition(
+      code: 'BRL',
+      displayName: 'Brazilian Real (BRL)',
+      locale: 'pt_BR',
+      symbol: r'R$',
+      decimalDigits: 2,
+      searchAliases: ['Brazil', 'Brasil'],
+    ),
+    CurrencyDefinition(
+      code: 'MXN',
+      displayName: 'Mexican Peso (MXN)',
+      locale: 'es_MX',
+      symbol: r'MX$',
+      decimalDigits: 2,
+      searchAliases: ['Mexico', 'Meksiko'],
+    ),
+    CurrencyDefinition(
       code: 'AUD',
       displayName: 'Australian Dollar (AUD)',
       locale: 'en_AU',
@@ -163,4 +215,15 @@ class CurrencyFormatter {
   /// Long display name shown in the picker dialog. Kept here so the screen
   /// does not need to maintain a parallel mapping.
   static String displayName(String code) => definitionOf(code).displayName;
+
+  static bool matchesQuery(CurrencyDefinition definition, String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) return true;
+
+    return definition.code.toLowerCase().contains(normalized) ||
+        definition.displayName.toLowerCase().contains(normalized) ||
+        definition.searchAliases.any(
+          (alias) => alias.toLowerCase().contains(normalized),
+        );
+  }
 }

@@ -641,6 +641,18 @@ abstract class AppL10n {
   /// **'Mata Uang Default'**
   String get currencyLabel;
 
+  /// No description provided for @currencySearchHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Cari mata uang'**
+  String get currencySearchHint;
+
+  /// No description provided for @currencySearchEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Mata uang tidak ditemukan.'**
+  String get currencySearchEmpty;
+
   /// No description provided for @languageLabel.
   ///
   /// In id, this message translates to:

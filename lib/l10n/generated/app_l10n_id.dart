@@ -309,6 +309,12 @@ class AppL10nId extends AppL10n {
   String get currencyLabel => 'Mata Uang Default';
 
   @override
+  String get currencySearchHint => 'Cari mata uang';
+
+  @override
+  String get currencySearchEmpty => 'Mata uang tidak ditemukan.';
+
+  @override
   String get languageLabel => 'Bahasa';
 
   @override

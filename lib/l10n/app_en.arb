@@ -108,6 +108,8 @@
   "resetPasswordSent": "Password reset email sent.",
 
   "currencyLabel": "Default Currency",
+  "currencySearchHint": "Search currency",
+  "currencySearchEmpty": "No currency found.",
   "languageLabel": "Language",
   "themeLabel": "Theme",
 
