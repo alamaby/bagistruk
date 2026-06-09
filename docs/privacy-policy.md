@@ -1,6 +1,6 @@
 # Privacy Policy — BagiStruk
 
-**Effective date:** 2026-05-30
+**Effective date:** 2026-06-09
 
 This policy explains how BagiStruk collects, uses, stores, and deletes data. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -16,7 +16,7 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - Profile preferences: display name, default currency, language preference, and theme preference.
 - App activity metadata: `last_active_at`, used to understand when an account was last active and to support inactivity cleanup.
 - Receipt photos: images you choose or capture for OCR processing.
-- Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, and settlement status.
+- Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, settlement status, deleted-bill recovery metadata, exports generated on device, and optional transfer bank information used in settlement messages.
 - OCR credit data: plan/entitlement status, monthly credit grants, credit usage, and audit records needed to enforce scan limits.
 - Google Play Billing data when purchases are available: product IDs, purchase tokens, order IDs, subscription status/expiry, and verification responses needed to grant Plus access or OCR credit packs.
 - Support and reminder data: email address and inactivity reminder timestamps when reminders are sent.
@@ -33,9 +33,9 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 
 - To authenticate users and keep sessions active.
 - To process receipt photos and extract bill information.
-- To save, display, edit, split, and settle bills.
+- To save, display, edit, split, settle, share, export, delete, and restore bills when the feature is available.
 - To preserve anonymous data when a user upgrades to a registered account.
-- To enforce OCR credit limits, including anonymous, free, and Plus plan limits.
+- To enforce OCR credit limits and feature access, including anonymous, Free, Plus, history windows, export access, deleted-bill recovery, per-bill currency override, transfer bank information, and monthly insights.
 - To verify Google Play purchases server-side and grant Plus subscriptions or one-time OCR credit packs.
 - To store user preferences and personalize the app.
 - To track last activity for account retention and cleanup.
@@ -91,7 +91,7 @@ For privacy questions or deletion requests, contact: **alam.aby.b@gmail.com**
 
 # Kebijakan Privasi — BagiStruk
 
-**Tanggal berlaku:** 2026-05-30
+**Tanggal berlaku:** 2026-06-09
 
 Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimpan, dan menghapus data. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -107,7 +107,7 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Preferensi profil: nama tampilan, mata uang default, bahasa, dan tema.
 - Metadata aktivitas aplikasi: `last_active_at`, digunakan untuk mengetahui kapan akun terakhir aktif dan mendukung pembersihan akun tidak aktif.
 - Foto struk: gambar yang Anda pilih atau ambil untuk pemrosesan OCR.
-- Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, dan status pembayaran.
+- Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, status pembayaran, metadata pemulihan bill terhapus, export yang dibuat di perangkat, dan info bank transfer opsional untuk pesan settlement.
 - Data credit OCR: status plan/entitlement, grant credit bulanan, penggunaan credit, dan audit yang dibutuhkan untuk menerapkan batas scan.
 - Data Google Play Billing saat pembelian tersedia: product ID, purchase token, order ID, status/expiry subscription, dan respons verifikasi yang dibutuhkan untuk memberi akses Plus atau paket credit OCR.
 - Data dukungan dan reminder: alamat email dan timestamp reminder tidak aktif saat reminder dikirim.
@@ -124,9 +124,9 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 
 - Mengautentikasi pengguna dan menjaga sesi tetap aktif.
 - Memproses foto struk dan mengekstrak informasi tagihan.
-- Menyimpan, menampilkan, mengedit, membagi, dan menyelesaikan tagihan.
+- Menyimpan, menampilkan, mengedit, membagi, menyelesaikan, membagikan, mengekspor, menghapus, dan memulihkan tagihan saat fitur tersedia.
 - Mempertahankan data anonim saat pengguna upgrade ke akun terdaftar.
-- Menerapkan batas credit OCR, termasuk batas untuk pengguna anonim, Free, dan Plus.
+- Menerapkan batas credit OCR dan akses fitur, termasuk batas pengguna anonim, Free, Plus, jendela History, akses export, pemulihan bill terhapus, penggantian currency per bill, info bank transfer, dan insight bulanan.
 - Memverifikasi pembelian Google Play dari sisi server dan memberi subscription Plus atau paket credit OCR sekali beli.
 - Menyimpan preferensi pengguna dan menyesuaikan pengalaman aplikasi.
 - Melacak aktivitas terakhir untuk retensi dan pembersihan akun.

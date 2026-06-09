@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder settings</title>
+  <desc id="desc">Ilustrasi placeholder tab Settings dengan account, credit, billing, preference, dan fitur Plus.</desc>
+  <rect width="960" height="540" rx="28" fill="#f8fafc"/>
+  <rect x="74" y="42" width="326" height="456" rx="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="108" y="90" fill="#0f172a" font-family="Arial, sans-serif" font-size="26" font-weight="700">Settings</text>
+  <text x="108" y="130" fill="#0f766e" font-family="Arial, sans-serif" font-size="13" font-weight="700">ACCOUNT</text>
+  <rect x="108" y="148" width="252" height="46" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="130" y="177" fill="#0f172a" font-family="Arial, sans-serif" font-size="15">Credit scan 18/20</text>
+  <rect x="108" y="206" width="252" height="46" rx="12" fill="#ecfeff" stroke="#bae6fd"/>
+  <text x="130" y="235" fill="#075985" font-family="Arial, sans-serif" font-size="15">Plus dan paket credit</text>
+  <text x="108" y="284" fill="#0f766e" font-family="Arial, sans-serif" font-size="13" font-weight="700">PREFERENCES</text>
+  <rect x="108" y="302" width="252" height="46" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="130" y="331" fill="#0f172a" font-family="Arial, sans-serif" font-size="15">Currency: IDR</text>
+  <rect x="108" y="360" width="252" height="46" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="130" y="389" fill="#0f172a" font-family="Arial, sans-serif" font-size="15">Language: ID</text>
+  <rect x="108" y="418" width="252" height="46" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="130" y="447" fill="#0f172a" font-family="Arial, sans-serif" font-size="15">Theme: System</text>
+  <rect x="478" y="76" width="386" height="388" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="514" y="128" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Yang diatur di sini</text>
+  <text x="514" y="186" fill="#334155" font-family="Arial, sans-serif" font-size="18">Akun, login, logout, hapus akun</text>
+  <text x="514" y="232" fill="#334155" font-family="Arial, sans-serif" font-size="18">Currency, bahasa, dan tema</text>
+  <text x="514" y="278" fill="#334155" font-family="Arial, sans-serif" font-size="18">Billing Plus dan top-up credit</text>
+  <text x="514" y="324" fill="#334155" font-family="Arial, sans-serif" font-size="18">Plus: info bank dan bill terhapus</text>
+  <rect x="514" y="388" width="326" height="38" rx="10" fill="#fef3c7"/>
+  <text x="534" y="413" fill="#92400e" font-family="Arial, sans-serif" font-size="15">Ganti dengan screenshot Settings asli</text>
+</svg>

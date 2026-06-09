@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder perbandingan plan</title>
+  <desc id="desc">Ilustrasi placeholder perbandingan Anonymous, Free, dan Plus.</desc>
+  <rect width="960" height="540" rx="28" fill="#f8fafc"/>
+  <text x="72" y="82" fill="#0f172a" font-family="Arial, sans-serif" font-size="34" font-weight="700">Perbedaan akses</text>
+  <rect x="72" y="122" width="240" height="332" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <rect x="360" y="122" width="240" height="332" rx="24" fill="#ecfeff" stroke="#0891b2" stroke-width="3"/>
+  <rect x="648" y="122" width="240" height="332" rx="24" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="112" y="176" fill="#0f172a" font-family="Arial, sans-serif" font-size="26" font-weight="700">Anonymous</text>
+  <text x="400" y="176" fill="#0f172a" font-family="Arial, sans-serif" font-size="26" font-weight="700">Free</text>
+  <text x="688" y="176" fill="#0f172a" font-family="Arial, sans-serif" font-size="26" font-weight="700">Plus</text>
+  <text x="112" y="232" fill="#334155" font-family="Arial, sans-serif" font-size="18">5 scan lifetime</text>
+  <text x="112" y="276" fill="#334155" font-family="Arial, sans-serif" font-size="18">History terkunci</text>
+  <text x="112" y="320" fill="#334155" font-family="Arial, sans-serif" font-size="18">Daftar untuk simpan</text>
+  <text x="400" y="232" fill="#334155" font-family="Arial, sans-serif" font-size="18">20 scan/bulan</text>
+  <text x="400" y="276" fill="#334155" font-family="Arial, sans-serif" font-size="18">History 7 hari</text>
+  <text x="400" y="320" fill="#334155" font-family="Arial, sans-serif" font-size="18">Iklan bisa tampil</text>
+  <text x="688" y="232" fill="#166534" font-family="Arial, sans-serif" font-size="18">60 scan/bulan</text>
+  <text x="688" y="276" fill="#166534" font-family="Arial, sans-serif" font-size="18">History 90 hari</text>
+  <text x="688" y="320" fill="#166534" font-family="Arial, sans-serif" font-size="18">Tanpa iklan</text>
+  <text x="688" y="364" fill="#166534" font-family="Arial, sans-serif" font-size="18">Export, insight, restore</text>
+  <rect x="272" y="476" width="416" height="38" rx="10" fill="#fef3c7"/>
+  <text x="294" y="501" fill="#92400e" font-family="Arial, sans-serif" font-size="15">Ganti dengan screenshot paywall/billing saat tersedia</text>
+</svg>

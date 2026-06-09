@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder flow scan struk</title>
+  <desc id="desc">Ilustrasi placeholder layar Scan dengan foto struk, tombol Add Photos, dan tombol Scan.</desc>
+  <rect width="960" height="540" rx="28" fill="#f8fafc"/>
+  <rect x="60" y="44" width="250" height="452" rx="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <rect x="84" y="84" width="202" height="254" rx="18" fill="#ecfeff" stroke="#0891b2" stroke-width="3"/>
+  <rect x="126" y="118" width="118" height="178" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
+  <path d="M146 150h78M146 180h62M146 210h84M146 240h54M146 270h76" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="326" r="24" fill="#14b8a6"/>
+  <path d="M245 326h22M256 315v22" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <rect x="84" y="374" width="92" height="42" rx="12" fill="#e2e8f0"/>
+  <rect x="194" y="374" width="92" height="42" rx="12" fill="#0f766e"/>
+  <text x="103" y="401" fill="#0f172a" font-family="Arial, sans-serif" font-size="14" font-weight="700">Add</text>
+  <text x="224" y="401" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Scan</text>
+  <text x="84" y="458" fill="#475569" font-family="Arial, sans-serif" font-size="15">Scan tab</text>
+  <path d="M346 270h88" stroke="#0f766e" stroke-width="5" stroke-linecap="round"/>
+  <path d="M418 252l22 18-22 18" fill="none" stroke="#0f766e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="480" y="78" width="360" height="384" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="516" y="124" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Credit check</text>
+  <rect x="516" y="156" width="286" height="58" rx="16" fill="#dcfce7"/>
+  <text x="542" y="192" fill="#166534" font-family="Arial, sans-serif" font-size="18" font-weight="700">Credit tersedia</text>
+  <text x="516" y="258" fill="#334155" font-family="Arial, sans-serif" font-size="18">1. Pilih kamera atau galeri</text>
+  <text x="516" y="296" fill="#334155" font-family="Arial, sans-serif" font-size="18">2. Preview satu atau banyak foto</text>
+  <text x="516" y="334" fill="#334155" font-family="Arial, sans-serif" font-size="18">3. Tap Scan</text>
+  <text x="516" y="372" fill="#334155" font-family="Arial, sans-serif" font-size="18">4. Tunggu OCR selesai</text>
+  <rect x="516" y="404" width="286" height="38" rx="10" fill="#fef3c7"/>
+  <text x="536" y="429" fill="#92400e" font-family="Arial, sans-serif" font-size="15">Ganti dengan screenshot Scan asli</text>
+</svg>

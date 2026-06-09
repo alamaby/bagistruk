@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder review bill</title>
+  <desc id="desc">Ilustrasi placeholder layar Review bill dengan item, pajak, service, dan total.</desc>
+  <rect width="960" height="540" rx="28" fill="#f8fafc"/>
+  <rect x="82" y="42" width="302" height="456" rx="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="112" y="88" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Review bill</text>
+  <rect x="112" y="112" width="230" height="38" rx="10" fill="#e0f2fe"/>
+  <text x="130" y="137" fill="#075985" font-family="Arial, sans-serif" font-size="15" font-weight="700">Nama merchant</text>
+  <rect x="112" y="172" width="230" height="66" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="130" y="198" fill="#0f172a" font-family="Arial, sans-serif" font-size="15" font-weight="700">Nasi Goreng</text>
+  <text x="130" y="222" fill="#64748b" font-family="Arial, sans-serif" font-size="13">Qty 2 x Rp 22.000</text>
+  <rect x="112" y="250" width="230" height="66" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="130" y="276" fill="#0f172a" font-family="Arial, sans-serif" font-size="15" font-weight="700">Es Teh</text>
+  <text x="130" y="300" fill="#64748b" font-family="Arial, sans-serif" font-size="13">Qty 3 x Rp 6.000</text>
+  <rect x="112" y="338" width="102" height="42" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="130" y="364" fill="#334155" font-family="Arial, sans-serif" font-size="13">Pajak</text>
+  <rect x="232" y="338" width="110" height="42" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="250" y="364" fill="#334155" font-family="Arial, sans-serif" font-size="13">Service</text>
+  <text x="112" y="420" fill="#0f172a" font-family="Arial, sans-serif" font-size="20" font-weight="700">Total Rp 70.000</text>
+  <rect x="112" y="444" width="230" height="38" rx="12" fill="#0f766e"/>
+  <text x="178" y="469" fill="#ffffff" font-family="Arial, sans-serif" font-size="15" font-weight="700">Simpan Bill</text>
+  <rect x="452" y="72" width="392" height="396" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="488" y="124" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Periksa sebelum simpan</text>
+  <path d="M500 178h300M500 228h300M500 278h300M500 328h300" stroke="#cbd5e1" stroke-width="2"/>
+  <circle cx="516" cy="178" r="8" fill="#0f766e"/>
+  <circle cx="516" cy="228" r="8" fill="#0f766e"/>
+  <circle cx="516" cy="278" r="8" fill="#0f766e"/>
+  <circle cx="516" cy="328" r="8" fill="#0f766e"/>
+  <text x="540" y="184" fill="#334155" font-family="Arial, sans-serif" font-size="18">Nama merchant dan tanggal</text>
+  <text x="540" y="234" fill="#334155" font-family="Arial, sans-serif" font-size="18">Nama item, qty, harga</text>
+  <text x="540" y="284" fill="#334155" font-family="Arial, sans-serif" font-size="18">Pajak, service, dan total</text>
+  <text x="540" y="334" fill="#334155" font-family="Arial, sans-serif" font-size="18">Currency per bill untuk Plus</text>
+  <rect x="488" y="392" width="318" height="38" rx="10" fill="#fef3c7"/>
+  <text x="508" y="417" fill="#92400e" font-family="Arial, sans-serif" font-size="15">Ganti dengan screenshot Review asli</text>
+</svg>

@@ -1,6 +1,6 @@
 # Terms of Service — BagiStruk
 
-**Effective date:** 2026-05-30
+**Effective date:** 2026-06-09
 
 These Terms explain the basic rules for using BagiStruk. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -18,7 +18,7 @@ You may use some features with an anonymous session. You may also register or si
 
 Anonymous accounts are intended for temporary or lightweight use. Registered accounts allow data to persist across devices and sessions, depending on the authentication provider and backend availability.
 
-OCR scanning may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features. Unused monthly credits may expire at the end of the applicable period.
+OCR scanning and selected features may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features such as longer history access, monthly insights, PDF/CSV export, per-bill currency override, transfer bank information in settlement messages, deleted-bill recovery, and an ad-free experience when ads are enabled. Unused monthly credits may expire at the end of the applicable period.
 
 Paid subscriptions and one-time OCR credit packs, when available, are processed through Google Play Billing on Android. Subscription access continues while Google Play reports the subscription as active. One-time OCR credit packs are added to your account after server-side purchase verification. Refunds, cancellations, renewal timing, grace periods, and payment issues may affect access or available credits according to Google Play policies and the app's server-side entitlement records.
 
@@ -84,7 +84,7 @@ Questions about these Terms: **alam.aby.b@gmail.com**
 
 # Syarat dan Ketentuan — BagiStruk
 
-**Tanggal berlaku:** 2026-05-30
+**Tanggal berlaku:** 2026-06-09
 
 Syarat ini menjelaskan aturan dasar penggunaan BagiStruk. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -102,7 +102,7 @@ Sebagian fitur dapat digunakan dengan sesi anonim. Anda juga dapat mendaftar ata
 
 Akun anonim ditujukan untuk penggunaan sementara atau ringan. Akun terdaftar memungkinkan data bertahan lintas perangkat dan sesi, tergantung penyedia autentikasi dan ketersediaan backend.
 
-Scan OCR dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
+Scan OCR dan fitur tertentu dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan seperti akses History lebih panjang, insight bulanan, export PDF/CSV, penggantian currency per bill, info bank transfer di pesan settlement, pemulihan bill terhapus, dan pengalaman tanpa iklan saat iklan diaktifkan. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
 
 Subscription berbayar dan paket credit OCR sekali beli, jika tersedia, diproses melalui Google Play Billing di Android. Akses subscription berlaku selama Google Play melaporkan subscription masih aktif. Paket credit OCR sekali beli ditambahkan ke akun setelah verifikasi pembelian sisi server. Refund, pembatalan, waktu renewal, grace period, dan masalah pembayaran dapat memengaruhi akses atau credit yang tersedia sesuai kebijakan Google Play dan catatan entitlement server-side aplikasi.
 

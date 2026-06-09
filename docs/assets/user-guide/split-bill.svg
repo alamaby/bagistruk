@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder split bill</title>
+  <desc id="desc">Ilustrasi placeholder layar Split bill dengan item dan avatar partisipan.</desc>
+  <rect width="960" height="540" rx="28" fill="#f8fafc"/>
+  <rect x="70" y="42" width="330" height="456" rx="30" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <rect x="70" y="42" width="330" height="116" rx="30" fill="#ccfbf1"/>
+  <text x="104" y="92" fill="#134e4a" font-family="Arial, sans-serif" font-size="18">Total tagihan</text>
+  <text x="104" y="128" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Rp 120.000</text>
+  <rect x="104" y="190" width="262" height="58" rx="14" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="126" y="225" fill="#0f172a" font-family="Arial, sans-serif" font-size="16" font-weight="700">Pizza</text>
+  <text x="304" y="225" fill="#0f172a" font-family="Arial, sans-serif" font-size="16">Rp 80k</text>
+  <rect x="104" y="262" width="262" height="58" rx="14" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+  <text x="126" y="297" fill="#0f172a" font-family="Arial, sans-serif" font-size="16" font-weight="700">Minum</text>
+  <text x="302" y="297" fill="#0f172a" font-family="Arial, sans-serif" font-size="16">Rp 40k</text>
+  <circle cx="132" cy="430" r="25" fill="#0f766e"/>
+  <circle cx="204" cy="430" r="25" fill="#06b6d4"/>
+  <circle cx="276" cy="430" r="25" fill="#f59e0b"/>
+  <circle cx="344" cy="430" r="25" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="125" y="436" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">A</text>
+  <text x="197" y="436" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">B</text>
+  <text x="269" y="436" fill="#ffffff" font-family="Arial, sans-serif" font-size="16" font-weight="700">C</text>
+  <text x="338" y="436" fill="#334155" font-family="Arial, sans-serif" font-size="20" font-weight="700">+</text>
+  <rect x="476" y="76" width="384" height="388" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="512" y="128" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Cara membagi item</text>
+  <text x="512" y="186" fill="#334155" font-family="Arial, sans-serif" font-size="18">1. Tambahkan peserta</text>
+  <text x="512" y="232" fill="#334155" font-family="Arial, sans-serif" font-size="18">2. Pilih avatar peserta aktif</text>
+  <text x="512" y="278" fill="#334155" font-family="Arial, sans-serif" font-size="18">3. Tap item yang dia konsumsi</text>
+  <text x="512" y="324" fill="#334155" font-family="Arial, sans-serif" font-size="18">4. Ulangi sampai semua item terbagi</text>
+  <rect x="512" y="388" width="298" height="38" rx="10" fill="#fef3c7"/>
+  <text x="532" y="413" fill="#92400e" font-family="Arial, sans-serif" font-size="15">Ganti dengan screenshot Split asli</text>
+</svg>
