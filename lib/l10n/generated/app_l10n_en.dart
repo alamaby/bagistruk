@@ -59,6 +59,61 @@ class AppL10nEn extends AppL10n {
       'The selected image doesn\'t look like a receipt. Try a clear photo of a receipt.';
 
   @override
+  String scanPreparingSessionFailed(String message) {
+    return 'Could not prepare session: $message';
+  }
+
+  @override
+  String scanCreditCheckFailed(String message) {
+    return 'Could not check scan credits: $message';
+  }
+
+  @override
+  String get scanNoCreditAnonymousTitle => 'Free scan limit reached';
+
+  @override
+  String get scanNoCreditFreeTitle => 'This month\'s scan credits are used up';
+
+  @override
+  String get scanNoCreditAnonymousBody =>
+      'You have used 5 scan credits as a guest. Create an account to get 20 free credits every month.';
+
+  @override
+  String scanNoCreditPlusBody(int monthlyAllowance) {
+    return 'You have used $monthlyAllowance Plus credits this month. Credits will be available again in the next period.';
+  }
+
+  @override
+  String scanNoCreditFreeBody(int monthlyAllowance) {
+    return 'You have used $monthlyAllowance free credits this month. Upgrade to Plus for 60 credits/month, no ads, and Plus features.';
+  }
+
+  @override
+  String get scanNoCreditLater => 'Later';
+
+  @override
+  String get scanNoCreditRegister => 'Sign Up';
+
+  @override
+  String get scanNoCreditPlusSoon => 'Plus coming soon';
+
+  @override
+  String get scanStatusPreparingImages => 'Processing images…';
+
+  @override
+  String get scanStatusIdle => 'Add photos and tap Scan';
+
+  @override
+  String scanStatusScanning(int imageCount) {
+    return 'Scanning $imageCount image(s)…';
+  }
+
+  @override
+  String scanStatusSuccess(int itemCount, String provider) {
+    return '$itemCount items detected via $provider';
+  }
+
+  @override
   String get ocrErrorNetworkTitle => 'No connection';
 
   @override
@@ -435,6 +490,58 @@ class AppL10nEn extends AppL10n {
   String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override
+  String get authErrorNetwork =>
+      'No internet connection. Try again when the network is stable.';
+
+  @override
+  String authErrorServer(String message) {
+    return 'Server issue: $message. Try again shortly.';
+  }
+
+  @override
+  String get authErrorParsing =>
+      'The server response could not be read. Try again.';
+
+  @override
+  String get authErrorUnknown => 'Something unexpected happened. Try again.';
+
+  @override
+  String get authErrorInvalidLogin => 'Email or password is incorrect.';
+
+  @override
+  String get authErrorAlreadyRegistered =>
+      'Email is already registered. Try logging in.';
+
+  @override
+  String get authErrorWeakPassword =>
+      'Password is too weak. Use at least 6 characters.';
+
+  @override
+  String get authErrorEmailNotConfirmed =>
+      'Email has not been confirmed. Check your inbox.';
+
+  @override
+  String get authErrorDisposableEmail =>
+      'Temporary/disposable email cannot be used. Use your main email.';
+
+  @override
+  String get authErrorEmailAliasUsed =>
+      'This email appears to be an alias of an email that has already been used.';
+
+  @override
+  String get authErrorInvalidEmail => 'Email format is not valid yet.';
+
+  @override
+  String get authErrorGoogleSignIn =>
+      'Google Sign-In failed after choosing an account. Try again; if it keeps happening, check the OAuth Android package name, debug/release SHA-1, and Google Web Client ID.';
+
+  @override
+  String get authErrorComingSoon => 'This feature is coming soon.';
+
+  @override
+  String get authErrorFallback => 'Authentication failed. Try again.';
+
+  @override
   String get loading => 'Loading...';
 
   @override
@@ -675,6 +782,173 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get participantShareAgain => 'Share again';
+
+  @override
+  String get billReviewTitle => 'Review bill';
+
+  @override
+  String get billReviewAddItem => 'Add item';
+
+  @override
+  String get billReviewDeleteItemTitle => 'Delete item?';
+
+  @override
+  String billReviewDeleteItemBody(String name) {
+    return 'Item \"$name\" will be deleted.';
+  }
+
+  @override
+  String get billReviewMerchantHint => 'Merchant name';
+
+  @override
+  String get billReviewItemNameHint => 'Item name';
+
+  @override
+  String get billReviewUnnamedItem => 'unnamed item';
+
+  @override
+  String get billReviewUnitPriceLabel => 'Price / unit';
+
+  @override
+  String get billReviewTaxLabel => 'Tax';
+
+  @override
+  String get billReviewServiceLabel => 'Service';
+
+  @override
+  String get billReviewSaveBill => 'Save Bill';
+
+  @override
+  String billReviewAiLowConfidence(String percent) {
+    return 'AI is less confident ($percent%) — verify the numbers.';
+  }
+
+  @override
+  String billReviewMismatch(String computed, String detected) {
+    return 'Total $computed differs from the receipt ($detected). Check again.';
+  }
+
+  @override
+  String get billReviewTitleRequired => 'Title cannot be empty.';
+
+  @override
+  String get billReviewItemsRequired => 'Add at least one item.';
+
+  @override
+  String get billReviewInvalidItem =>
+      'Check the name, price, and quantity for every item.';
+
+  @override
+  String billReviewSaveBillFailed(String message) {
+    return 'Could not save bill: $message';
+  }
+
+  @override
+  String billReviewSaveItemsFailed(String message) {
+    return 'Bill was saved, but items could not be saved: $message';
+  }
+
+  @override
+  String get billSplitTitle => 'Split bill';
+
+  @override
+  String get billSplitBackTooltip => 'Back';
+
+  @override
+  String get billSplitDone => 'Done';
+
+  @override
+  String get billSplitAddPersonTitle => 'Add person';
+
+  @override
+  String get billSplitNameHint => 'Name';
+
+  @override
+  String get billSplitAdd => 'Add';
+
+  @override
+  String get billSplitEmptyItems => 'This bill has no items yet.';
+
+  @override
+  String get billSplitTotalBill => 'Total bill';
+
+  @override
+  String get billSplitAllAssigned => 'All items have been split';
+
+  @override
+  String billSplitUnassigned(String amount) {
+    return 'Unassigned: $amount';
+  }
+
+  @override
+  String get billSplitViewSummary => 'View Summary';
+
+  @override
+  String get billSplitStateNotReady => 'State is not ready.';
+
+  @override
+  String get billSplitNameRequired => 'Name cannot be empty.';
+
+  @override
+  String billSplitAddPersonFailed(String message) {
+    return 'Could not add person: $message';
+  }
+
+  @override
+  String get billSplitSelectPersonFirst => 'Select a person below first.';
+
+  @override
+  String billSplitSaveAssignmentFailed(String message) {
+    return 'Could not save assignment: $message';
+  }
+
+  @override
+  String get billDetailTitle => 'Bill Details';
+
+  @override
+  String get billDetailHomeTooltip => 'Home';
+
+  @override
+  String get billDetailScanAnotherTooltip => 'Scan another receipt';
+
+  @override
+  String get billDetailLoading => 'Loading details…';
+
+  @override
+  String get billDetailParticipants => 'Participants';
+
+  @override
+  String get billDetailTotalBill => 'Total bill';
+
+  @override
+  String billDetailPaidProgress(int paidCount, int totalCount) {
+    return '$paidCount/$totalCount participants have paid';
+  }
+
+  @override
+  String get billDetailSettled => 'Paid';
+
+  @override
+  String get billDetailUnsettled => 'Unpaid';
+
+  @override
+  String get billDetailEmptyParticipants =>
+      'No participants for this bill yet.';
+
+  @override
+  String get billDetailGoToSplit => 'Go to Split';
+
+  @override
+  String get billDetailParticipantNotFound => 'Participant not found.';
+
+  @override
+  String billDetailSaveStatusFailed(String message) {
+    return 'Could not save status: $message';
+  }
+
+  @override
+  String get billDetailStateNotReady =>
+      'Data is not ready yet, please try again shortly.';
 
   @override
   String get exportPdf => 'Export PDF';

@@ -51,7 +51,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         final email = Uri.encodeQueryComponent(_email.text.trim());
         context.go('${Routes.verifyEmail}?email=$email');
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 
@@ -66,7 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       case Success():
         context.go(Routes.history);
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 

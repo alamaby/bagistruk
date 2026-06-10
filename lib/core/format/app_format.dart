@@ -1,21 +1,29 @@
+import 'dart:ui';
+
 import 'package:intl/intl.dart';
 
-/// App-wide formatters defaulted to Indonesian locale (`id_ID`).
-///
-/// Rupiah convention: `Rp ` prefix + thousands separator `.`, no decimals
-/// (whole rupiah is the practical unit; cents don't exist in real receipts).
+/// App-wide formatters.
 class AppFormat {
   const AppFormat._();
 
-  static const String locale = 'id_ID';
+  static const String locale = 'en_US';
 
-  /// Rupiah currency. Example: `Rp 104.002`.
-  static NumberFormat currency() =>
-      NumberFormat.currency(locale: locale, symbol: 'Rp ', decimalDigits: 0);
+  static String intlLocaleOf(Locale locale) {
+    final country = locale.countryCode;
+    return country == null || country.isEmpty
+        ? locale.languageCode
+        : '${locale.languageCode}_$country';
+  }
 
-  /// Long-form date in Indonesian. Example: `29 April 2026`.
-  static DateFormat longDate() => DateFormat.yMMMMd(locale);
+  static NumberFormat currency([String? localeName]) => NumberFormat.currency(
+    locale: localeName ?? locale,
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
 
-  /// Short numeric date. Example: `29/04/2026`.
-  static DateFormat shortDate() => DateFormat('dd/MM/yyyy', locale);
+  static DateFormat longDate([String? localeName]) =>
+      DateFormat.yMMMMd(localeName ?? locale);
+
+  static DateFormat shortDate([String? localeName]) =>
+      DateFormat('dd/MM/yyyy', localeName ?? locale);
 }

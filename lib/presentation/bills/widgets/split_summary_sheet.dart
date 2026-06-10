@@ -133,7 +133,8 @@ class _ParticipantSummaryCard extends StatelessWidget {
           template: template,
           participantId: participant.id,
         ),
-        subject: 'Rincian ${bill.bill.title} — ${participant.name}',
+        subject:
+            '${l10n.settlementMessageBillPrefix} ${bill.bill.title} - ${participant.name}',
       );
     } catch (_) {
       if (context.mounted) {
@@ -280,7 +281,9 @@ class _ParticipantSummaryCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        s.item.name.isEmpty ? '(tanpa nama)' : s.item.name,
+                        s.item.name.isEmpty
+                            ? l10n.settlementMessageUnnamedItem
+                            : s.item.name,
                         style: TextStyle(fontSize: 13.sp),
                       ),
                     ),

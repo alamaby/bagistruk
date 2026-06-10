@@ -232,11 +232,13 @@ class SplitNotifier extends _$SplitNotifier {
     state = AsyncData(s.copyWith(selectedParticipantId: next));
   }
 
-  Future<String?> addParticipant(String name) async {
+  Future<SplitActionError?> addParticipant(String name) async {
     final s = state.value;
-    if (s == null) return 'State belum siap';
+    if (s == null) return const SplitActionError(SplitActionErrorKind.notReady);
     final trimmed = name.trim();
-    if (trimmed.isEmpty) return 'Nama tidak boleh kosong';
+    if (trimmed.isEmpty) {
+      return const SplitActionError(SplitActionErrorKind.nameRequired);
+    }
 
     final participant = Participant(
       id: _uuid.v4(),
@@ -246,7 +248,10 @@ class SplitNotifier extends _$SplitNotifier {
     final repo = ref.read(billRepositoryProvider);
     final res = await repo.upsertParticipant(participant);
     if (res is ResultFailure<Participant>) {
-      return 'Gagal tambah orang: ${res.failure}';
+      return SplitActionError(
+        SplitActionErrorKind.addPersonFailed,
+        res.failure.toString(),
+      );
     }
     final saved = (res as Success<Participant>).data;
     state = AsyncData(
@@ -260,11 +265,13 @@ class SplitNotifier extends _$SplitNotifier {
 
   /// Toggles the selected participant's assignment on [itemId]. Returns an
   /// error message if no participant is selected; null on success.
-  Future<String?> toggleAssignment(String itemId) async {
+  Future<SplitActionError?> toggleAssignment(String itemId) async {
     final s = state.value;
     if (s == null) return null;
     final pid = s.selectedParticipantId;
-    if (pid == null) return 'Pilih dulu orang di bawah';
+    if (pid == null) {
+      return const SplitActionError(SplitActionErrorKind.selectPersonFirst);
+    }
 
     final existing = s.assignments
         .where((a) => a.itemId == itemId && a.participantId == pid)
@@ -289,7 +296,10 @@ class SplitNotifier extends _$SplitNotifier {
     if (res is ResultFailure<List<Assignment>>) {
       // Roll back local state on persistence failure.
       state = AsyncData(s);
-      return 'Gagal simpan assignment: ${res.failure}';
+      return SplitActionError(
+        SplitActionErrorKind.saveAssignmentFailed,
+        res.failure.toString(),
+      );
     }
     return null;
   }
@@ -305,4 +315,18 @@ class _FailureException implements Exception {
   final Failure failure;
   @override
   String toString() => failure.toString();
+}
+
+class SplitActionError {
+  const SplitActionError(this.kind, [this.message]);
+  final SplitActionErrorKind kind;
+  final String? message;
+}
+
+enum SplitActionErrorKind {
+  notReady,
+  nameRequired,
+  addPersonFailed,
+  selectPersonFirst,
+  saveAssignmentFailed,
 }

@@ -5,13 +5,12 @@ import 'profile_notifier.dart';
 
 part 'preferences_providers.g.dart';
 
-/// Active locale derived from [ProfileNotifier]. Defaults to Indonesian until
-/// the profile row resolves, mirroring the previous hard-coded MaterialApp
-/// locale so first-frame text never flickers from English to Indonesian.
+/// Active locale derived from [ProfileNotifier]. Defaults to English until the
+/// profile row resolves.
 @Riverpod(keepAlive: true)
 Locale localePref(Ref ref) {
   final profile = ref.watch(profileProvider);
-  final code = profile.value?.languagePref ?? 'id';
+  final code = profile.value?.languagePref ?? 'en';
   return Locale(code);
 }
 

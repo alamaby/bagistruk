@@ -48,7 +48,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
       case ResultFailure(:final failure):
         messenger.showSnackBar(
           SnackBar(
-            content: Text(friendlyAuthMessage(failure)),
+            content: Text(friendlyAuthMessage(failure, AppL10n.of(context))),
             behavior: SnackBarBehavior.floating,
           ),
         );

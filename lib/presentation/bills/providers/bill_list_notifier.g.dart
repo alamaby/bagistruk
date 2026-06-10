@@ -39,7 +39,7 @@ final class BillListNotifierProvider
   BillListNotifier create() => BillListNotifier();
 }
 
-String _$billListNotifierHash() => r'0dd7dbdeb6bd5c5420e347120d860990053c8c07';
+String _$billListNotifierHash() => r'b2b4b794a33d7e43fca0eb09ad5b8ac1fd73f19a';
 
 /// Async-loaded list of bills for the current user. Uses [AsyncValue] so the
 /// UI gets standard loading / data / error rendering for free.
@@ -88,7 +88,7 @@ final class DeletedBillListNotifierProvider
 }
 
 String _$deletedBillListNotifierHash() =>
-    r'4c2ec3d866cfb4ef4de0f6ac28dc4c306af6a794';
+    r'056968a4cc41d8b6e95f23e2befa10b6fdb0325c';
 
 abstract class _$DeletedBillListNotifier
     extends $AsyncNotifier<List<DeletedBill>> {

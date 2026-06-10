@@ -213,7 +213,7 @@ return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languageP
 @JsonSerializable()
 
 class _ProfileDto extends ProfileDto {
-  const _ProfileDto({required this.id, @JsonKey(name: 'display_name') this.displayName, @JsonKey(name: 'default_currency') this.defaultCurrency = 'IDR', @JsonKey(name: 'language_pref') this.languagePref = 'id', @JsonKey(name: 'theme_pref') this.themePref = 'system'}): super._();
+  const _ProfileDto({required this.id, @JsonKey(name: 'display_name') this.displayName, @JsonKey(name: 'default_currency') this.defaultCurrency = 'IDR', @JsonKey(name: 'language_pref') this.languagePref = 'en', @JsonKey(name: 'theme_pref') this.themePref = 'system'}): super._();
   factory _ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
 
 @override final  String id;

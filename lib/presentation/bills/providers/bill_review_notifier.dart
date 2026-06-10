@@ -144,14 +144,14 @@ class BillReviewNotifier extends _$BillReviewNotifier {
   /// with a human-readable message on failure.
   Future<SaveResult> save() async {
     if (state.title.trim().isEmpty) {
-      return const SaveError('Judul tidak boleh kosong');
+      return const SaveError(SaveErrorKind.titleRequired);
     }
     if (state.items.isEmpty) {
-      return const SaveError('Tambahkan minimal satu item');
+      return const SaveError(SaveErrorKind.itemsRequired);
     }
     for (final it in state.items) {
       if (it.name.trim().isEmpty || it.price < 0 || it.qty <= 0) {
-        return const SaveError('Periksa nama, harga, dan qty setiap item');
+        return const SaveError(SaveErrorKind.invalidItem);
       }
     }
 
@@ -172,7 +172,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     final billRes = await repo.createBill(bill);
     if (billRes is ResultFailure<Bill>) {
       state = state.copyWith(saving: false);
-      return SaveError('Gagal simpan bill: ${_msg(billRes.failure)}');
+      return SaveError(SaveErrorKind.saveBillFailed, _msg(billRes.failure));
     }
 
     final items = state.items
@@ -189,9 +189,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     final itemsRes = await repo.upsertItems(items);
     if (itemsRes is ResultFailure<List<Item>>) {
       state = state.copyWith(saving: false);
-      return SaveError(
-        'Bill tersimpan tapi item gagal: ${_msg(itemsRes.failure)}',
-      );
+      return SaveError(SaveErrorKind.saveItemsFailed, _msg(itemsRes.failure));
     }
 
     state = state.copyWith(saving: false);
@@ -211,6 +209,15 @@ class SaveSuccess extends SaveResult {
 }
 
 class SaveError extends SaveResult {
-  const SaveError(this.message);
-  final String message;
+  const SaveError(this.kind, [this.message]);
+  final SaveErrorKind kind;
+  final String? message;
+}
+
+enum SaveErrorKind {
+  titleRequired,
+  itemsRequired,
+  invalidItem,
+  saveBillFailed,
+  saveItemsFailed,
 }

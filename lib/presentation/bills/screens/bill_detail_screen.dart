@@ -53,23 +53,24 @@ class BillDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Tagihan'),
+        title: Text(AppL10n.of(context).billDetailTitle),
         leading: IconButton(
           icon: const Icon(Icons.home_outlined),
-          tooltip: 'Beranda',
+          tooltip: AppL10n.of(context).billDetailHomeTooltip,
           onPressed: () => _goHome(context, ref),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.document_scanner_outlined),
-            tooltip: 'Scan struk lain',
+            tooltip: AppL10n.of(context).billDetailScanAnotherTooltip,
             onPressed: () => context.go(Routes.scan),
           ),
         ],
       ),
       body: SafeArea(
         child: async.when(
-          loading: () => const LoadingView(message: 'Memuat detail…'),
+          loading: () =>
+              LoadingView(message: AppL10n.of(context).billDetailLoading),
           error: (e, _) => _ErrorView(
             message: e.toString(),
             onRetry: () => ref.invalidate(billDetailFamily(billId)),
@@ -101,7 +102,16 @@ class _Body extends ConsumerWidget {
         .read(billDetailFamily(billId).notifier)
         .toggleParticipantPaymentStatus(pid);
     if (err != null && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
+      final l10n = AppL10n.of(context);
+      final msg = switch (err.kind) {
+        BillDetailActionErrorKind.notFound =>
+          l10n.billDetailParticipantNotFound,
+        BillDetailActionErrorKind.saveStatusFailed =>
+          l10n.billDetailSaveStatusFailed(err.message ?? ''),
+        BillDetailActionErrorKind.stateNotReady =>
+          l10n.billDetailStateNotReady,
+      };
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -198,7 +208,9 @@ class _Body extends ConsumerWidget {
       final bytes = await BillPdfExporter(
         state: state,
         currency: currency,
-        dateFormat: AppFormat.longDate(),
+        dateFormat: AppFormat.longDate(
+          AppFormat.intlLocaleOf(Localizations.localeOf(context)),
+        ),
         l10n: l10n,
         bankInfo: bankInfo,
       ).build();
@@ -247,6 +259,7 @@ class _Body extends ConsumerWidget {
           totalCount: state.participants.length,
           receiptDate: state.bill.receiptDate ?? state.bill.createdAt,
           currency: currency,
+          l10n: l10n,
         ),
         SizedBox(height: 12.h),
         _ExportActions(
@@ -259,7 +272,7 @@ class _Body extends ConsumerWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 4.w),
           child: Text(
-            'Partisipan',
+            l10n.billDetailParticipants,
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
@@ -269,7 +282,7 @@ class _Body extends ConsumerWidget {
         ),
         SizedBox(height: 8.h),
         if (state.participants.isEmpty)
-          _EmptyParticipants(billId: billId)
+          _EmptyParticipants(billId: billId, l10n: l10n)
         else
           for (final p in state.participants)
             Padding(
@@ -341,6 +354,7 @@ class _HeaderCard extends StatelessWidget {
     required this.totalCount,
     required this.receiptDate,
     required this.currency,
+    required this.l10n,
   });
 
   final String title;
@@ -350,6 +364,7 @@ class _HeaderCard extends StatelessWidget {
   final int totalCount;
   final DateTime receiptDate;
   final NumberFormat currency;
+  final AppL10n l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +392,7 @@ class _HeaderCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              _StatusBadge(isSettled: isSettled),
+              _StatusBadge(isSettled: isSettled, l10n: l10n),
             ],
           ),
           SizedBox(height: 4.h),
@@ -390,7 +405,9 @@ class _HeaderCard extends StatelessWidget {
               ),
               SizedBox(width: 4.w),
               Text(
-                AppFormat.longDate().format(receiptDate),
+                AppFormat.longDate(
+                  AppFormat.intlLocaleOf(Localizations.localeOf(context)),
+                ).format(receiptDate),
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: scheme.onSurfaceVariant,
@@ -400,7 +417,7 @@ class _HeaderCard extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           Text(
-            'Total tagihan',
+            l10n.billDetailTotalBill,
             style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
           ),
           SizedBox(height: 2.h),
@@ -423,7 +440,7 @@ class _HeaderCard extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 Text(
-                  '$paidCount/$totalCount partisipan sudah bayar',
+                  l10n.billDetailPaidProgress(paidCount, totalCount),
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: scheme.onSurfaceVariant,
@@ -451,9 +468,10 @@ class _HeaderCard extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.isSettled});
+  const _StatusBadge({required this.isSettled, required this.l10n});
 
   final bool isSettled;
+  final AppL10n l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -480,7 +498,7 @@ class _StatusBadge extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           Text(
-            isSettled ? 'Lunas' : 'Belum lunas',
+            isSettled ? l10n.billDetailSettled : l10n.billDetailUnsettled,
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
@@ -597,9 +615,10 @@ class _ParticipantTile extends StatelessWidget {
 }
 
 class _EmptyParticipants extends StatelessWidget {
-  const _EmptyParticipants({required this.billId});
+  const _EmptyParticipants({required this.billId, required this.l10n});
 
   final String billId;
+  final AppL10n l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -620,7 +639,7 @@ class _EmptyParticipants extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Belum ada partisipan untuk tagihan ini.',
+            l10n.billDetailEmptyParticipants,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13.sp, color: scheme.onSurfaceVariant),
           ),
@@ -631,7 +650,7 @@ class _EmptyParticipants extends StatelessWidget {
               pathParameters: {'billId': billId},
             ),
             icon: const Icon(Icons.call_split),
-            label: const Text('Pergi ke Pembagian'),
+            label: Text(l10n.billDetailGoToSplit),
           ),
         ],
       ),
@@ -664,7 +683,7 @@ class _ErrorView extends StatelessWidget {
             SizedBox(height: 16.h),
             FilledButton.tonal(
               onPressed: onRetry,
-              child: const Text('Coba lagi'),
+              child: Text(AppL10n.of(context).retry),
             ),
           ],
         ),

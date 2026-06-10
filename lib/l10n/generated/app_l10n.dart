@@ -193,6 +193,90 @@ abstract class AppL10n {
   /// **'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.'**
   String get scanNotReceiptHint;
 
+  /// No description provided for @scanPreparingSessionFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal siapkan sesi: {message}'**
+  String scanPreparingSessionFailed(String message);
+
+  /// No description provided for @scanCreditCheckFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal cek credit scan: {message}'**
+  String scanCreditCheckFailed(String message);
+
+  /// No description provided for @scanNoCreditAnonymousTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Batas scan gratis tercapai'**
+  String get scanNoCreditAnonymousTitle;
+
+  /// No description provided for @scanNoCreditFreeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Credit scan bulan ini habis'**
+  String get scanNoCreditFreeTitle;
+
+  /// No description provided for @scanNoCreditAnonymousBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar akun untuk mendapat 20 credit gratis setiap bulan.'**
+  String get scanNoCreditAnonymousBody;
+
+  /// No description provided for @scanNoCreditPlusBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu sudah memakai {monthlyAllowance} credit Plus bulan ini. Credit akan tersedia lagi pada periode berikutnya.'**
+  String scanNoCreditPlusBody(int monthlyAllowance);
+
+  /// No description provided for @scanNoCreditFreeBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Kamu sudah memakai {monthlyAllowance} credit gratis bulan ini. Upgrade ke Plus untuk 60 credit/bulan, tanpa iklan, dan fitur khusus Plus.'**
+  String scanNoCreditFreeBody(int monthlyAllowance);
+
+  /// No description provided for @scanNoCreditLater.
+  ///
+  /// In id, this message translates to:
+  /// **'Nanti'**
+  String get scanNoCreditLater;
+
+  /// No description provided for @scanNoCreditRegister.
+  ///
+  /// In id, this message translates to:
+  /// **'Daftar'**
+  String get scanNoCreditRegister;
+
+  /// No description provided for @scanNoCreditPlusSoon.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus segera hadir'**
+  String get scanNoCreditPlusSoon;
+
+  /// No description provided for @scanStatusPreparingImages.
+  ///
+  /// In id, this message translates to:
+  /// **'Memproses gambar…'**
+  String get scanStatusPreparingImages;
+
+  /// No description provided for @scanStatusIdle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah foto lalu tap Pindai'**
+  String get scanStatusIdle;
+
+  /// No description provided for @scanStatusScanning.
+  ///
+  /// In id, this message translates to:
+  /// **'Memindai {imageCount} gambar…'**
+  String scanStatusScanning(int imageCount);
+
+  /// No description provided for @scanStatusSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'{itemCount} item terdeteksi via {provider}'**
+  String scanStatusSuccess(int itemCount, String provider);
+
   /// No description provided for @ocrErrorNetworkTitle.
   ///
   /// In id, this message translates to:
@@ -863,6 +947,90 @@ abstract class AppL10n {
   /// **'Terjadi kesalahan. Coba lagi.'**
   String get errorGeneric;
 
+  /// No description provided for @authErrorNetwork.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada koneksi internet. Coba lagi setelah jaringan stabil.'**
+  String get authErrorNetwork;
+
+  /// No description provided for @authErrorServer.
+  ///
+  /// In id, this message translates to:
+  /// **'Server bermasalah: {message}. Coba lagi sebentar lagi.'**
+  String authErrorServer(String message);
+
+  /// No description provided for @authErrorParsing.
+  ///
+  /// In id, this message translates to:
+  /// **'Respons server tidak terbaca. Coba lagi.'**
+  String get authErrorParsing;
+
+  /// No description provided for @authErrorUnknown.
+  ///
+  /// In id, this message translates to:
+  /// **'Terjadi kesalahan tak terduga. Coba lagi.'**
+  String get authErrorUnknown;
+
+  /// No description provided for @authErrorInvalidLogin.
+  ///
+  /// In id, this message translates to:
+  /// **'Email atau password salah.'**
+  String get authErrorInvalidLogin;
+
+  /// No description provided for @authErrorAlreadyRegistered.
+  ///
+  /// In id, this message translates to:
+  /// **'Email sudah terdaftar. Coba login.'**
+  String get authErrorAlreadyRegistered;
+
+  /// No description provided for @authErrorWeakPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Password terlalu lemah. Minimal 6 karakter.'**
+  String get authErrorWeakPassword;
+
+  /// No description provided for @authErrorEmailNotConfirmed.
+  ///
+  /// In id, this message translates to:
+  /// **'Email belum dikonfirmasi. Cek kotak masuk.'**
+  String get authErrorEmailNotConfirmed;
+
+  /// No description provided for @authErrorDisposableEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Email sementara/disposable tidak bisa digunakan. Pakai email utama kamu.'**
+  String get authErrorDisposableEmail;
+
+  /// No description provided for @authErrorEmailAliasUsed.
+  ///
+  /// In id, this message translates to:
+  /// **'Email ini terdeteksi sebagai alias dari email yang sudah pernah digunakan.'**
+  String get authErrorEmailAliasUsed;
+
+  /// No description provided for @authErrorInvalidEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Format email belum valid.'**
+  String get authErrorInvalidEmail;
+
+  /// No description provided for @authErrorGoogleSignIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Google Sign-In gagal setelah memilih akun. Coba lagi; jika tetap terjadi, cek OAuth Android package name, SHA-1 debug/release, dan Google Web Client ID.'**
+  String get authErrorGoogleSignIn;
+
+  /// No description provided for @authErrorComingSoon.
+  ///
+  /// In id, this message translates to:
+  /// **'Fitur ini akan segera hadir.'**
+  String get authErrorComingSoon;
+
+  /// No description provided for @authErrorFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Autentikasi gagal. Coba lagi.'**
+  String get authErrorFallback;
+
   /// No description provided for @loading.
   ///
   /// In id, this message translates to:
@@ -1312,6 +1480,294 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Bagikan ulang'**
   String get participantShareAgain;
+
+  /// No description provided for @billReviewTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Review bill'**
+  String get billReviewTitle;
+
+  /// No description provided for @billReviewAddItem.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah item'**
+  String get billReviewAddItem;
+
+  /// No description provided for @billReviewDeleteItemTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus item?'**
+  String get billReviewDeleteItemTitle;
+
+  /// No description provided for @billReviewDeleteItemBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Item \"{name}\" akan dihapus.'**
+  String billReviewDeleteItemBody(String name);
+
+  /// No description provided for @billReviewMerchantHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama merchant'**
+  String get billReviewMerchantHint;
+
+  /// No description provided for @billReviewItemNameHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama item'**
+  String get billReviewItemNameHint;
+
+  /// No description provided for @billReviewUnnamedItem.
+  ///
+  /// In id, this message translates to:
+  /// **'tanpa nama'**
+  String get billReviewUnnamedItem;
+
+  /// No description provided for @billReviewUnitPriceLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Harga / unit'**
+  String get billReviewUnitPriceLabel;
+
+  /// No description provided for @billReviewTaxLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Pajak'**
+  String get billReviewTaxLabel;
+
+  /// No description provided for @billReviewServiceLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Service'**
+  String get billReviewServiceLabel;
+
+  /// No description provided for @billReviewSaveBill.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan Bill'**
+  String get billReviewSaveBill;
+
+  /// No description provided for @billReviewAiLowConfidence.
+  ///
+  /// In id, this message translates to:
+  /// **'AI kurang yakin ({percent}%) — periksa angka.'**
+  String billReviewAiLowConfidence(String percent);
+
+  /// No description provided for @billReviewMismatch.
+  ///
+  /// In id, this message translates to:
+  /// **'Total {computed} berbeda dari struk ({detected}). Periksa lagi.'**
+  String billReviewMismatch(String computed, String detected);
+
+  /// No description provided for @billReviewTitleRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Judul tidak boleh kosong.'**
+  String get billReviewTitleRequired;
+
+  /// No description provided for @billReviewItemsRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambahkan minimal satu item.'**
+  String get billReviewItemsRequired;
+
+  /// No description provided for @billReviewInvalidItem.
+  ///
+  /// In id, this message translates to:
+  /// **'Periksa nama, harga, dan qty setiap item.'**
+  String get billReviewInvalidItem;
+
+  /// No description provided for @billReviewSaveBillFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal simpan bill: {message}'**
+  String billReviewSaveBillFailed(String message);
+
+  /// No description provided for @billReviewSaveItemsFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill tersimpan tapi item gagal: {message}'**
+  String billReviewSaveItemsFailed(String message);
+
+  /// No description provided for @billSplitTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Split bill'**
+  String get billSplitTitle;
+
+  /// No description provided for @billSplitBackTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Kembali'**
+  String get billSplitBackTooltip;
+
+  /// No description provided for @billSplitDone.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesai'**
+  String get billSplitDone;
+
+  /// No description provided for @billSplitAddPersonTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah orang'**
+  String get billSplitAddPersonTitle;
+
+  /// No description provided for @billSplitNameHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama'**
+  String get billSplitNameHint;
+
+  /// No description provided for @billSplitAdd.
+  ///
+  /// In id, this message translates to:
+  /// **'Tambah'**
+  String get billSplitAdd;
+
+  /// No description provided for @billSplitEmptyItems.
+  ///
+  /// In id, this message translates to:
+  /// **'Bill ini belum punya item.'**
+  String get billSplitEmptyItems;
+
+  /// No description provided for @billSplitTotalBill.
+  ///
+  /// In id, this message translates to:
+  /// **'Total tagihan'**
+  String get billSplitTotalBill;
+
+  /// No description provided for @billSplitAllAssigned.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua item sudah dibagi'**
+  String get billSplitAllAssigned;
+
+  /// No description provided for @billSplitUnassigned.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum dibagi: {amount}'**
+  String billSplitUnassigned(String amount);
+
+  /// No description provided for @billSplitViewSummary.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat Rincian'**
+  String get billSplitViewSummary;
+
+  /// No description provided for @billSplitStateNotReady.
+  ///
+  /// In id, this message translates to:
+  /// **'State belum siap.'**
+  String get billSplitStateNotReady;
+
+  /// No description provided for @billSplitNameRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama tidak boleh kosong.'**
+  String get billSplitNameRequired;
+
+  /// No description provided for @billSplitAddPersonFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal tambah orang: {message}'**
+  String billSplitAddPersonFailed(String message);
+
+  /// No description provided for @billSplitSelectPersonFirst.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih dulu orang di bawah.'**
+  String get billSplitSelectPersonFirst;
+
+  /// No description provided for @billSplitSaveAssignmentFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal simpan assignment: {message}'**
+  String billSplitSaveAssignmentFailed(String message);
+
+  /// No description provided for @billDetailTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Detail Tagihan'**
+  String get billDetailTitle;
+
+  /// No description provided for @billDetailHomeTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Beranda'**
+  String get billDetailHomeTooltip;
+
+  /// No description provided for @billDetailScanAnotherTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Scan struk lain'**
+  String get billDetailScanAnotherTooltip;
+
+  /// No description provided for @billDetailLoading.
+  ///
+  /// In id, this message translates to:
+  /// **'Memuat detail…'**
+  String get billDetailLoading;
+
+  /// No description provided for @billDetailParticipants.
+  ///
+  /// In id, this message translates to:
+  /// **'Partisipan'**
+  String get billDetailParticipants;
+
+  /// No description provided for @billDetailTotalBill.
+  ///
+  /// In id, this message translates to:
+  /// **'Total tagihan'**
+  String get billDetailTotalBill;
+
+  /// No description provided for @billDetailPaidProgress.
+  ///
+  /// In id, this message translates to:
+  /// **'{paidCount}/{totalCount} partisipan sudah bayar'**
+  String billDetailPaidProgress(int paidCount, int totalCount);
+
+  /// No description provided for @billDetailSettled.
+  ///
+  /// In id, this message translates to:
+  /// **'Lunas'**
+  String get billDetailSettled;
+
+  /// No description provided for @billDetailUnsettled.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum lunas'**
+  String get billDetailUnsettled;
+
+  /// No description provided for @billDetailEmptyParticipants.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum ada partisipan untuk tagihan ini.'**
+  String get billDetailEmptyParticipants;
+
+  /// No description provided for @billDetailGoToSplit.
+  ///
+  /// In id, this message translates to:
+  /// **'Pergi ke Pembagian'**
+  String get billDetailGoToSplit;
+
+  /// No description provided for @billDetailParticipantNotFound.
+  ///
+  /// In id, this message translates to:
+  /// **'Partisipan tidak ditemukan.'**
+  String get billDetailParticipantNotFound;
+
+  /// No description provided for @billDetailSaveStatusFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal simpan status: {message}'**
+  String billDetailSaveStatusFailed(String message);
+
+  /// No description provided for @billDetailStateNotReady.
+  ///
+  /// In id, this message translates to:
+  /// **'Data belum siap, coba lagi sebentar.'**
+  String get billDetailStateNotReady;
 
   /// No description provided for @exportPdf.
   ///

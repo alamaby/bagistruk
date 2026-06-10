@@ -40,7 +40,7 @@ Future<String?> _bootstrap() async {
   try {
     await dotenv.load(fileName: '.env').timeout(const Duration(seconds: 5));
   } catch (e) {
-    return 'Gagal memuat konfigurasi (.env): $e';
+    return 'Failed to load configuration (.env): $e';
   }
 
   try {
@@ -49,7 +49,7 @@ Future<String?> _bootstrap() async {
       anonKey: Env.supabaseAnonKey,
     ).timeout(const Duration(seconds: 10));
   } catch (e) {
-    return 'Gagal inisialisasi Supabase: $e';
+    return 'Failed to initialize Supabase: $e';
   }
 
   try {

@@ -10,6 +10,7 @@ import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../l10n/generated/app_l10n.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../shared/widgets/loading_view.dart';
 import '../providers/split_notifier.dart';
@@ -53,22 +54,22 @@ class BillSplitScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Split bill'),
+        title: Text(AppL10n.of(context).billSplitTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          tooltip: 'Kembali',
+          tooltip: AppL10n.of(context).billSplitBackTooltip,
           onPressed: () => _exit(context, ref),
         ),
         actions: [
           TextButton(
             onPressed: () => _finish(context),
-            child: const Text('Selesai'),
+            child: Text(AppL10n.of(context).billSplitDone),
           ),
         ],
       ),
       body: SafeArea(
         child: async.when(
-          loading: () => const LoadingView(message: 'Loading…'),
+          loading: () => LoadingView(message: AppL10n.of(context).loading),
           error: (e, _) => Center(
             child: Padding(
               padding: EdgeInsets.all(24.w),
@@ -100,7 +101,18 @@ class _SplitBody extends ConsumerWidget {
   SplitNotifier _notifier(WidgetRef ref) =>
       ref.read(splitFamily(billId).notifier);
 
-  void _toast(BuildContext context, String msg) {
+  void _toast(BuildContext context, SplitActionError error) {
+    final l10n = AppL10n.of(context);
+    final msg = switch (error.kind) {
+      SplitActionErrorKind.notReady => l10n.billSplitStateNotReady,
+      SplitActionErrorKind.nameRequired => l10n.billSplitNameRequired,
+      SplitActionErrorKind.addPersonFailed => l10n.billSplitAddPersonFailed(
+        error.message ?? '',
+      ),
+      SplitActionErrorKind.selectPersonFirst => l10n.billSplitSelectPersonFirst,
+      SplitActionErrorKind.saveAssignmentFailed =>
+        l10n.billSplitSaveAssignmentFailed(error.message ?? ''),
+    };
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
@@ -109,22 +121,23 @@ class _SplitBody extends ConsumerWidget {
       context: context,
       builder: (ctx) {
         final ctrl = TextEditingController();
+        final l10n = AppL10n.of(ctx);
         return AlertDialog(
-          title: const Text('Tambah orang'),
+          title: Text(l10n.billSplitAddPersonTitle),
           content: TextField(
             controller: ctrl,
             autofocus: true,
-            decoration: const InputDecoration(hintText: 'Nama'),
+            decoration: InputDecoration(hintText: l10n.billSplitNameHint),
             onSubmitted: (_) => Navigator.pop(ctx, ctrl.text),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Batal'),
+              child: Text(l10n.cancelAction),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, ctrl.text),
-              child: const Text('Tambah'),
+              child: Text(l10n.billSplitAdd),
             ),
           ],
         );
@@ -148,7 +161,7 @@ class _SplitBody extends ConsumerWidget {
           child: state.items.isEmpty
               ? Center(
                   child: Text(
-                    'Bill ini belum punya item.',
+                    AppL10n.of(context).billSplitEmptyItems,
                     style: TextStyle(fontSize: 14.sp),
                   ),
                 )
@@ -232,7 +245,7 @@ class _Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total tagihan',
+            AppL10n.of(context).billSplitTotalBill,
             style: TextStyle(
               fontSize: 12.sp,
               color: scheme.onPrimaryContainer.withValues(alpha: 0.8),
@@ -260,8 +273,10 @@ class _Header extends StatelessWidget {
               SizedBox(width: 6.w),
               Text(
                 allAssigned
-                    ? 'Semua item sudah dibagi'
-                    : 'Belum dibagi: ${currency.format(unassignedSubtotal)}',
+                    ? AppL10n.of(context).billSplitAllAssigned
+                    : AppL10n.of(context).billSplitUnassigned(
+                        currency.format(unassignedSubtotal),
+                      ),
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
@@ -328,7 +343,9 @@ class _ItemRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.name.isEmpty ? '(tanpa nama)' : item.name,
+                        item.name.isEmpty
+                            ? AppL10n.of(context).settlementMessageUnnamedItem
+                            : item.name,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
@@ -555,7 +572,7 @@ class _AddButton extends StatelessWidget {
         ),
         SizedBox(height: 4.h),
         Text(
-          'Tambah',
+          AppL10n.of(context).billSplitAdd,
           style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w500),
         ),
       ],
@@ -585,7 +602,7 @@ class _SummaryButton extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onTap,
                   icon: const Icon(Icons.receipt_long),
-                  label: const Text('Lihat Rincian'),
+                  label: Text(AppL10n.of(context).billSplitViewSummary),
                   style: FilledButton.styleFrom(
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,

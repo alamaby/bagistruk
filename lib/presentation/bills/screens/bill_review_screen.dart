@@ -100,16 +100,31 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     final result = await _notifier.save();
     if (!mounted) return;
     switch (result) {
-      case SaveError(:final message):
+      case SaveError():
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(message)));
+        ).showSnackBar(SnackBar(content: Text(_saveErrorMessage(result))));
       case SaveSuccess(:final billId):
         context.goNamed(
           Routes.billSplitName,
           pathParameters: {'billId': billId},
         );
     }
+  }
+
+  String _saveErrorMessage(SaveError error) {
+    final l10n = AppL10n.of(context);
+    return switch (error.kind) {
+      SaveErrorKind.titleRequired => l10n.billReviewTitleRequired,
+      SaveErrorKind.itemsRequired => l10n.billReviewItemsRequired,
+      SaveErrorKind.invalidItem => l10n.billReviewInvalidItem,
+      SaveErrorKind.saveBillFailed => l10n.billReviewSaveBillFailed(
+        error.message ?? '',
+      ),
+      SaveErrorKind.saveItemsFailed => l10n.billReviewSaveItemsFailed(
+        error.message ?? '',
+      ),
+    };
   }
 
   Future<void> _onPickCurrency(String current) async {
@@ -137,8 +152,10 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     final summaryFocused = _taxFocus.hasFocus || _serviceFocus.hasFocus;
     final showSticky = !keyboardOpen || summaryFocused;
 
+    final l10n = AppL10n.of(context);
+
     return AppScaffold(
-      title: 'Review bill',
+      title: l10n.billReviewTitle,
       body: AbsorbPointer(
         absorbing: state.saving,
         child: Column(
@@ -178,7 +195,7 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
                       child: OutlinedButton.icon(
                         onPressed: _notifier.addItem,
                         icon: const Icon(Icons.add),
-                        label: const Text('Tambah item'),
+                        label: Text(l10n.billReviewAddItem),
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size.fromHeight(44.h),
                           shape: RoundedRectangleBorder(
@@ -201,18 +218,22 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
                       return await showDialog<bool>(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: const Text('Hapus item?'),
+                              title: Text(l10n.billReviewDeleteItemTitle),
                               content: Text(
-                                'Item "${item.name.isEmpty ? 'tanpa nama' : item.name}" akan dihapus.',
+                                l10n.billReviewDeleteItemBody(
+                                  item.name.isEmpty
+                                      ? l10n.billReviewUnnamedItem
+                                      : item.name,
+                                ),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(ctx, false),
-                                  child: const Text('Batal'),
+                                  child: Text(l10n.cancelAction),
                                 ),
                                 FilledButton(
                                   onPressed: () => Navigator.pop(ctx, true),
-                                  child: const Text('Hapus'),
+                                  child: Text(l10n.deleteBillAction),
                                 ),
                               ],
                             ),
@@ -350,7 +371,7 @@ class _Header extends StatelessWidget {
                     border: InputBorder.none,
                     isDense: true,
                     contentPadding: EdgeInsets.zero,
-                    hintText: 'Nama merchant',
+                    hintText: AppL10n.of(context).billReviewMerchantHint,
                     hintStyle: TextStyle(
                       fontSize: 20.sp,
                       color: scheme.outline,
@@ -373,7 +394,9 @@ class _Header extends StatelessWidget {
                   ),
                   SizedBox(width: 6.w),
                   Text(
-                    AppFormat.longDate().format(receiptDate!),
+                    AppFormat.longDate(
+                      AppFormat.intlLocaleOf(Localizations.localeOf(context)),
+                    ).format(receiptDate!),
                     style: TextStyle(fontSize: 12.sp, color: scheme.outline),
                   ),
                 ],
@@ -430,7 +453,9 @@ class _Header extends StatelessWidget {
                   SizedBox(width: 6.w),
                   Flexible(
                     child: Text(
-                      'AI kurang yakin (${(confidence * 100).toStringAsFixed(0)}%) — periksa angka.',
+                      AppL10n.of(context).billReviewAiLowConfidence(
+                        (confidence * 100).toStringAsFixed(0),
+                      ),
                       style: TextStyle(
                         fontSize: 11.sp,
                         color: scheme.onTertiaryContainer,
@@ -480,8 +505,8 @@ class _ItemCard extends StatelessWidget {
               controller: controllers.name,
               onChanged: onNameChanged,
               style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                hintText: 'Nama item',
+              decoration: InputDecoration(
+                hintText: AppL10n.of(context).billReviewItemNameHint,
                 isDense: true,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -525,7 +550,7 @@ class _ItemCard extends StatelessWidget {
                     ],
                     onChanged: onPriceChanged,
                     decoration: InputDecoration(
-                      labelText: 'Harga / unit',
+                      labelText: AppL10n.of(context).billReviewUnitPriceLabel,
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.r),
@@ -636,7 +661,7 @@ class _StickyBottom extends StatelessWidget {
                             focusNode: taxFocus,
                             onChanged: onTaxChanged,
                             decoration: InputDecoration(
-                              labelText: 'Pajak',
+                              labelText: AppL10n.of(context).billReviewTaxLabel,
                               isDense: true,
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
@@ -662,7 +687,9 @@ class _StickyBottom extends StatelessWidget {
                             focusNode: serviceFocus,
                             onChanged: onServiceChanged,
                             decoration: InputDecoration(
-                              labelText: 'Service',
+                              labelText: AppL10n.of(
+                                context,
+                              ).billReviewServiceLabel,
                               isDense: true,
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
@@ -769,7 +796,7 @@ class _SaveButton extends StatelessWidget {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          'Simpan Bill',
+                          AppL10n.of(context).billReviewSaveBill,
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
@@ -845,8 +872,10 @@ class _MismatchBanner extends StatelessWidget {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              'Total ${currency.format(computed)} berbeda dari struk '
-              '(${currency.format(detected)}). Periksa lagi.',
+              AppL10n.of(context).billReviewMismatch(
+                currency.format(computed),
+                currency.format(detected),
+              ),
               style: TextStyle(fontSize: 12.sp, color: Colors.orange.shade900),
             ),
           ),

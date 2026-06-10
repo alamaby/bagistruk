@@ -10,7 +10,7 @@ _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   id: json['id'] as String,
   displayName: json['display_name'] as String?,
   defaultCurrency: json['default_currency'] as String? ?? 'IDR',
-  languagePref: json['language_pref'] as String? ?? 'id',
+  languagePref: json['language_pref'] as String? ?? 'en',
   themePref: json['theme_pref'] as String? ?? 'system',
 );
 

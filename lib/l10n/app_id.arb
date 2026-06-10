@@ -18,6 +18,41 @@
   "scanCameraDone": "Selesai",
   "scanNotReceiptTitle": "Foto bukan struk",
   "scanNotReceiptHint": "Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.",
+  "scanPreparingSessionFailed": "Gagal siapkan sesi: {message}",
+  "@scanPreparingSessionFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "scanCreditCheckFailed": "Gagal cek credit scan: {message}",
+  "@scanCreditCheckFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "scanNoCreditAnonymousTitle": "Batas scan gratis tercapai",
+  "scanNoCreditFreeTitle": "Credit scan bulan ini habis",
+  "scanNoCreditAnonymousBody": "Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar akun untuk mendapat 20 credit gratis setiap bulan.",
+  "scanNoCreditPlusBody": "Kamu sudah memakai {monthlyAllowance} credit Plus bulan ini. Credit akan tersedia lagi pada periode berikutnya.",
+  "@scanNoCreditPlusBody": {
+    "placeholders": { "monthlyAllowance": { "type": "int" } }
+  },
+  "scanNoCreditFreeBody": "Kamu sudah memakai {monthlyAllowance} credit gratis bulan ini. Upgrade ke Plus untuk 60 credit/bulan, tanpa iklan, dan fitur khusus Plus.",
+  "@scanNoCreditFreeBody": {
+    "placeholders": { "monthlyAllowance": { "type": "int" } }
+  },
+  "scanNoCreditLater": "Nanti",
+  "scanNoCreditRegister": "Daftar",
+  "scanNoCreditPlusSoon": "Plus segera hadir",
+  "scanStatusPreparingImages": "Memproses gambar…",
+  "scanStatusIdle": "Tambah foto lalu tap Pindai",
+  "scanStatusScanning": "Memindai {imageCount} gambar…",
+  "@scanStatusScanning": {
+    "placeholders": { "imageCount": { "type": "int" } }
+  },
+  "scanStatusSuccess": "{itemCount} item terdeteksi via {provider}",
+  "@scanStatusSuccess": {
+    "placeholders": {
+      "itemCount": { "type": "int" },
+      "provider": { "type": "String" }
+    }
+  },
   "ocrErrorNetworkTitle": "Tidak ada koneksi",
   "ocrErrorNetworkBody": "Periksa koneksi internetmu, lalu coba scan ulang.",
   "ocrErrorAuthTitle": "Sesi berakhir",
@@ -164,6 +199,23 @@
   "deleteBillSuccess": "Bill dipindahkan ke Bill terhapus.",
 
   "errorGeneric": "Terjadi kesalahan. Coba lagi.",
+  "authErrorNetwork": "Tidak ada koneksi internet. Coba lagi setelah jaringan stabil.",
+  "authErrorServer": "Server bermasalah: {message}. Coba lagi sebentar lagi.",
+  "@authErrorServer": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "authErrorParsing": "Respons server tidak terbaca. Coba lagi.",
+  "authErrorUnknown": "Terjadi kesalahan tak terduga. Coba lagi.",
+  "authErrorInvalidLogin": "Email atau password salah.",
+  "authErrorAlreadyRegistered": "Email sudah terdaftar. Coba login.",
+  "authErrorWeakPassword": "Password terlalu lemah. Minimal 6 karakter.",
+  "authErrorEmailNotConfirmed": "Email belum dikonfirmasi. Cek kotak masuk.",
+  "authErrorDisposableEmail": "Email sementara/disposable tidak bisa digunakan. Pakai email utama kamu.",
+  "authErrorEmailAliasUsed": "Email ini terdeteksi sebagai alias dari email yang sudah pernah digunakan.",
+  "authErrorInvalidEmail": "Format email belum valid.",
+  "authErrorGoogleSignIn": "Google Sign-In gagal setelah memilih akun. Coba lagi; jika tetap terjadi, cek OAuth Android package name, SHA-1 debug/release, dan Google Web Client ID.",
+  "authErrorComingSoon": "Fitur ini akan segera hadir.",
+  "authErrorFallback": "Autentikasi gagal. Coba lagi.",
   "loading": "Memuat...",
 
   "noSessionMessage": "Daftar atau masuk untuk mengakses pengaturan.",
@@ -271,6 +323,90 @@
   "splitSummaryService": "Service (proporsional)",
   "splitSummaryShare": "Bagikan",
   "participantShareAgain": "Bagikan ulang",
+  "billReviewTitle": "Review bill",
+  "billReviewAddItem": "Tambah item",
+  "billReviewDeleteItemTitle": "Hapus item?",
+  "billReviewDeleteItemBody": "Item \"{name}\" akan dihapus.",
+  "@billReviewDeleteItemBody": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "billReviewMerchantHint": "Nama merchant",
+  "billReviewItemNameHint": "Nama item",
+  "billReviewUnnamedItem": "tanpa nama",
+  "billReviewUnitPriceLabel": "Harga / unit",
+  "billReviewTaxLabel": "Pajak",
+  "billReviewServiceLabel": "Service",
+  "billReviewSaveBill": "Simpan Bill",
+  "billReviewAiLowConfidence": "AI kurang yakin ({percent}%) — periksa angka.",
+  "@billReviewAiLowConfidence": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "billReviewMismatch": "Total {computed} berbeda dari struk ({detected}). Periksa lagi.",
+  "@billReviewMismatch": {
+    "placeholders": {
+      "computed": { "type": "String" },
+      "detected": { "type": "String" }
+    }
+  },
+  "billReviewTitleRequired": "Judul tidak boleh kosong.",
+  "billReviewItemsRequired": "Tambahkan minimal satu item.",
+  "billReviewInvalidItem": "Periksa nama, harga, dan qty setiap item.",
+  "billReviewSaveBillFailed": "Gagal simpan bill: {message}",
+  "@billReviewSaveBillFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billReviewSaveItemsFailed": "Bill tersimpan tapi item gagal: {message}",
+  "@billReviewSaveItemsFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billSplitTitle": "Split bill",
+  "billSplitBackTooltip": "Kembali",
+  "billSplitDone": "Selesai",
+  "billSplitAddPersonTitle": "Tambah orang",
+  "billSplitNameHint": "Nama",
+  "billSplitAdd": "Tambah",
+  "billSplitEmptyItems": "Bill ini belum punya item.",
+  "billSplitTotalBill": "Total tagihan",
+  "billSplitAllAssigned": "Semua item sudah dibagi",
+  "billSplitUnassigned": "Belum dibagi: {amount}",
+  "@billSplitUnassigned": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "billSplitViewSummary": "Lihat Rincian",
+  "billSplitStateNotReady": "State belum siap.",
+  "billSplitNameRequired": "Nama tidak boleh kosong.",
+  "billSplitAddPersonFailed": "Gagal tambah orang: {message}",
+  "@billSplitAddPersonFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billSplitSelectPersonFirst": "Pilih dulu orang di bawah.",
+  "billSplitSaveAssignmentFailed": "Gagal simpan assignment: {message}",
+  "@billSplitSaveAssignmentFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billDetailTitle": "Detail Tagihan",
+  "billDetailHomeTooltip": "Beranda",
+  "billDetailScanAnotherTooltip": "Scan struk lain",
+  "billDetailLoading": "Memuat detail…",
+  "billDetailParticipants": "Partisipan",
+  "billDetailTotalBill": "Total tagihan",
+  "billDetailPaidProgress": "{paidCount}/{totalCount} partisipan sudah bayar",
+  "@billDetailPaidProgress": {
+    "placeholders": {
+      "paidCount": { "type": "int" },
+      "totalCount": { "type": "int" }
+    }
+  },
+  "billDetailSettled": "Lunas",
+  "billDetailUnsettled": "Belum lunas",
+  "billDetailEmptyParticipants": "Belum ada partisipan untuk tagihan ini.",
+  "billDetailGoToSplit": "Pergi ke Pembagian",
+  "billDetailParticipantNotFound": "Partisipan tidak ditemukan.",
+  "billDetailSaveStatusFailed": "Gagal simpan status: {message}",
+  "@billDetailSaveStatusFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billDetailStateNotReady": "Data belum siap, coba lagi sebentar.",
   "exportPdf": "Export PDF",
   "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",

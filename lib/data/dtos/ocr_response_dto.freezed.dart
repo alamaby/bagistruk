@@ -284,7 +284,7 @@ as double,
 /// @nodoc
 mixin _$OcrResponseDto {
 
- List<OcrLineItemDto> get items; double? get detectedTotal; double? get detectedTax; double? get detectedService; String? get merchant; DateTime? get receiptDate; double get confidence; String get providerUsed;
+ List<OcrLineItemDto> get items; double? get detectedTotal; double? get detectedTax; double? get detectedService; String? get merchant;@JsonKey(fromJson: _nullableDateTimeFromJson) DateTime? get receiptDate; double get confidence; String get providerUsed;
 /// Create a copy of OcrResponseDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -317,7 +317,7 @@ abstract mixin class $OcrResponseDtoCopyWith<$Res>  {
   factory $OcrResponseDtoCopyWith(OcrResponseDto value, $Res Function(OcrResponseDto) _then) = _$OcrResponseDtoCopyWithImpl;
 @useResult
 $Res call({
- List<OcrLineItemDto> items, double? detectedTotal, double? detectedTax, double? detectedService, String? merchant, DateTime? receiptDate, double confidence, String providerUsed
+ List<OcrLineItemDto> items, double? detectedTotal, double? detectedTax, double? detectedService, String? merchant,@JsonKey(fromJson: _nullableDateTimeFromJson) DateTime? receiptDate, double confidence, String providerUsed
 });
 
 
@@ -429,7 +429,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant,  DateTime? receiptDate,  double confidence,  String providerUsed)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant, @JsonKey(fromJson: _nullableDateTimeFromJson)  DateTime? receiptDate,  double confidence,  String providerUsed)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OcrResponseDto() when $default != null:
 return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detectedService,_that.merchant,_that.receiptDate,_that.confidence,_that.providerUsed);case _:
@@ -450,7 +450,7 @@ return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detected
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant,  DateTime? receiptDate,  double confidence,  String providerUsed)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant, @JsonKey(fromJson: _nullableDateTimeFromJson)  DateTime? receiptDate,  double confidence,  String providerUsed)  $default,) {final _that = this;
 switch (_that) {
 case _OcrResponseDto():
 return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detectedService,_that.merchant,_that.receiptDate,_that.confidence,_that.providerUsed);case _:
@@ -470,7 +470,7 @@ return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detected
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant,  DateTime? receiptDate,  double confidence,  String providerUsed)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<OcrLineItemDto> items,  double? detectedTotal,  double? detectedTax,  double? detectedService,  String? merchant, @JsonKey(fromJson: _nullableDateTimeFromJson)  DateTime? receiptDate,  double confidence,  String providerUsed)?  $default,) {final _that = this;
 switch (_that) {
 case _OcrResponseDto() when $default != null:
 return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detectedService,_that.merchant,_that.receiptDate,_that.confidence,_that.providerUsed);case _:
@@ -485,7 +485,7 @@ return $default(_that.items,_that.detectedTotal,_that.detectedTax,_that.detected
 @JsonSerializable()
 
 class _OcrResponseDto extends OcrResponseDto {
-  const _OcrResponseDto({required final  List<OcrLineItemDto> items, this.detectedTotal, this.detectedTax, this.detectedService, this.merchant, this.receiptDate, this.confidence = 0.0, required this.providerUsed}): _items = items,super._();
+  const _OcrResponseDto({required final  List<OcrLineItemDto> items, this.detectedTotal, this.detectedTax, this.detectedService, this.merchant, @JsonKey(fromJson: _nullableDateTimeFromJson) this.receiptDate, this.confidence = 0.0, required this.providerUsed}): _items = items,super._();
   factory _OcrResponseDto.fromJson(Map<String, dynamic> json) => _$OcrResponseDtoFromJson(json);
 
  final  List<OcrLineItemDto> _items;
@@ -499,7 +499,7 @@ class _OcrResponseDto extends OcrResponseDto {
 @override final  double? detectedTax;
 @override final  double? detectedService;
 @override final  String? merchant;
-@override final  DateTime? receiptDate;
+@override@JsonKey(fromJson: _nullableDateTimeFromJson) final  DateTime? receiptDate;
 @override@JsonKey() final  double confidence;
 @override final  String providerUsed;
 
@@ -536,7 +536,7 @@ abstract mixin class _$OcrResponseDtoCopyWith<$Res> implements $OcrResponseDtoCo
   factory _$OcrResponseDtoCopyWith(_OcrResponseDto value, $Res Function(_OcrResponseDto) _then) = __$OcrResponseDtoCopyWithImpl;
 @override @useResult
 $Res call({
- List<OcrLineItemDto> items, double? detectedTotal, double? detectedTax, double? detectedService, String? merchant, DateTime? receiptDate, double confidence, String providerUsed
+ List<OcrLineItemDto> items, double? detectedTotal, double? detectedTax, double? detectedService, String? merchant,@JsonKey(fromJson: _nullableDateTimeFromJson) DateTime? receiptDate, double confidence, String providerUsed
 });
 
 

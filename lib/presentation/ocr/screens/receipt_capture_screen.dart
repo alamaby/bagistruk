@@ -136,7 +136,13 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       final ensured = await ref.read(authRepositoryProvider).ensureSignedIn();
       if (ensured is ResultFailure<String> && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal siapkan sesi: ${ensured.failure}')),
+          SnackBar(
+            content: Text(
+              AppL10n.of(
+                context,
+              ).scanPreparingSessionFailed(ensured.failure.toString()),
+            ),
+          ),
         );
         return;
       }
@@ -169,7 +175,11 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         return false;
       case ResultFailure(:final failure):
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal cek credit scan: $failure')),
+          SnackBar(
+            content: Text(
+              AppL10n.of(context).scanCreditCheckFailed(failure.toString()),
+            ),
+          ),
         );
         return false;
     }
@@ -180,18 +190,15 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
     required int monthlyAllowance,
   }) {
     final isAnonymous = planCode == 'anonymous';
+    final l10n = AppL10n.of(context);
     final title = isAnonymous
-        ? 'Batas scan gratis tercapai'
-        : 'Credit scan bulan ini habis';
+        ? l10n.scanNoCreditAnonymousTitle
+        : l10n.scanNoCreditFreeTitle;
     final body = isAnonymous
-        ? 'Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar '
-              'akun untuk mendapat 20 credit gratis setiap bulan.'
+        ? l10n.scanNoCreditAnonymousBody
         : planCode == 'plus'
-        ? 'Kamu sudah memakai $monthlyAllowance credit Plus bulan ini. Credit '
-              'akan tersedia lagi pada periode berikutnya.'
-        : 'Kamu sudah memakai $monthlyAllowance credit gratis bulan ini. '
-              'Upgrade ke Plus untuk 60 credit/bulan, tanpa iklan, dan fitur '
-              'khusus Plus.';
+        ? l10n.scanNoCreditPlusBody(monthlyAllowance)
+        : l10n.scanNoCreditFreeBody(monthlyAllowance);
     return showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -200,7 +207,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Nanti'),
+            child: Text(l10n.scanNoCreditLater),
           ),
           if (isAnonymous)
             FilledButton.icon(
@@ -209,13 +216,13 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
                 Navigator.of(ctx).pop();
                 context.goNamed(Routes.registerName);
               },
-              label: const Text('Daftar'),
+              label: Text(l10n.scanNoCreditRegister),
             )
           else if (planCode == 'free')
             FilledButton.icon(
               icon: const Icon(Icons.workspace_premium),
               onPressed: () => Navigator.of(ctx).pop(),
-              label: const Text('Plus segera hadir'),
+              label: Text(l10n.scanNoCreditPlusSoon),
             ),
         ],
       ),
@@ -393,14 +400,18 @@ class _StatusLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isProcessing = starting || state is OcrProcessing;
+    final l10n = AppL10n.of(context);
     final text = starting && state is! OcrProcessing
-        ? 'Memproses gambar…'
+        ? l10n.scanStatusPreparingImages
         : switch (state) {
-            OcrIdle() => 'Add photos and tap Scan',
-            OcrProcessing(:final imageCount) =>
-              'Scanning $imageCount image(s)…',
-            OcrSuccess(:final result) =>
-              '${result.items.length} items detected via ${result.providerUsed}',
+            OcrIdle() => l10n.scanStatusIdle,
+            OcrProcessing(:final imageCount) => l10n.scanStatusScanning(
+              imageCount,
+            ),
+            OcrSuccess(:final result) => l10n.scanStatusSuccess(
+              result.items.length,
+              result.providerUsed,
+            ),
             OcrFailure() => '',
           };
     final label = Text(

@@ -8,23 +8,20 @@ part of 'preferences_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Active locale derived from [ProfileNotifier]. Defaults to Indonesian until
-/// the profile row resolves, mirroring the previous hard-coded MaterialApp
-/// locale so first-frame text never flickers from English to Indonesian.
+/// Active locale derived from [ProfileNotifier]. Defaults to English until the
+/// profile row resolves.
 
 @ProviderFor(localePref)
 const localePrefProvider = LocalePrefProvider._();
 
-/// Active locale derived from [ProfileNotifier]. Defaults to Indonesian until
-/// the profile row resolves, mirroring the previous hard-coded MaterialApp
-/// locale so first-frame text never flickers from English to Indonesian.
+/// Active locale derived from [ProfileNotifier]. Defaults to English until the
+/// profile row resolves.
 
 final class LocalePrefProvider
     extends $FunctionalProvider<Locale, Locale, Locale>
     with $Provider<Locale> {
-  /// Active locale derived from [ProfileNotifier]. Defaults to Indonesian until
-  /// the profile row resolves, mirroring the previous hard-coded MaterialApp
-  /// locale so first-frame text never flickers from English to Indonesian.
+  /// Active locale derived from [ProfileNotifier]. Defaults to English until the
+  /// profile row resolves.
   const LocalePrefProvider._()
     : super(
         from: null,
@@ -58,7 +55,7 @@ final class LocalePrefProvider
   }
 }
 
-String _$localePrefHash() => r'dd94a7b0bf20680735db2bdf4efba666e0d3a2e2';
+String _$localePrefHash() => r'39df0eed7d5146e1f8194b8297b77cf447b7c038';
 
 @ProviderFor(themeModePref)
 const themeModePrefProvider = ThemeModePrefProvider._();

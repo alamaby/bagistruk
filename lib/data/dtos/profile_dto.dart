@@ -11,7 +11,7 @@ abstract class ProfileDto with _$ProfileDto {
     required String id,
     @JsonKey(name: 'display_name') String? displayName,
     @JsonKey(name: 'default_currency') @Default('IDR') String defaultCurrency,
-    @JsonKey(name: 'language_pref') @Default('id') String languagePref,
+    @JsonKey(name: 'language_pref') @Default('en') String languagePref,
     @JsonKey(name: 'theme_pref') @Default('system') String themePref,
   }) = _ProfileDto;
 

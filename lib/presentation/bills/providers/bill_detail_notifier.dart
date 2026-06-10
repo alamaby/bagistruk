@@ -133,12 +133,18 @@ class BillDetailNotifier extends _$BillDetailNotifier {
     );
   }
 
-  Future<String?> toggleParticipantPaymentStatus(String participantId) async {
+  Future<BillDetailActionError?> toggleParticipantPaymentStatus(
+    String participantId,
+  ) async {
     final s = state.value;
-    if (s == null) return 'State belum siap';
+    if (s == null) {
+      return const BillDetailActionError(BillDetailActionErrorKind.stateNotReady);
+    }
 
     final idx = s.participants.indexWhere((p) => p.id == participantId);
-    if (idx < 0) return 'Partisipan tidak ditemukan';
+    if (idx < 0) {
+      return const BillDetailActionError(BillDetailActionErrorKind.notFound);
+    }
     final old = s.participants[idx];
     final updated = old.copyWith(
       isPaid: !old.isPaid,
@@ -152,7 +158,10 @@ class BillDetailNotifier extends _$BillDetailNotifier {
     final res = await repo.upsertParticipant(updated);
     if (res is ResultFailure<Participant>) {
       state = AsyncData(s);
-      return 'Gagal simpan status: ${res.failure}';
+      return BillDetailActionError(
+        BillDetailActionErrorKind.saveStatusFailed,
+        res.failure.toString(),
+      );
     }
 
     final allPaid = nextList.isNotEmpty && nextList.every((p) => p.isPaid);
@@ -174,6 +183,14 @@ class BillDetailNotifier extends _$BillDetailNotifier {
     ResultFailure(:final failure) => throw _FailureException(failure),
   };
 }
+
+class BillDetailActionError {
+  const BillDetailActionError(this.kind, [this.message]);
+  final BillDetailActionErrorKind kind;
+  final String? message;
+}
+
+enum BillDetailActionErrorKind { notFound, saveStatusFailed, stateNotReady }
 
 class _FailureException implements Exception {
   _FailureException(this.failure);

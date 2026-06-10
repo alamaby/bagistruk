@@ -60,7 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       case Success():
         context.go(widget.from ?? Routes.history);
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 
@@ -75,7 +75,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       case Success():
         context.go(widget.from ?? Routes.history);
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 
@@ -111,7 +111,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ).toString(),
         );
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 

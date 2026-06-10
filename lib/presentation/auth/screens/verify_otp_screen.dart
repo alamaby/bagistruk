@@ -81,7 +81,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
       case Success():
         context.go(widget.from ?? Routes.history);
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 
@@ -111,7 +111,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
             ),
           );
       case ResultFailure(:final failure):
-        _showError(friendlyAuthMessage(failure));
+        _showError(friendlyAuthMessage(failure, AppL10n.of(context)));
     }
   }
 

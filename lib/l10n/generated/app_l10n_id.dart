@@ -58,6 +58,61 @@ class AppL10nId extends AppL10n {
       'Gambar yang dipilih sepertinya bukan struk. Coba foto struk yang jelas.';
 
   @override
+  String scanPreparingSessionFailed(String message) {
+    return 'Gagal siapkan sesi: $message';
+  }
+
+  @override
+  String scanCreditCheckFailed(String message) {
+    return 'Gagal cek credit scan: $message';
+  }
+
+  @override
+  String get scanNoCreditAnonymousTitle => 'Batas scan gratis tercapai';
+
+  @override
+  String get scanNoCreditFreeTitle => 'Credit scan bulan ini habis';
+
+  @override
+  String get scanNoCreditAnonymousBody =>
+      'Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar akun untuk mendapat 20 credit gratis setiap bulan.';
+
+  @override
+  String scanNoCreditPlusBody(int monthlyAllowance) {
+    return 'Kamu sudah memakai $monthlyAllowance credit Plus bulan ini. Credit akan tersedia lagi pada periode berikutnya.';
+  }
+
+  @override
+  String scanNoCreditFreeBody(int monthlyAllowance) {
+    return 'Kamu sudah memakai $monthlyAllowance credit gratis bulan ini. Upgrade ke Plus untuk 60 credit/bulan, tanpa iklan, dan fitur khusus Plus.';
+  }
+
+  @override
+  String get scanNoCreditLater => 'Nanti';
+
+  @override
+  String get scanNoCreditRegister => 'Daftar';
+
+  @override
+  String get scanNoCreditPlusSoon => 'Plus segera hadir';
+
+  @override
+  String get scanStatusPreparingImages => 'Memproses gambar…';
+
+  @override
+  String get scanStatusIdle => 'Tambah foto lalu tap Pindai';
+
+  @override
+  String scanStatusScanning(int imageCount) {
+    return 'Memindai $imageCount gambar…';
+  }
+
+  @override
+  String scanStatusSuccess(int itemCount, String provider) {
+    return '$itemCount item terdeteksi via $provider';
+  }
+
+  @override
   String get ocrErrorNetworkTitle => 'Tidak ada koneksi';
 
   @override
@@ -434,6 +489,56 @@ class AppL10nId extends AppL10n {
   String get errorGeneric => 'Terjadi kesalahan. Coba lagi.';
 
   @override
+  String get authErrorNetwork =>
+      'Tidak ada koneksi internet. Coba lagi setelah jaringan stabil.';
+
+  @override
+  String authErrorServer(String message) {
+    return 'Server bermasalah: $message. Coba lagi sebentar lagi.';
+  }
+
+  @override
+  String get authErrorParsing => 'Respons server tidak terbaca. Coba lagi.';
+
+  @override
+  String get authErrorUnknown => 'Terjadi kesalahan tak terduga. Coba lagi.';
+
+  @override
+  String get authErrorInvalidLogin => 'Email atau password salah.';
+
+  @override
+  String get authErrorAlreadyRegistered => 'Email sudah terdaftar. Coba login.';
+
+  @override
+  String get authErrorWeakPassword =>
+      'Password terlalu lemah. Minimal 6 karakter.';
+
+  @override
+  String get authErrorEmailNotConfirmed =>
+      'Email belum dikonfirmasi. Cek kotak masuk.';
+
+  @override
+  String get authErrorDisposableEmail =>
+      'Email sementara/disposable tidak bisa digunakan. Pakai email utama kamu.';
+
+  @override
+  String get authErrorEmailAliasUsed =>
+      'Email ini terdeteksi sebagai alias dari email yang sudah pernah digunakan.';
+
+  @override
+  String get authErrorInvalidEmail => 'Format email belum valid.';
+
+  @override
+  String get authErrorGoogleSignIn =>
+      'Google Sign-In gagal setelah memilih akun. Coba lagi; jika tetap terjadi, cek OAuth Android package name, SHA-1 debug/release, dan Google Web Client ID.';
+
+  @override
+  String get authErrorComingSoon => 'Fitur ini akan segera hadir.';
+
+  @override
+  String get authErrorFallback => 'Autentikasi gagal. Coba lagi.';
+
+  @override
   String get loading => 'Memuat...';
 
   @override
@@ -676,6 +781,172 @@ class AppL10nId extends AppL10n {
 
   @override
   String get participantShareAgain => 'Bagikan ulang';
+
+  @override
+  String get billReviewTitle => 'Review bill';
+
+  @override
+  String get billReviewAddItem => 'Tambah item';
+
+  @override
+  String get billReviewDeleteItemTitle => 'Hapus item?';
+
+  @override
+  String billReviewDeleteItemBody(String name) {
+    return 'Item \"$name\" akan dihapus.';
+  }
+
+  @override
+  String get billReviewMerchantHint => 'Nama merchant';
+
+  @override
+  String get billReviewItemNameHint => 'Nama item';
+
+  @override
+  String get billReviewUnnamedItem => 'tanpa nama';
+
+  @override
+  String get billReviewUnitPriceLabel => 'Harga / unit';
+
+  @override
+  String get billReviewTaxLabel => 'Pajak';
+
+  @override
+  String get billReviewServiceLabel => 'Service';
+
+  @override
+  String get billReviewSaveBill => 'Simpan Bill';
+
+  @override
+  String billReviewAiLowConfidence(String percent) {
+    return 'AI kurang yakin ($percent%) — periksa angka.';
+  }
+
+  @override
+  String billReviewMismatch(String computed, String detected) {
+    return 'Total $computed berbeda dari struk ($detected). Periksa lagi.';
+  }
+
+  @override
+  String get billReviewTitleRequired => 'Judul tidak boleh kosong.';
+
+  @override
+  String get billReviewItemsRequired => 'Tambahkan minimal satu item.';
+
+  @override
+  String get billReviewInvalidItem =>
+      'Periksa nama, harga, dan qty setiap item.';
+
+  @override
+  String billReviewSaveBillFailed(String message) {
+    return 'Gagal simpan bill: $message';
+  }
+
+  @override
+  String billReviewSaveItemsFailed(String message) {
+    return 'Bill tersimpan tapi item gagal: $message';
+  }
+
+  @override
+  String get billSplitTitle => 'Split bill';
+
+  @override
+  String get billSplitBackTooltip => 'Kembali';
+
+  @override
+  String get billSplitDone => 'Selesai';
+
+  @override
+  String get billSplitAddPersonTitle => 'Tambah orang';
+
+  @override
+  String get billSplitNameHint => 'Nama';
+
+  @override
+  String get billSplitAdd => 'Tambah';
+
+  @override
+  String get billSplitEmptyItems => 'Bill ini belum punya item.';
+
+  @override
+  String get billSplitTotalBill => 'Total tagihan';
+
+  @override
+  String get billSplitAllAssigned => 'Semua item sudah dibagi';
+
+  @override
+  String billSplitUnassigned(String amount) {
+    return 'Belum dibagi: $amount';
+  }
+
+  @override
+  String get billSplitViewSummary => 'Lihat Rincian';
+
+  @override
+  String get billSplitStateNotReady => 'State belum siap.';
+
+  @override
+  String get billSplitNameRequired => 'Nama tidak boleh kosong.';
+
+  @override
+  String billSplitAddPersonFailed(String message) {
+    return 'Gagal tambah orang: $message';
+  }
+
+  @override
+  String get billSplitSelectPersonFirst => 'Pilih dulu orang di bawah.';
+
+  @override
+  String billSplitSaveAssignmentFailed(String message) {
+    return 'Gagal simpan assignment: $message';
+  }
+
+  @override
+  String get billDetailTitle => 'Detail Tagihan';
+
+  @override
+  String get billDetailHomeTooltip => 'Beranda';
+
+  @override
+  String get billDetailScanAnotherTooltip => 'Scan struk lain';
+
+  @override
+  String get billDetailLoading => 'Memuat detail…';
+
+  @override
+  String get billDetailParticipants => 'Partisipan';
+
+  @override
+  String get billDetailTotalBill => 'Total tagihan';
+
+  @override
+  String billDetailPaidProgress(int paidCount, int totalCount) {
+    return '$paidCount/$totalCount partisipan sudah bayar';
+  }
+
+  @override
+  String get billDetailSettled => 'Lunas';
+
+  @override
+  String get billDetailUnsettled => 'Belum lunas';
+
+  @override
+  String get billDetailEmptyParticipants =>
+      'Belum ada partisipan untuk tagihan ini.';
+
+  @override
+  String get billDetailGoToSplit => 'Pergi ke Pembagian';
+
+  @override
+  String get billDetailParticipantNotFound => 'Partisipan tidak ditemukan.';
+
+  @override
+  String billDetailSaveStatusFailed(String message) {
+    return 'Gagal simpan status: $message';
+  }
+
+  @override
+  String get billDetailStateNotReady => 'Data belum siap, coba lagi sebentar.';
 
   @override
   String get exportPdf => 'Export PDF';

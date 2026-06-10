@@ -212,7 +212,7 @@ return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_th
 
 
 class _UserProfile implements UserProfile {
-  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'IDR', this.languagePref = 'id', this.themePref = 'system', this.isAnonymous = false});
+  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'IDR', this.languagePref = 'en', this.themePref = 'system', this.isAnonymous = false});
   
 
 @override final  String id;

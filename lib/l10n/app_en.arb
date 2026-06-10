@@ -18,6 +18,41 @@
   "scanCameraDone": "Done",
   "scanNotReceiptTitle": "Not a receipt",
   "scanNotReceiptHint": "The selected image doesn't look like a receipt. Try a clear photo of a receipt.",
+  "scanPreparingSessionFailed": "Could not prepare session: {message}",
+  "@scanPreparingSessionFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "scanCreditCheckFailed": "Could not check scan credits: {message}",
+  "@scanCreditCheckFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "scanNoCreditAnonymousTitle": "Free scan limit reached",
+  "scanNoCreditFreeTitle": "This month's scan credits are used up",
+  "scanNoCreditAnonymousBody": "You have used 5 scan credits as a guest. Create an account to get 20 free credits every month.",
+  "scanNoCreditPlusBody": "You have used {monthlyAllowance} Plus credits this month. Credits will be available again in the next period.",
+  "@scanNoCreditPlusBody": {
+    "placeholders": { "monthlyAllowance": { "type": "int" } }
+  },
+  "scanNoCreditFreeBody": "You have used {monthlyAllowance} free credits this month. Upgrade to Plus for 60 credits/month, no ads, and Plus features.",
+  "@scanNoCreditFreeBody": {
+    "placeholders": { "monthlyAllowance": { "type": "int" } }
+  },
+  "scanNoCreditLater": "Later",
+  "scanNoCreditRegister": "Sign Up",
+  "scanNoCreditPlusSoon": "Plus coming soon",
+  "scanStatusPreparingImages": "Processing images…",
+  "scanStatusIdle": "Add photos and tap Scan",
+  "scanStatusScanning": "Scanning {imageCount} image(s)…",
+  "@scanStatusScanning": {
+    "placeholders": { "imageCount": { "type": "int" } }
+  },
+  "scanStatusSuccess": "{itemCount} items detected via {provider}",
+  "@scanStatusSuccess": {
+    "placeholders": {
+      "itemCount": { "type": "int" },
+      "provider": { "type": "String" }
+    }
+  },
   "ocrErrorNetworkTitle": "No connection",
   "ocrErrorNetworkBody": "Check your internet connection, then scan again.",
   "ocrErrorAuthTitle": "Session expired",
@@ -164,6 +199,23 @@
   "deleteBillSuccess": "Bill moved to Deleted bills.",
 
   "errorGeneric": "Something went wrong. Please try again.",
+  "authErrorNetwork": "No internet connection. Try again when the network is stable.",
+  "authErrorServer": "Server issue: {message}. Try again shortly.",
+  "@authErrorServer": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "authErrorParsing": "The server response could not be read. Try again.",
+  "authErrorUnknown": "Something unexpected happened. Try again.",
+  "authErrorInvalidLogin": "Email or password is incorrect.",
+  "authErrorAlreadyRegistered": "Email is already registered. Try logging in.",
+  "authErrorWeakPassword": "Password is too weak. Use at least 6 characters.",
+  "authErrorEmailNotConfirmed": "Email has not been confirmed. Check your inbox.",
+  "authErrorDisposableEmail": "Temporary/disposable email cannot be used. Use your main email.",
+  "authErrorEmailAliasUsed": "This email appears to be an alias of an email that has already been used.",
+  "authErrorInvalidEmail": "Email format is not valid yet.",
+  "authErrorGoogleSignIn": "Google Sign-In failed after choosing an account. Try again; if it keeps happening, check the OAuth Android package name, debug/release SHA-1, and Google Web Client ID.",
+  "authErrorComingSoon": "This feature is coming soon.",
+  "authErrorFallback": "Authentication failed. Try again.",
   "loading": "Loading...",
 
   "noSessionMessage": "Sign up or log in to access settings.",
@@ -271,6 +323,90 @@
   "splitSummaryService": "Service (proportional)",
   "splitSummaryShare": "Share",
   "participantShareAgain": "Share again",
+  "billReviewTitle": "Review bill",
+  "billReviewAddItem": "Add item",
+  "billReviewDeleteItemTitle": "Delete item?",
+  "billReviewDeleteItemBody": "Item \"{name}\" will be deleted.",
+  "@billReviewDeleteItemBody": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "billReviewMerchantHint": "Merchant name",
+  "billReviewItemNameHint": "Item name",
+  "billReviewUnnamedItem": "unnamed item",
+  "billReviewUnitPriceLabel": "Price / unit",
+  "billReviewTaxLabel": "Tax",
+  "billReviewServiceLabel": "Service",
+  "billReviewSaveBill": "Save Bill",
+  "billReviewAiLowConfidence": "AI is less confident ({percent}%) — verify the numbers.",
+  "@billReviewAiLowConfidence": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+  "billReviewMismatch": "Total {computed} differs from the receipt ({detected}). Check again.",
+  "@billReviewMismatch": {
+    "placeholders": {
+      "computed": { "type": "String" },
+      "detected": { "type": "String" }
+    }
+  },
+  "billReviewTitleRequired": "Title cannot be empty.",
+  "billReviewItemsRequired": "Add at least one item.",
+  "billReviewInvalidItem": "Check the name, price, and quantity for every item.",
+  "billReviewSaveBillFailed": "Could not save bill: {message}",
+  "@billReviewSaveBillFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billReviewSaveItemsFailed": "Bill was saved, but items could not be saved: {message}",
+  "@billReviewSaveItemsFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billSplitTitle": "Split bill",
+  "billSplitBackTooltip": "Back",
+  "billSplitDone": "Done",
+  "billSplitAddPersonTitle": "Add person",
+  "billSplitNameHint": "Name",
+  "billSplitAdd": "Add",
+  "billSplitEmptyItems": "This bill has no items yet.",
+  "billSplitTotalBill": "Total bill",
+  "billSplitAllAssigned": "All items have been split",
+  "billSplitUnassigned": "Unassigned: {amount}",
+  "@billSplitUnassigned": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "billSplitViewSummary": "View Summary",
+  "billSplitStateNotReady": "State is not ready.",
+  "billSplitNameRequired": "Name cannot be empty.",
+  "billSplitAddPersonFailed": "Could not add person: {message}",
+  "@billSplitAddPersonFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billSplitSelectPersonFirst": "Select a person below first.",
+  "billSplitSaveAssignmentFailed": "Could not save assignment: {message}",
+  "@billSplitSaveAssignmentFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billDetailTitle": "Bill Details",
+  "billDetailHomeTooltip": "Home",
+  "billDetailScanAnotherTooltip": "Scan another receipt",
+  "billDetailLoading": "Loading details…",
+  "billDetailParticipants": "Participants",
+  "billDetailTotalBill": "Total bill",
+  "billDetailPaidProgress": "{paidCount}/{totalCount} participants have paid",
+  "@billDetailPaidProgress": {
+    "placeholders": {
+      "paidCount": { "type": "int" },
+      "totalCount": { "type": "int" }
+    }
+  },
+  "billDetailSettled": "Paid",
+  "billDetailUnsettled": "Unpaid",
+  "billDetailEmptyParticipants": "No participants for this bill yet.",
+  "billDetailGoToSplit": "Go to Split",
+  "billDetailParticipantNotFound": "Participant not found.",
+  "billDetailSaveStatusFailed": "Could not save status: {message}",
+  "@billDetailSaveStatusFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "billDetailStateNotReady": "Data is not ready yet, please try again shortly.",
   "exportPdf": "Export PDF",
   "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",
