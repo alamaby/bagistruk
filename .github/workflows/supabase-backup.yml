@@ -1,0 +1,81 @@
+name: Supabase Backup
+
+on:
+  schedule:
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Backup database to Google Drive
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      BACKUP_REMOTE_PATH: gdrive:bagistruk/supabase-backups
+
+    steps:
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Validate required secrets
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+          RCLONE_CONFIG_BASE64: ${{ secrets.RCLONE_CONFIG_BASE64 }}
+        run: |
+          missing=()
+          for key in DATABASE_URL RCLONE_CONFIG_BASE64; do
+            if [ -z "${!key}" ]; then
+              missing+=("$key")
+            fi
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing required secrets: ${missing[*]}. Add SUPABASE_DATABASE_URL and RCLONE_CONFIG_BASE64 in GitHub Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+      - name: Restore rclone config
+        env:
+          RCLONE_CONFIG_BASE64: ${{ secrets.RCLONE_CONFIG_BASE64 }}
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "$RCLONE_CONFIG_BASE64" | base64 -d > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+
+      - name: Dump Supabase database
+        id: dump
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+        run: |
+          mkdir -p backups
+          timestamp="$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
+          backup_file="backups/bagistruk-supabase-${timestamp}.sql"
+          supabase db dump --db-url "$DATABASE_URL" --file "$backup_file"
+          gzip "$backup_file"
+          echo "backup_file=${backup_file}.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Upload backup to Google Drive
+        run: |
+          rclone copy "${{ steps.dump.outputs.backup_file }}" "$BACKUP_REMOTE_PATH" \
+            --drive-use-trash=false \
+            --transfers=1 \
+            --checkers=4
+
+      - name: Delete Google Drive backups older than 30 days
+        run: |
+          rclone delete "$BACKUP_REMOTE_PATH" \
+            --min-age 30d \
+            --include "*.sql.gz" \
+            --drive-use-trash=false
+          rclone rmdirs "$BACKUP_REMOTE_PATH" --leave-root
