@@ -131,7 +131,9 @@ class _SettingsBody extends ConsumerWidget {
         ),
         if (!isAnon)
           ListTile(
-            leading: const Icon(Icons.account_balance_outlined),
+            leading: const _PlusFeatureLeadingIcon(
+              icon: Icons.account_balance_outlined,
+            ),
             title: Text(l10n.transferBankSettingsTitle),
             subtitle: Text(
               (creditStatus?.isPlus ?? false)
@@ -147,7 +149,9 @@ class _SettingsBody extends ConsumerWidget {
           ),
         if (!isAnon)
           ListTile(
-            leading: const Icon(Icons.restore_from_trash_outlined),
+            leading: const _PlusFeatureLeadingIcon(
+              icon: Icons.restore_from_trash_outlined,
+            ),
             title: Text(l10n.deletedBillsTitle),
             subtitle: Text(
               (creditStatus?.isPlus ?? false)
@@ -480,6 +484,44 @@ class _SettingsTileTrailing extends StatelessWidget {
         PlusInfoIcon(title: infoTitle, message: infoMessage),
         const Icon(Icons.chevron_right),
       ],
+    );
+  }
+}
+
+class _PlusFeatureLeadingIcon extends StatelessWidget {
+  const _PlusFeatureLeadingIcon({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      width: 40.r,
+      height: 40.r,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Align(alignment: Alignment.centerLeft, child: Icon(icon)),
+          Positioned(
+            right: 2.r,
+            bottom: 2.r,
+            child: Container(
+              padding: EdgeInsets.all(2.r),
+              decoration: BoxDecoration(
+                color: scheme.primaryContainer,
+                shape: BoxShape.circle,
+                border: Border.all(color: scheme.surface, width: 1.5.r),
+              ),
+              child: Icon(
+                Icons.workspace_premium_outlined,
+                size: 13.r,
+                color: scheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
