@@ -122,10 +122,8 @@ class _Body extends ConsumerWidget {
   ) async {
     final l10n = AppL10n.of(context);
     try {
-      final isPlus = switch (ref.read(ocrCreditStatusProvider)) {
-        AsyncData(:final value) => value?.isPlus ?? false,
-        _ => false,
-      };
+      final creditStatus = await ref.refresh(ocrCreditStatusProvider.future);
+      final isPlus = creditStatus?.isPlus ?? false;
       final bankInfo = isPlus
           ? await ref.read(transferBankInfoProvider.future)
           : null;
