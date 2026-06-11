@@ -165,7 +165,7 @@ class _Body extends ConsumerWidget {
       _ => false,
     };
     if (!isPlus) {
-      context.pushNamed(Routes.settingsName);
+      context.goNamed(Routes.settingsName);
       return;
     }
 
@@ -199,7 +199,7 @@ class _Body extends ConsumerWidget {
       _ => false,
     };
     if (!isPlus) {
-      context.pushNamed(Routes.settingsName);
+      context.goNamed(Routes.settingsName);
       return;
     }
 
