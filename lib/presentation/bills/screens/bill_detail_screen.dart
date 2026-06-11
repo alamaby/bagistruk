@@ -319,37 +319,65 @@ class _ExportActions extends StatelessWidget {
     final icon = isPlus ? Icons.file_download_outlined : Icons.lock_outline;
     final lockedStyle = FilledButton.styleFrom(
       minimumSize: Size.fromHeight(44.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       backgroundColor: scheme.surfaceContainerHigh,
       foregroundColor: scheme.onSurfaceVariant,
     );
 
-    return Column(
+    return Row(
       children: [
-        FilledButton.tonalIcon(
-          onPressed: onExportPdf,
-          icon: Icon(isPlus ? Icons.picture_as_pdf_outlined : icon),
-          label: Text(isPlus ? l10n.exportPdf : l10n.exportPdfPlusLocked),
-          style: isPlus
-              ? FilledButton.styleFrom(minimumSize: Size.fromHeight(44.h))
-              : lockedStyle,
+        Expanded(
+          child: FilledButton.tonalIcon(
+            onPressed: onExportPdf,
+            icon: Icon(isPlus ? Icons.picture_as_pdf_outlined : icon),
+            label: _OneLineButtonLabel(
+              isPlus ? l10n.exportPdf : l10n.exportPdfPlusLocked,
+            ),
+            style: isPlus
+                ? FilledButton.styleFrom(
+                    minimumSize: Size.fromHeight(44.h),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  )
+                : lockedStyle,
+          ),
         ),
-        SizedBox(height: 8.h),
-        OutlinedButton.icon(
-          onPressed: onExportCsv,
-          icon: Icon(icon),
-          label: Text(isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked),
-          style: OutlinedButton.styleFrom(minimumSize: Size.fromHeight(44.h)),
-        ),
-        if (!isPlus)
-          Align(
-            alignment: Alignment.centerRight,
-            child: PlusInfoIcon(
-              title: l10n.exportPdfPlusLocked,
-              message: l10n.exportPlusDetail,
-              iconColor: scheme.onSurfaceVariant,
+        SizedBox(width: 8.w),
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: onExportCsv,
+            icon: Icon(icon),
+            label: _OneLineButtonLabel(
+              isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked,
+            ),
+            style: OutlinedButton.styleFrom(
+              minimumSize: Size.fromHeight(44.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
             ),
           ),
+        ),
+        if (!isPlus) ...[
+          SizedBox(width: 4.w),
+          PlusInfoIcon(
+            title: l10n.exportPdfPlusLocked,
+            message: l10n.exportPlusDetail,
+            iconColor: scheme.onSurfaceVariant,
+          ),
+        ],
       ],
+    );
+  }
+}
+
+class _OneLineButtonLabel extends StatelessWidget {
+  const _OneLineButtonLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
     );
   }
 }
