@@ -8,7 +8,6 @@ import '../../../core/billing/plus_feature_limits.dart';
 import '../../../core/error/result.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
-import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/monthly_spending_insight.dart';
 import '../../../l10n/generated/app_l10n.dart';
@@ -52,17 +51,7 @@ class HistoryScreen extends ConsumerWidget {
             onRefresh: () => ref.read(billListProvider.notifier).refresh(),
             child: CustomScrollView(
               slivers: [
-                SliverAppBar(
-                  title: Text(l10n.historyTab),
-                  pinned: true,
-                  actions: [
-                    IconButton(
-                      tooltip: l10n.historySignOutTooltip,
-                      icon: const Icon(Icons.logout),
-                      onPressed: () => _signOut(context, ref),
-                    ),
-                  ],
-                ),
+                SliverAppBar(title: Text(l10n.historyTab), pinned: true),
                 SliverToBoxAdapter(child: _SummaryCards(bills: list)),
                 SliverToBoxAdapter(
                   child: _HistoryAccessBanner(
@@ -138,21 +127,6 @@ class HistoryScreen extends ConsumerWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
-    final l10n = AppL10n.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final repo = ref.read(authRepositoryProvider);
-    await repo.signOut();
-    await repo.signInAnonymously();
-    if (!context.mounted) return;
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(l10n.historySignedOut),
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
