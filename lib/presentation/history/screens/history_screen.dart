@@ -18,6 +18,7 @@ import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../insights/providers/monthly_spending_insight_provider.dart';
 import '../../settings/providers/preferences_providers.dart';
 import '../../shared/widgets/loading_view.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
@@ -323,17 +324,13 @@ class _LockedInsightPreview extends StatelessWidget {
                         ),
                       ),
                     ),
+                    PlusInfoIcon(
+                      title: l10n.monthlyInsightTitle,
+                      message: l10n.monthlyInsightLockedSubtitle,
+                      iconColor: scheme.onSurfaceVariant,
+                    ),
                     _SmallPlusPill(color: scheme.onSurfaceVariant),
                   ],
-                ),
-                SizedBox(height: 6.h),
-                Text(
-                  l10n.monthlyInsightLockedSubtitle,
-                  style: TextStyle(
-                    color: scheme.onSurfaceVariant,
-                    fontSize: 12.sp,
-                    height: 1.35,
-                  ),
                 ),
                 SizedBox(height: 12.h),
                 _BlurredMetricRow(currency: currency),
@@ -689,7 +686,7 @@ class _HistoryAccessBanner extends StatelessWidget {
         : hasHistoryAccess
         ? l10n.historyWindowFree
         : l10n.historyWindowAnonymous;
-    final subtitle = isPlus
+    final details = isPlus
         ? l10n.historyWindowSubtitle(days)
         : hasHistoryAccess
         ? l10n.historyWindowFreeSubtitle(
@@ -758,12 +755,12 @@ class _HistoryAccessBanner extends StatelessWidget {
                             ),
                           ),
                         ),
+                      PlusInfoIcon(
+                        title: title,
+                        message: details,
+                        iconColor: fg,
+                      ),
                     ],
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    subtitle,
-                    style: TextStyle(color: fg, fontSize: 12.sp, height: 1.3),
                   ),
                 ],
               ),

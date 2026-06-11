@@ -17,6 +17,7 @@ import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/profile_notifier.dart';
 import '../providers/settings_actions.dart';
 import '../widgets/confirm_dialog.dart';
@@ -135,9 +136,13 @@ class _SettingsBody extends ConsumerWidget {
             subtitle: Text(
               (creditStatus?.isPlus ?? false)
                   ? l10n.transferBankSettingsSubtitle
-                  : l10n.transferBankSettingsLockedSubtitle,
+                  : l10n.plusOnlyShort,
             ),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: _SettingsTileTrailing(
+              infoTitle: l10n.transferBankSettingsTitle,
+              infoMessage: l10n.transferBankSettingsLockedSubtitle,
+              showInfo: !(creditStatus?.isPlus ?? false),
+            ),
             onTap: () => context.pushNamed(Routes.transferBankInfoName),
           ),
         if (!isAnon)
@@ -147,9 +152,13 @@ class _SettingsBody extends ConsumerWidget {
             subtitle: Text(
               (creditStatus?.isPlus ?? false)
                   ? l10n.deletedBillsSettingsSubtitle
-                  : l10n.deletedBillsSettingsLockedSubtitle,
+                  : l10n.plusOnlyShort,
             ),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: _SettingsTileTrailing(
+              infoTitle: l10n.deletedBillsTitle,
+              infoMessage: l10n.deletedBillsSettingsLockedSubtitle,
+              showInfo: !(creditStatus?.isPlus ?? false),
+            ),
             onTap: () => context.pushNamed(Routes.deletedBillsName),
           ),
         if (!isAnon)
@@ -448,6 +457,30 @@ class _SettingsBody extends ConsumerWidget {
 
   void _snack(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+}
+
+class _SettingsTileTrailing extends StatelessWidget {
+  const _SettingsTileTrailing({
+    required this.infoTitle,
+    required this.infoMessage,
+    required this.showInfo,
+  });
+
+  final String infoTitle;
+  final String infoMessage;
+  final bool showInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!showInfo) return const Icon(Icons.chevron_right);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        PlusInfoIcon(title: infoTitle, message: infoMessage),
+        const Icon(Icons.chevron_right),
+      ],
+    );
   }
 }
 

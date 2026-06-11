@@ -120,6 +120,7 @@
   "changeNameHint": "Display name",
   "saveAction": "Save",
   "cancelAction": "Cancel",
+  "plusOnlyShort": "Plus only.",
   "transferBankSettingsTitle": "Bank transfer info",
   "transferBankSettingsSubtitle": "Add an account for WhatsApp settlement messages.",
   "transferBankSettingsLockedSubtitle": "Plus only. Bank info can be added to WhatsApp settlement messages.",
@@ -337,6 +338,8 @@
   "billReviewTaxLabel": "Tax",
   "billReviewServiceLabel": "Service",
   "billReviewSaveBill": "Save Bill",
+  "billReviewCurrencyPlusTitle": "Per-bill currency",
+  "billReviewCurrencyPlusDetail": "Changing currency per bill is a Plus feature. Free users keep using the default currency from Settings.",
   "billReviewAiLowConfidence": "AI is less confident ({percent}%) — verify the numbers.",
   "@billReviewAiLowConfidence": {
     "placeholders": { "percent": { "type": "String" } }
@@ -411,6 +414,7 @@
   "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",
   "exportCsvPlusLocked": "Export CSV (Plus)",
+  "exportPlusDetail": "PDF and CSV exports are Plus features. Free users can still view and share the basic participant breakdown.",
   "exportFailed": "Could not create the export. Please try again.",
   "exportPdfSubject": "Export {title}",
   "@exportPdfSubject": {

@@ -120,6 +120,7 @@
   "changeNameHint": "Nama tampilan",
   "saveAction": "Simpan",
   "cancelAction": "Batal",
+  "plusOnlyShort": "Khusus Plus.",
   "transferBankSettingsTitle": "Info bank transfer",
   "transferBankSettingsSubtitle": "Tambahkan rekening untuk pesan WhatsApp settlement.",
   "transferBankSettingsLockedSubtitle": "Khusus Plus. Info bank bisa ikut di pesan WhatsApp settlement.",
@@ -337,6 +338,8 @@
   "billReviewTaxLabel": "Pajak",
   "billReviewServiceLabel": "Service",
   "billReviewSaveBill": "Simpan Bill",
+  "billReviewCurrencyPlusTitle": "Currency per bill",
+  "billReviewCurrencyPlusDetail": "Mengubah currency per bill adalah fitur Plus. Pengguna Free tetap memakai mata uang default dari Pengaturan.",
   "billReviewAiLowConfidence": "AI kurang yakin ({percent}%) — periksa angka.",
   "@billReviewAiLowConfidence": {
     "placeholders": { "percent": { "type": "String" } }
@@ -411,6 +414,7 @@
   "exportPdfPlusLocked": "Export PDF (Plus)",
   "exportCsv": "Export CSV",
   "exportCsvPlusLocked": "Export CSV (Plus)",
+  "exportPlusDetail": "Export PDF dan CSV adalah fitur Plus. Pengguna Free tetap bisa melihat dan membagikan rincian peserta versi basic.",
   "exportFailed": "Export belum bisa dibuat. Coba lagi.",
   "exportPdfSubject": "Export {title}",
   "@exportPdfSubject": {

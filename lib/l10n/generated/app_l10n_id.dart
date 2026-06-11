@@ -303,6 +303,9 @@ class AppL10nId extends AppL10n {
   String get cancelAction => 'Batal';
 
   @override
+  String get plusOnlyShort => 'Khusus Plus.';
+
+  @override
   String get transferBankSettingsTitle => 'Info bank transfer';
 
   @override
@@ -818,6 +821,13 @@ class AppL10nId extends AppL10n {
   String get billReviewSaveBill => 'Simpan Bill';
 
   @override
+  String get billReviewCurrencyPlusTitle => 'Currency per bill';
+
+  @override
+  String get billReviewCurrencyPlusDetail =>
+      'Mengubah currency per bill adalah fitur Plus. Pengguna Free tetap memakai mata uang default dari Pengaturan.';
+
+  @override
   String billReviewAiLowConfidence(String percent) {
     return 'AI kurang yakin ($percent%) — periksa angka.';
   }
@@ -959,6 +969,10 @@ class AppL10nId extends AppL10n {
 
   @override
   String get exportCsvPlusLocked => 'Export CSV (Plus)';
+
+  @override
+  String get exportPlusDetail =>
+      'Export PDF dan CSV adalah fitur Plus. Pengguna Free tetap bisa melihat dan membagikan rincian peserta versi basic.';
 
   @override
   String get exportFailed => 'Export belum bisa dibuat. Coba lagi.';

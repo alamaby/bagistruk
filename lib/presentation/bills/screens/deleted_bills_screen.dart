@@ -10,6 +10,7 @@ import '../../../core/router/routes.dart';
 import '../../../domain/entities/deleted_bill.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/bill_list_notifier.dart';
 
 class DeletedBillsScreen extends ConsumerWidget {
@@ -142,14 +143,10 @@ class _LockedView extends StatelessWidget {
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 8.h),
-            Text(
-              l10n.deletedBillsLockedSubtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: scheme.onSurfaceVariant,
-                fontSize: 13.sp,
-                height: 1.35,
-              ),
+            PlusInfoIcon(
+              title: l10n.deletedBillsLockedTitle,
+              message: l10n.deletedBillsLockedSubtitle,
+              iconColor: scheme.primary,
             ),
             SizedBox(height: 16.h),
             FilledButton.icon(

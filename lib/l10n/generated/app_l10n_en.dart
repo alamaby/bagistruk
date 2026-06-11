@@ -303,6 +303,9 @@ class AppL10nEn extends AppL10n {
   String get cancelAction => 'Cancel';
 
   @override
+  String get plusOnlyShort => 'Plus only.';
+
+  @override
   String get transferBankSettingsTitle => 'Bank transfer info';
 
   @override
@@ -819,6 +822,13 @@ class AppL10nEn extends AppL10n {
   String get billReviewSaveBill => 'Save Bill';
 
   @override
+  String get billReviewCurrencyPlusTitle => 'Per-bill currency';
+
+  @override
+  String get billReviewCurrencyPlusDetail =>
+      'Changing currency per bill is a Plus feature. Free users keep using the default currency from Settings.';
+
+  @override
   String billReviewAiLowConfidence(String percent) {
     return 'AI is less confident ($percent%) — verify the numbers.';
   }
@@ -961,6 +971,10 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get exportCsvPlusLocked => 'Export CSV (Plus)';
+
+  @override
+  String get exportPlusDetail =>
+      'PDF and CSV exports are Plus features. Free users can still view and share the basic participant breakdown.';
 
   @override
   String get exportFailed => 'Could not create the export. Please try again.';

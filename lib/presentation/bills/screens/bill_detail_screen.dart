@@ -19,6 +19,7 @@ import '../../auth/providers/auth_providers.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../../shared/widgets/loading_view.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../export/bill_csv_exporter.dart';
 import '../export/bill_pdf_exporter.dart';
 import '../providers/bill_detail_notifier.dart';
@@ -108,8 +109,7 @@ class _Body extends ConsumerWidget {
           l10n.billDetailParticipantNotFound,
         BillDetailActionErrorKind.saveStatusFailed =>
           l10n.billDetailSaveStatusFailed(err.message ?? ''),
-        BillDetailActionErrorKind.stateNotReady =>
-          l10n.billDetailStateNotReady,
+        BillDetailActionErrorKind.stateNotReady => l10n.billDetailStateNotReady,
       };
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
@@ -340,6 +340,15 @@ class _ExportActions extends StatelessWidget {
           label: Text(isPlus ? l10n.exportCsv : l10n.exportCsvPlusLocked),
           style: OutlinedButton.styleFrom(minimumSize: Size.fromHeight(44.h)),
         ),
+        if (!isPlus)
+          Align(
+            alignment: Alignment.centerRight,
+            child: PlusInfoIcon(
+              title: l10n.exportPdfPlusLocked,
+              message: l10n.exportPlusDetail,
+              iconColor: scheme.onSurfaceVariant,
+            ),
+          ),
       ],
     );
   }

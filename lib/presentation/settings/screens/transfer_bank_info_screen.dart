@@ -8,6 +8,7 @@ import '../../../data/providers.dart';
 import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/transfer_bank_info_provider.dart';
 
 class TransferBankInfoScreen extends ConsumerStatefulWidget {
@@ -236,9 +237,14 @@ class _LockedPlusCard extends StatelessWidget {
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
-              l10n.transferBankPlusOnly,
+              l10n.plusOnlyShort,
               style: TextStyle(color: scheme.onPrimaryContainer),
             ),
+          ),
+          PlusInfoIcon(
+            title: l10n.transferBankSettingsTitle,
+            message: l10n.transferBankPlusOnly,
+            iconColor: scheme.onPrimaryContainer,
           ),
         ],
       ),

@@ -617,6 +617,12 @@ abstract class AppL10n {
   /// **'Batal'**
   String get cancelAction;
 
+  /// No description provided for @plusOnlyShort.
+  ///
+  /// In id, this message translates to:
+  /// **'Khusus Plus.'**
+  String get plusOnlyShort;
+
   /// No description provided for @transferBankSettingsTitle.
   ///
   /// In id, this message translates to:
@@ -1547,6 +1553,18 @@ abstract class AppL10n {
   /// **'Simpan Bill'**
   String get billReviewSaveBill;
 
+  /// No description provided for @billReviewCurrencyPlusTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Currency per bill'**
+  String get billReviewCurrencyPlusTitle;
+
+  /// No description provided for @billReviewCurrencyPlusDetail.
+  ///
+  /// In id, this message translates to:
+  /// **'Mengubah currency per bill adalah fitur Plus. Pengguna Free tetap memakai mata uang default dari Pengaturan.'**
+  String get billReviewCurrencyPlusDetail;
+
   /// No description provided for @billReviewAiLowConfidence.
   ///
   /// In id, this message translates to:
@@ -1792,6 +1810,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Export CSV (Plus)'**
   String get exportCsvPlusLocked;
+
+  /// No description provided for @exportPlusDetail.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF dan CSV adalah fitur Plus. Pengguna Free tetap bisa melihat dan membagikan rincian peserta versi basic.'**
+  String get exportPlusDetail;
 
   /// No description provided for @exportFailed.
   ///

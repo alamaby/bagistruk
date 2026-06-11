@@ -11,6 +11,7 @@ import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/transfer_bank_info_provider.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/split_notifier.dart';
 import '../utils/settlement_message_builder.dart';
 import 'participant_avatar.dart';
@@ -369,14 +370,18 @@ class _ParticipantSummaryCard extends StatelessWidget {
                   color: scheme.onSurfaceVariant,
                 ),
                 SizedBox(width: 6.w),
-                Expanded(
-                  child: Text(
-                    l10n.settlementTemplatePlusLocked,
-                    style: TextStyle(
-                      color: scheme.onSurfaceVariant,
-                      fontSize: 11.sp,
-                    ),
+                Text(
+                  'Plus',
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w700,
                   ),
+                ),
+                PlusInfoIcon(
+                  title: l10n.settlementTemplateCompact,
+                  message: l10n.settlementTemplatePlusLocked,
+                  iconColor: scheme.onSurfaceVariant,
                 ),
               ],
             ),

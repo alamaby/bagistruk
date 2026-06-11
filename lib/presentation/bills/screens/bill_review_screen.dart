@@ -14,6 +14,7 @@ import '../../../l10n/generated/app_l10n.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/widgets/currency_picker_dialog.dart';
 import '../../shared/widgets/app_scaffold.dart';
+import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/bill_review_notifier.dart';
 
 /// Mandatory verification gate between OCR success and DB persistence.
@@ -424,12 +425,10 @@ class _Header extends StatelessWidget {
                   visualDensity: VisualDensity.compact,
                 ),
                 if (!isPlus)
-                  Text(
-                    'Per-bill currency is Plus',
-                    style: TextStyle(
-                      fontSize: 11.sp,
-                      color: scheme.onSurfaceVariant,
-                    ),
+                  PlusInfoIcon(
+                    title: AppL10n.of(context).billReviewCurrencyPlusTitle,
+                    message: AppL10n.of(context).billReviewCurrencyPlusDetail,
+                    iconColor: scheme.onSurfaceVariant,
                   ),
               ],
             ),
