@@ -1,6 +1,6 @@
 # Terms of Service — BagiStruk
 
-**Effective date:** 2026-06-09
+**Effective date:** 2026-06-11
 
 These Terms explain the basic rules for using BagiStruk. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -18,7 +18,7 @@ You may use some features with an anonymous session. You may also register or si
 
 Anonymous accounts are intended for temporary or lightweight use. Registered accounts allow data to persist across devices and sessions, depending on the authentication provider and backend availability.
 
-OCR scanning and selected features may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features such as longer history access, monthly insights, PDF/CSV export, per-bill currency override, transfer bank information in settlement messages, deleted-bill recovery, and an ad-free experience when ads are enabled. Unused monthly credits may expire at the end of the applicable period.
+OCR scanning and selected features may be limited by credits or plan entitlements. Anonymous users receive a limited lifetime credit allowance, free registered users may receive a monthly credit allowance, and Plus users may receive higher limits and additional features such as longer history access, monthly insights, PDF/CSV export, per-bill currency override, transfer bank information in settlement messages, deleted-bill recovery, and an ad-free experience when ads are enabled. Eligible registered users may receive a one-time Plus trial. When the trial ends, access returns to the Free plan unless a paid Plus subscription is active. Unused monthly credits may expire at the end of the applicable period.
 
 Paid subscriptions and one-time OCR credit packs, when available, are processed through Google Play Billing on Android. Subscription access continues while Google Play reports the subscription as active. One-time OCR credit packs are added to your account after server-side purchase verification. Refunds, cancellations, renewal timing, grace periods, and payment issues may affect access or available credits according to Google Play policies and the app's server-side entitlement records.
 
@@ -50,7 +50,7 @@ Opening the app after receiving a reminder resets the pending inactivity deletio
 
 ## 8. Third-Party Services
 
-BagiStruk depends on third-party services such as Supabase, Google Sign-In, OCR providers, Google Mobile Ads / AdMob if ads are enabled, and email providers. Their availability, policies, and behavior may affect the app. We are not responsible for outages or changes made by third-party providers.
+BagiStruk depends on third-party services such as Supabase, Google Sign-In, OCR providers, Google Mobile Ads / AdMob if ads are enabled, Google Play Billing when purchases are available, and email providers for transactional reminders or operational alerts. Their availability, policies, and behavior may affect the app. We are not responsible for outages or changes made by third-party providers.
 
 ## 9. Donations And External Links
 
@@ -84,7 +84,7 @@ Questions about these Terms: **alam.aby.b@gmail.com**
 
 # Syarat dan Ketentuan — BagiStruk
 
-**Tanggal berlaku:** 2026-06-09
+**Tanggal berlaku:** 2026-06-11
 
 Syarat ini menjelaskan aturan dasar penggunaan BagiStruk. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -102,7 +102,7 @@ Sebagian fitur dapat digunakan dengan sesi anonim. Anda juga dapat mendaftar ata
 
 Akun anonim ditujukan untuk penggunaan sementara atau ringan. Akun terdaftar memungkinkan data bertahan lintas perangkat dan sesi, tergantung penyedia autentikasi dan ketersediaan backend.
 
-Scan OCR dan fitur tertentu dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan seperti akses History lebih panjang, insight bulanan, export PDF/CSV, penggantian currency per bill, info bank transfer di pesan settlement, pemulihan bill terhapus, dan pengalaman tanpa iklan saat iklan diaktifkan. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
+Scan OCR dan fitur tertentu dapat dibatasi oleh credit atau entitlement plan. Pengguna anonim mendapat batas credit lifetime terbatas, pengguna terdaftar Free dapat mendapat credit bulanan, dan pengguna Plus dapat mendapat batas lebih tinggi serta fitur tambahan seperti akses History lebih panjang, insight bulanan, export PDF/CSV, penggantian currency per bill, info bank transfer di pesan settlement, pemulihan bill terhapus, dan pengalaman tanpa iklan saat iklan diaktifkan. Pengguna terdaftar yang memenuhi syarat dapat menerima trial Plus satu kali. Setelah trial berakhir, akses kembali ke plan Free kecuali subscription Plus berbayar aktif. Credit bulanan yang tidak digunakan dapat hangus pada akhir periode yang berlaku.
 
 Subscription berbayar dan paket credit OCR sekali beli, jika tersedia, diproses melalui Google Play Billing di Android. Akses subscription berlaku selama Google Play melaporkan subscription masih aktif. Paket credit OCR sekali beli ditambahkan ke akun setelah verifikasi pembelian sisi server. Refund, pembatalan, waktu renewal, grace period, dan masalah pembayaran dapat memengaruhi akses atau credit yang tersedia sesuai kebijakan Google Play dan catatan entitlement server-side aplikasi.
 
@@ -134,7 +134,7 @@ Membuka aplikasi setelah menerima reminder akan mereset status penghapusan tidak
 
 ## 8. Layanan Pihak Ketiga
 
-BagiStruk bergantung pada layanan pihak ketiga seperti Supabase, Google Sign-In, penyedia OCR, Google Mobile Ads / AdMob jika iklan diaktifkan, dan penyedia email. Ketersediaan, kebijakan, dan perilaku layanan tersebut dapat memengaruhi aplikasi. Kami tidak bertanggung jawab atas gangguan atau perubahan dari penyedia pihak ketiga.
+BagiStruk bergantung pada layanan pihak ketiga seperti Supabase, Google Sign-In, penyedia OCR, Google Mobile Ads / AdMob jika iklan diaktifkan, Google Play Billing saat pembelian tersedia, dan penyedia email untuk reminder transaksional atau alert operasional. Ketersediaan, kebijakan, dan perilaku layanan tersebut dapat memengaruhi aplikasi. Kami tidak bertanggung jawab atas gangguan atau perubahan dari penyedia pihak ketiga.
 
 ## 9. Donasi Dan Link Eksternal
 
