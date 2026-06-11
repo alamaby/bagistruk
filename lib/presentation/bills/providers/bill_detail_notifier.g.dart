@@ -63,7 +63,7 @@ final class BillDetailNotifierProvider
 }
 
 String _$billDetailNotifierHash() =>
-    r'444b4a4d0989ca57adaa57301722bb621904a084';
+    r'f51ddda5b37212acd3bbe714c31399676b0e632d';
 
 /// Loads the bill graph for the detail screen and exposes the settlement
 /// toggle. Strategy: optimistic UI update; on persist failure roll back to the

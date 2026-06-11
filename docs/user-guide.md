@@ -33,11 +33,13 @@ Buka tab **Scan**. Tap **Add Photos**, lalu pilih:
 
 Jika struk panjang, kamu bisa mengambil beberapa foto. Pastikan setiap foto terang, tidak terlalu miring, dan bagian total/item terlihat jelas.
 
-Setelah foto masuk ke preview, tap **Scan**. Aplikasi akan mengecek credit scan terlebih dahulu. Jika credit masih tersedia, foto dikirim ke proses OCR dan AI untuk membaca isi struk.
+Setelah foto masuk ke preview, layar Scan menampilkan estimasi credit yang akan terpakai. Tap **Scan**. Aplikasi akan mengecek credit scan terlebih dahulu. Jika credit masih tersedia, foto dikirim ke proses OCR dan AI untuk membaca isi struk.
 
 Catatan penting:
 
 - Scan hanya mengonsumsi credit jika proses menghasilkan hasil struk yang valid.
+- Untuk pengguna Anonymous dan Free, scan multi-foto mengonsumsi credit sesuai jumlah foto. Contoh: 3 foto struk panjang memakai 3 credit.
+- Untuk pengguna Plus, scan struk panjang dengan beberapa foto tetap memakai 1 credit per hasil OCR valid.
 - Jika gambar bukan struk atau hasil terlalu tidak yakin, aplikasi dapat menolak hasil dan meminta kamu mencoba ulang.
 - Untuk struk dengan angka ribuan seperti `15.300`, tetap cek hasil review sebelum menyimpan.
 
@@ -199,7 +201,7 @@ Perbedaan akses utama:
 | Restore bill terhapus | Tidak | Tidak | Ya, selama 30 hari |
 | Paket top-up credit | Perlu daftar akun | Ya, jika tersedia | Ya, jika tersedia |
 
-Credit bulanan dapat hangus pada akhir periode yang berlaku. Paket top-up credit, jika tersedia, ditambahkan setelah pembelian berhasil diverifikasi.
+Credit bulanan dapat hangus pada akhir periode yang berlaku. Untuk Anonymous dan Free, multi-foto memakai credit sesuai jumlah foto; Plus tetap memakai 1 credit per scan valid meskipun memakai beberapa foto untuk struk panjang. Paket top-up credit, jika tersedia, ditambahkan setelah pembelian berhasil diverifikasi.
 
 ## 8. Tips Agar Hasil Scan Lebih Akurat
 

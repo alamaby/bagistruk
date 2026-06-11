@@ -69,6 +69,20 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String scanCreditCostWithBalance(
+    int imageCount,
+    int creditCost,
+    int balance,
+  ) {
+    return '$imageCount photo(s) will use $creditCost credit(s). Balance: $balance.';
+  }
+
+  @override
+  String scanCreditRequired(int requiredCredits, int balance) {
+    return 'This scan needs $requiredCredits credit(s). Current balance: $balance.';
+  }
+
+  @override
   String get scanNoCreditAnonymousTitle => 'Free scan limit reached';
 
   @override

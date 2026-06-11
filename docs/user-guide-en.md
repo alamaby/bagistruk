@@ -33,11 +33,13 @@ Open the **Scan** tab. Tap **Add Photos**, then choose:
 
 For long receipts, you can add multiple photos. Try to use bright, clear photos with the item list and total visible.
 
-After the photos appear in the preview, tap **Scan**. The app checks your scan credit first. If credit is available, the photos are sent to OCR and AI processing.
+After the photos appear in the preview, the Scan screen shows an estimate of how many credits will be used. Tap **Scan**. The app checks your scan credit first. If credit is available, the photos are sent to OCR and AI processing.
 
 Important notes:
 
 - A scan only consumes credit when processing returns a valid receipt result.
+- For Anonymous and Free users, multi-photo scans consume credits based on the number of photos. Example: 3 photos for a long receipt use 3 credits.
+- For Plus users, a long-receipt scan with multiple photos still uses 1 credit per valid OCR result.
 - If the image is not a receipt or the result is too uncertain, the app may reject it and ask you to try again.
 - For receipts with thousands separators such as `15.300`, always review the extracted values before saving.
 
@@ -199,7 +201,7 @@ Main access differences:
 | Restore deleted bills | No | No | Yes, within 30 days |
 | Top-up credit packs | Requires account registration | Yes, if available | Yes, if available |
 
-Monthly credits may expire at the end of the applicable period. Top-up credit packs, if available, are added after purchase verification succeeds.
+Monthly credits may expire at the end of the applicable period. For Anonymous and Free users, multi-photo scans use credits based on the photo count; Plus keeps using 1 credit per valid scan even with multiple photos for a long receipt. Top-up credit packs, if available, are added after purchase verification succeeds.
 
 ## 8. Tips For More Accurate Scans
 

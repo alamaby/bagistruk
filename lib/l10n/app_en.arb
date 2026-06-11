@@ -26,6 +26,21 @@
   "@scanCreditCheckFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "scanCreditCostWithBalance": "{imageCount} photo(s) will use {creditCost} credit(s). Balance: {balance}.",
+  "@scanCreditCostWithBalance": {
+    "placeholders": {
+      "imageCount": { "type": "int" },
+      "creditCost": { "type": "int" },
+      "balance": { "type": "int" }
+    }
+  },
+  "scanCreditRequired": "This scan needs {requiredCredits} credit(s). Current balance: {balance}.",
+  "@scanCreditRequired": {
+    "placeholders": {
+      "requiredCredits": { "type": "int" },
+      "balance": { "type": "int" }
+    }
+  },
   "scanNoCreditAnonymousTitle": "Free scan limit reached",
   "scanNoCreditFreeTitle": "This month's scan credits are used up",
   "scanNoCreditAnonymousBody": "You have used 5 scan credits as a guest. Create an account to get 20 free credits every month.",

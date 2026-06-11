@@ -68,6 +68,20 @@ class AppL10nId extends AppL10n {
   }
 
   @override
+  String scanCreditCostWithBalance(
+    int imageCount,
+    int creditCost,
+    int balance,
+  ) {
+    return '$imageCount foto akan memakai $creditCost credit. Sisa: $balance.';
+  }
+
+  @override
+  String scanCreditRequired(int requiredCredits, int balance) {
+    return 'Scan ini butuh $requiredCredits credit. Sisa credit kamu: $balance.';
+  }
+
+  @override
   String get scanNoCreditAnonymousTitle => 'Batas scan gratis tercapai';
 
   @override

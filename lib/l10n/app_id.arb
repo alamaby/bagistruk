@@ -26,6 +26,21 @@
   "@scanCreditCheckFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "scanCreditCostWithBalance": "{imageCount} foto akan memakai {creditCost} credit. Sisa: {balance}.",
+  "@scanCreditCostWithBalance": {
+    "placeholders": {
+      "imageCount": { "type": "int" },
+      "creditCost": { "type": "int" },
+      "balance": { "type": "int" }
+    }
+  },
+  "scanCreditRequired": "Scan ini butuh {requiredCredits} credit. Sisa credit kamu: {balance}.",
+  "@scanCreditRequired": {
+    "placeholders": {
+      "requiredCredits": { "type": "int" },
+      "balance": { "type": "int" }
+    }
+  },
   "scanNoCreditAnonymousTitle": "Batas scan gratis tercapai",
   "scanNoCreditFreeTitle": "Credit scan bulan ini habis",
   "scanNoCreditAnonymousBody": "Kamu sudah memakai 5 credit scan sebagai pengguna anonim. Daftar akun untuk mendapat 20 credit gratis setiap bulan.",

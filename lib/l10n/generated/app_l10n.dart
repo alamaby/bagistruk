@@ -205,6 +205,18 @@ abstract class AppL10n {
   /// **'Gagal cek credit scan: {message}'**
   String scanCreditCheckFailed(String message);
 
+  /// No description provided for @scanCreditCostWithBalance.
+  ///
+  /// In id, this message translates to:
+  /// **'{imageCount} foto akan memakai {creditCost} credit. Sisa: {balance}.'**
+  String scanCreditCostWithBalance(int imageCount, int creditCost, int balance);
+
+  /// No description provided for @scanCreditRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Scan ini butuh {requiredCredits} credit. Sisa credit kamu: {balance}.'**
+  String scanCreditRequired(int requiredCredits, int balance);
+
   /// No description provided for @scanNoCreditAnonymousTitle.
   ///
   /// In id, this message translates to:

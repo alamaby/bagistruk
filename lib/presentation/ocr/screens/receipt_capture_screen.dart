@@ -167,10 +167,16 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
 
     switch (res) {
       case Success(:final data):
-        if (data.balance > 0) return true;
+        final creditCost = _creditCostForPlan(
+          planCode: data.planCode,
+          imageCount: _images.length,
+        );
+        if (data.balance >= creditCost) return true;
         await _showNoCreditDialog(
           planCode: data.planCode,
           monthlyAllowance: data.monthlyAllowance,
+          requiredCredits: creditCost,
+          balance: data.balance,
         );
         return false;
       case ResultFailure(:final failure):
@@ -188,6 +194,8 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
   Future<void> _showNoCreditDialog({
     required String planCode,
     required int monthlyAllowance,
+    required int requiredCredits,
+    required int balance,
   }) {
     final isAnonymous = planCode == 'anonymous';
     final l10n = AppL10n.of(context);
@@ -203,7 +211,20 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(title),
-        content: Text(body),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(body),
+            SizedBox(height: 12.h),
+            Text(
+              l10n.scanCreditRequired(requiredCredits, balance),
+              style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
+                color: Theme.of(ctx).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -297,6 +318,10 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       }
     });
     final state = ref.watch(ocrProvider);
+    final creditStatus = switch (ref.watch(ocrCreditStatusProvider)) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
     final busy = _starting || state is OcrProcessing;
     final scanActive = _images.isNotEmpty && !busy;
     final l10n = AppL10n.of(context);
@@ -339,6 +364,17 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
               )
             else
               _StatusLabel(state: state, starting: _starting),
+            if (_images.isNotEmpty && creditStatus != null) ...[
+              SizedBox(height: 6.h),
+              _ScanCreditCostLabel(
+                imageCount: _images.length,
+                balance: creditStatus.balance,
+                creditCost: _creditCostForPlan(
+                  planCode: creditStatus.planCode,
+                  imageCount: _images.length,
+                ),
+              ),
+            ],
             SizedBox(height: 12.h),
             Row(
               children: [
@@ -391,6 +427,11 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
 
 enum _PhotoSource { camera, gallery }
 
+int _creditCostForPlan({required String? planCode, required int imageCount}) {
+  if (imageCount <= 0) return 0;
+  return planCode == 'plus' ? 1 : imageCount;
+}
+
 class _StatusLabel extends StatelessWidget {
   const _StatusLabel({required this.state, required this.starting});
   final OcrState state;
@@ -426,6 +467,56 @@ class _StatusLabel extends StatelessWidget {
     return label
         .animate(onPlay: (c) => c.repeat())
         .shimmer(duration: 1200.ms, color: scheme.primary);
+  }
+}
+
+class _ScanCreditCostLabel extends StatelessWidget {
+  const _ScanCreditCostLabel({
+    required this.imageCount,
+    required this.balance,
+    required this.creditCost,
+  });
+
+  final int imageCount;
+  final int balance;
+  final int creditCost;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final insufficient = balance < creditCost;
+    final color = insufficient ? scheme.error : scheme.onSurfaceVariant;
+    final text = l10n.scanCreditCostWithBalance(
+      imageCount,
+      creditCost,
+      balance,
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          insufficient
+              ? Icons.error_outline
+              : Icons.account_balance_wallet_outlined,
+          size: 16.r,
+          color: color,
+        ),
+        SizedBox(width: 6.w),
+        Flexible(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: color,
+              fontSize: 12.sp,
+              fontWeight: insufficient ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
