@@ -22,6 +22,14 @@ class ProfileRepositoryImpl implements IProfileRepository {
       languagePref: dto.languagePref,
       themePref: dto.themePref,
       isAnonymous: _ds.isAnonymous,
+      marketingEmailOptIn: dto.marketingEmailOptIn,
+      marketingEmailOptInAt: dto.marketingEmailOptInAt,
+      marketingEmailOptInSource: dto.marketingEmailOptInSource,
+      acceptedTermsAt: dto.acceptedTermsAt,
+      acceptedPrivacyAt: dto.acceptedPrivacyAt,
+      acceptedTermsVersion: dto.acceptedTermsVersion,
+      acceptedPrivacyVersion: dto.acceptedPrivacyVersion,
+      welcomedAt: dto.welcomedAt,
     );
   });
 
@@ -40,6 +48,40 @@ class ProfileRepositoryImpl implements IProfileRepository {
   @override
   Future<Result<void>> updateThemePref(String mode) =>
       guardAsync(() => _ds.updateField('theme_pref', mode));
+
+  @override
+  Future<Result<void>> setMarketingEmailOptIn({
+    required bool optedIn,
+    required String source,
+  }) {
+    final now = DateTime.now().toUtc();
+    return guardAsync(() => _ds.updateFields({
+          'marketing_email_opt_in': optedIn,
+          // Clear the audit columns when the user withdraws consent so the
+          // marketing opt-in is unambiguously recorded as `never` again.
+          'marketing_email_opt_in_at': optedIn ? now : null,
+          'marketing_email_opt_in_source': optedIn ? source : null,
+        }));
+  }
+
+  @override
+  Future<Result<void>> recordLegalAcceptance({
+    required int termsVersion,
+    required int privacyVersion,
+  }) {
+    final now = DateTime.now().toUtc();
+    return guardAsync(() => _ds.updateFields({
+          'accepted_terms_at': now,
+          'accepted_privacy_at': now,
+          'accepted_terms_version': termsVersion,
+          'accepted_privacy_version': privacyVersion,
+        }));
+  }
+
+  @override
+  Future<Result<void>> markWelcomed() => guardAsync(
+        () => _ds.updateFields({'welcomed_at': DateTime.now().toUtc()}),
+      );
 
   @override
   Future<Result<OcrCreditStatus>> getOcrCreditStatus() => guardAsync(() async {

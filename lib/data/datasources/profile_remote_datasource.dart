@@ -41,6 +41,19 @@ class ProfileRemoteDataSource {
     await _client.from(_table).update({column: value}).eq('id', uid);
   }
 
+  /// Writes multiple columns in a single UPDATE so multi-field mutations
+  /// (legal acceptance, marketing opt-in, welcome stamp) are atomic on the
+  /// server. Falls back to a per-field loop in `updateField` for single
+  /// column writes.
+  Future<void> updateFields(Map<String, Object?> values) async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    if (values.isEmpty) return;
+    await _client.from(_table).update(values).eq('id', uid);
+  }
+
   Future<Map<String, dynamic>> getTransferBankInfo() async {
     final uid = currentUserId;
     if (uid == null) {

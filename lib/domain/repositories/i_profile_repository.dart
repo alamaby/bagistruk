@@ -20,6 +20,29 @@ abstract interface class IProfileRepository {
   /// [mode] must be `light`, `dark`, or `system`.
   Future<Result<void>> updateThemePref(String mode);
 
+  /// Records or withdraws the user's marketing email opt-in. [source] is
+  /// stored for audit purposes and must be one of
+  /// `register_form` | `settings_toggle` | `post_login_welcome` (enforced by
+  /// the `profiles_marketing_source_check` constraint on the database).
+  /// When [optedIn] is `false` the timestamp and source columns are cleared.
+  Future<Result<void>> setMarketingEmailOptIn({
+    required bool optedIn,
+    required String source,
+  });
+
+  /// Records that the user accepted the Terms of Service and Privacy Policy
+  /// at the supplied versions. The router compares these versions against
+  /// `app_config` to decide whether to re-prompt on subsequent launches.
+  Future<Result<void>> recordLegalAcceptance({
+    required int termsVersion,
+    required int privacyVersion,
+  });
+
+  /// Stamps the post-login welcome gate so the welcome screen is not shown
+  /// again for the current user. Used by the email/password register flow
+  /// where the marketing opt-in is collected on the register form itself.
+  Future<Result<void>> markWelcomed();
+
   /// Reads the current OCR credit status for the active user.
   Future<Result<OcrCreditStatus>> getOcrCreditStatus();
 
