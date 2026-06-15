@@ -218,6 +218,26 @@ class _SettingsBody extends ConsumerWidget {
           ),
           onTap: () => _onPickTheme(context, ref, profile.themePref),
         ),
+        if (!isAnon)
+          ListTile(
+            leading: const Icon(Icons.mark_email_read_outlined),
+            title: Text(l10n.settingsMarketingOptIn),
+            subtitle: Text(l10n.settingsMarketingOptInSubtitle),
+            trailing: Switch.adaptive(
+              value: profile.marketingEmailOptIn,
+              onChanged: (v) async {
+                final res = await ref
+                    .read(profileProvider.notifier)
+                    .updateMarketingOptIn(
+                      optedIn: v,
+                      source: 'settings_toggle',
+                    );
+                if (context.mounted && res is ResultFailure<void>) {
+                  _snack(context, AppL10n.of(context).errorGeneric);
+                }
+              },
+            ),
+          ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: const BannerAdWidget(),

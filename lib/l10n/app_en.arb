@@ -1,6 +1,17 @@
 {
   "@@locale": "en",
 
+  "registerMarketingOptIn": "I want to receive promotional emails, feature updates, and tips from BagiStruk.",
+
+  "postLoginWelcomeTitle": "Welcome to BagiStruk!",
+  "postLoginWelcomeBody": "Let us know if you want to receive promotional emails, feature updates, and tips from us. You can change this any time from Settings.",
+  "postLoginWelcomeOptIn": "Send me promotional emails, feature updates, and tips.",
+  "postLoginWelcomeContinue": "Continue",
+  "postLoginWelcomeErrorSave": "Failed to save. Please try again.",
+
+  "settingsMarketingOptIn": "Promotional emails",
+  "settingsMarketingOptInSubtitle": "Tips, feature updates, and offers from BagiStruk.",
+
   "settingsTitle": "Profile & Settings",
   "settingsTab": "Settings",
   "scanTab": "Scan",

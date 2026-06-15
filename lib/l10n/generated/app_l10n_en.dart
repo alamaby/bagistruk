@@ -1186,4 +1186,32 @@ class AppL10nEn extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Take a photo of a shopping or dining receipt to start splitting fairly!';
+
+  @override
+  String get registerMarketingOptIn =>
+      'I want to receive promotional emails, feature updates, and tips from BagiStruk.';
+
+  @override
+  String get postLoginWelcomeTitle => 'Welcome to BagiStruk!';
+
+  @override
+  String get postLoginWelcomeBody =>
+      'Let us know if you want to receive promotional emails, feature updates, and tips from us. You can change this any time from Settings.';
+
+  @override
+  String get postLoginWelcomeOptIn =>
+      'Send me promotional emails, feature updates, and tips.';
+
+  @override
+  String get postLoginWelcomeContinue => 'Continue';
+
+  @override
+  String get postLoginWelcomeErrorSave => 'Failed to save. Please try again.';
+
+  @override
+  String get settingsMarketingOptIn => 'Promotional emails';
+
+  @override
+  String get settingsMarketingOptInSubtitle =>
+      'Tips, feature updates, and offers from BagiStruk.';
 }

@@ -7,6 +7,7 @@ import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../settings/providers/profile_notifier.dart';
 import '../utils/auth_messages.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_validators.dart';
@@ -25,6 +26,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _password = TextEditingController();
   bool _loading = false;
   bool _googleLoading = false;
+  bool _marketingOptIn = false;
 
   bool get _busy => _loading || _googleLoading;
 
@@ -48,6 +50,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     setState(() => _loading = false);
     switch (res) {
       case Success():
+        // Stamp the marketing opt-in (if any) and the post-login welcome
+        // marker so the welcome screen does not fire for email/password
+        // sign-ups. The writes are awaited because failing silently would
+        // leave the welcome screen re-appearing on every launch. If the
+        // network blip, the user can re-try the opt-in from Settings.
+        if (_marketingOptIn) {
+          await ref
+              .read(profileProvider.notifier)
+              .updateMarketingOptIn(
+                optedIn: true,
+                source: 'register_form',
+              );
+        }
+        await ref.read(profileProvider.notifier).markWelcomed();
         final email = Uri.encodeQueryComponent(_email.text.trim());
         context.go('${Routes.verifyEmail}?email=$email');
       case ResultFailure(:final failure):
@@ -176,6 +192,42 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   validator: validatePassword,
                   onSubmitted: (_) => _submit(),
                   autofillHints: const [AutofillHints.newPassword],
+                ),
+                SizedBox(height: 12.h),
+                SwitchListTile.adaptive(
+                  value: _marketingOptIn,
+                  onChanged: _busy
+                      ? null
+                      : (v) => setState(() => _marketingOptIn = v ?? false),
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    l10n.registerMarketingOptIn,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                Padding(
+                  // Align the secondary link with the switch label, which
+                  // starts ~56dp from the leading edge (icon + padding).
+                  padding: EdgeInsets.only(left: 56.w, top: 2.h),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: _busy
+                          ? null
+                          : () => context.pushNamed(Routes.privacyPolicyName),
+                      child: Text(
+                        l10n.legalAcceptanceReadPrivacy,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: scheme.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 24.h),
                 FilledButton(

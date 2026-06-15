@@ -97,6 +97,29 @@ class ProfileNotifier extends _$ProfileNotifier {
     return res;
   }
 
+  /// Records or withdraws the marketing email opt-in. [source] is recorded
+  /// for audit and must be one of
+  /// `register_form` | `settings_toggle` | `post_login_welcome` (mirrors
+  /// the `profiles_marketing_source_check` DB constraint). Withdrawing
+  /// (optedIn=false) clears the timestamp and source columns.
+  Future<Result<void>> updateMarketingOptIn({
+    required bool optedIn,
+    required String source,
+  }) async {
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .setMarketingEmailOptIn(optedIn: optedIn, source: source);
+    if (res is Success<void>) {
+      final now = DateTime.now().toUtc();
+      _patch((p) => p.copyWith(
+            marketingEmailOptIn: optedIn,
+            marketingEmailOptInAt: optedIn ? now : null,
+            marketingEmailOptInSource: optedIn ? source : null,
+          ));
+    }
+    return res;
+  }
+
   void _patch(UserProfile Function(UserProfile) update) {
     final current = state.value;
     if (current == null) return;

@@ -2161,6 +2161,30 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!'**
   String get scanEmptyHint;
+
+  /// No description provided for @registerMarketingOptIn.
+  String get registerMarketingOptIn;
+
+  /// No description provided for @postLoginWelcomeTitle.
+  String get postLoginWelcomeTitle;
+
+  /// No description provided for @postLoginWelcomeBody.
+  String get postLoginWelcomeBody;
+
+  /// No description provided for @postLoginWelcomeOptIn.
+  String get postLoginWelcomeOptIn;
+
+  /// No description provided for @postLoginWelcomeContinue.
+  String get postLoginWelcomeContinue;
+
+  /// No description provided for @postLoginWelcomeErrorSave.
+  String get postLoginWelcomeErrorSave;
+
+  /// No description provided for @settingsMarketingOptIn.
+  String get settingsMarketingOptIn;
+
+  /// No description provided for @settingsMarketingOptInSubtitle.
+  String get settingsMarketingOptInSubtitle;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

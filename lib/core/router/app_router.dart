@@ -8,6 +8,7 @@ import '../../domain/entities/ocr_result.dart';
 import '../../presentation/auth/providers/auth_providers.dart';
 import '../../presentation/auth/screens/legal_acceptance_screen.dart';
 import '../../presentation/auth/screens/login_screen.dart';
+import '../../presentation/auth/screens/post_login_welcome_screen.dart';
 import '../../presentation/auth/screens/register_screen.dart';
 import '../../presentation/auth/screens/verify_email_screen.dart';
 import '../../presentation/auth/screens/verify_otp_screen.dart';
@@ -117,6 +118,20 @@ GoRouter appRouter(Ref ref) {
             state.matchedLocation != Routes.legalAcceptance) {
           final from = state.matchedLocation;
           return '${Routes.legalAcceptance}'
+              '?from=${Uri.encodeQueryComponent(from)}';
+        }
+
+        // Post-login welcome (Google sign-in only). Email/password sign-up
+        // stamps `welcomed_at` from the register screen, so this gate only
+        // fires for non-anonymous users who have not been welcomed yet.
+        // Excluded from the legal-acceptance screen so a user mid-acceptance
+        // is not bounced to the welcome screen.
+        if (!profile.isAnonymous &&
+            profile.welcomedAt == null &&
+            state.matchedLocation != Routes.postLoginWelcome &&
+            state.matchedLocation != Routes.legalAcceptance) {
+          final from = state.matchedLocation;
+          return '${Routes.postLoginWelcome}'
               '?from=${Uri.encodeQueryComponent(from)}';
         }
       }
@@ -231,6 +246,13 @@ GoRouter appRouter(Ref ref) {
         path: Routes.legalAcceptance,
         name: Routes.legalAcceptanceName,
         builder: (context, state) => LegalAcceptanceScreen(
+          from: state.uri.queryParameters['from'],
+        ),
+      ),
+      GoRoute(
+        path: Routes.postLoginWelcome,
+        name: Routes.postLoginWelcomeName,
+        builder: (context, state) => PostLoginWelcomeScreen(
           from: state.uri.queryParameters['from'],
         ),
       ),

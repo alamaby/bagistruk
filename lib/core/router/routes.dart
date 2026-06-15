@@ -55,4 +55,12 @@ class Routes {
   /// not match `app_config.legal.terms_version` / `legal.privacy_version`.
   static const String legalAcceptance = '/legal-acceptance';
   static const String legalAcceptanceName = 'legal-acceptance';
+
+  /// One-time screen shown after a non-anonymous user finishes the
+  /// authentication flow (currently Google sign-in) to collect an explicit
+  /// marketing email opt-in. Email/password sign-up collects the same
+  /// opt-in on the register form and stamps `welcomed_at` directly, so the
+  /// welcome screen only fires for users who skipped the register form.
+  static const String postLoginWelcome = '/post-login-welcome';
+  static const String postLoginWelcomeName = 'post-login-welcome';
 }

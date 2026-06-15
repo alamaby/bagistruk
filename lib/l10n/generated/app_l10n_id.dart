@@ -1184,4 +1184,32 @@ class AppL10nId extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!';
+
+  @override
+  String get registerMarketingOptIn =>
+      'Saya ingin menerima email promosi, berita fitur, dan tips dari BagiStruk.';
+
+  @override
+  String get postLoginWelcomeTitle => 'Selamat datang di BagiStruk!';
+
+  @override
+  String get postLoginWelcomeBody =>
+      'Beri tahu kami apakah Anda ingin menerima email promosi, berita fitur, dan tips dari kami. Anda bisa mengubah preferensi ini kapan saja dari Settings.';
+
+  @override
+  String get postLoginWelcomeOptIn =>
+      'Kirim saya email promosi, berita fitur, dan tips.';
+
+  @override
+  String get postLoginWelcomeContinue => 'Lanjutkan';
+
+  @override
+  String get postLoginWelcomeErrorSave => 'Gagal menyimpan. Coba lagi.';
+
+  @override
+  String get settingsMarketingOptIn => 'Email promosi';
+
+  @override
+  String get settingsMarketingOptInSubtitle =>
+      'Tips, info fitur, dan penawaran dari BagiStruk.';
 }

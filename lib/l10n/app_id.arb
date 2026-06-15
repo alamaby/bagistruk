@@ -1,6 +1,17 @@
 {
   "@@locale": "id",
 
+  "registerMarketingOptIn": "Saya ingin menerima email promosi, berita fitur, dan tips dari BagiStruk.",
+
+  "postLoginWelcomeTitle": "Selamat datang di BagiStruk!",
+  "postLoginWelcomeBody": "Beri tahu kami apakah Anda ingin menerima email promosi, berita fitur, dan tips dari kami. Anda bisa mengubah preferensi ini kapan saja dari Settings.",
+  "postLoginWelcomeOptIn": "Kirim saya email promosi, berita fitur, dan tips.",
+  "postLoginWelcomeContinue": "Lanjutkan",
+  "postLoginWelcomeErrorSave": "Gagal menyimpan. Coba lagi.",
+
+  "settingsMarketingOptIn": "Email promosi",
+  "settingsMarketingOptInSubtitle": "Tips, info fitur, dan penawaran dari BagiStruk.",
+
   "settingsTitle": "Profil & Pengaturan",
   "settingsTab": "Pengaturan",
   "scanTab": "Pindai",
