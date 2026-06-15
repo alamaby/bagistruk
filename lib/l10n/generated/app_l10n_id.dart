@@ -620,6 +620,33 @@ class AppL10nId extends AppL10n {
   String get registerLoginLink => 'Login';
 
   @override
+  String get legalAcceptanceAppBarTitle => 'Persetujuan Hukum';
+
+  @override
+  String get legalAcceptanceTitle => 'Sebelum mulai…';
+
+  @override
+  String get legalAcceptanceIntro => 'Untuk menggunakan BagiStruk, mohon baca dan setujui dua dokumen di bawah ini. Kami membutuhkan persetujuan terpisah untuk Syarat Layanan dan Kebijakan Privasi.';
+
+  @override
+  String get legalAcceptanceReadTerms => 'Baca Syarat Layanan';
+
+  @override
+  String get legalAcceptanceReadPrivacy => 'Baca Kebijakan Privasi';
+
+  @override
+  String get legalAcceptanceAgreeTerms => 'Saya telah membaca dan menyetujui Syarat Layanan.';
+
+  @override
+  String get legalAcceptanceAgreePrivacy => 'Saya telah membaca dan menyetujui Kebijakan Privasi.';
+
+  @override
+  String get legalAcceptanceContinue => 'Lanjutkan';
+
+  @override
+  String get legalAcceptanceErrorSave => 'Gagal menyimpan persetujuan. Coba lagi.';
+
+  @override
   String get verifyEmailTitle => 'Verifikasi email';
 
   @override

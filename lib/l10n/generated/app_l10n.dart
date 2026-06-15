@@ -1175,6 +1175,33 @@ abstract class AppL10n {
   /// **'Login'**
   String get registerLoginLink;
 
+  /// No description provided for @legalAcceptanceAppBarTitle.
+  String get legalAcceptanceAppBarTitle;
+
+  /// No description provided for @legalAcceptanceTitle.
+  String get legalAcceptanceTitle;
+
+  /// No description provided for @legalAcceptanceIntro.
+  String get legalAcceptanceIntro;
+
+  /// No description provided for @legalAcceptanceReadTerms.
+  String get legalAcceptanceReadTerms;
+
+  /// No description provided for @legalAcceptanceReadPrivacy.
+  String get legalAcceptanceReadPrivacy;
+
+  /// No description provided for @legalAcceptanceAgreeTerms.
+  String get legalAcceptanceAgreeTerms;
+
+  /// No description provided for @legalAcceptanceAgreePrivacy.
+  String get legalAcceptanceAgreePrivacy;
+
+  /// No description provided for @legalAcceptanceContinue.
+  String get legalAcceptanceContinue;
+
+  /// No description provided for @legalAcceptanceErrorSave.
+  String get legalAcceptanceErrorSave;
+
   /// No description provided for @verifyEmailTitle.
   ///
   /// In id, this message translates to:

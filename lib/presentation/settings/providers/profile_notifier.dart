@@ -72,6 +72,31 @@ class ProfileNotifier extends _$ProfileNotifier {
     return res;
   }
 
+  /// Records the user's acceptance of the current Terms of Service and
+  /// Privacy Policy. The notifier pulls the current versions from
+  /// `appConfigProvider` so the call site does not have to know the version
+  /// numbers; the router compares the stamped versions to decide whether
+  /// to re-prompt on future launches.
+  Future<Result<void>> recordLegalAcceptance() async {
+    final cfg = await ref.read(appConfigProvider.future);
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .recordLegalAcceptance(
+          termsVersion: cfg.termsVersion,
+          privacyVersion: cfg.privacyVersion,
+        );
+    if (res is Success<void>) {
+      final now = DateTime.now().toUtc();
+      _patch((p) => p.copyWith(
+            acceptedTermsAt: now,
+            acceptedPrivacyAt: now,
+            acceptedTermsVersion: cfg.termsVersion,
+            acceptedPrivacyVersion: cfg.privacyVersion,
+          ));
+    }
+    return res;
+  }
+
   void _patch(UserProfile Function(UserProfile) update) {
     final current = state.value;
     if (current == null) return;

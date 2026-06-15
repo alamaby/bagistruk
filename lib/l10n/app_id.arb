@@ -257,6 +257,16 @@
   "registerHaveAccount": "Sudah punya akun? ",
   "registerLoginLink": "Login",
 
+  "legalAcceptanceAppBarTitle": "Persetujuan Hukum",
+  "legalAcceptanceTitle": "Sebelum mulai…",
+  "legalAcceptanceIntro": "Untuk menggunakan BagiStruk, mohon baca dan setujui dua dokumen di bawah ini. Kami membutuhkan persetujuan terpisah untuk Syarat Layanan dan Kebijakan Privasi.",
+  "legalAcceptanceReadTerms": "Baca Syarat Layanan",
+  "legalAcceptanceReadPrivacy": "Baca Kebijakan Privasi",
+  "legalAcceptanceAgreeTerms": "Saya telah membaca dan menyetujui Syarat Layanan.",
+  "legalAcceptanceAgreePrivacy": "Saya telah membaca dan menyetujui Kebijakan Privasi.",
+  "legalAcceptanceContinue": "Lanjutkan",
+  "legalAcceptanceErrorSave": "Gagal menyimpan persetujuan. Coba lagi.",
+
   "verifyEmailTitle": "Verifikasi email",
   "verifyEmailBackTooltip": "Kembali",
   "verifyEmailHeading": "Cek email kamu",

@@ -6,6 +6,7 @@ import '../../data/providers.dart';
 import '../../domain/entities/auth_snapshot.dart';
 import '../../domain/entities/ocr_result.dart';
 import '../../presentation/auth/providers/auth_providers.dart';
+import '../../presentation/auth/screens/legal_acceptance_screen.dart';
 import '../../presentation/auth/screens/login_screen.dart';
 import '../../presentation/auth/screens/register_screen.dart';
 import '../../presentation/auth/screens/verify_email_screen.dart';
@@ -19,6 +20,7 @@ import '../../presentation/ocr/screens/receipt_capture_screen.dart';
 import '../../presentation/about/screens/about_screen.dart';
 import '../../presentation/about/screens/privacy_policy_screen.dart';
 import '../../presentation/about/screens/terms_of_service_screen.dart';
+import '../../presentation/settings/providers/profile_notifier.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
 import '../../presentation/settings/screens/transfer_bank_info_screen.dart';
 import '../../presentation/shell/screens/main_shell_screen.dart';
@@ -31,6 +33,11 @@ part 'app_router.g.dart';
 GoRouter appRouter(Ref ref) {
   final refresh = _AuthRefreshNotifier();
   ref.listen(authStateProvider, (_, _) => refresh.bump());
+  // Also bump on app_config and profile changes so the legal-acceptance
+  // gate re-evaluates as soon as the user accepts (profile) or the
+  // operator bumps the legal doc version in `app_config`.
+  ref.listen(appConfigProvider, (_, _) => refresh.bump());
+  ref.listen(profileProvider, (_, _) => refresh.bump());
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -84,6 +91,36 @@ GoRouter appRouter(Ref ref) {
         if (from != null && from.isNotEmpty) return from;
         return Routes.history;
       }
+
+      // ToS/PP acceptance gate. Skipped while the user is reading either
+      // legal document (so a push to /terms-of-service or /privacy-policy
+      // from inside the gate does not immediately pop them back).
+      final cfg = switch (ref.read(appConfigProvider)) {
+        AsyncData(:final value) => value,
+        _ => null,
+      };
+      final profile = switch (ref.read(profileProvider)) {
+        AsyncData(:final value) => value,
+        _ => null,
+      };
+      final onLegalDocScreen =
+          state.matchedLocation == Routes.termsOfService ||
+          state.matchedLocation == Routes.privacyPolicy;
+      if (cfg != null &&
+          profile != null &&
+          profile.id.isNotEmpty &&
+          !onLegalDocScreen) {
+        final needsAccept =
+            profile.acceptedTermsVersion != cfg.termsVersion ||
+                profile.acceptedPrivacyVersion != cfg.privacyVersion;
+        if (needsAccept &&
+            state.matchedLocation != Routes.legalAcceptance) {
+          final from = state.matchedLocation;
+          return '${Routes.legalAcceptance}'
+              '?from=${Uri.encodeQueryComponent(from)}';
+        }
+      }
+
       return null;
     },
     routes: [
@@ -189,6 +226,13 @@ GoRouter appRouter(Ref ref) {
         path: Routes.termsOfService,
         name: Routes.termsOfServiceName,
         builder: (context, state) => const TermsOfServiceScreen(),
+      ),
+      GoRoute(
+        path: Routes.legalAcceptance,
+        name: Routes.legalAcceptanceName,
+        builder: (context, state) => LegalAcceptanceScreen(
+          from: state.uri.queryParameters['from'],
+        ),
       ),
     ],
   );

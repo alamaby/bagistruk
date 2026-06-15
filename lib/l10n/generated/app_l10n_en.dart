@@ -622,6 +622,33 @@ class AppL10nEn extends AppL10n {
   String get registerLoginLink => 'Log In';
 
   @override
+  String get legalAcceptanceAppBarTitle => 'Legal Agreement';
+
+  @override
+  String get legalAcceptanceTitle => 'Before you start…';
+
+  @override
+  String get legalAcceptanceIntro => 'To use BagiStruk, please read and agree to the two documents below. We need separate consent for the Terms of Service and the Privacy Policy.';
+
+  @override
+  String get legalAcceptanceReadTerms => 'Read Terms of Service';
+
+  @override
+  String get legalAcceptanceReadPrivacy => 'Read Privacy Policy';
+
+  @override
+  String get legalAcceptanceAgreeTerms => 'I have read and agree to the Terms of Service.';
+
+  @override
+  String get legalAcceptanceAgreePrivacy => 'I have read and agree to the Privacy Policy.';
+
+  @override
+  String get legalAcceptanceContinue => 'Continue';
+
+  @override
+  String get legalAcceptanceErrorSave => 'Failed to save acceptance. Please try again.';
+
+  @override
   String get verifyEmailTitle => 'Verify email';
 
   @override

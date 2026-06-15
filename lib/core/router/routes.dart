@@ -47,4 +47,12 @@ class Routes {
 
   static const String termsOfService = '/terms-of-service';
   static const String termsOfServiceName = 'terms-of-service';
+
+  /// First-run gate that requires the user to accept the current Terms of
+  /// Service and Privacy Policy versions before any other route is
+  /// reachable. Routed to by `appRouter.redirect` whenever
+  /// `profile.acceptedTermsVersion` or `profile.acceptedPrivacyVersion` does
+  /// not match `app_config.legal.terms_version` / `legal.privacy_version`.
+  static const String legalAcceptance = '/legal-acceptance';
+  static const String legalAcceptanceName = 'legal-acceptance';
 }

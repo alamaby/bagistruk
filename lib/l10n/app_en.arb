@@ -257,6 +257,16 @@
   "registerHaveAccount": "Already have an account? ",
   "registerLoginLink": "Log In",
 
+  "legalAcceptanceAppBarTitle": "Legal Agreement",
+  "legalAcceptanceTitle": "Before you start…",
+  "legalAcceptanceIntro": "To use BagiStruk, please read and agree to the two documents below. We need separate consent for the Terms of Service and the Privacy Policy.",
+  "legalAcceptanceReadTerms": "Read Terms of Service",
+  "legalAcceptanceReadPrivacy": "Read Privacy Policy",
+  "legalAcceptanceAgreeTerms": "I have read and agree to the Terms of Service.",
+  "legalAcceptanceAgreePrivacy": "I have read and agree to the Privacy Policy.",
+  "legalAcceptanceContinue": "Continue",
+  "legalAcceptanceErrorSave": "Failed to save acceptance. Please try again.",
+
   "verifyEmailTitle": "Verify email",
   "verifyEmailBackTooltip": "Back",
   "verifyEmailHeading": "Check your email",
