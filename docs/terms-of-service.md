@@ -10,7 +10,11 @@ BagiStruk is a split-bill app that helps users scan receipts, review extracted b
 
 ## 2. Acceptance
 
-By using BagiStruk, you agree to these Terms and the Privacy Policy. If you do not agree, do not use the app.
+The first time you use BagiStruk, the app will ask you to read and accept these Terms and the Privacy Policy. Your continued use of the app confirms that you have read, understood, and agreed to both documents.
+
+**Minimum age.** BagiStruk is not intended for children under **13 years of age** (the threshold under the US Children's Online Privacy Protection Act, COPPA), or under the age required by your local law to consent to digital services (16 in most of the European Economic Area by default, 18 in Indonesia under the Civil Code, or younger if your country's law allows consent at a lower age with parental approval). By accepting these Terms, you confirm that you meet the minimum age requirement in your jurisdiction. If you do not, do not use the app.
+
+If you do not agree with these Terms, do not use the app. You can uninstall BagiStruk at any time to end your agreement with us.
 
 ## 3. Accounts
 
@@ -64,21 +68,39 @@ We may update, suspend, limit, or discontinue parts of the app at any time, incl
 
 We may suspend or delete accounts or data when required by law, for security reasons, for abuse prevention, or according to the inactivity policy. You may delete your account from Profile & Settings in the app or request account deletion by contacting us.
 
-## 12. Disclaimer
+## 12. Your Rights As A Consumer
+
+Nothing in these Terms is intended to exclude, limit, or override rights that you have under mandatory law in your country of residence, including but not limited to:
+
+- For users in the European Economic Area: the protections of the EU General Data Protection Regulation (GDPR), the ePrivacy Directive, the EU Consumer Rights Directive, and equivalent national laws.
+- For users in Indonesia: the protections of UU No. 27/2022 on Personal Data Protection and UU No. 8/1999 on Consumer Protection.
+- For users in the United States: applicable state consumer protection and privacy laws (e.g., CCPA/CPRA in California).
+
+If any provision of these Terms is found to be invalid or unenforceable in your jurisdiction, that provision will be limited or removed to the minimum extent necessary so that the remaining provisions remain in full force and effect.
+
+## 13. Disclaimer
 
 The app is provided "as is" and "as available". We do not guarantee that the app will be uninterrupted, error-free, or that OCR results will be accurate.
 
-## 13. Limitation Of Liability
+## 14. Limitation Of Liability
 
 To the maximum extent permitted by law, we are not liable for indirect, incidental, special, consequential, or punitive damages, or for losses caused by incorrect OCR output, user input mistakes, service outages, data loss, or third-party services.
 
-## 14. Changes To These Terms
+## 15. Changes To These Terms
 
 We may update these Terms from time to time. Continued use of the app after changes means you accept the updated Terms.
 
-## 15. Contact
+## 16. Contact
 
-Questions about these Terms: **alam.aby.b@gmail.com**
+Questions about these Terms, complaints, or requests to exercise your consumer rights:
+
+**Email:** alam.aby.b@gmail.com
+
+**Postal address:**
+[Operator legal name — to be filled before public release]
+[Street address]
+[City, postal code]
+[Country]
 
 ---
 
@@ -94,7 +116,11 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 
 ## 2. Persetujuan
 
-Dengan menggunakan BagiStruk, Anda menyetujui Syarat ini dan Kebijakan Privasi. Jika tidak setuju, jangan gunakan aplikasi.
+Saat pertama kali Anda menggunakan BagiStruk, aplikasi akan meminta Anda untuk membaca dan menyetujui Syarat ini dan Kebijakan Privasi. Penggunaan aplikasi yang berkelanjutan mengonfirmasi bahwa Anda telah membaca, memahami, dan menyetujui kedua dokumen.
+
+**Batas usia minimum.** BagiStruk tidak ditujukan untuk anak di bawah **13 tahun** (batas minimum US Children's Online Privacy Protection Act, COPPA), atau di bawah usia yang diwajibkan hukum lokal Anda untuk menyetujui layanan digital (16 tahun di sebagian besar Wilayah Ekonomi Eropa secara default, 18 tahun di Indonesia menurut Kitab Undang-Undang Hukum Perdata, atau lebih muda bila hukum negara Anda mengizinkan persetujuan pada usia lebih muda dengan persetujuan orang tua). Dengan menyetujui Syarat ini, Anda menyatakan memenuhi batas usia minimum di yurisdiksi Anda. Jika tidak, jangan gunakan aplikasi.
+
+Jika Anda tidak setuju dengan Syarat ini, jangan gunakan aplikasi. Anda dapat menghapus instalasi BagiStruk kapan saja untuk mengakhiri perjanjian Anda dengan kami.
 
 ## 3. Akun
 
@@ -148,18 +174,36 @@ Kami dapat memperbarui, menangguhkan, membatasi, atau menghentikan bagian aplika
 
 Kami dapat menangguhkan atau menghapus akun atau data jika diwajibkan hukum, untuk alasan keamanan, pencegahan penyalahgunaan, atau sesuai kebijakan akun tidak aktif. Anda dapat menghapus akun dari Profil & Pengaturan di aplikasi atau meminta penghapusan akun dengan menghubungi kami.
 
-## 12. Penafian
+## 12. Hak Anda Sebagai Konsumen
+
+Tidak ada dalam Syarat ini yang bertujuan untuk mengecualikan, membatasi, atau mengesampingkan hak yang Anda miliki berdasarkan hukum wajib di negara tempat tinggal Anda, termasuk namun tidak terbatas pada:
+
+- Untuk pengguna di Wilayah Ekonomi Eropa: perlindungan dari EU General Data Protection Regulation (GDPR), ePrivacy Directive, EU Consumer Rights Directive, dan hukum nasional setara.
+- Untuk pengguna di Indonesia: perlindungan dari UU No. 27/2022 tentang Pelindungan Data Pribadi dan UU No. 8/1999 tentang Perlindungan Konsumen.
+- Untuk pengguna di Amerika Serikat: hukum perlindungan konsumen dan privasi negara bagian yang berlaku (misalnya CCPA/CPRA di California).
+
+Jika ada ketentuan dalam Syarat ini yang ditemukan tidak valid atau tidak dapat diterapkan di yurisdiksi Anda, ketentuan tersebut akan dibatasi atau dihapus seminimal mungkin sehingga ketentuan yang tersisa tetap berlaku penuh.
+
+## 13. Penafian
 
 Aplikasi disediakan "sebagaimana adanya" dan "sebagaimana tersedia". Kami tidak menjamin aplikasi selalu tersedia, bebas error, atau hasil OCR selalu akurat.
 
-## 13. Batasan Tanggung Jawab
+## 14. Batasan Tanggung Jawab
 
 Sejauh diizinkan hukum, kami tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, konsekuensial, atau punitif, atau kerugian akibat hasil OCR yang salah, kesalahan input pengguna, gangguan layanan, kehilangan data, atau layanan pihak ketiga.
 
-## 14. Perubahan Syarat
+## 15. Perubahan Syarat
 
 Kami dapat memperbarui Syarat ini dari waktu ke waktu. Penggunaan aplikasi setelah perubahan berarti Anda menerima Syarat yang diperbarui.
 
-## 15. Kontak
+## 16. Kontak
 
-Pertanyaan tentang Syarat ini: **alam.aby.b@gmail.com**
+Pertanyaan tentang Syarat ini, keluhan, atau permintaan penggunaan hak konsumen Anda:
+
+**Email:** alam.aby.b@gmail.com
+
+**Alamat pos:**
+Alam Aby Bashit
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia

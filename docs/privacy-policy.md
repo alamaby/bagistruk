@@ -8,6 +8,20 @@ This policy explains how BagiStruk collects, uses, stores, and deletes data. Thi
 
 BagiStruk is a split-bill app that helps users scan receipts, extract bill items with OCR, and divide payments among participants. We collect only the data needed to provide these features. We do not sell personal data. If ads are enabled, we use Google Mobile Ads / AdMob to show ads and measure ad performance.
 
+## Who We Are
+
+The data controller for BagiStruk is:
+
+**Alam Aby Bashit**
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia
+**Email:** alam.aby.b@gmail.com
+
+If you are in the European Economic Area, the address above also serves as our contact for the purposes of GDPR Art. 27 when you cannot reach us by email. You can always contact us at the email above regardless of your location.
+
+For Indonesian users, you may lodge a complaint with the Ministry of Communication and Information Technology (KOMINFO) or with the Personal Data Protection Authority (Otoritas Pelindungan Data Pribadi, OPDP) once it becomes operational. The list of EEA supervisory authorities is available at https://edpb.europa.eu/about-edpb/about-edpb/members_en.
+
 ## Data We Collect
 
 - Account data: email address, authentication identifiers, and sign-in provider information when you create or use an account.
@@ -45,6 +59,18 @@ BagiStruk is a split-bill app that helps users scan receipts, extract bill items
 - To show ads, measure ad performance, prevent ad fraud, and respect consent choices when ads are enabled.
 - To diagnose errors, prevent abuse, and enforce database rate limits.
 
+## Legal Basis For Processing
+
+We process your personal data on the following legal bases, in line with Article 6 of the EU General Data Protection Regulation (GDPR) and equivalent provisions of the Indonesian Personal Data Protection Law (UU No. 27/2022, "UU PDP"):
+
+- **Account data, authentication, and bill data** — to perform the contract you entered with us by creating an account (Art. 6(1)(b) GDPR / Pasal 23 UU PDP).
+- **Receipt photos and OCR processing** — with your explicit consent each time you submit a scan (Art. 6(1)(a) GDPR). Scans submitted before withdrawal of consent will have been processed.
+- **Marketing emails and promotional communications** — with your prior opt-in consent only (Art. 6(1)(a) GDPR / Pasal 23 UU PDP). You can withdraw this consent at any time from Profile & Settings, or via the unsubscribe link in any marketing email we send.
+- **Personalized advertising** — with your consent given through Google's User Messaging Platform (UMP) when required by applicable law (Art. 6(1)(a) GDPR / ePrivacy Directive). We do not personalize ads for users who do not give consent.
+- **Basic technical, security, and anti-abuse data** — on the basis of our legitimate interest in keeping the service secure and preventing abuse (Art. 6(1)(f) GDPR).
+- **Inactivity reminders and account cleanup notifications** — on the basis of our legitimate interest in keeping account records accurate (Art. 6(1)(f) GDPR).
+- **Operational alerts about OCR provider issues** — on the basis of our legitimate interest in operating a reliable service (Art. 6(1)(f) GDPR).
+
 ## Storage And Processing
 
 App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, and Nvidia NIM. API keys for those providers are stored server-side and are not bundled into the mobile app.
@@ -59,6 +85,17 @@ BagiStruk may use:
 - Resend or another email provider: inactivity reminder emails and operational OCR provider alerts, if configured.
 - Google Mobile Ads / AdMob: optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging.
 - Google Play Billing / Google Play Developer API: purchase processing and server-side purchase verification for subscriptions and one-time OCR credit packs.
+
+## International Data Transfers
+
+Your data may be transferred to and processed in countries other than your country of residence. The main destinations are:
+
+- **United States** — for Google services (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, and Nvidia NIM OCR processing.
+- **European Economic Area or other Supabase regions** — for authentication, database, and Edge Functions, depending on your Supabase project's configured region.
+
+When we transfer personal data outside the European Economic Area, we rely on safeguards such as the European Commission's Standard Contractual Clauses (SCCs), the EU-U.S. Data Privacy Framework (where applicable), or equivalent contractual protections. A copy of the relevant safeguards can be requested by contacting us.
+
+Under Indonesian law (UU PDP Pasal 56), cross-border transfers are subject to requirements of adequate protection in the destination country or explicit consent from the data subject. Where required, we obtain such consent at the time of account creation.
 
 ## Account Retention And Deletion
 
@@ -77,9 +114,37 @@ You may also request account and data deletion by contacting us at the email bel
 
 We rely on Supabase authentication, row-level security, server-side API keys, and database policies to protect user data. No system is perfectly secure, but we take reasonable steps to limit access and reduce exposure.
 
+## Data Breach Notification
+
+In the event of a personal data breach that is likely to result in a high risk to your rights and freedoms, we will:
+
+- Notify the relevant supervisory authority (the data protection authority in your jurisdiction) within 72 hours of becoming aware of the breach, as required by GDPR Art. 33.
+- Notify affected users without undue delay, as required by GDPR Art. 34, when the breach poses a high risk to their rights.
+- For users in Indonesia, notify the Personal Data Protection Authority (Otoritas Pelindungan Data Pribadi) and affected users within 3 x 24 hours of becoming aware, as required by UU PDP Pasal 46.
+
+The notification will describe the nature of the breach, the categories and approximate number of affected users, the likely consequences, and the measures taken or proposed to address it.
+
+## Your Rights
+
+Subject to applicable law, you have the following rights regarding your personal data:
+
+- **Right of access (GDPR Art. 15 / UU PDP Pasal 7)** — to request a copy of the personal data we hold about you.
+- **Right to rectification (GDPR Art. 16 / UU PDP Pasal 8)** — to correct inaccurate or incomplete data. Most profile fields can be updated from Profile & Settings; bill fields can be edited in the app.
+- **Right to erasure / right to be forgotten (GDPR Art. 17 / UU PDP Pasal 9)** — to request deletion of your account and associated data from Profile & Settings, or by contacting us.
+- **Right to restriction of processing (GDPR Art. 18)** — to request that we limit how we use your data in certain circumstances.
+- **Right to data portability (GDPR Art. 20 / UU PDP Pasal 11)** — to receive your data in a structured, commonly used, machine-readable format. Bills and their data can be exported as PDF and CSV from the app.
+- **Right to object (GDPR Art. 21)** — to object to processing based on legitimate interest, including profiling related to direct marketing.
+- **Right to withdraw consent (GDPR Art. 7(3) / UU PDP Pasal 25)** — to withdraw any consent you have given, at any time, without affecting the lawfulness of processing before withdrawal. Marketing opt-in can be withdrawn from Profile & Settings.
+- **Right to lodge a complaint** — with your local data protection authority (for EEA residents; see https://edpb.europa.eu/about-edpb/about-edpb/members_en), or with KOMINFO / the Personal Data Protection Authority (for Indonesian residents).
+- **Right not to be subject to automated decision-making (GDPR Art. 22)** — BagiStruk does not make decisions based solely on automated processing that produce legal or similarly significant effects on you.
+
+To exercise any of these rights, contact us at **alam.aby.b@gmail.com**. We will respond within 30 days, or earlier if required by local law. We may need to verify your identity before acting on the request.
+
 ## Children
 
-BagiStruk is not intended for children under the age required by applicable law to consent to digital services. If you believe a child has provided personal data, contact us so we can review and delete it.
+BagiStruk is not intended for children under **13 years of age** (the threshold under the US Children's Online Privacy Protection Act, COPPA), or under the age required by your local law to consent to digital services (16 in most of the European Economic Area by default, 18 in Indonesia under the Civil Code, or younger if your country's law allows consent at a lower age with parental approval).
+
+We do not knowingly collect personal data from children below the applicable age threshold. If you believe a child has provided personal data to us, contact us at **alam.aby.b@gmail.com** so we can review, delete the data, and close the account. Where required by law, we will obtain verifiable parental consent before processing the child's data.
 
 ## Changes
 
@@ -87,7 +152,15 @@ We may update this policy from time to time. The latest version should be made a
 
 ## Contact
 
-For privacy questions or deletion requests, contact: **alam.aby.b@gmail.com**
+For privacy questions, deletion requests, or to exercise your data protection rights, contact us:
+
+**Email:** alam.aby.b@gmail.com
+
+**Postal address (also our EEA Art. 27 contact):**
+Alam Aby Bashit
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia
 
 ---
 
@@ -100,6 +173,20 @@ Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimp
 ## Ringkasan
 
 BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk, mengekstrak item tagihan dengan OCR, dan membagi pembayaran antar peserta. Kami hanya mengumpulkan data yang diperlukan agar fitur aplikasi berjalan. Kami tidak menjual data pribadi. Jika iklan diaktifkan, kami memakai Google Mobile Ads / AdMob untuk menampilkan iklan dan mengukur performa iklan.
+
+## Siapa Kami
+
+Pengontrol data untuk BagiStruk adalah:
+
+**Alam Aby Bashit**
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia
+**Email:** alam.aby.b@gmail.com
+
+Jika Anda berada di Wilayah Ekonomi Eropa, alamat di atas juga berfungsi sebagai kontak kami untuk keperluan Pasal 27 GDPR saat Anda tidak dapat menghubungi kami melalui email. Anda selalu dapat menghubungi kami di email di atas dari mana pun.
+
+Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komunikasi dan Informatika (KOMINFO) atau Otoritas Pelindungan Data Pribadi (OPDP) setelah badan tersebut beroperasi. Daftar otoritas pengawas EEA tersedia di https://edpb.europa.eu/about-edpb/about-edpb/members_en.
 
 ## Data Yang Kami Kumpulkan
 
@@ -138,6 +225,18 @@ BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk,
 - Menampilkan iklan, mengukur performa iklan, mencegah fraud iklan, dan menghormati pilihan consent saat iklan diaktifkan.
 - Mendiagnosis error, mencegah penyalahgunaan, dan menerapkan rate limit database.
 
+## Dasar Hukum Pemrosesan
+
+Kami memproses data pribadi Anda berdasarkan dasar hukum berikut, sesuai Pasal 6 GDPR (Uni Eropa) dan ketentuan setara UU No. 27/2022 tentang Pelindungan Data Pribadi ("UU PDP"):
+
+- **Data akun, autentikasi, dan data tagihan** — untuk pelaksanaan kontrak yang Anda sepakati saat membuat akun (Pasal 6(1)(b) GDPR / Pasal 23 UU PDP).
+- **Foto struk dan pemrosesan OCR** — dengan persetujuan eksplisit Anda setiap kali Anda mengirim pindaian (Pasal 6(1)(a) GDPR). Pindaian yang dikirim sebelum penarikan persetujuan tetap akan diproses.
+- **Email promosi dan komunikasi pemasaran** — hanya dengan persetujuan opt-in Anda (Pasal 6(1)(a) GDPR / Pasal 23 UU PDP). Anda dapat menarik persetujuan ini kapan saja dari Profil & Pengaturan, atau melalui link unsubscribe di email pemasaran apa pun.
+- **Iklan yang dipersonalisasi** — dengan persetujuan Anda melalui Google User Messaging Platform (UMP) bila diwajibkan hukum yang berlaku (Pasal 6(1)(a) GDPR / ePrivacy Directive). Kami tidak mempersonalisasi iklan untuk pengguna yang tidak memberikan persetujuan.
+- **Data teknis, keamanan, dan anti-penyalahgunaan** — berdasarkan kepentingan sah kami untuk menjaga layanan tetap aman dan mencegah fraud (Pasal 6(1)(f) GDPR).
+- **Reminder tidak aktif dan notifikasi pembersihan akun** — berdasarkan kepentingan sah kami dalam memelihara catatan akun yang akurat (Pasal 6(1)(f) GDPR).
+- **Alert operasional tentang masalah penyedia OCR** — berdasarkan kepentingan sah kami dalam mengoperasikan layanan yang andal (Pasal 6(1)(f) GDPR).
+
 ## Penyimpanan Dan Pemrosesan
 
 Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, dan Nvidia NIM. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
@@ -152,6 +251,17 @@ BagiStruk dapat menggunakan:
 - Resend atau penyedia email lain: email reminder tidak aktif dan alert operasional penyedia OCR, jika dikonfigurasi.
 - Google Mobile Ads / AdMob: penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi.
 - Google Play Billing / Google Play Developer API: pemrosesan pembelian dan verifikasi pembelian sisi server untuk subscription dan paket credit OCR sekali beli.
+
+## Transfer Data Lintas Negara
+
+Data Anda dapat ditransfer dan diproses di negara selain negara tempat tinggal Anda. Tujuan utama:
+
+- **Amerika Serikat** — untuk layanan Google (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, dan pemrosesan OCR Nvidia NIM.
+- **Wilayah Ekonomi Eropa atau region Supabase lain** — untuk autentikasi, database, dan Edge Functions, tergantung region project Supabase Anda.
+
+Ketika kami mentransfer data pribadi keluar dari Wilayah Ekonomi Eropa, kami mengandalkan perlindungan seperti Standard Contractual Clauses (SCC) dari European Commission, EU-U.S. Data Privacy Framework (bila berlaku), atau perlindungan kontraktual setara. Salinan perlindungan relevan dapat diminta dengan menghubungi kami.
+
+Berdasarkan UU PDP Pasal 56, transfer lintas negara tunduk pada persyaratan tingkat perlindungan yang memadai di negara tujuan atau persetujuan eksplisit dari subjek data. Bila diperlukan, kami memperoleh persetujuan tersebut pada saat pembuatan akun.
 
 ## Retensi Dan Penghapusan Akun
 
@@ -170,9 +280,37 @@ Anda juga dapat meminta penghapusan akun dan data dengan menghubungi email di ba
 
 Kami menggunakan autentikasi Supabase, row-level security, API key sisi server, dan policy database untuk melindungi data pengguna. Tidak ada sistem yang sepenuhnya aman, tetapi kami mengambil langkah wajar untuk membatasi akses dan mengurangi risiko.
 
+## Notifikasi Pelanggaran Data
+
+Apabila terjadi pelanggaran data pribadi yang kemungkinan besar berisiko tinggi terhadap hak dan kebebasan Anda, kami akan:
+
+- Memberi tahu otoritas pengawas terkait (otoritas perlindungan data di yurisdiksi Anda) dalam 72 jam setelah menyadari pelanggaran, sesuai Pasal 33 GDPR.
+- Memberi tahu pengguna terdampak tanpa penundaan yang tidak semestinya, sesuai Pasal 34 GDPR, ketika pelanggaran menimbulkan risiko tinggi terhadap hak mereka.
+- Untuk pengguna di Indonesia, memberi tahu Otoritas Pelindungan Data Pribadi (OPDP) dan pengguna terdampak dalam 3 x 24 jam setelah menyadari, sesuai Pasal 46 UU PDP.
+
+Notifikasi akan menjelaskan sifat pelanggaran, kategori dan perkiraan jumlah pengguna terdampak, kemungkinan konsekuensi, serta langkah-langkah yang diambil atau diusulkan untuk mengatasinya.
+
+## Hak Anda
+
+Sesuai hukum yang berlaku, Anda memiliki hak-hak berikut terkait data pribadi Anda:
+
+- **Hak akses (Pasal 15 GDPR / Pasal 7 UU PDP)** — meminta salinan data pribadi yang kami simpan tentang Anda.
+- **Hak koreksi (Pasal 16 GDPR / Pasal 8 UU PDP)** — mengoreksi data yang tidak akurat atau tidak lengkap. Sebagian besar field profil dapat diubah dari Profil & Pengaturan; field tagihan dapat diedit di aplikasi.
+- **Hak penghapusan / hak untuk dilupakan (Pasal 17 GDPR / Pasal 9 UU PDP)** — meminta penghapusan akun dan data terkait dari Profil & Pengaturan, atau dengan menghubungi kami.
+- **Hak pembatasan pemrosesan (Pasal 18 GDPR)** — meminta kami membatasi penggunaan data Anda dalam keadaan tertentu.
+- **Hak portabilitas data (Pasal 20 GDPR / Pasal 11 UU PDP)** — menerima data Anda dalam format terstruktur, umum digunakan, dan dapat dibaca mesin. Tagihan dan datanya dapat diekspor sebagai PDF dan CSV dari aplikasi.
+- **Hak keberatan (Pasal 21 GDPR)** — menolak pemrosesan berdasarkan kepentingan sah, termasuk profiling terkait pemasaran langsung.
+- **Hak penarikan persetujuan (Pasal 7(3) GDPR / Pasal 25 UU PDP)** — menarik persetujuan yang telah Anda berikan, kapan saja, tanpa memengaruhi keabsahan pemrosesan sebelum penarikan. Opt-in pemasaran dapat ditarik dari Profil & Pengaturan.
+- **Hak mengajukan keluhan** — ke otoritas perlindungan data lokal (untuk warga EEA; lihat https://edpb.europa.eu/about-edpb/about-edpb/members_en), atau ke KOMINFO / Otoritas Pelindungan Data Pribadi (untuk warga Indonesia).
+- **Hak untuk tidak menjadi subjek pengambilan keputusan otomatis (Pasal 22 GDPR)** — BagiStruk tidak membuat keputusan berdasarkan pemrosesan otomatis semata yang menghasilkan efek hukum atau efek signifikan serupa terhadap Anda.
+
+Untuk menggunakan hak-hak ini, hubungi kami di **alam.aby.b@gmail.com**. Kami akan merespons dalam 30 hari, atau lebih cepat bila diwajibkan hukum lokal. Kami mungkin perlu memverifikasi identitas Anda sebelum menindaklanjuti permintaan.
+
 ## Anak-Anak
 
-BagiStruk tidak ditujukan untuk anak di bawah usia yang diwajibkan hukum untuk memberikan persetujuan layanan digital. Jika Anda yakin seorang anak memberikan data pribadi, hubungi kami agar dapat ditinjau dan dihapus.
+BagiStruk tidak ditujukan untuk anak di bawah **13 tahun** (batas minimum US Children's Online Privacy Protection Act, COPPA), atau di bawah usia yang diwajibkan hukum lokal Anda untuk menyetujui layanan digital (16 tahun di sebagian besar Wilayah Ekonomi Eropa secara default, 18 tahun di Indonesia menurut Kitab Undang-Undang Hukum Perdata, atau lebih muda bila hukum negara Anda mengizinkan persetujuan pada usia lebih muda dengan persetujuan orang tua).
+
+Kami tidak dengan sengaja mengumpulkan data pribadi dari anak di bawah batas usia yang berlaku. Jika Anda yakin seorang anak telah memberikan data pribadi kepada kami, hubungi kami di **alam.aby.b@gmail.com** agar kami dapat meninjau, menghapus data, dan menutup akun. Bila diwajibkan hukum, kami akan memperoleh persetujuan orang tua yang dapat diverifikasi sebelum memproses data anak.
 
 ## Perubahan
 
@@ -180,4 +318,12 @@ Kami dapat memperbarui kebijakan ini dari waktu ke waktu. Versi terbaru sebaikny
 
 ## Kontak
 
-Pertanyaan privasi atau permintaan penghapusan data: **alam.aby.b@gmail.com**
+Untuk pertanyaan privasi, permintaan penghapusan, atau penggunaan hak perlindungan data Anda, hubungi kami:
+
+**Email:** alam.aby.b@gmail.com
+
+**Alamat pos (juga kontak Pasal 27 GDPR kami):**
+Alam Aby Bashit
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia
