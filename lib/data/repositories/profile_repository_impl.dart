@@ -30,6 +30,7 @@ class ProfileRepositoryImpl implements IProfileRepository {
       acceptedTermsVersion: dto.acceptedTermsVersion,
       acceptedPrivacyVersion: dto.acceptedPrivacyVersion,
       welcomedAt: dto.welcomedAt,
+      isAdult: dto.isAdult,
     );
   });
 
@@ -82,6 +83,10 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<Result<void>> markWelcomed() => guardAsync(
         () => _ds.updateFields({'welcomed_at': DateTime.now().toUtc()}),
       );
+
+  @override
+  Future<Result<void>> setIsAdult({required bool isAdult}) =>
+      guardAsync(() => _ds.updateFields({'is_adult': isAdult}));
 
   @override
   Future<Result<OcrCreditStatus>> getOcrCreditStatus() => guardAsync(() async {

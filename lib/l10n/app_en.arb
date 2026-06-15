@@ -275,6 +275,7 @@
   "legalAcceptanceReadPrivacy": "Read Privacy Policy",
   "legalAcceptanceAgreeTerms": "I have read and agree to the Terms of Service.",
   "legalAcceptanceAgreePrivacy": "I have read and agree to the Privacy Policy.",
+  "legalAcceptanceAgreeAge": "I am 18 years of age or older, or older if required by my local law.",
   "legalAcceptanceContinue": "Continue",
   "legalAcceptanceErrorSave": "Failed to save acceptance. Please try again.",
 

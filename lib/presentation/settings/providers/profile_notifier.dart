@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/ads/ad_service.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/error/result.dart';
 import '../../../data/providers.dart';
@@ -116,6 +117,26 @@ class ProfileNotifier extends _$ProfileNotifier {
             marketingEmailOptInAt: optedIn ? now : null,
             marketingEmailOptInSource: optedIn ? source : null,
           ));
+    }
+    return res;
+  }
+
+  /// Records the user's declared age 18+ status. Also propagates the
+  /// change to AdService so the UMP underage tag is updated synchronously
+  /// with the profile patch — banner ads reload with the new consent
+  /// signal on the next refresh.
+  Future<Result<void>> setIsAdult({required bool isAdult}) async {
+    final res = await ref
+        .read(profileRepositoryProvider)
+        .setIsAdult(isAdult: isAdult);
+    if (res is Success<void>) {
+      _patch((p) => p.copyWith(isAdult: isAdult));
+      // Fire-and-forget: AdService is best-effort and the user has
+      // already committed to the new value in DB. Failures are silent
+      // because ads will still respect the new tag on next app launch
+      // when AdService.initialize() runs again.
+      // ignore: discarded_futures
+      AdService.setUserIsMinor(!isAdult);
     }
     return res;
   }

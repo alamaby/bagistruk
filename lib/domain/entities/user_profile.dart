@@ -28,5 +28,11 @@ abstract class UserProfile with _$UserProfile {
     // the post-login welcome (Google sign-in flow). Email/password sign-up
     // sets it directly after `signUp` so the welcome screen is skipped.
     DateTime? welcomedAt,
+    // User-declared age 18+ (or older if required by local law). Drives the
+    // AdMob `setTagForUnderAgeOfConsent` call so users below the age of
+    // consent only see non-personalized ads. Default FALSE so the app
+    // behaves conservatively until the user explicitly declares adult age
+    // during the legal acceptance flow.
+    @Default(false) bool isAdult,
   }) = _UserProfile;
 }

@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../core/ads/ad_config.dart';
+import '../../../domain/entities/user_profile.dart';
+import '../../../presentation/settings/providers/profile_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 
 class BannerAdWidget extends ConsumerStatefulWidget {
@@ -38,6 +40,20 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
       _ => null,
     };
     if (creditStatus?.adsEnabled == false) return const SizedBox.shrink();
+
+    // Re-load the banner when the profile's `isAdult` flag changes so the
+    // next ad request carries the updated UMP underage tag. We listen
+    // rather than watch so we only act on changes, not on initial build.
+    ref.listen<UserProfile?>(profileProvider, (prev, next) {
+      final wasMinor = !(prev?.isAdult ?? false);
+      final isMinor = !(next?.isAdult ?? false);
+      if (wasMinor != isMinor && _loaded) {
+        _ad?.dispose();
+        _ad = null;
+        _loaded = false;
+        _load();
+      }
+    });
 
     final ad = _ad;
     if (!_loaded || ad == null) return const SizedBox.shrink();

@@ -643,6 +643,10 @@ class AppL10nEn extends AppL10n {
   String get legalAcceptanceAgreePrivacy => 'I have read and agree to the Privacy Policy.';
 
   @override
+  String get legalAcceptanceAgreeAge =>
+      'I am 18 years of age or older, or older if required by my local law.';
+
+  @override
   String get legalAcceptanceContinue => 'Continue';
 
   @override

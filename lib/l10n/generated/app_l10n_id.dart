@@ -641,6 +641,10 @@ class AppL10nId extends AppL10n {
   String get legalAcceptanceAgreePrivacy => 'Saya telah membaca dan menyetujui Kebijakan Privasi.';
 
   @override
+  String get legalAcceptanceAgreeAge =>
+      'Saya berusia 18 tahun ke atas, atau lebih tua jika diwajibkan oleh hukum lokal saya.';
+
+  @override
   String get legalAcceptanceContinue => 'Lanjutkan';
 
   @override

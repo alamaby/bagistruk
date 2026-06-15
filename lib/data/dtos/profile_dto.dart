@@ -24,6 +24,7 @@ abstract class ProfileDto with _$ProfileDto {
     @JsonKey(name: 'accepted_terms_version') int? acceptedTermsVersion,
     @JsonKey(name: 'accepted_privacy_version') int? acceptedPrivacyVersion,
     @JsonKey(name: 'welcomed_at') DateTime? welcomedAt,
+    @JsonKey(name: 'is_adult') @Default(false) bool isAdult,
   }) = _ProfileDto;
 
   factory ProfileDto.fromJson(Map<String, dynamic> json) =>

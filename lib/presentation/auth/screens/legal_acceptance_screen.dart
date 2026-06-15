@@ -30,10 +30,12 @@ class LegalAcceptanceScreen extends ConsumerStatefulWidget {
 class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
   bool _termsChecked = false;
   bool _privacyChecked = false;
+  bool _ageChecked = false;
   bool _submitting = false;
 
   bool get _busy => _submitting;
-  bool get _canSubmit => _termsChecked && _privacyChecked && !_busy;
+  bool get _canSubmit =>
+      _termsChecked && _privacyChecked && _ageChecked && !_busy;
 
   Future<void> _submit() async {
     if (!_canSubmit) return;
@@ -45,6 +47,12 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
     setState(() => _submitting = false);
     switch (res) {
       case Success():
+        // Stamp the adult-age declaration so AdMob/UMP can move the user
+        // out of the conservative default (is_adult=FALSE = non-personalized
+        // ads) once they confirm they are old enough.
+        if (_ageChecked) {
+          await ref.read(profileProvider.notifier).setIsAdult(isAdult: true);
+        }
         if (!mounted) return;
         context.go(widget.from ?? Routes.scan);
       case ResultFailure():
@@ -167,6 +175,13 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
                     ? null
                     : (v) => setState(() => _privacyChecked = v ?? false),
                 label: l10n.legalAcceptanceAgreePrivacy,
+              ),
+              _ConsentCheckbox(
+                value: _ageChecked,
+                onChanged: _busy
+                    ? null
+                    : (v) => setState(() => _ageChecked = v ?? false),
+                label: l10n.legalAcceptanceAgreeAge,
               ),
               SizedBox(height: 24.h),
               FilledButton(

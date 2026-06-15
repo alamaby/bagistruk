@@ -43,6 +43,12 @@ abstract interface class IProfileRepository {
   /// where the marketing opt-in is collected on the register form itself.
   Future<Result<void>> markWelcomed();
 
+  /// Records the user's declared age 18+ status. Drives the AdMob
+  /// `setTagForUnderAgeOfConsent` call so minors only see non-personalized
+  /// ads. Called from the legal acceptance flow after the user checks the
+  /// "I am 18+" checkbox.
+  Future<Result<void>> setIsAdult({required bool isAdult});
+
   /// Reads the current OCR credit status for the active user.
   Future<Result<OcrCreditStatus>> getOcrCreditStatus();
 

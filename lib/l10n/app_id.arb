@@ -275,6 +275,7 @@
   "legalAcceptanceReadPrivacy": "Baca Kebijakan Privasi",
   "legalAcceptanceAgreeTerms": "Saya telah membaca dan menyetujui Syarat Layanan.",
   "legalAcceptanceAgreePrivacy": "Saya telah membaca dan menyetujui Kebijakan Privasi.",
+  "legalAcceptanceAgreeAge": "Saya berusia 18 tahun ke atas, atau lebih tua jika diwajibkan oleh hukum lokal saya.",
   "legalAcceptanceContinue": "Lanjutkan",
   "legalAcceptanceErrorSave": "Gagal menyimpan persetujuan. Coba lagi.",
 

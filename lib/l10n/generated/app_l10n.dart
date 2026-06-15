@@ -1196,6 +1196,9 @@ abstract class AppL10n {
   /// No description provided for @legalAcceptanceAgreePrivacy.
   String get legalAcceptanceAgreePrivacy;
 
+  /// No description provided for @legalAcceptanceAgreeAge.
+  String get legalAcceptanceAgreeAge;
+
   /// No description provided for @legalAcceptanceContinue.
   String get legalAcceptanceContinue;
 
