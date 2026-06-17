@@ -97,6 +97,54 @@ abstract class AppL10n {
     Locale('id'),
   ];
 
+  /// No description provided for @registerMarketingOptIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Saya ingin menerima email promosi, berita fitur, dan tips dari BagiStruk.'**
+  String get registerMarketingOptIn;
+
+  /// No description provided for @postLoginWelcomeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Selamat datang di BagiStruk!'**
+  String get postLoginWelcomeTitle;
+
+  /// No description provided for @postLoginWelcomeBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Beri tahu kami apakah Anda ingin menerima email promosi, berita fitur, dan tips dari kami. Anda bisa mengubah preferensi ini kapan saja dari Settings.'**
+  String get postLoginWelcomeBody;
+
+  /// No description provided for @postLoginWelcomeOptIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Kirim saya email promosi, berita fitur, dan tips.'**
+  String get postLoginWelcomeOptIn;
+
+  /// No description provided for @postLoginWelcomeContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjutkan'**
+  String get postLoginWelcomeContinue;
+
+  /// No description provided for @postLoginWelcomeErrorSave.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menyimpan. Coba lagi.'**
+  String get postLoginWelcomeErrorSave;
+
+  /// No description provided for @settingsMarketingOptIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Email promosi'**
+  String get settingsMarketingOptIn;
+
+  /// No description provided for @settingsMarketingOptInSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tips, info fitur, dan penawaran dari BagiStruk.'**
+  String get settingsMarketingOptInSubtitle;
+
   /// No description provided for @settingsTitle.
   ///
   /// In id, this message translates to:
@@ -1176,33 +1224,63 @@ abstract class AppL10n {
   String get registerLoginLink;
 
   /// No description provided for @legalAcceptanceAppBarTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Persetujuan Hukum'**
   String get legalAcceptanceAppBarTitle;
 
   /// No description provided for @legalAcceptanceTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sebelum mulai…'**
   String get legalAcceptanceTitle;
 
   /// No description provided for @legalAcceptanceIntro.
+  ///
+  /// In id, this message translates to:
+  /// **'Untuk menggunakan BagiStruk, mohon baca dan setujui dua dokumen di bawah ini. Kami membutuhkan persetujuan terpisah untuk Syarat Layanan dan Kebijakan Privasi.'**
   String get legalAcceptanceIntro;
 
   /// No description provided for @legalAcceptanceReadTerms.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Syarat Layanan'**
   String get legalAcceptanceReadTerms;
 
   /// No description provided for @legalAcceptanceReadPrivacy.
+  ///
+  /// In id, this message translates to:
+  /// **'Baca Kebijakan Privasi'**
   String get legalAcceptanceReadPrivacy;
 
   /// No description provided for @legalAcceptanceAgreeTerms.
+  ///
+  /// In id, this message translates to:
+  /// **'Saya telah membaca dan menyetujui Syarat Layanan.'**
   String get legalAcceptanceAgreeTerms;
 
   /// No description provided for @legalAcceptanceAgreePrivacy.
+  ///
+  /// In id, this message translates to:
+  /// **'Saya telah membaca dan menyetujui Kebijakan Privasi.'**
   String get legalAcceptanceAgreePrivacy;
 
   /// No description provided for @legalAcceptanceAgreeAge.
+  ///
+  /// In id, this message translates to:
+  /// **'Saya berusia 18 tahun ke atas, atau lebih tua jika diwajibkan oleh hukum lokal saya.'**
   String get legalAcceptanceAgreeAge;
 
   /// No description provided for @legalAcceptanceContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjutkan'**
   String get legalAcceptanceContinue;
 
   /// No description provided for @legalAcceptanceErrorSave.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menyimpan persetujuan. Coba lagi.'**
   String get legalAcceptanceErrorSave;
 
   /// No description provided for @verifyEmailTitle.
@@ -1745,6 +1823,36 @@ abstract class AppL10n {
   /// **'Gagal simpan assignment: {message}'**
   String billSplitSaveAssignmentFailed(String message);
 
+  /// No description provided for @participantPhoneLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Nomor (opsional)'**
+  String get participantPhoneLabel;
+
+  /// No description provided for @participantImportFromContacts.
+  ///
+  /// In id, this message translates to:
+  /// **'Import dari kontak'**
+  String get participantImportFromContacts;
+
+  /// No description provided for @participantImportFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal membuka kontak. Coba lagi atau tambah manual.'**
+  String get participantImportFailed;
+
+  /// No description provided for @participantImportNoPhone.
+  ///
+  /// In id, this message translates to:
+  /// **'(kontak ini tidak punya nomor)'**
+  String get participantImportNoPhone;
+
+  /// No description provided for @billDetailParticipantPhoneLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'No HP'**
+  String get billDetailParticipantPhoneLabel;
+
   /// No description provided for @billDetailTitle.
   ///
   /// In id, this message translates to:
@@ -2021,6 +2129,12 @@ abstract class AppL10n {
   /// **'Belum lunas'**
   String get settlementMessageOutstanding;
 
+  /// No description provided for @settlementMessageWhatsappLink.
+  ///
+  /// In id, this message translates to:
+  /// **'Chat via WhatsApp: {url}'**
+  String settlementMessageWhatsappLink(String url);
+
   /// No description provided for @aboutTitle.
   ///
   /// In id, this message translates to:
@@ -2164,30 +2278,6 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!'**
   String get scanEmptyHint;
-
-  /// No description provided for @registerMarketingOptIn.
-  String get registerMarketingOptIn;
-
-  /// No description provided for @postLoginWelcomeTitle.
-  String get postLoginWelcomeTitle;
-
-  /// No description provided for @postLoginWelcomeBody.
-  String get postLoginWelcomeBody;
-
-  /// No description provided for @postLoginWelcomeOptIn.
-  String get postLoginWelcomeOptIn;
-
-  /// No description provided for @postLoginWelcomeContinue.
-  String get postLoginWelcomeContinue;
-
-  /// No description provided for @postLoginWelcomeErrorSave.
-  String get postLoginWelcomeErrorSave;
-
-  /// No description provided for @settingsMarketingOptIn.
-  String get settingsMarketingOptIn;
-
-  /// No description provided for @settingsMarketingOptInSubtitle.
-  String get settingsMarketingOptInSubtitle;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

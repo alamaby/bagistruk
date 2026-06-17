@@ -232,7 +232,7 @@ class SplitNotifier extends _$SplitNotifier {
     state = AsyncData(s.copyWith(selectedParticipantId: next));
   }
 
-  Future<SplitActionError?> addParticipant(String name) async {
+  Future<SplitActionError?> addParticipant(String name, {String? phone}) async {
     final s = state.value;
     if (s == null) return const SplitActionError(SplitActionErrorKind.notReady);
     final trimmed = name.trim();
@@ -244,6 +244,7 @@ class SplitNotifier extends _$SplitNotifier {
       id: _uuid.v4(),
       billId: s.bill.id,
       name: trimmed,
+      phone: phone,
     );
     final repo = ref.read(billRepositoryProvider);
     final res = await repo.upsertParticipant(participant);

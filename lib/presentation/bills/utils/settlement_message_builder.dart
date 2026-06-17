@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
-import '../../../domain/entities/transfer_bank_info.dart';
+import '../../../core/format/phone_formatter.dart';
+import '../../../domain/entities/transfer_bank_info.dart'
 import '../../../l10n/generated/app_l10n.dart';
 import '../providers/split_notifier.dart';
 
@@ -35,22 +36,26 @@ class SettlementMessageBuilder {
       (t) => t.participantId == participant.id,
     );
     final items = state.itemsForParticipant(participant.id);
+    final waLink = PhoneFormatter.waMeLink(participant.phone);
 
     return switch (template) {
       SettlementMessageTemplate.basic => _buildBasic(
         participantName: participant.name,
         items: items,
         total: total,
+        waLink: waLink,
       ),
       SettlementMessageTemplate.compactPlus => _buildCompact(
         participantName: participant.name,
         total: total,
+        waLink: waLink,
       ),
       SettlementMessageTemplate.detailedPlus => _buildDetailed(
         participantName: participant.name,
         isPaid: participant.isPaid,
         items: items,
         total: total,
+        waLink: waLink,
       ),
       SettlementMessageTemplate.allPlus => _buildAllParticipants(),
     };
@@ -60,6 +65,7 @@ class SettlementMessageBuilder {
     required String participantName,
     required List<ParticipantItemShare> items,
     required ParticipantTotal total,
+    String? waLink,
   }) {
     final buf = StringBuffer();
     buf.writeln('*${l10n.settlementMessageBillPrefix} ${state.bill.title}*');
@@ -69,12 +75,17 @@ class SettlementMessageBuilder {
     buf.writeln();
     _writeTotals(buf, total, emphasizeTotal: true);
     _writeBankInfoIfAny(buf);
+    if (waLink != null) {
+      buf.writeln();
+      buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
+    }
     return buf.toString();
   }
 
   String _buildCompact({
     required String participantName,
     required ParticipantTotal total,
+    String? waLink,
   }) {
     final buf = StringBuffer();
     buf.writeln('*BagiStruk - ${state.bill.title}*');
@@ -96,6 +107,10 @@ class SettlementMessageBuilder {
     buf.writeln();
     buf.writeln(l10n.settlementMessageTransferNote);
     _writeBankInfoIfAny(buf);
+    if (waLink != null) {
+      buf.writeln();
+      buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
+    }
     return buf.toString();
   }
 
@@ -104,6 +119,7 @@ class SettlementMessageBuilder {
     required bool isPaid,
     required List<ParticipantItemShare> items,
     required ParticipantTotal total,
+    String? waLink,
   }) {
     final buf = StringBuffer();
     buf.writeln('*BagiStruk - ${state.bill.title}*');
@@ -116,6 +132,10 @@ class SettlementMessageBuilder {
       '${l10n.settlementMessageStatus}: ${isPaid ? l10n.settlementMessagePaid : l10n.settlementMessageUnpaid}',
     );
     _writeBankInfoIfAny(buf);
+    if (waLink != null) {
+      buf.writeln();
+      buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
+    }
     return buf.toString();
   }
 

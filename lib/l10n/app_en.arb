@@ -424,6 +424,12 @@
   "@billSplitSaveAssignmentFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "participantPhoneLabel": "Phone (optional)",
+  "participantImportFromContacts": "Import from contacts",
+  "participantImportFailed": "Could not open contacts. Try again or add manually.",
+  "participantImportNoPhone": "(this contact has no phone number)",
+  "billDetailParticipantPhoneLabel": "Phone",
+
   "billDetailTitle": "Bill Details",
   "billDetailHomeTooltip": "Home",
   "billDetailScanAnotherTooltip": "Scan another receipt",
@@ -498,6 +504,10 @@
   "settlementMessageGrandTotal": "Total bill",
   "settlementMessageOutstanding": "Outstanding",
 
+  "settlementMessageWhatsappLink": "Chat via WhatsApp: {url}",
+  "@settlementMessageWhatsappLink": {
+    "placeholders": { "url": { "type": "String" } }
+  },
   "aboutTitle": "About",
   "aboutSettingsTile": "About App",
   "aboutVersionLabel": "Version",

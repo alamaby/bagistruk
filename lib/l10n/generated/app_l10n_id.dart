@@ -9,6 +9,34 @@ class AppL10nId extends AppL10n {
   AppL10nId([String locale = 'id']) : super(locale);
 
   @override
+  String get registerMarketingOptIn =>
+      'Saya ingin menerima email promosi, berita fitur, dan tips dari BagiStruk.';
+
+  @override
+  String get postLoginWelcomeTitle => 'Selamat datang di BagiStruk!';
+
+  @override
+  String get postLoginWelcomeBody =>
+      'Beri tahu kami apakah Anda ingin menerima email promosi, berita fitur, dan tips dari kami. Anda bisa mengubah preferensi ini kapan saja dari Settings.';
+
+  @override
+  String get postLoginWelcomeOptIn =>
+      'Kirim saya email promosi, berita fitur, dan tips.';
+
+  @override
+  String get postLoginWelcomeContinue => 'Lanjutkan';
+
+  @override
+  String get postLoginWelcomeErrorSave => 'Gagal menyimpan. Coba lagi.';
+
+  @override
+  String get settingsMarketingOptIn => 'Email promosi';
+
+  @override
+  String get settingsMarketingOptInSubtitle =>
+      'Tips, info fitur, dan penawaran dari BagiStruk.';
+
+  @override
   String get settingsTitle => 'Profil & Pengaturan';
 
   @override
@@ -626,7 +654,8 @@ class AppL10nId extends AppL10n {
   String get legalAcceptanceTitle => 'Sebelum mulai…';
 
   @override
-  String get legalAcceptanceIntro => 'Untuk menggunakan BagiStruk, mohon baca dan setujui dua dokumen di bawah ini. Kami membutuhkan persetujuan terpisah untuk Syarat Layanan dan Kebijakan Privasi.';
+  String get legalAcceptanceIntro =>
+      'Untuk menggunakan BagiStruk, mohon baca dan setujui dua dokumen di bawah ini. Kami membutuhkan persetujuan terpisah untuk Syarat Layanan dan Kebijakan Privasi.';
 
   @override
   String get legalAcceptanceReadTerms => 'Baca Syarat Layanan';
@@ -635,10 +664,12 @@ class AppL10nId extends AppL10n {
   String get legalAcceptanceReadPrivacy => 'Baca Kebijakan Privasi';
 
   @override
-  String get legalAcceptanceAgreeTerms => 'Saya telah membaca dan menyetujui Syarat Layanan.';
+  String get legalAcceptanceAgreeTerms =>
+      'Saya telah membaca dan menyetujui Syarat Layanan.';
 
   @override
-  String get legalAcceptanceAgreePrivacy => 'Saya telah membaca dan menyetujui Kebijakan Privasi.';
+  String get legalAcceptanceAgreePrivacy =>
+      'Saya telah membaca dan menyetujui Kebijakan Privasi.';
 
   @override
   String get legalAcceptanceAgreeAge =>
@@ -648,7 +679,8 @@ class AppL10nId extends AppL10n {
   String get legalAcceptanceContinue => 'Lanjutkan';
 
   @override
-  String get legalAcceptanceErrorSave => 'Gagal menyimpan persetujuan. Coba lagi.';
+  String get legalAcceptanceErrorSave =>
+      'Gagal menyimpan persetujuan. Coba lagi.';
 
   @override
   String get verifyEmailTitle => 'Verifikasi email';
@@ -957,6 +989,22 @@ class AppL10nId extends AppL10n {
   }
 
   @override
+  String get participantPhoneLabel => 'Nomor (opsional)';
+
+  @override
+  String get participantImportFromContacts => 'Import dari kontak';
+
+  @override
+  String get participantImportFailed =>
+      'Gagal membuka kontak. Coba lagi atau tambah manual.';
+
+  @override
+  String get participantImportNoPhone => '(kontak ini tidak punya nomor)';
+
+  @override
+  String get billDetailParticipantPhoneLabel => 'No HP';
+
+  @override
   String get billDetailTitle => 'Detail Tagihan';
 
   @override
@@ -1115,6 +1163,11 @@ class AppL10nId extends AppL10n {
   String get settlementMessageOutstanding => 'Belum lunas';
 
   @override
+  String settlementMessageWhatsappLink(String url) {
+    return 'Chat via WhatsApp: $url';
+  }
+
+  @override
   String get aboutTitle => 'Tentang';
 
   @override
@@ -1188,32 +1241,4 @@ class AppL10nId extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!';
-
-  @override
-  String get registerMarketingOptIn =>
-      'Saya ingin menerima email promosi, berita fitur, dan tips dari BagiStruk.';
-
-  @override
-  String get postLoginWelcomeTitle => 'Selamat datang di BagiStruk!';
-
-  @override
-  String get postLoginWelcomeBody =>
-      'Beri tahu kami apakah Anda ingin menerima email promosi, berita fitur, dan tips dari kami. Anda bisa mengubah preferensi ini kapan saja dari Settings.';
-
-  @override
-  String get postLoginWelcomeOptIn =>
-      'Kirim saya email promosi, berita fitur, dan tips.';
-
-  @override
-  String get postLoginWelcomeContinue => 'Lanjutkan';
-
-  @override
-  String get postLoginWelcomeErrorSave => 'Gagal menyimpan. Coba lagi.';
-
-  @override
-  String get settingsMarketingOptIn => 'Email promosi';
-
-  @override
-  String get settingsMarketingOptInSubtitle =>
-      'Tips, info fitur, dan penawaran dari BagiStruk.';
 }

@@ -31,6 +31,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 - App activity metadata: `last_active_at`, used to understand when an account was last active and to support inactivity cleanup.
 - Receipt photos: images you choose or capture for OCR processing.
 - Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, settlement status, deleted-bill recovery metadata, exports generated on device, and optional transfer bank information used in settlement messages.
+- **Participant contact info**: when you import a participant from your address book, only the name and phone number of the single contact you select are stored on our server as part of the bill. We never upload your full address book.
 - OCR credit data: plan/entitlement status, Plus trial start/end/consumption metadata, monthly credit grants, credit usage, and audit records needed to enforce scan limits and feature access.
 - Google Play Billing data when purchases are available: product IDs, purchase tokens, order IDs, subscription status/expiry, and verification responses needed to grant Plus access or OCR credit packs.
 - Support and reminder data: email address and inactivity reminder timestamps when reminders are sent.
@@ -42,6 +43,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 
 - **Camera**: to capture receipt photos.
 - **Photos / media access**: to pick receipt photos from the gallery.
+- **Contacts** (optional): when you tap "Import from contacts" while adding a participant, the system contact picker returns only the single contact you select. We store that contact's name and phone number as part of the bill; your full address book is never uploaded.
 - **Internet / network state**: to communicate with Supabase and OCR services.
 
 ## How We Use Data
@@ -57,6 +59,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 - To track last activity for account retention and cleanup.
 - To send inactivity reminders to registered users before account cleanup.
 - To show ads, measure ad performance, prevent ad fraud, and respect consent choices when ads are enabled.
+- To fill in a participant's name and phone number from the single contact you choose via the optional "Import from contacts" feature, and to generate WhatsApp deep-links in settlement messages when the bill owner shares them.
 - To diagnose errors, prevent abuse, and enforce database rate limits.
 
 ## Legal Basis For Processing
@@ -197,6 +200,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 - Metadata aktivitas aplikasi: `last_active_at`, digunakan untuk mengetahui kapan akun terakhir aktif dan mendukung pembersihan akun tidak aktif.
 - Foto struk: gambar yang Anda pilih atau ambil untuk pemrosesan OCR.
 - Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, status pembayaran, metadata pemulihan bill terhapus, export yang dibuat di perangkat, dan info bank transfer opsional untuk pesan settlement.
+- **Info kontak peserta**: ketika Anda mengimpor peserta dari buku alamat, hanya nama dan nomor telepon dari satu kontak yang Anda pilih yang disimpan di server kami sebagai bagian dari tagihan. Kami tidak pernah mengunggah buku alamat lengkap Anda.
 - Data credit OCR: status plan/entitlement, metadata mulai/akhir/pemakaian trial Plus, grant credit bulanan, penggunaan credit, dan audit yang dibutuhkan untuk menerapkan batas scan dan akses fitur.
 - Data Google Play Billing saat pembelian tersedia: product ID, purchase token, order ID, status/expiry subscription, dan respons verifikasi yang dibutuhkan untuk memberi akses Plus atau paket credit OCR.
 - Data dukungan dan reminder: alamat email dan timestamp reminder tidak aktif saat reminder dikirim.
@@ -208,6 +212,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 
 - **Kamera**: untuk mengambil foto struk.
 - **Akses foto / media**: untuk memilih foto struk dari galeri.
+- **Kontak** (opsional): ketika Anda memilih "Import dari kontak" saat menambahkan peserta, picker kontak sistem hanya mengembalikan satu kontak yang Anda pilih. Kami menyimpan nama dan nomor telepon kontak tersebut sebagai bagian dari tagihan; buku alamat lengkap Anda tidak pernah diunggah.
 - **Internet / status jaringan**: untuk berkomunikasi dengan Supabase dan layanan OCR.
 
 ## Cara Kami Menggunakan Data
@@ -223,6 +228,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 - Melacak aktivitas terakhir untuk retensi dan pembersihan akun.
 - Mengirim reminder tidak aktif kepada pengguna terdaftar sebelum pembersihan akun.
 - Menampilkan iklan, mengukur performa iklan, mencegah fraud iklan, dan menghormati pilihan consent saat iklan diaktifkan.
+- Mengisi nama dan nomor peserta dari satu kontak yang Anda pilih lewat fitur opsional "Import dari kontak", dan membuat deep-link WhatsApp di pesan settlement ketika pemilik tagihan membagikannya.
 - Mendiagnosis error, mencegah penyalahgunaan, dan menerapkan rate limit database.
 
 ## Dasar Hukum Pemrosesan

@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import 'package:flutter_contacts/flutter_contacts.dart';
+
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
@@ -117,34 +119,88 @@ class _SplitBody extends ConsumerWidget {
   }
 
   Future<void> _addParticipant(BuildContext context, WidgetRef ref) async {
-    final name = await showDialog<String>(
+    final result = await showDialog<({String name, String? phone})>(
       context: context,
       builder: (ctx) {
-        final ctrl = TextEditingController();
+        final nameCtrl = TextEditingController();
+        final phoneCtrl = TextEditingController();
         final l10n = AppL10n.of(ctx);
-        return AlertDialog(
-          title: Text(l10n.billSplitAddPersonTitle),
-          content: TextField(
-            controller: ctrl,
-            autofocus: true,
-            decoration: InputDecoration(hintText: l10n.billSplitNameHint),
-            onSubmitted: (_) => Navigator.pop(ctx, ctrl.text),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(l10n.cancelAction),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, ctrl.text),
-              child: Text(l10n.billSplitAdd),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (ctx, setLocal) {
+            Future<void> pickContact() async {
+              try {
+                final c = await FlutterContacts.openExternalPick();
+                if (c == null) return;
+                final phone = c.phones.isNotEmpty ? c.phones.first.number : null;
+                setLocal(() {
+                  if (nameCtrl.text.isEmpty) nameCtrl.text = c.displayName;
+                  if (phone != null && phoneCtrl.text.isEmpty) {
+                    phoneCtrl.text = phone;
+                  }
+                });
+              } catch (_) {
+                if (ctx.mounted) {
+                  ScaffoldMessenger.of(ctx).showSnackBar(
+                    SnackBar(content: Text(l10n.participantImportFailed)),
+                  );
+                }
+              }
+            }
+
+            return AlertDialog(
+              title: Text(l10n.billSplitAddPersonTitle),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      controller: nameCtrl,
+                      autofocus: true,
+                      decoration: InputDecoration(hintText: l10n.billSplitNameHint),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        icon: const Icon(Icons.contacts_outlined, size: 18),
+                        label: Text(l10n.participantImportFromContacts),
+                        onPressed: pickContact,
+                      ),
+                    ),
+                    TextField(
+                      controller: phoneCtrl,
+                      decoration: InputDecoration(labelText: l10n.participantPhoneLabel),
+                      keyboardType: TextInputType.phone,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(l10n.cancelAction),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.pop(
+                    ctx,
+                    (
+                      name: nameCtrl.text,
+                      phone: phoneCtrl.text.trim().isEmpty
+                          ? null
+                          : phoneCtrl.text.trim(),
+                    ),
+                  ),
+                  child: Text(l10n.billSplitAdd),
+                ),
+              ],
+            );
+          },
         );
       },
     );
-    if (name == null || name.trim().isEmpty) return;
-    final err = await _notifier(ref).addParticipant(name);
+    if (result == null) return;
+    if (result.name.trim().isEmpty) return;
+    final err = await _notifier(ref).addParticipant(result.name, phone: result.phone);
     if (err != null && context.mounted) _toast(context, err);
   }
 

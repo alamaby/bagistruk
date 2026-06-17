@@ -39,6 +39,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>BagiStruk uses your contacts only when you tap "Import from contacts" while adding a participant. The system contact picker returns the single contact you choose, and BagiStruk stores only that contact's name and phone number on our server as part of the bill. Your full address book is never uploaded.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

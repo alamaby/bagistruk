@@ -15,6 +15,7 @@ abstract class ParticipantDto with _$ParticipantDto {
     required String name,
     @JsonKey(name: 'is_paid') @Default(false) bool isPaid,
     @JsonKey(name: 'paid_at') DateTime? paidAt,
+    @JsonKey(name: 'phone') String? phone,
   }) = _ParticipantDto;
 
   factory ParticipantDto.fromJson(Map<String, dynamic> json) =>
@@ -26,6 +27,7 @@ abstract class ParticipantDto with _$ParticipantDto {
     name: p.name,
     isPaid: p.isPaid,
     paidAt: p.paidAt,
+    phone: p.phone,
   );
 
   Participant toEntity() => Participant(
@@ -34,5 +36,6 @@ abstract class ParticipantDto with _$ParticipantDto {
     name: name,
     isPaid: isPaid,
     paidAt: paidAt,
+    phone: phone,
   );
 }

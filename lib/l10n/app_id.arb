@@ -424,6 +424,12 @@
   "@billSplitSaveAssignmentFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "participantPhoneLabel": "Nomor (opsional)",
+  "participantImportFromContacts": "Import dari kontak",
+  "participantImportFailed": "Gagal membuka kontak. Coba lagi atau tambah manual.",
+  "participantImportNoPhone": "(kontak ini tidak punya nomor)",
+  "billDetailParticipantPhoneLabel": "No HP",
+
   "billDetailTitle": "Detail Tagihan",
   "billDetailHomeTooltip": "Beranda",
   "billDetailScanAnotherTooltip": "Scan struk lain",
@@ -498,6 +504,10 @@
   "settlementMessageGrandTotal": "Total bill",
   "settlementMessageOutstanding": "Belum lunas",
 
+  "settlementMessageWhatsappLink": "Chat via WhatsApp: {url}",
+  "@settlementMessageWhatsappLink": {
+    "placeholders": { "url": { "type": "String" } }
+  },
   "aboutTitle": "Tentang",
   "aboutSettingsTile": "Tentang Aplikasi",
   "aboutVersionLabel": "Versi",

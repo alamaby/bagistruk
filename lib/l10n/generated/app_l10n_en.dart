@@ -9,6 +9,34 @@ class AppL10nEn extends AppL10n {
   AppL10nEn([String locale = 'en']) : super(locale);
 
   @override
+  String get registerMarketingOptIn =>
+      'I want to receive promotional emails, feature updates, and tips from BagiStruk.';
+
+  @override
+  String get postLoginWelcomeTitle => 'Welcome to BagiStruk!';
+
+  @override
+  String get postLoginWelcomeBody =>
+      'Let us know if you want to receive promotional emails, feature updates, and tips from us. You can change this any time from Settings.';
+
+  @override
+  String get postLoginWelcomeOptIn =>
+      'Send me promotional emails, feature updates, and tips.';
+
+  @override
+  String get postLoginWelcomeContinue => 'Continue';
+
+  @override
+  String get postLoginWelcomeErrorSave => 'Failed to save. Please try again.';
+
+  @override
+  String get settingsMarketingOptIn => 'Promotional emails';
+
+  @override
+  String get settingsMarketingOptInSubtitle =>
+      'Tips, feature updates, and offers from BagiStruk.';
+
+  @override
   String get settingsTitle => 'Profile & Settings';
 
   @override
@@ -628,7 +656,8 @@ class AppL10nEn extends AppL10n {
   String get legalAcceptanceTitle => 'Before you start…';
 
   @override
-  String get legalAcceptanceIntro => 'To use BagiStruk, please read and agree to the two documents below. We need separate consent for the Terms of Service and the Privacy Policy.';
+  String get legalAcceptanceIntro =>
+      'To use BagiStruk, please read and agree to the two documents below. We need separate consent for the Terms of Service and the Privacy Policy.';
 
   @override
   String get legalAcceptanceReadTerms => 'Read Terms of Service';
@@ -637,10 +666,12 @@ class AppL10nEn extends AppL10n {
   String get legalAcceptanceReadPrivacy => 'Read Privacy Policy';
 
   @override
-  String get legalAcceptanceAgreeTerms => 'I have read and agree to the Terms of Service.';
+  String get legalAcceptanceAgreeTerms =>
+      'I have read and agree to the Terms of Service.';
 
   @override
-  String get legalAcceptanceAgreePrivacy => 'I have read and agree to the Privacy Policy.';
+  String get legalAcceptanceAgreePrivacy =>
+      'I have read and agree to the Privacy Policy.';
 
   @override
   String get legalAcceptanceAgreeAge =>
@@ -650,7 +681,8 @@ class AppL10nEn extends AppL10n {
   String get legalAcceptanceContinue => 'Continue';
 
   @override
-  String get legalAcceptanceErrorSave => 'Failed to save acceptance. Please try again.';
+  String get legalAcceptanceErrorSave =>
+      'Failed to save acceptance. Please try again.';
 
   @override
   String get verifyEmailTitle => 'Verify email';
@@ -958,6 +990,22 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get participantPhoneLabel => 'Phone (optional)';
+
+  @override
+  String get participantImportFromContacts => 'Import from contacts';
+
+  @override
+  String get participantImportFailed =>
+      'Could not open contacts. Try again or add manually.';
+
+  @override
+  String get participantImportNoPhone => '(this contact has no phone number)';
+
+  @override
+  String get billDetailParticipantPhoneLabel => 'Phone';
+
+  @override
   String get billDetailTitle => 'Bill Details';
 
   @override
@@ -1117,6 +1165,11 @@ class AppL10nEn extends AppL10n {
   String get settlementMessageOutstanding => 'Outstanding';
 
   @override
+  String settlementMessageWhatsappLink(String url) {
+    return 'Chat via WhatsApp: $url';
+  }
+
+  @override
   String get aboutTitle => 'About';
 
   @override
@@ -1190,32 +1243,4 @@ class AppL10nEn extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Take a photo of a shopping or dining receipt to start splitting fairly!';
-
-  @override
-  String get registerMarketingOptIn =>
-      'I want to receive promotional emails, feature updates, and tips from BagiStruk.';
-
-  @override
-  String get postLoginWelcomeTitle => 'Welcome to BagiStruk!';
-
-  @override
-  String get postLoginWelcomeBody =>
-      'Let us know if you want to receive promotional emails, feature updates, and tips from us. You can change this any time from Settings.';
-
-  @override
-  String get postLoginWelcomeOptIn =>
-      'Send me promotional emails, feature updates, and tips.';
-
-  @override
-  String get postLoginWelcomeContinue => 'Continue';
-
-  @override
-  String get postLoginWelcomeErrorSave => 'Failed to save. Please try again.';
-
-  @override
-  String get settingsMarketingOptIn => 'Promotional emails';
-
-  @override
-  String get settingsMarketingOptInSubtitle =>
-      'Tips, feature updates, and offers from BagiStruk.';
 }
