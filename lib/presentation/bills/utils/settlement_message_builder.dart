@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 import '../../../core/format/phone_formatter.dart';
-import '../../../domain/entities/transfer_bank_info.dart'
+import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../providers/split_notifier.dart';
 

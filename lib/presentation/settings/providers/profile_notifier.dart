@@ -141,6 +141,18 @@ class ProfileNotifier extends _$ProfileNotifier {
     return res;
   }
 
+  /// Stamps the post-login welcome marker so the post-login welcome gate
+  /// is bypassed on subsequent app launches. The router reads
+  /// `profile.welcomedAt` to decide whether to redirect non-anonymous
+  /// users to [PostLoginWelcomeScreen].
+  Future<Result<void>> markWelcomed() async {
+    final res = await ref.read(profileRepositoryProvider).markWelcomed();
+    if (res is Success<void>) {
+      _patch((p) => p.copyWith(welcomedAt: DateTime.now().toUtc()));
+    }
+    return res;
+  }
+
   void _patch(UserProfile Function(UserProfile) update) {
     final current = state.value;
     if (current == null) return;

@@ -15,6 +15,7 @@ _ParticipantDto _$ParticipantDtoFromJson(Map<String, dynamic> json) =>
       paidAt: json['paid_at'] == null
           ? null
           : DateTime.parse(json['paid_at'] as String),
+      phone: json['phone'] as String?,
     );
 
 Map<String, dynamic> _$ParticipantDtoToJson(_ParticipantDto instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ParticipantDtoToJson(_ParticipantDto instance) =>
       'name': instance.name,
       'is_paid': instance.isPaid,
       'paid_at': ?instance.paidAt?.toIso8601String(),
+      'phone': ?instance.phone,
     };

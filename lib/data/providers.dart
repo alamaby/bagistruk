@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../core/error/failure.dart';
 import '../core/error/result.dart';
 import '../core/network/supabase_client_provider.dart';
 import '../domain/entities/app_config.dart';

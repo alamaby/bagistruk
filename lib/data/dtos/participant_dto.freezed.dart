@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ParticipantDto {
 
- String get id;@JsonKey(name: 'bill_id') String get billId; String get name;@JsonKey(name: 'is_paid') bool get isPaid;@JsonKey(name: 'paid_at') DateTime? get paidAt;
+ String get id;@JsonKey(name: 'bill_id') String get billId; String get name;@JsonKey(name: 'is_paid') bool get isPaid;@JsonKey(name: 'paid_at') DateTime? get paidAt;@JsonKey(name: 'phone') String? get phone;
 /// Create a copy of ParticipantDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ParticipantDtoCopyWith<ParticipantDto> get copyWith => _$ParticipantDtoCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ParticipantDto&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ParticipantDto&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt);
+int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt,phone);
 
 @override
 String toString() {
-  return 'ParticipantDto(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt)';
+  return 'ParticipantDto(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt, phone: $phone)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ParticipantDtoCopyWith<$Res>  {
   factory $ParticipantDtoCopyWith(ParticipantDto value, $Res Function(ParticipantDto) _then) = _$ParticipantDtoCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'bill_id') String billId, String name,@JsonKey(name: 'is_paid') bool isPaid,@JsonKey(name: 'paid_at') DateTime? paidAt
+ String id,@JsonKey(name: 'bill_id') String billId, String name,@JsonKey(name: 'is_paid') bool isPaid,@JsonKey(name: 'paid_at') DateTime? paidAt,@JsonKey(name: 'phone') String? phone
 });
 
 
@@ -65,14 +65,15 @@ class _$ParticipantDtoCopyWithImpl<$Res>
 
 /// Create a copy of ParticipantDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,Object? phone = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,billId: null == billId ? _self.billId : billId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,isPaid: null == isPaid ? _self.isPaid : isPaid // ignore: cast_nullable_to_non_nullable
 as bool,paidAt: freezed == paidAt ? _self.paidAt : paidAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt, @JsonKey(name: 'phone')  String? phone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ParticipantDto() when $default != null:
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt, @JsonKey(name: 'phone')  String? phone)  $default,) {final _that = this;
 switch (_that) {
 case _ParticipantDto():
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'bill_id')  String billId,  String name, @JsonKey(name: 'is_paid')  bool isPaid, @JsonKey(name: 'paid_at')  DateTime? paidAt, @JsonKey(name: 'phone')  String? phone)?  $default,) {final _that = this;
 switch (_that) {
 case _ParticipantDto() when $default != null:
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 @JsonSerializable()
 
 class _ParticipantDto extends ParticipantDto {
-  const _ParticipantDto({required this.id, @JsonKey(name: 'bill_id') required this.billId, required this.name, @JsonKey(name: 'is_paid') this.isPaid = false, @JsonKey(name: 'paid_at') this.paidAt}): super._();
+  const _ParticipantDto({required this.id, @JsonKey(name: 'bill_id') required this.billId, required this.name, @JsonKey(name: 'is_paid') this.isPaid = false, @JsonKey(name: 'paid_at') this.paidAt, @JsonKey(name: 'phone') this.phone}): super._();
   factory _ParticipantDto.fromJson(Map<String, dynamic> json) => _$ParticipantDtoFromJson(json);
 
 @override final  String id;
@@ -221,6 +222,7 @@ class _ParticipantDto extends ParticipantDto {
 @override final  String name;
 @override@JsonKey(name: 'is_paid') final  bool isPaid;
 @override@JsonKey(name: 'paid_at') final  DateTime? paidAt;
+@override@JsonKey(name: 'phone') final  String? phone;
 
 /// Create a copy of ParticipantDto
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ParticipantDto&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ParticipantDto&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt);
+int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt,phone);
 
 @override
 String toString() {
-  return 'ParticipantDto(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt)';
+  return 'ParticipantDto(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt, phone: $phone)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$ParticipantDtoCopyWith<$Res> implements $ParticipantDtoCo
   factory _$ParticipantDtoCopyWith(_ParticipantDto value, $Res Function(_ParticipantDto) _then) = __$ParticipantDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'bill_id') String billId, String name,@JsonKey(name: 'is_paid') bool isPaid,@JsonKey(name: 'paid_at') DateTime? paidAt
+ String id,@JsonKey(name: 'bill_id') String billId, String name,@JsonKey(name: 'is_paid') bool isPaid,@JsonKey(name: 'paid_at') DateTime? paidAt,@JsonKey(name: 'phone') String? phone
 });
 
 
@@ -272,14 +274,15 @@ class __$ParticipantDtoCopyWithImpl<$Res>
 
 /// Create a copy of ParticipantDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,Object? phone = freezed,}) {
   return _then(_ParticipantDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,billId: null == billId ? _self.billId : billId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,isPaid: null == isPaid ? _self.isPaid : isPaid // ignore: cast_nullable_to_non_nullable
 as bool,paidAt: freezed == paidAt ? _self.paidAt : paidAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

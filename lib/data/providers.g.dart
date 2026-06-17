@@ -324,3 +324,170 @@ final class ProfileRepositoryProvider
 }
 
 String _$profileRepositoryHash() => r'4540dcf3060645d8150c54eaa2421425904c1f93';
+
+@ProviderFor(appConfigRemoteDataSource)
+const appConfigRemoteDataSourceProvider = AppConfigRemoteDataSourceProvider._();
+
+final class AppConfigRemoteDataSourceProvider
+    extends
+        $FunctionalProvider<
+          AppConfigRemoteDataSource,
+          AppConfigRemoteDataSource,
+          AppConfigRemoteDataSource
+        >
+    with $Provider<AppConfigRemoteDataSource> {
+  const AppConfigRemoteDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appConfigRemoteDataSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appConfigRemoteDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AppConfigRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AppConfigRemoteDataSource create(Ref ref) {
+    return appConfigRemoteDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AppConfigRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AppConfigRemoteDataSource>(value),
+    );
+  }
+}
+
+String _$appConfigRemoteDataSourceHash() =>
+    r'14e41f302095882a79d31dc930f07f52ce78074b';
+
+@ProviderFor(appConfigRepository)
+const appConfigRepositoryProvider = AppConfigRepositoryProvider._();
+
+final class AppConfigRepositoryProvider
+    extends
+        $FunctionalProvider<
+          IAppConfigRepository,
+          IAppConfigRepository,
+          IAppConfigRepository
+        >
+    with $Provider<IAppConfigRepository> {
+  const AppConfigRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appConfigRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appConfigRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<IAppConfigRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IAppConfigRepository create(Ref ref) {
+    return appConfigRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IAppConfigRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IAppConfigRepository>(value),
+    );
+  }
+}
+
+String _$appConfigRepositoryHash() =>
+    r'8efe8a6d66d5742ca56ab2af62c246763c966814';
+
+/// Exposes the runtime app configuration (legal doc versions, future feature
+/// flags) to the rest of the app. Loaded once on first read and cached
+/// in-memory by the repository; [refresh] drops the cache and re-reads.
+/// Falls back to [AppConfig.fallback] when the read fails so the legal gate
+/// still works offline (the user accepts v1, the next online read may bump
+/// the version and re-prompt).
+
+@ProviderFor(AppConfigNotifier)
+const appConfigProvider = AppConfigNotifierProvider._();
+
+/// Exposes the runtime app configuration (legal doc versions, future feature
+/// flags) to the rest of the app. Loaded once on first read and cached
+/// in-memory by the repository; [refresh] drops the cache and re-reads.
+/// Falls back to [AppConfig.fallback] when the read fails so the legal gate
+/// still works offline (the user accepts v1, the next online read may bump
+/// the version and re-prompt).
+final class AppConfigNotifierProvider
+    extends $AsyncNotifierProvider<AppConfigNotifier, AppConfig> {
+  /// Exposes the runtime app configuration (legal doc versions, future feature
+  /// flags) to the rest of the app. Loaded once on first read and cached
+  /// in-memory by the repository; [refresh] drops the cache and re-reads.
+  /// Falls back to [AppConfig.fallback] when the read fails so the legal gate
+  /// still works offline (the user accepts v1, the next online read may bump
+  /// the version and re-prompt).
+  const AppConfigNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appConfigProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appConfigNotifierHash();
+
+  @$internal
+  @override
+  AppConfigNotifier create() => AppConfigNotifier();
+}
+
+String _$appConfigNotifierHash() => r'b40df654b5802183ca8499e9a1188b8b18fbb9c7';
+
+/// Exposes the runtime app configuration (legal doc versions, future feature
+/// flags) to the rest of the app. Loaded once on first read and cached
+/// in-memory by the repository; [refresh] drops the cache and re-reads.
+/// Falls back to [AppConfig.fallback] when the read fails so the legal gate
+/// still works offline (the user accepts v1, the next online read may bump
+/// the version and re-prompt).
+
+abstract class _$AppConfigNotifier extends $AsyncNotifier<AppConfig> {
+  FutureOr<AppConfig> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<AppConfig>, AppConfig>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<AppConfig>, AppConfig>,
+              AsyncValue<AppConfig>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

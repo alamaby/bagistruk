@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../settings/providers/profile_notifier.dart';
@@ -150,7 +151,7 @@ class _PostLoginWelcomeScreenState
                   value: _marketingOptIn,
                   onChanged: _busy
                       ? null
-                      : (v) => setState(() => _marketingOptIn = v ?? false),
+                      : (v) => setState(() => _marketingOptIn = v),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     l10n.postLoginWelcomeOptIn,

@@ -198,7 +198,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   value: _marketingOptIn,
                   onChanged: _busy
                       ? null
-                      : (v) => setState(() => _marketingOptIn = v ?? false),
+                      : (v) => setState(() => _marketingOptIn = v),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     l10n.registerMarketingOptIn,

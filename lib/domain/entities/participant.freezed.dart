@@ -14,7 +14,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Participant {
 
- String get id; String get billId; String get name; bool get isPaid; DateTime? get paidAt;
+ String get id; String get billId; String get name; bool get isPaid; DateTime? get paidAt;/// Optional phone number for the WhatsApp deep-link in settlement
+/// messages. Stored as the user entered / imported it; the client
+/// normalises digits and prepends a country code when building the
+/// wa.me URL. Null when the participant was added without a phone
+/// (manual entry without one, or imported from a contact that had
+/// no numbers on file).
+ String? get phone;
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +31,16 @@ $ParticipantCopyWith<Participant> get copyWith => _$ParticipantCopyWithImpl<Part
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt);
+int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt,phone);
 
 @override
 String toString() {
-  return 'Participant(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt)';
+  return 'Participant(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt, phone: $phone)';
 }
 
 
@@ -45,7 +51,7 @@ abstract mixin class $ParticipantCopyWith<$Res>  {
   factory $ParticipantCopyWith(Participant value, $Res Function(Participant) _then) = _$ParticipantCopyWithImpl;
 @useResult
 $Res call({
- String id, String billId, String name, bool isPaid, DateTime? paidAt
+ String id, String billId, String name, bool isPaid, DateTime? paidAt, String? phone
 });
 
 
@@ -62,14 +68,15 @@ class _$ParticipantCopyWithImpl<$Res>
 
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,Object? phone = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,billId: null == billId ? _self.billId : billId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,isPaid: null == isPaid ? _self.isPaid : isPaid // ignore: cast_nullable_to_non_nullable
 as bool,paidAt: freezed == paidAt ? _self.paidAt : paidAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -154,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt,  String? phone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Participant() when $default != null:
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   return orElse();
 
 }
@@ -175,10 +182,10 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt,  String? phone)  $default,) {final _that = this;
 switch (_that) {
 case _Participant():
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +202,10 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String billId,  String name,  bool isPaid,  DateTime? paidAt,  String? phone)?  $default,) {final _that = this;
 switch (_that) {
 case _Participant() when $default != null:
-return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case _:
+return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt,_that.phone);case _:
   return null;
 
 }
@@ -210,7 +217,7 @@ return $default(_that.id,_that.billId,_that.name,_that.isPaid,_that.paidAt);case
 
 
 class _Participant implements Participant {
-  const _Participant({required this.id, required this.billId, required this.name, this.isPaid = false, this.paidAt});
+  const _Participant({required this.id, required this.billId, required this.name, this.isPaid = false, this.paidAt, this.phone});
   
 
 @override final  String id;
@@ -218,6 +225,13 @@ class _Participant implements Participant {
 @override final  String name;
 @override@JsonKey() final  bool isPaid;
 @override final  DateTime? paidAt;
+/// Optional phone number for the WhatsApp deep-link in settlement
+/// messages. Stored as the user entered / imported it; the client
+/// normalises digits and prepends a country code when building the
+/// wa.me URL. Null when the participant was added without a phone
+/// (manual entry without one, or imported from a contact that had
+/// no numbers on file).
+@override final  String? phone;
 
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +243,16 @@ _$ParticipantCopyWith<_Participant> get copyWith => __$ParticipantCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Participant&&(identical(other.id, id) || other.id == id)&&(identical(other.billId, billId) || other.billId == billId)&&(identical(other.name, name) || other.name == name)&&(identical(other.isPaid, isPaid) || other.isPaid == isPaid)&&(identical(other.paidAt, paidAt) || other.paidAt == paidAt)&&(identical(other.phone, phone) || other.phone == phone));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt);
+int get hashCode => Object.hash(runtimeType,id,billId,name,isPaid,paidAt,phone);
 
 @override
 String toString() {
-  return 'Participant(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt)';
+  return 'Participant(id: $id, billId: $billId, name: $name, isPaid: $isPaid, paidAt: $paidAt, phone: $phone)';
 }
 
 
@@ -249,7 +263,7 @@ abstract mixin class _$ParticipantCopyWith<$Res> implements $ParticipantCopyWith
   factory _$ParticipantCopyWith(_Participant value, $Res Function(_Participant) _then) = __$ParticipantCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String billId, String name, bool isPaid, DateTime? paidAt
+ String id, String billId, String name, bool isPaid, DateTime? paidAt, String? phone
 });
 
 
@@ -266,14 +280,15 @@ class __$ParticipantCopyWithImpl<$Res>
 
 /// Create a copy of Participant
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? billId = null,Object? name = null,Object? isPaid = null,Object? paidAt = freezed,Object? phone = freezed,}) {
   return _then(_Participant(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,billId: null == billId ? _self.billId : billId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,isPaid: null == isPaid ? _self.isPaid : isPaid // ignore: cast_nullable_to_non_nullable
 as bool,paidAt: freezed == paidAt ? _self.paidAt : paidAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

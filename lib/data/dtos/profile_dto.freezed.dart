@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileDto {
 
- String get id;@JsonKey(name: 'display_name') String? get displayName;@JsonKey(name: 'default_currency') String get defaultCurrency;@JsonKey(name: 'language_pref') String get languagePref;@JsonKey(name: 'theme_pref') String get themePref;
+ String get id;@JsonKey(name: 'display_name') String? get displayName;@JsonKey(name: 'default_currency') String get defaultCurrency;@JsonKey(name: 'language_pref') String get languagePref;@JsonKey(name: 'theme_pref') String get themePref;@JsonKey(name: 'marketing_email_opt_in') bool get marketingEmailOptIn;@JsonKey(name: 'marketing_email_opt_in_at') DateTime? get marketingEmailOptInAt;@JsonKey(name: 'marketing_email_opt_in_source') String? get marketingEmailOptInSource;@JsonKey(name: 'accepted_terms_at') DateTime? get acceptedTermsAt;@JsonKey(name: 'accepted_privacy_at') DateTime? get acceptedPrivacyAt;@JsonKey(name: 'accepted_terms_version') int? get acceptedTermsVersion;@JsonKey(name: 'accepted_privacy_version') int? get acceptedPrivacyVersion;@JsonKey(name: 'welcomed_at') DateTime? get welcomedAt;@JsonKey(name: 'is_adult') bool get isAdult;
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProfileDtoCopyWith<ProfileDto> get copyWith => _$ProfileDtoCopyWithImpl<Profile
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,defaultCurrency,languagePref,themePref);
+int get hashCode => Object.hash(runtimeType,id,displayName,defaultCurrency,languagePref,themePref,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,isAdult);
 
 @override
 String toString() {
-  return 'ProfileDto(id: $id, displayName: $displayName, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref)';
+  return 'ProfileDto(id: $id, displayName: $displayName, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, isAdult: $isAdult)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProfileDtoCopyWith<$Res>  {
   factory $ProfileDtoCopyWith(ProfileDto value, $Res Function(ProfileDto) _then) = _$ProfileDtoCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'display_name') String? displayName,@JsonKey(name: 'default_currency') String defaultCurrency,@JsonKey(name: 'language_pref') String languagePref,@JsonKey(name: 'theme_pref') String themePref
+ String id,@JsonKey(name: 'display_name') String? displayName,@JsonKey(name: 'default_currency') String defaultCurrency,@JsonKey(name: 'language_pref') String languagePref,@JsonKey(name: 'theme_pref') String themePref,@JsonKey(name: 'marketing_email_opt_in') bool marketingEmailOptIn,@JsonKey(name: 'marketing_email_opt_in_at') DateTime? marketingEmailOptInAt,@JsonKey(name: 'marketing_email_opt_in_source') String? marketingEmailOptInSource,@JsonKey(name: 'accepted_terms_at') DateTime? acceptedTermsAt,@JsonKey(name: 'accepted_privacy_at') DateTime? acceptedPrivacyAt,@JsonKey(name: 'accepted_terms_version') int? acceptedTermsVersion,@JsonKey(name: 'accepted_privacy_version') int? acceptedPrivacyVersion,@JsonKey(name: 'welcomed_at') DateTime? welcomedAt,@JsonKey(name: 'is_adult') bool isAdult
 });
 
 
@@ -65,14 +65,23 @@ class _$ProfileDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? isAdult = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,defaultCurrency: null == defaultCurrency ? _self.defaultCurrency : defaultCurrency // ignore: cast_nullable_to_non_nullable
 as String,languagePref: null == languagePref ? _self.languagePref : languagePref // ignore: cast_nullable_to_non_nullable
 as String,themePref: null == themePref ? _self.themePref : themePref // ignore: cast_nullable_to_non_nullable
-as String,
+as String,marketingEmailOptIn: null == marketingEmailOptIn ? _self.marketingEmailOptIn : marketingEmailOptIn // ignore: cast_nullable_to_non_nullable
+as bool,marketingEmailOptInAt: freezed == marketingEmailOptInAt ? _self.marketingEmailOptInAt : marketingEmailOptInAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,marketingEmailOptInSource: freezed == marketingEmailOptInSource ? _self.marketingEmailOptInSource : marketingEmailOptInSource // ignore: cast_nullable_to_non_nullable
+as String?,acceptedTermsAt: freezed == acceptedTermsAt ? _self.acceptedTermsAt : acceptedTermsAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acceptedPrivacyAt: freezed == acceptedPrivacyAt ? _self.acceptedPrivacyAt : acceptedPrivacyAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acceptedTermsVersion: freezed == acceptedTermsVersion ? _self.acceptedTermsVersion : acceptedTermsVersion // ignore: cast_nullable_to_non_nullable
+as int?,acceptedPrivacyVersion: freezed == acceptedPrivacyVersion ? _self.acceptedPrivacyVersion : acceptedPrivacyVersion // ignore: cast_nullable_to_non_nullable
+as int?,welcomedAt: freezed == welcomedAt ? _self.welcomedAt : welcomedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -157,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref, @JsonKey(name: 'marketing_email_opt_in')  bool marketingEmailOptIn, @JsonKey(name: 'marketing_email_opt_in_at')  DateTime? marketingEmailOptInAt, @JsonKey(name: 'marketing_email_opt_in_source')  String? marketingEmailOptInSource, @JsonKey(name: 'accepted_terms_at')  DateTime? acceptedTermsAt, @JsonKey(name: 'accepted_privacy_at')  DateTime? acceptedPrivacyAt, @JsonKey(name: 'accepted_terms_version')  int? acceptedTermsVersion, @JsonKey(name: 'accepted_privacy_version')  int? acceptedPrivacyVersion, @JsonKey(name: 'welcomed_at')  DateTime? welcomedAt, @JsonKey(name: 'is_adult')  bool isAdult)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
-return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref);case _:
+return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
   return orElse();
 
 }
@@ -178,10 +187,10 @@ return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languageP
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref, @JsonKey(name: 'marketing_email_opt_in')  bool marketingEmailOptIn, @JsonKey(name: 'marketing_email_opt_in_at')  DateTime? marketingEmailOptInAt, @JsonKey(name: 'marketing_email_opt_in_source')  String? marketingEmailOptInSource, @JsonKey(name: 'accepted_terms_at')  DateTime? acceptedTermsAt, @JsonKey(name: 'accepted_privacy_at')  DateTime? acceptedPrivacyAt, @JsonKey(name: 'accepted_terms_version')  int? acceptedTermsVersion, @JsonKey(name: 'accepted_privacy_version')  int? acceptedPrivacyVersion, @JsonKey(name: 'welcomed_at')  DateTime? welcomedAt, @JsonKey(name: 'is_adult')  bool isAdult)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto():
-return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref);case _:
+return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +207,10 @@ return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languageP
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'display_name')  String? displayName, @JsonKey(name: 'default_currency')  String defaultCurrency, @JsonKey(name: 'language_pref')  String languagePref, @JsonKey(name: 'theme_pref')  String themePref, @JsonKey(name: 'marketing_email_opt_in')  bool marketingEmailOptIn, @JsonKey(name: 'marketing_email_opt_in_at')  DateTime? marketingEmailOptInAt, @JsonKey(name: 'marketing_email_opt_in_source')  String? marketingEmailOptInSource, @JsonKey(name: 'accepted_terms_at')  DateTime? acceptedTermsAt, @JsonKey(name: 'accepted_privacy_at')  DateTime? acceptedPrivacyAt, @JsonKey(name: 'accepted_terms_version')  int? acceptedTermsVersion, @JsonKey(name: 'accepted_privacy_version')  int? acceptedPrivacyVersion, @JsonKey(name: 'welcomed_at')  DateTime? welcomedAt, @JsonKey(name: 'is_adult')  bool isAdult)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileDto() when $default != null:
-return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref);case _:
+return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
   return null;
 
 }
@@ -213,7 +222,7 @@ return $default(_that.id,_that.displayName,_that.defaultCurrency,_that.languageP
 @JsonSerializable()
 
 class _ProfileDto extends ProfileDto {
-  const _ProfileDto({required this.id, @JsonKey(name: 'display_name') this.displayName, @JsonKey(name: 'default_currency') this.defaultCurrency = 'IDR', @JsonKey(name: 'language_pref') this.languagePref = 'en', @JsonKey(name: 'theme_pref') this.themePref = 'system'}): super._();
+  const _ProfileDto({required this.id, @JsonKey(name: 'display_name') this.displayName, @JsonKey(name: 'default_currency') this.defaultCurrency = 'IDR', @JsonKey(name: 'language_pref') this.languagePref = 'en', @JsonKey(name: 'theme_pref') this.themePref = 'system', @JsonKey(name: 'marketing_email_opt_in') this.marketingEmailOptIn = false, @JsonKey(name: 'marketing_email_opt_in_at') this.marketingEmailOptInAt, @JsonKey(name: 'marketing_email_opt_in_source') this.marketingEmailOptInSource, @JsonKey(name: 'accepted_terms_at') this.acceptedTermsAt, @JsonKey(name: 'accepted_privacy_at') this.acceptedPrivacyAt, @JsonKey(name: 'accepted_terms_version') this.acceptedTermsVersion, @JsonKey(name: 'accepted_privacy_version') this.acceptedPrivacyVersion, @JsonKey(name: 'welcomed_at') this.welcomedAt, @JsonKey(name: 'is_adult') this.isAdult = false}): super._();
   factory _ProfileDto.fromJson(Map<String, dynamic> json) => _$ProfileDtoFromJson(json);
 
 @override final  String id;
@@ -221,6 +230,15 @@ class _ProfileDto extends ProfileDto {
 @override@JsonKey(name: 'default_currency') final  String defaultCurrency;
 @override@JsonKey(name: 'language_pref') final  String languagePref;
 @override@JsonKey(name: 'theme_pref') final  String themePref;
+@override@JsonKey(name: 'marketing_email_opt_in') final  bool marketingEmailOptIn;
+@override@JsonKey(name: 'marketing_email_opt_in_at') final  DateTime? marketingEmailOptInAt;
+@override@JsonKey(name: 'marketing_email_opt_in_source') final  String? marketingEmailOptInSource;
+@override@JsonKey(name: 'accepted_terms_at') final  DateTime? acceptedTermsAt;
+@override@JsonKey(name: 'accepted_privacy_at') final  DateTime? acceptedPrivacyAt;
+@override@JsonKey(name: 'accepted_terms_version') final  int? acceptedTermsVersion;
+@override@JsonKey(name: 'accepted_privacy_version') final  int? acceptedPrivacyVersion;
+@override@JsonKey(name: 'welcomed_at') final  DateTime? welcomedAt;
+@override@JsonKey(name: 'is_adult') final  bool isAdult;
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileDto&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,defaultCurrency,languagePref,themePref);
+int get hashCode => Object.hash(runtimeType,id,displayName,defaultCurrency,languagePref,themePref,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,isAdult);
 
 @override
 String toString() {
-  return 'ProfileDto(id: $id, displayName: $displayName, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref)';
+  return 'ProfileDto(id: $id, displayName: $displayName, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, isAdult: $isAdult)';
 }
 
 
@@ -255,7 +273,7 @@ abstract mixin class _$ProfileDtoCopyWith<$Res> implements $ProfileDtoCopyWith<$
   factory _$ProfileDtoCopyWith(_ProfileDto value, $Res Function(_ProfileDto) _then) = __$ProfileDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'display_name') String? displayName,@JsonKey(name: 'default_currency') String defaultCurrency,@JsonKey(name: 'language_pref') String languagePref,@JsonKey(name: 'theme_pref') String themePref
+ String id,@JsonKey(name: 'display_name') String? displayName,@JsonKey(name: 'default_currency') String defaultCurrency,@JsonKey(name: 'language_pref') String languagePref,@JsonKey(name: 'theme_pref') String themePref,@JsonKey(name: 'marketing_email_opt_in') bool marketingEmailOptIn,@JsonKey(name: 'marketing_email_opt_in_at') DateTime? marketingEmailOptInAt,@JsonKey(name: 'marketing_email_opt_in_source') String? marketingEmailOptInSource,@JsonKey(name: 'accepted_terms_at') DateTime? acceptedTermsAt,@JsonKey(name: 'accepted_privacy_at') DateTime? acceptedPrivacyAt,@JsonKey(name: 'accepted_terms_version') int? acceptedTermsVersion,@JsonKey(name: 'accepted_privacy_version') int? acceptedPrivacyVersion,@JsonKey(name: 'welcomed_at') DateTime? welcomedAt,@JsonKey(name: 'is_adult') bool isAdult
 });
 
 
@@ -272,14 +290,23 @@ class __$ProfileDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? isAdult = null,}) {
   return _then(_ProfileDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,defaultCurrency: null == defaultCurrency ? _self.defaultCurrency : defaultCurrency // ignore: cast_nullable_to_non_nullable
 as String,languagePref: null == languagePref ? _self.languagePref : languagePref // ignore: cast_nullable_to_non_nullable
 as String,themePref: null == themePref ? _self.themePref : themePref // ignore: cast_nullable_to_non_nullable
-as String,
+as String,marketingEmailOptIn: null == marketingEmailOptIn ? _self.marketingEmailOptIn : marketingEmailOptIn // ignore: cast_nullable_to_non_nullable
+as bool,marketingEmailOptInAt: freezed == marketingEmailOptInAt ? _self.marketingEmailOptInAt : marketingEmailOptInAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,marketingEmailOptInSource: freezed == marketingEmailOptInSource ? _self.marketingEmailOptInSource : marketingEmailOptInSource // ignore: cast_nullable_to_non_nullable
+as String?,acceptedTermsAt: freezed == acceptedTermsAt ? _self.acceptedTermsAt : acceptedTermsAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acceptedPrivacyAt: freezed == acceptedPrivacyAt ? _self.acceptedPrivacyAt : acceptedPrivacyAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,acceptedTermsVersion: freezed == acceptedTermsVersion ? _self.acceptedTermsVersion : acceptedTermsVersion // ignore: cast_nullable_to_non_nullable
+as int?,acceptedPrivacyVersion: freezed == acceptedPrivacyVersion ? _self.acceptedPrivacyVersion : acceptedPrivacyVersion // ignore: cast_nullable_to_non_nullable
+as int?,welcomedAt: freezed == welcomedAt ? _self.welcomedAt : welcomedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

@@ -14,15 +14,13 @@ class AdService {
     if (_initialized || !AdConfig.adsEnabled) return;
     _initialized = true;
 
-    // In debug builds force the EEA geography so the UMP consent form is
-    // actually shown during local testing — without this, developers in
-    // non-regulated regions never see the form. No-op in release.
+    // In debug builds, register the test device so the AdMob SDK serves
+    // test creatives. Note: in google_mobile_ads v8 there is no public
+    // API to force the EEA geography — the consent form will only show
+    // on devices whose actual region is regulated. No-op in release.
     if (kDebugMode) {
-      await ConsentInformation.instance.setConsentDebugSettings(
-        ConsentDebugSettings(
-          debugGeography: DebugGeography.debugGeographyEea,
-          testDeviceIds: const ['TEST-DEVICE-HASH'],
-        ),
+      await MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(testDeviceIds: const ['TEST-DEVICE-HASH']),
       );
     }
 
@@ -62,7 +60,14 @@ class AdService {
   /// (non-personalized) ads.
   static Future<void> setUserIsMinor(bool isMinor) async {
     if (!AdConfig.adsEnabled) return;
-    await ConsentInformation.instance.setTagForUnderAgeOfConsent(isMinor);
+    // google_mobile_ads v8 exposes the UMP TFUA enum via the
+    // `TagForUnderAgeOfConsent` constants (1 = under age, 0 = not).
+    await MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(
+        tagForUnderAgeOfConsent:
+            isMinor ? TagForUnderAgeOfConsent.yes : TagForUnderAgeOfConsent.no,
+      ),
+    );
   }
 
   /// Re-triggers the UMP consent form so the user can review or change
@@ -71,7 +76,9 @@ class AdService {
   static Future<void> showConsentFormIfAvailable() async {
     if (!AdConfig.adsEnabled) return;
     try {
-      await ConsentForm.showPrivacyOptionsFormIfRequired((_) {});
+      // v8 exposes the privacy options form via the static
+      // `showPrivacyOptionsForm` (no separate `load` step required).
+      await ConsentForm.showPrivacyOptionsForm((_) {});
     } catch (_) {
       // UMP may not have a form ready (e.g. user is in a non-regulated
       // region) — surface this gracefully so Settings callers do not

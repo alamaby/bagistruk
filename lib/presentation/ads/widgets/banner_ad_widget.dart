@@ -44,7 +44,11 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
     // Re-load the banner when the profile's `isAdult` flag changes so the
     // next ad request carries the updated UMP underage tag. We listen
     // rather than watch so we only act on changes, not on initial build.
-    ref.listen<UserProfile?>(profileProvider, (prev, next) {
+    ref.listen<UserProfile?>(
+      profileProvider.select(
+        (s) => switch (s) { AsyncData(:final value) => value, _ => null },
+      ),
+      (prev, next) {
       final wasMinor = !(prev?.isAdult ?? false);
       final isMinor = !(next?.isAdult ?? false);
       if (wasMinor != isMinor && _loaded) {
@@ -53,7 +57,8 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
         _loaded = false;
         _load();
       }
-    });
+    },
+    );
 
     final ad = _ad;
     if (!_loaded || ad == null) return const SizedBox.shrink();

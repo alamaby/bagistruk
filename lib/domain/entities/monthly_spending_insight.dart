@@ -57,7 +57,7 @@ class MonthlySpendingInsight {
   ) {
     if (value is! List) return const [];
     return value
-        .whereType<Map>()
+        .whereType<Map<dynamic, dynamic>>()
         .map((e) => fromJson(Map<String, dynamic>.from(e)))
         .toList(growable: false);
   }

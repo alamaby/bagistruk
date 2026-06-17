@@ -65,7 +65,7 @@ final class BillReviewNotifierProvider
 }
 
 String _$billReviewNotifierHash() =>
-    r'dea9f97a0c97615a662ea19e9dad939e32e3e9b1';
+    r'e05f1583f0aa56e0825e42953be1a91eba86c99b';
 
 /// Live-editable review state seeded from an [OcrResult]. Total recalculation
 /// happens on every mutation so the sticky bottom bar stays in sync.

@@ -94,7 +94,10 @@ class ProfileRemoteDataSource {
       throw const AuthException('No active session');
     }
     final row = await _client
-        .rpc('get_ocr_credit_status', params: {'p_user_id': uid})
+        .rpc<Map<String, dynamic>>(
+          'get_ocr_credit_status',
+          params: {'p_user_id': uid},
+        )
         .single();
     return Map<String, dynamic>.from(row as Map);
   }
@@ -107,7 +110,7 @@ class ProfileRemoteDataSource {
       throw const AuthException('No active session');
     }
     final row = await _client
-        .rpc(
+        .rpc<Map<String, dynamic>>(
           'get_monthly_spending_insight',
           params: {'p_user_id': uid, 'p_currency_code': currencyCode},
         )
