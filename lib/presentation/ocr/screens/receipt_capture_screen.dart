@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
+import '../../../data/services/device_fingerprint_service.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
@@ -155,7 +156,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       // mounted; the service caches the Android device info internally.
       if (!mounted) return;
       final fingerprintHeaders = await ref
-          .read(deviceFingerprintServiceProvider)
+          .read<DeviceFingerprintService>(deviceFingerprintServiceProvider)
           .collectHeaders(context: context);
       // Pass currency dari profile user supaya Edge Function bisa pakai
       // konvensi locale yg tepat saat parsing harga (mis. IDR gunakan '.'

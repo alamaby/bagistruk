@@ -56,7 +56,7 @@ class BillPdfExporter {
         build: (context) => [
           pw.Text(
             'BagiStruk',
-            style: pw.TextStyle(fontSize: 12, color: PdfColors.grey700),
+            style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey700),
           ),
           pw.SizedBox(height: 6),
           pw.Text(

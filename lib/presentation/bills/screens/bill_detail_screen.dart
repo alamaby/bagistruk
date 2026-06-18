@@ -203,6 +203,7 @@ class _Body extends ConsumerWidget {
 
     try {
       final bankInfo = await ref.read(transferBankInfoProvider.future);
+      if (!context.mounted) return;
       final bytes = await BillPdfExporter(
         state: state,
         currency: currency,
