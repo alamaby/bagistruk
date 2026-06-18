@@ -133,6 +133,12 @@ abstract class AppL10n {
   /// **'Gagal menyimpan. Coba lagi.'**
   String get postLoginWelcomeErrorSave;
 
+  /// No description provided for @registerErrorSaveProfile.
+  ///
+  /// In id, this message translates to:
+  /// **'Akun Anda berhasil dibuat, tetapi kami tidak dapat menyimpan preferensi Anda. Coba lagi dari Settings setelah verifikasi email.'**
+  String get registerErrorSaveProfile;
+
   /// No description provided for @settingsMarketingOptIn.
   ///
   /// In id, this message translates to:

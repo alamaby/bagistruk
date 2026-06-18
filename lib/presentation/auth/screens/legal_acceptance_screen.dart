@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../settings/providers/profile_notifier.dart';
@@ -58,6 +59,14 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
         context.go(widget.from ?? Routes.scan);
       case ResultFailure():
         if (!mounted) return;
+        // Surface the actual Failure to the debug log so the next time
+        // the generic "Failed to save acceptance" toast appears we can
+        // see the underlying cause (auth missing, RLS deny, network,
+        // postgrest error code, etc.) in `flutter run` / logcat.
+        AppLogger.error(
+          'LegalAcceptanceScreen: recordLegalAcceptance failed',
+          res.failure,
+        );
         _showError(AppL10n.of(context).legalAcceptanceErrorSave);
     }
   }

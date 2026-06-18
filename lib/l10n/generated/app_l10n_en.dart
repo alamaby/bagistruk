@@ -30,6 +30,10 @@ class AppL10nEn extends AppL10n {
   String get postLoginWelcomeErrorSave => 'Failed to save. Please try again.';
 
   @override
+  String get registerErrorSaveProfile =>
+      'Your account was created but we could not save your preferences. Please try again from Settings after verifying your email.';
+
+  @override
   String get settingsMarketingOptIn => 'Promotional emails';
 
   @override

@@ -9,6 +9,8 @@
   "postLoginWelcomeContinue": "Continue",
   "postLoginWelcomeErrorSave": "Failed to save. Please try again.",
 
+  "registerErrorSaveProfile": "Your account was created but we could not save your preferences. Please try again from Settings after verifying your email.",
+
   "settingsMarketingOptIn": "Promotional emails",
   "settingsMarketingOptInSubtitle": "Tips, feature updates, and offers from BagiStruk.",
 

@@ -60,7 +60,12 @@ class ProfileRepositoryImpl implements IProfileRepository {
           'marketing_email_opt_in': optedIn,
           // Clear the audit columns when the user withdraws consent so the
           // marketing opt-in is unambiguously recorded as `never` again.
-          'marketing_email_opt_in_at': optedIn ? now : null,
+          // `postgrest` serialises the update body with `jsonEncode`, which
+          // rejects raw `DateTime` (`Converting object to an encodable
+          // object failed`). Convert to ISO 8601 string up front so the
+          // same code path works for every DateTime-bearing mutation.
+          'marketing_email_opt_in_at':
+              optedIn ? now.toIso8601String() : null,
           'marketing_email_opt_in_source': optedIn ? source : null,
         }));
   }
@@ -72,8 +77,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }) {
     final now = DateTime.now().toUtc();
     return guardAsync(() => _ds.updateFields({
-          'accepted_terms_at': now,
-          'accepted_privacy_at': now,
+          'accepted_terms_at': now.toIso8601String(),
+          'accepted_privacy_at': now.toIso8601String(),
           'accepted_terms_version': termsVersion,
           'accepted_privacy_version': privacyVersion,
         }));
@@ -81,7 +86,9 @@ class ProfileRepositoryImpl implements IProfileRepository {
 
   @override
   Future<Result<void>> markWelcomed() => guardAsync(
-        () => _ds.updateFields({'welcomed_at': DateTime.now().toUtc()}),
+        () => _ds.updateFields({
+          'welcomed_at': DateTime.now().toUtc().toIso8601String(),
+        }),
       );
 
   @override

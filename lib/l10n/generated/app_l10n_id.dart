@@ -30,6 +30,10 @@ class AppL10nId extends AppL10n {
   String get postLoginWelcomeErrorSave => 'Gagal menyimpan. Coba lagi.';
 
   @override
+  String get registerErrorSaveProfile =>
+      'Akun Anda berhasil dibuat, tetapi kami tidak dapat menyimpan preferensi Anda. Coba lagi dari Settings setelah verifikasi email.';
+
+  @override
   String get settingsMarketingOptIn => 'Email promosi';
 
   @override

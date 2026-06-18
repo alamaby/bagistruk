@@ -20,7 +20,12 @@ class AdService {
     // on devices whose actual region is regulated. No-op in release.
     if (kDebugMode) {
       await MobileAds.instance.updateRequestConfiguration(
-        RequestConfiguration(testDeviceIds: const ['TEST-DEVICE-HASH']),
+        // Empty list lets AdMob auto-detect debug devices via the
+        // `adb shell setprop debug.firebase.analytics.app` flag or by
+        // the device's build flavor. Supplying a placeholder string
+        // like `'TEST-DEVICE-HASH'` makes the SDK try to look it up,
+        // fail, and log spurious warnings at every ad request.
+        RequestConfiguration(testDeviceIds: const <String>[]),
       );
     }
 
