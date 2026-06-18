@@ -149,13 +149,25 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       final canScan = await _checkOcrCredit();
       if (!canScan) return;
       final bytes = await Future.wait(_images.map((f) => f.readAsBytes()));
+      // Build the device fingerprint payload up front so the user pays the
+      // Android plugin round-trip once per scan rather than during the
+      // hot path below. MediaQuery is read here while the screen is still
+      // mounted; the service caches the Android device info internally.
+      if (!mounted) return;
+      final fingerprintHeaders = await ref
+          .read(deviceFingerprintServiceProvider)
+          .collectHeaders(context: context);
       // Pass currency dari profile user supaya Edge Function bisa pakai
       // konvensi locale yg tepat saat parsing harga (mis. IDR gunakan '.'
       // sebagai pemisah ribuan, bukan desimal). Fallback ke 'IDR' jika
       // profile belum siap — sesuai pasar utama aplikasi.
       final currency =
           ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
-      await ref.read(ocrProvider.notifier).process(bytes, currency: currency);
+      await ref.read(ocrProvider.notifier).process(
+        bytes,
+        currency: currency,
+        fingerprintHeaders: fingerprintHeaders,
+      );
     } finally {
       if (mounted) setState(() => _starting = false);
     }

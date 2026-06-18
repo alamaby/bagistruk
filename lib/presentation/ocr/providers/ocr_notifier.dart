@@ -31,6 +31,7 @@ class OcrNotifier extends _$OcrNotifier {
     List<Uint8List> images, {
     String? hint,
     String? currency,
+    Map<String, String>? fingerprintHeaders,
   }) async {
     state = OcrState.processing(images.length);
     final repo = ref.read(ocrRepositoryProvider);
@@ -38,6 +39,7 @@ class OcrNotifier extends _$OcrNotifier {
       images,
       hint: hint,
       currency: currency,
+      fingerprintHeaders: fingerprintHeaders,
     );
     state = switch (res) {
       Success(:final data) => OcrState.success(data),

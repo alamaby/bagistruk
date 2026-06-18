@@ -9,9 +9,11 @@ abstract interface class IOCRRepository {
   ///
   /// [currency] (ISO 4217) memberi tahu server konvensi locale yang dipakai
   /// LLM saat membaca angka pada struk. Null → server default (IDR).
+  ///
   Future<Result<OcrResult>> processReceipt(
     List<Uint8List> imagesBytes, {
     String? hint,
     String? currency,
+    Map<String, String>? fingerprintHeaders,
   });
 }

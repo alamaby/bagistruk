@@ -17,6 +17,7 @@ import 'repositories/auth_repository_impl.dart';
 import 'repositories/bill_repository_impl.dart';
 import 'repositories/ocr_repository_impl.dart';
 import 'repositories/profile_repository_impl.dart';
+import 'services/device_fingerprint_service.dart';
 import 'services/ocr_service.dart';
 
 part 'providers.g.dart';

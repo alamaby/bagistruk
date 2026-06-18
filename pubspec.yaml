@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.13.1+24
+version: 0.13.2+25
 
 environment:
   sdk: ^3.11.5
@@ -38,6 +38,11 @@ dependencies:
   # OCR pipeline support
   image_picker: ^1.1.2
   image: ^4.3.0
+  # Device fingerprint signals for the anti-abuse gate. Read-only access
+  # to non-PII hardware fields (Android version, SDK, brand, model,
+  # hardware) — no IMEI, Android ID, serial, MAC, or advertising ID.
+  # Values are HMAC-hashed at the Edge Function and never persisted raw.
+  device_info_plus: ^11.0.0
 
   # Animations / motion
   lottie: ^3.1.2

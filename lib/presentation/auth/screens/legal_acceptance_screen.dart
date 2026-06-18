@@ -9,13 +9,17 @@ import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../settings/providers/profile_notifier.dart';
+import '../providers/auth_providers.dart';
 
 /// First-run gate that requires the user to actively opt in to the current
 /// Terms of Service and Privacy Policy before any other route is reachable.
 /// The router redirects here whenever
 /// `profile.acceptedTermsVersion` / `acceptedPrivacyVersion` do not match
 /// the current versions in `app_config`; the screen stamps the new
-/// versions and returns the user to [from] (defaults to [Routes.scan]).
+/// versions and returns the user to [from]. For anonymous users the
+/// fallback is [Routes.scan] (the entry-point tab); for signed-in users
+/// the fallback is [Routes.history] (the authenticated home tab) so a
+/// fresh sign-up does not strand the user on the wrong tab.
 class LegalAcceptanceScreen extends ConsumerStatefulWidget {
   const LegalAcceptanceScreen({super.key, this.from});
 
@@ -56,7 +60,24 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
           await ref.read(profileProvider.notifier).setIsAdult(isAdult: true);
         }
         if (!mounted) return;
-        context.go(widget.from ?? Routes.scan);
+        // Pick the best default destination. widget.from is set by the
+        // router when the gate fires from a real route; for signed-in
+        // users the anonymous entry-point (/scan) is wrong, so route
+        // them to their home tab (/history) instead. This avoids
+        // stranding newly-signed-up users on /scan when the gate fires
+        // for /register or /scan (the latter is the cold-start path for
+        // anonymous users who later upgrade their account via
+        // `signUp` -> `linkEmail`).
+        final auth = ref.read(authStateProvider);
+        final isSignedIn = switch (auth) {
+          AsyncData(:final value) => value.isSignedIn,
+          _ => false,
+        };
+        final dest = isSignedIn &&
+                (widget.from == null || widget.from == Routes.scan)
+            ? Routes.history
+            : (widget.from ?? Routes.scan);
+        context.go(dest);
       case ResultFailure():
         if (!mounted) return;
         // Surface the actual Failure to the debug log so the next time

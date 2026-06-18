@@ -27,6 +27,7 @@ class OCRService {
     List<Uint8List> imagesBytes, {
     String? hint,
     String? currency,
+    Map<String, String>? fingerprintHeaders,
   }) {
     return guardAsync(() async {
       // Downscale + base64 in parallel — encoding is CPU-bound but the image
@@ -40,9 +41,14 @@ class OCRService {
         currency: currency,
       );
 
+      // Merge any device-fingerprint headers on top of the Edge Function's
+      // default Authorization / apikey / Content-Type. The fingerprint is
+      // best-effort — empty map is fine, the server falls back to a v1 hash
+      // built from IP + UA + accept-language.
       final response = await _client.functions.invoke(
         AppConstants.ocrEdgeFunctionName,
         body: request.toJson(),
+        headers: fingerprintHeaders,
       );
 
       if (response.status >= 400) {

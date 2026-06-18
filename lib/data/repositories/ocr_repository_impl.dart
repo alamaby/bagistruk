@@ -14,11 +14,13 @@ class OcrRepositoryImpl implements IOCRRepository {
     List<Uint8List> imagesBytes, {
     String? hint,
     String? currency,
+    Map<String, String>? fingerprintHeaders,
   }) async {
     final res = await _service.processReceipt(
       imagesBytes,
       hint: hint,
       currency: currency,
+      fingerprintHeaders: fingerprintHeaders,
     );
     return switch (res) {
       Success(:final data) => Result.success(data.toEntity()),
