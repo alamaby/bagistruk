@@ -15,6 +15,9 @@ class AuthRepositoryImpl implements IAuthRepository {
   bool get isAnonymous => _ds.isAnonymous;
 
   @override
+  bool get isEmailConfirmed => _ds.isEmailConfirmed;
+
+  @override
   Stream<String?> watchUserId() => _ds.watchUserId();
 
   @override

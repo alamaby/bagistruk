@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthSnapshot {
 
- String? get userId; bool get isAnonymous;
+ String? get userId; bool get isAnonymous; bool get emailConfirmed;
 /// Create a copy of AuthSnapshot
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AuthSnapshotCopyWith<AuthSnapshot> get copyWith => _$AuthSnapshotCopyWithImpl<A
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthSnapshot&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthSnapshot&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.emailConfirmed, emailConfirmed) || other.emailConfirmed == emailConfirmed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userId,isAnonymous);
+int get hashCode => Object.hash(runtimeType,userId,isAnonymous,emailConfirmed);
 
 @override
 String toString() {
-  return 'AuthSnapshot(userId: $userId, isAnonymous: $isAnonymous)';
+  return 'AuthSnapshot(userId: $userId, isAnonymous: $isAnonymous, emailConfirmed: $emailConfirmed)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AuthSnapshotCopyWith<$Res>  {
   factory $AuthSnapshotCopyWith(AuthSnapshot value, $Res Function(AuthSnapshot) _then) = _$AuthSnapshotCopyWithImpl;
 @useResult
 $Res call({
- String? userId, bool isAnonymous
+ String? userId, bool isAnonymous, bool emailConfirmed
 });
 
 
@@ -62,10 +62,11 @@ class _$AuthSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of AuthSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = freezed,Object? isAnonymous = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = freezed,Object? isAnonymous = null,Object? emailConfirmed = null,}) {
   return _then(_self.copyWith(
 userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,isAnonymous: null == isAnonymous ? _self.isAnonymous : isAnonymous // ignore: cast_nullable_to_non_nullable
+as bool,emailConfirmed: null == emailConfirmed ? _self.emailConfirmed : emailConfirmed // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -148,10 +149,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? userId,  bool isAnonymous)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? userId,  bool isAnonymous,  bool emailConfirmed)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthSnapshot() when $default != null:
-return $default(_that.userId,_that.isAnonymous);case _:
+return $default(_that.userId,_that.isAnonymous,_that.emailConfirmed);case _:
   return orElse();
 
 }
@@ -169,10 +170,10 @@ return $default(_that.userId,_that.isAnonymous);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? userId,  bool isAnonymous)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? userId,  bool isAnonymous,  bool emailConfirmed)  $default,) {final _that = this;
 switch (_that) {
 case _AuthSnapshot():
-return $default(_that.userId,_that.isAnonymous);}
+return $default(_that.userId,_that.isAnonymous,_that.emailConfirmed);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -186,10 +187,10 @@ return $default(_that.userId,_that.isAnonymous);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? userId,  bool isAnonymous)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? userId,  bool isAnonymous,  bool emailConfirmed)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthSnapshot() when $default != null:
-return $default(_that.userId,_that.isAnonymous);case _:
+return $default(_that.userId,_that.isAnonymous,_that.emailConfirmed);case _:
   return null;
 
 }
@@ -201,11 +202,12 @@ return $default(_that.userId,_that.isAnonymous);case _:
 
 
 class _AuthSnapshot extends AuthSnapshot {
-  const _AuthSnapshot({required this.userId, required this.isAnonymous}): super._();
+  const _AuthSnapshot({required this.userId, required this.isAnonymous, this.emailConfirmed = false}): super._();
   
 
 @override final  String? userId;
 @override final  bool isAnonymous;
+@override@JsonKey() final  bool emailConfirmed;
 
 /// Create a copy of AuthSnapshot
 /// with the given fields replaced by the non-null parameter values.
@@ -217,16 +219,16 @@ _$AuthSnapshotCopyWith<_AuthSnapshot> get copyWith => __$AuthSnapshotCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthSnapshot&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthSnapshot&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.emailConfirmed, emailConfirmed) || other.emailConfirmed == emailConfirmed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userId,isAnonymous);
+int get hashCode => Object.hash(runtimeType,userId,isAnonymous,emailConfirmed);
 
 @override
 String toString() {
-  return 'AuthSnapshot(userId: $userId, isAnonymous: $isAnonymous)';
+  return 'AuthSnapshot(userId: $userId, isAnonymous: $isAnonymous, emailConfirmed: $emailConfirmed)';
 }
 
 
@@ -237,7 +239,7 @@ abstract mixin class _$AuthSnapshotCopyWith<$Res> implements $AuthSnapshotCopyWi
   factory _$AuthSnapshotCopyWith(_AuthSnapshot value, $Res Function(_AuthSnapshot) _then) = __$AuthSnapshotCopyWithImpl;
 @override @useResult
 $Res call({
- String? userId, bool isAnonymous
+ String? userId, bool isAnonymous, bool emailConfirmed
 });
 
 
@@ -254,10 +256,11 @@ class __$AuthSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of AuthSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = freezed,Object? isAnonymous = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = freezed,Object? isAnonymous = null,Object? emailConfirmed = null,}) {
   return _then(_AuthSnapshot(
 userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,isAnonymous: null == isAnonymous ? _self.isAnonymous : isAnonymous // ignore: cast_nullable_to_non_nullable
+as bool,emailConfirmed: null == emailConfirmed ? _self.emailConfirmed : emailConfirmed // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

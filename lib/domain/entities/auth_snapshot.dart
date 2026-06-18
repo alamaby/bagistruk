@@ -7,9 +7,14 @@ sealed class AuthSnapshot with _$AuthSnapshot {
   const factory AuthSnapshot({
     required String? userId,
     required bool isAnonymous,
+    @Default(false) bool emailConfirmed,
   }) = _AuthSnapshot;
 
   const AuthSnapshot._();
 
-  bool get isSignedIn => userId != null && !isAnonymous;
+  // Supabase flips `is_anonymous = false` the moment `updateUser` runs, even
+  // when email confirmation is required and `emailConfirmedAt` is still null.
+  // Treat the user as truly signed in only after the email link is clicked so
+  // the verify-email screen gets to do its job.
+  bool get isSignedIn => userId != null && !isAnonymous && emailConfirmed;
 }

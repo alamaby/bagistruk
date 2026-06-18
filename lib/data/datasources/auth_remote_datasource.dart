@@ -17,6 +17,8 @@ class AuthRemoteDataSource {
 
   bool get isAnonymous => _auth.currentUser?.isAnonymous ?? false;
 
+  bool get isEmailConfirmed => _auth.currentUser?.emailConfirmedAt != null;
+
   Stream<String?> watchUserId() =>
       _auth.onAuthStateChange.map((s) => s.session?.user.id);
 
@@ -25,6 +27,7 @@ class AuthRemoteDataSource {
     return AuthSnapshot(
       userId: user?.id,
       isAnonymous: user?.isAnonymous ?? false,
+      emailConfirmed: user?.emailConfirmedAt != null,
     );
   });
 

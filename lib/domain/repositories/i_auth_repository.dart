@@ -8,6 +8,11 @@ abstract interface class IAuthRepository {
   /// True when the active session belongs to an anonymous user.
   bool get isAnonymous;
 
+  /// True once the current user has confirmed their email. For anonymous
+  /// users this is always false. The router needs this to keep a freshly
+  /// registered user parked on the verify-email screen.
+  bool get isEmailConfirmed;
+
   /// Stream of user-id transitions; null when signed out.
   Stream<String?> watchUserId();
 

@@ -11,6 +11,10 @@ part 'auth_providers.g.dart';
 @Riverpod(keepAlive: true)
 Stream<AuthSnapshot> authState(Ref ref) async* {
   final repo = ref.watch(authRepositoryProvider);
-  yield AuthSnapshot(userId: repo.currentUserId, isAnonymous: repo.isAnonymous);
+  yield AuthSnapshot(
+    userId: repo.currentUserId,
+    isAnonymous: repo.isAnonymous,
+    emailConfirmed: repo.isEmailConfirmed,
+  );
   yield* repo.watchAuthState();
 }
