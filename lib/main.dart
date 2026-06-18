@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,12 +54,19 @@ Future<String?> _bootstrap() async {
     return 'Failed to initialize Supabase: $e';
   }
 
-  try {
-    await AdService.initialize().timeout(const Duration(seconds: 8));
-  } catch (_) {
-    // Ads are optional monetization; startup should not fail if consent or the
-    // Mobile Ads SDK cannot initialize.
-  }
+  // Sengaja TIDAK await AdService.initialize() di sini. AdMob SDK + UMP
+  // initialization bisa makan 10+ detik di emulator (HTTP ke
+  // fundingchoicesmessages.google.com + verifikasi class GMS), dan
+  // keseluruhan proses terjadi di platform thread / main isolate, sehingga
+  // `.timeout(8s)` di Dart cuma men-trigger cancellation di sisi Dart —
+  // bukan membatalkan verifikasi native yang sedang berjalan. Hasilnya
+  // app launch freeze + 'Lost connection to device' di emulator.
+  //
+  // Ads adalah monetization opsional, jadi kita jalankan di background
+  // setelah UI muncul. `AdService.initialize()` sudah idempotent
+  // (early-return kalau `_initialized == true`), aman dipanggil kapan saja.
+  unawaited(_initAdsBestEffort());
+
 
   // Sengaja TIDAK eager-anonymous sign-in di sini. supabase_flutter sudah
   // memulihkan session yang disimpan saat `Supabase.initialize()` selesai;
@@ -67,6 +76,18 @@ Future<String?> _bootstrap() async {
   // sebelum aksi yang butuh `auth.uid()` (mis. proses OCR / simpan bill).
 
   return null;
+}
+
+Future<void> _initAdsBestEffort() async {
+  try {
+    await AdService.initialize().timeout(const Duration(seconds: 8));
+  } catch (_) {
+    // Ads adalah monetization opsional; jangan gagalkan startup kalau
+    // AdMob/UMP tidak ready. Jika timeout, SDK mungkin masih init di
+    // background — banner pertama akan muncul saat siap, dan UMP form
+    // akan di-skip (user akan melihat iklan non-personalized sampai
+    // consent di-refresh dari Settings).
+  }
 }
 
 class _StartupErrorApp extends StatelessWidget {

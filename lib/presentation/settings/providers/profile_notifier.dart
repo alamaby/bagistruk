@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/ads/ad_service.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/error/result.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../auth/providers/auth_providers.dart';
@@ -79,6 +80,20 @@ class ProfileNotifier extends _$ProfileNotifier {
   /// numbers; the router compares the stamped versions to decide whether
   /// to re-prompt on future launches.
   Future<Result<void>> recordLegalAcceptance() async {
+    // Defensive guard: the router only renders the legal screen when
+    // `profile.id.isNotEmpty`, which requires `auth.currentUserId != null`,
+    // but the session can drop between screen mount and submit (e.g. anon
+    // session expired, or user cleared app data mid-flow). Surface this as
+    // an explicit Failure instead of letting the datasource throw a bare
+    // AuthException that the screen shows as a generic "save failed".
+    if (ref.read(authRepositoryProvider).currentUserId == null) {
+      AppLogger.error(
+        'recordLegalAcceptance: no active session (auth.currentUserId null)',
+      );
+      return Result.failure(
+        const Failure.auth('No active session. Please restart the app.'),
+      );
+    }
     final cfg = await ref.read(appConfigProvider.future);
     final res = await ref
         .read(profileRepositoryProvider)
@@ -107,6 +122,20 @@ class ProfileNotifier extends _$ProfileNotifier {
     required bool optedIn,
     required String source,
   }) async {
+    // Defensive guard: right after `signUp()` (which is `linkEmail`),
+    // `_auth.updateUser` can emit a transient state where the session
+    // has been swapped but `currentUser` has not been re-read yet, so
+    // `_ds.updateFields` would throw AuthException. Same reasoning as
+    // `recordLegalAcceptance` -- return an explicit Failure so the
+    // caller can decide whether to retry or surface to the user.
+    if (ref.read(authRepositoryProvider).currentUserId == null) {
+      AppLogger.error(
+        'updateMarketingOptIn: no active session (auth.currentUserId null)',
+      );
+      return Result.failure(
+        const Failure.auth('No active session. Please restart the app.'),
+      );
+    }
     final res = await ref
         .read(profileRepositoryProvider)
         .setMarketingEmailOptIn(optedIn: optedIn, source: source);
@@ -146,6 +175,19 @@ class ProfileNotifier extends _$ProfileNotifier {
   /// `profile.welcomedAt` to decide whether to redirect non-anonymous
   /// users to [PostLoginWelcomeScreen].
   Future<Result<void>> markWelcomed() async {
+    // Defensive guard: same reasoning as `recordLegalAcceptance` and
+    // `updateMarketingOptIn` -- on transient auth state during sign-up
+    // `currentUserId` can be momentarily null. Returning explicit
+    // Failure lets the screen surface a clear error instead of letting
+    // the welcome gate keep firing on every app launch.
+    if (ref.read(authRepositoryProvider).currentUserId == null) {
+      AppLogger.error(
+        'markWelcomed: no active session (auth.currentUserId null)',
+      );
+      return Result.failure(
+        const Failure.auth('No active session. Please restart the app.'),
+      );
+    }
     final res = await ref.read(profileRepositoryProvider).markWelcomed();
     if (res is Success<void>) {
       _patch((p) => p.copyWith(welcomedAt: DateTime.now().toUtc()));

@@ -9,6 +9,8 @@
   "postLoginWelcomeContinue": "Lanjutkan",
   "postLoginWelcomeErrorSave": "Gagal menyimpan. Coba lagi.",
 
+  "registerErrorSaveProfile": "Akun Anda berhasil dibuat, tetapi kami tidak dapat menyimpan preferensi Anda. Coba lagi dari Settings setelah verifikasi email.",
+
   "settingsMarketingOptIn": "Email promosi",
   "settingsMarketingOptInSubtitle": "Tips, info fitur, dan penawaran dari BagiStruk.",
 

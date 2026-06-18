@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../settings/providers/profile_notifier.dart';
@@ -42,6 +43,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _loading = true);
     final repo = ref.read(authRepositoryProvider);
+
+    // Lazy session bootstrap: `signUp()` aliases `linkEmail()` which calls
+    // `_auth.updateUser(...)` — that API requires an existing session.
+    // On a fresh install with no persisted session, ensure we have an
+    // anonymous one first so the update can run. Idempotent: if a
+    // session already exists (anon or email), this is a no-op.
+    final ensured = await repo.ensureSignedIn();
+    if (ensured is ResultFailure<String>) {
+      AppLogger.error(
+        'RegisterScreen: ensureSignedIn failed',
+        ensured.failure,
+      );
+      if (!mounted) return;
+      setState(() => _loading = false);
+      _showError(friendlyAuthMessage(ensured.failure, AppL10n.of(context)));
+      return;
+    }
+
     final res = await repo.signUp(
       email: _email.text.trim(),
       password: _password.text,
@@ -52,18 +71,44 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       case Success():
         // Stamp the marketing opt-in (if any) and the post-login welcome
         // marker so the welcome screen does not fire for email/password
-        // sign-ups. The writes are awaited because failing silently would
-        // leave the welcome screen re-appearing on every launch. If the
-        // network blip, the user can re-try the opt-in from Settings.
+        // sign-ups. The writes are awaited AND their Result is checked
+        // because failing silently would leave the welcome screen
+        // re-appearing on every launch AND leave `marketing_email_opt_in`
+        // out of sync with what the user just consented to. If anything
+        // fails here the user is stuck on the register screen with a
+        // clear message -- they can re-try and the account is already
+        // created, so the retry is cheap.
         if (_marketingOptIn) {
-          await ref
+          final optRes = await ref
               .read(profileProvider.notifier)
               .updateMarketingOptIn(
                 optedIn: true,
                 source: 'register_form',
               );
+          if (!mounted) return;
+          if (optRes is ResultFailure<void>) {
+            AppLogger.error(
+              'RegisterScreen: updateMarketingOptIn failed',
+              optRes.failure,
+            );
+            setState(() => _loading = false);
+            _showError(AppL10n.of(context).registerErrorSaveProfile);
+            return;
+          }
         }
-        await ref.read(profileProvider.notifier).markWelcomed();
+        final welcomedRes = await ref
+            .read(profileProvider.notifier)
+            .markWelcomed();
+        if (!mounted) return;
+        if (welcomedRes is ResultFailure<void>) {
+          AppLogger.error(
+            'RegisterScreen: markWelcomed failed',
+            welcomedRes.failure,
+          );
+          setState(() => _loading = false);
+          _showError(AppL10n.of(context).registerErrorSaveProfile);
+          return;
+        }
         final email = Uri.encodeQueryComponent(_email.text.trim());
         context.go('${Routes.verifyEmail}?email=$email');
       case ResultFailure(:final failure):
