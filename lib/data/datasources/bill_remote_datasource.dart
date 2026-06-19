@@ -63,8 +63,22 @@ class BillRemoteDataSource {
   /// was lost but the local persisted session hasn't been re-attached yet.
   Future<Result<String>> authEnsureSignedIn() async {
     try {
-      final existing = _client.auth.currentUser?.id;
-      if (existing != null) return Result.success(existing);
+      // Cek currentSession + accessToken, bukan hanya currentUser. Di beberapa
+      // race condition (mis. sesi baru saja berakhir di background, atau
+      // Supabase client emit `AuthStateChange` null session) `currentUser`
+      // masih bisa berisi value non-null tapi JWT sudah tidak valid lagi.
+      // PostgREST hanya percaya `Authorization: Bearer <access_token>` di
+      // header — kalau tidak ada token valid, RLS menilai `auth.uid()` = NULL
+      // dan menolak INSERT/UPDATE. Cek session + accessToken memastikan kita
+      // selalu sign-in ulang sebelum request pertama setelah cold start.
+      final session = _client.auth.currentSession;
+      final existingToken = session?.accessToken;
+      final existingUserId = session?.user.id;
+      if (existingToken != null &&
+          existingToken.isNotEmpty &&
+          existingUserId != null) {
+        return Result.success(existingUserId);
+      }
       final res = await _client.auth.signInAnonymously();
       final user = res.user;
       if (user == null) {
