@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 import '../../../core/format/currency_formatter.dart';
+import '../../../core/format/phone_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/item.dart';
@@ -127,11 +128,21 @@ class _SplitBody extends ConsumerWidget {
         final l10n = AppL10n.of(ctx);
         return StatefulBuilder(
           builder: (ctx, setLocal) {
+            bool importing = false;
+
             Future<void> pickContact() async {
+              if (importing) return;
+              setLocal(() => importing = true);
               try {
+                final granted = await FlutterContacts.requestPermission(
+                  readonly: true,
+                );
+                if (!granted) return;
                 final c = await FlutterContacts.openExternalPick();
-                if (c == null) return;
-                final phone = c.phones.isNotEmpty ? c.phones.first.number : null;
+                if (c == null || !ctx.mounted) return;
+                final phone = c.phones.isNotEmpty
+                    ? PhoneFormatter.normalize(c.phones.first.number)
+                    : null;
                 setLocal(() {
                   if (nameCtrl.text.isEmpty) nameCtrl.text = c.displayName;
                   if (phone != null && phoneCtrl.text.isEmpty) {
@@ -144,6 +155,8 @@ class _SplitBody extends ConsumerWidget {
                     SnackBar(content: Text(l10n.participantImportFailed)),
                   );
                 }
+              } finally {
+                if (ctx.mounted) setLocal(() => importing = false);
               }
             }
 
@@ -157,19 +170,31 @@ class _SplitBody extends ConsumerWidget {
                     TextField(
                       controller: nameCtrl,
                       autofocus: true,
-                      decoration: InputDecoration(hintText: l10n.billSplitNameHint),
+                      decoration: InputDecoration(
+                        hintText: l10n.billSplitNameHint,
+                      ),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: TextButton.icon(
-                        icon: const Icon(Icons.contacts_outlined, size: 18),
+                        icon: importing
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.contacts_outlined, size: 18),
                         label: Text(l10n.participantImportFromContacts),
-                        onPressed: pickContact,
+                        onPressed: importing ? null : pickContact,
                       ),
                     ),
                     TextField(
                       controller: phoneCtrl,
-                      decoration: InputDecoration(labelText: l10n.participantPhoneLabel),
+                      decoration: InputDecoration(
+                        labelText: l10n.participantPhoneLabel,
+                      ),
                       keyboardType: TextInputType.phone,
                     ),
                   ],
@@ -181,15 +206,12 @@ class _SplitBody extends ConsumerWidget {
                   child: Text(l10n.cancelAction),
                 ),
                 FilledButton(
-                  onPressed: () => Navigator.pop(
-                    ctx,
-                    (
-                      name: nameCtrl.text,
-                      phone: phoneCtrl.text.trim().isEmpty
-                          ? null
-                          : phoneCtrl.text.trim(),
-                    ),
-                  ),
+                  onPressed: () => Navigator.pop(ctx, (
+                    name: nameCtrl.text,
+                    phone: phoneCtrl.text.trim().isEmpty
+                        ? null
+                        : phoneCtrl.text.trim(),
+                  )),
                   child: Text(l10n.billSplitAdd),
                 ),
               ],
@@ -200,7 +222,9 @@ class _SplitBody extends ConsumerWidget {
     );
     if (result == null) return;
     if (result.name.trim().isEmpty) return;
-    final err = await _notifier(ref).addParticipant(result.name, phone: result.phone);
+    final err = await _notifier(
+      ref,
+    ).addParticipant(result.name, phone: result.phone);
     if (err != null && context.mounted) _toast(context, err);
   }
 

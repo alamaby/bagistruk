@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.13.6+29
+version: 0.13.7+30
 
 environment:
   sdk: ^3.11.5
@@ -59,11 +59,10 @@ dependencies:
   url_launcher: ^6.3.0
   flutter_markdown_plus: ^1.0.7
   # Local contact picker for the participant import flow. Uses
-  # FlutterContacts.openExternalPick() so the OS-native picker handles
-  # contact access — we only ever receive the single contact the user
-  # selected, never the address book. Requires READ_CONTACTS on
-  # Android (declared in AndroidManifest.xml for transparency) and
-  # NSContactsUsageDescription on iOS (Info.plist).
+  # FlutterContacts.openExternalPick() which opens the OS-native picker, then
+  # automatically fetches full contact details via the Contacts Provider —
+  # requires READ_CONTACTS runtime permission on Android 6+ (declared in
+  # AndroidManifest.xml, requested at runtime in bill_split_screen.dart).
   flutter_contacts: ^1.1.9+2
 
 dev_dependencies:
