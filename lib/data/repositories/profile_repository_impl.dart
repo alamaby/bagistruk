@@ -56,18 +56,19 @@ class ProfileRepositoryImpl implements IProfileRepository {
     required String source,
   }) {
     final now = DateTime.now().toUtc();
-    return guardAsync(() => _ds.updateFields({
-          'marketing_email_opt_in': optedIn,
-          // Clear the audit columns when the user withdraws consent so the
-          // marketing opt-in is unambiguously recorded as `never` again.
-          // `postgrest` serialises the update body with `jsonEncode`, which
-          // rejects raw `DateTime` (`Converting object to an encodable
-          // object failed`). Convert to ISO 8601 string up front so the
-          // same code path works for every DateTime-bearing mutation.
-          'marketing_email_opt_in_at':
-              optedIn ? now.toIso8601String() : null,
-          'marketing_email_opt_in_source': optedIn ? source : null,
-        }));
+    return guardAsync(
+      () => _ds.updateFields({
+        'marketing_email_opt_in': optedIn,
+        // Clear the audit columns when the user withdraws consent so the
+        // marketing opt-in is unambiguously recorded as `never` again.
+        // `postgrest` serialises the update body with `jsonEncode`, which
+        // rejects raw `DateTime` (`Converting object to an encodable
+        // object failed`). Convert to ISO 8601 string up front so the
+        // same code path works for every DateTime-bearing mutation.
+        'marketing_email_opt_in_at': optedIn ? now.toIso8601String() : null,
+        'marketing_email_opt_in_source': optedIn ? source : null,
+      }),
+    );
   }
 
   @override
@@ -76,20 +77,22 @@ class ProfileRepositoryImpl implements IProfileRepository {
     required int privacyVersion,
   }) {
     final now = DateTime.now().toUtc();
-    return guardAsync(() => _ds.updateFields({
-          'accepted_terms_at': now.toIso8601String(),
-          'accepted_privacy_at': now.toIso8601String(),
-          'accepted_terms_version': termsVersion,
-          'accepted_privacy_version': privacyVersion,
-        }));
+    return guardAsync(
+      () => _ds.updateFields({
+        'accepted_terms_at': now.toIso8601String(),
+        'accepted_privacy_at': now.toIso8601String(),
+        'accepted_terms_version': termsVersion,
+        'accepted_privacy_version': privacyVersion,
+      }),
+    );
   }
 
   @override
   Future<Result<void>> markWelcomed() => guardAsync(
-        () => _ds.updateFields({
-          'welcomed_at': DateTime.now().toUtc().toIso8601String(),
-        }),
-      );
+    () => _ds.updateFields({
+      'welcomed_at': DateTime.now().toUtc().toIso8601String(),
+    }),
+  );
 
   @override
   Future<Result<void>> setIsAdult({required bool isAdult}) =>

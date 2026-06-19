@@ -51,10 +51,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     // session already exists (anon or email), this is a no-op.
     final ensured = await repo.ensureSignedIn();
     if (ensured is ResultFailure<String>) {
-      AppLogger.error(
-        'RegisterScreen: ensureSignedIn failed',
-        ensured.failure,
-      );
+      AppLogger.error('RegisterScreen: ensureSignedIn failed', ensured.failure);
       if (!mounted) return;
       setState(() => _loading = false);
       _showError(friendlyAuthMessage(ensured.failure, AppL10n.of(context)));
@@ -81,10 +78,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (_marketingOptIn) {
           final optRes = await ref
               .read(profileProvider.notifier)
-              .updateMarketingOptIn(
-                optedIn: true,
-                source: 'register_form',
-              );
+              .updateMarketingOptIn(optedIn: true, source: 'register_form');
           if (!mounted) return;
           if (optRes is ResultFailure<void>) {
             AppLogger.error(

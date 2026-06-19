@@ -103,12 +103,14 @@ class ProfileNotifier extends _$ProfileNotifier {
         );
     if (res is Success<void>) {
       final now = DateTime.now().toUtc();
-      _patch((p) => p.copyWith(
-            acceptedTermsAt: now,
-            acceptedPrivacyAt: now,
-            acceptedTermsVersion: cfg.termsVersion,
-            acceptedPrivacyVersion: cfg.privacyVersion,
-          ));
+      _patch(
+        (p) => p.copyWith(
+          acceptedTermsAt: now,
+          acceptedPrivacyAt: now,
+          acceptedTermsVersion: cfg.termsVersion,
+          acceptedPrivacyVersion: cfg.privacyVersion,
+        ),
+      );
     }
     return res;
   }
@@ -141,11 +143,13 @@ class ProfileNotifier extends _$ProfileNotifier {
         .setMarketingEmailOptIn(optedIn: optedIn, source: source);
     if (res is Success<void>) {
       final now = DateTime.now().toUtc();
-      _patch((p) => p.copyWith(
-            marketingEmailOptIn: optedIn,
-            marketingEmailOptInAt: optedIn ? now : null,
-            marketingEmailOptInSource: optedIn ? source : null,
-          ));
+      _patch(
+        (p) => p.copyWith(
+          marketingEmailOptIn: optedIn,
+          marketingEmailOptInAt: optedIn ? now : null,
+          marketingEmailOptInSource: optedIn ? source : null,
+        ),
+      );
     }
     return res;
   }

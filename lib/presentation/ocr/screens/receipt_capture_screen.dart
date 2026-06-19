@@ -157,11 +157,13 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       // profile belum siap — sesuai pasar utama aplikasi.
       final currency =
           ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
-      await ref.read(ocrProvider.notifier).process(
-        bytes,
-        currency: currency,
-        fingerprintHeaders: fingerprintHeaders,
-      );
+      await ref
+          .read(ocrProvider.notifier)
+          .process(
+            bytes,
+            currency: currency,
+            fingerprintHeaders: fingerprintHeaders,
+          );
     } finally {
       if (mounted) setState(() => _starting = false);
     }

@@ -113,9 +113,8 @@ GoRouter appRouter(Ref ref) {
           !onLegalDocScreen) {
         final needsAccept =
             profile.acceptedTermsVersion != cfg.termsVersion ||
-                profile.acceptedPrivacyVersion != cfg.privacyVersion;
-        if (needsAccept &&
-            state.matchedLocation != Routes.legalAcceptance) {
+            profile.acceptedPrivacyVersion != cfg.privacyVersion;
+        if (needsAccept && state.matchedLocation != Routes.legalAcceptance) {
           final from = state.matchedLocation;
           return '${Routes.legalAcceptance}'
               '?from=${Uri.encodeQueryComponent(from)}';
@@ -245,16 +244,14 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: Routes.legalAcceptance,
         name: Routes.legalAcceptanceName,
-        builder: (context, state) => LegalAcceptanceScreen(
-          from: state.uri.queryParameters['from'],
-        ),
+        builder: (context, state) =>
+            LegalAcceptanceScreen(from: state.uri.queryParameters['from']),
       ),
       GoRoute(
         path: Routes.postLoginWelcome,
         name: Routes.postLoginWelcomeName,
-        builder: (context, state) => PostLoginWelcomeScreen(
-          from: state.uri.queryParameters['from'],
-        ),
+        builder: (context, state) =>
+            PostLoginWelcomeScreen(from: state.uri.queryParameters['from']),
       ),
     ],
   );

@@ -60,12 +60,12 @@ class DeviceFingerprintService {
       // most fingerprinting heuristics use because it is stable across
       // physical resolution changes (e.g. foldable inner display).
       final mediaQuery = MediaQuery.of(context);
-      headers[DeviceFingerprintHeaders.screenWidth] =
-          mediaQuery.size.width.toStringAsFixed(0);
-      headers[DeviceFingerprintHeaders.screenHeight] =
-          mediaQuery.size.height.toStringAsFixed(0);
-      headers[DeviceFingerprintHeaders.screenDpi] =
-          mediaQuery.devicePixelRatio.toStringAsFixed(2);
+      headers[DeviceFingerprintHeaders.screenWidth] = mediaQuery.size.width
+          .toStringAsFixed(0);
+      headers[DeviceFingerprintHeaders.screenHeight] = mediaQuery.size.height
+          .toStringAsFixed(0);
+      headers[DeviceFingerprintHeaders.screenDpi] = mediaQuery.devicePixelRatio
+          .toStringAsFixed(2);
     }
 
     final androidHeaders = _androidCache ??= await _readAndroidHeaders();

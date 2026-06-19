@@ -73,8 +73,8 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
           AsyncData(:final value) => value.isSignedIn,
           _ => false,
         };
-        final dest = isSignedIn &&
-                (widget.from == null || widget.from == Routes.scan)
+        final dest =
+            isSignedIn && (widget.from == null || widget.from == Routes.scan)
             ? Routes.history
             : (widget.from ?? Routes.scan);
         context.go(dest);
@@ -166,10 +166,7 @@ class _LegalAcceptanceScreenState extends ConsumerState<LegalAcceptanceScreen> {
               SizedBox(height: 8.h),
               Text(
                 l10n.legalAcceptanceIntro,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  height: 1.4,
-                ),
+                style: TextStyle(fontSize: 14.sp, height: 1.4),
               ),
               SizedBox(height: 16.h),
               Wrap(
@@ -284,10 +281,7 @@ class _ConsentCheckbox extends StatelessWidget {
                 padding: EdgeInsets.only(top: 6.h),
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    height: 1.35,
-                  ),
+                  style: TextStyle(fontSize: 14.sp, height: 1.35),
                 ),
               ),
             ),

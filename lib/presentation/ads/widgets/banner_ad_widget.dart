@@ -46,18 +46,21 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
     // rather than watch so we only act on changes, not on initial build.
     ref.listen<UserProfile?>(
       profileProvider.select(
-        (s) => switch (s) { AsyncData(:final value) => value, _ => null },
+        (s) => switch (s) {
+          AsyncData(:final value) => value,
+          _ => null,
+        },
       ),
       (prev, next) {
-      final wasMinor = !(prev?.isAdult ?? false);
-      final isMinor = !(next?.isAdult ?? false);
-      if (wasMinor != isMinor && _loaded) {
-        _ad?.dispose();
-        _ad = null;
-        _loaded = false;
-        _load();
-      }
-    },
+        final wasMinor = !(prev?.isAdult ?? false);
+        final isMinor = !(next?.isAdult ?? false);
+        if (wasMinor != isMinor && _loaded) {
+          _ad?.dispose();
+          _ad = null;
+          _loaded = false;
+          _load();
+        }
+      },
     );
 
     final ad = _ad;

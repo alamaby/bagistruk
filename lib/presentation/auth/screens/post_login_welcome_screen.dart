@@ -139,10 +139,7 @@ class _PostLoginWelcomeScreenState
               ),
               SizedBox(height: 16.h),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12.w,
-                  vertical: 4.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: scheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12.r),
@@ -155,10 +152,7 @@ class _PostLoginWelcomeScreenState
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     l10n.postLoginWelcomeOptIn,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: scheme.onSurface,
-                    ),
+                    style: TextStyle(fontSize: 14.sp, color: scheme.onSurface),
                   ),
                 ),
               ),

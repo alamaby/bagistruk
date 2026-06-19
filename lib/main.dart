@@ -67,7 +67,6 @@ Future<String?> _bootstrap() async {
   // (early-return kalau `_initialized == true`), aman dipanggil kapan saja.
   unawaited(_initAdsBestEffort());
 
-
   // Sengaja TIDAK eager-anonymous sign-in di sini. supabase_flutter sudah
   // Eager anonymous sign-in: jika tidak ada session sama sekali (fresh
   // install, no persisted session), sign-in anonymous sekarang supaya:

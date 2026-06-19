@@ -69,8 +69,9 @@ class AdService {
     // `TagForUnderAgeOfConsent` constants (1 = under age, 0 = not).
     await MobileAds.instance.updateRequestConfiguration(
       RequestConfiguration(
-        tagForUnderAgeOfConsent:
-            isMinor ? TagForUnderAgeOfConsent.yes : TagForUnderAgeOfConsent.no,
+        tagForUnderAgeOfConsent: isMinor
+            ? TagForUnderAgeOfConsent.yes
+            : TagForUnderAgeOfConsent.no,
       ),
     );
   }

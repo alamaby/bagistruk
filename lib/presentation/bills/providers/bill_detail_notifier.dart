@@ -138,7 +138,9 @@ class BillDetailNotifier extends _$BillDetailNotifier {
   ) async {
     final s = state.value;
     if (s == null) {
-      return const BillDetailActionError(BillDetailActionErrorKind.stateNotReady);
+      return const BillDetailActionError(
+        BillDetailActionErrorKind.stateNotReady,
+      );
     }
 
     final idx = s.participants.indexWhere((p) => p.id == participantId);

@@ -23,6 +23,7 @@ class SettlementMessageBuilder {
   String build({
     required SettlementMessageTemplate template,
     String? participantId,
+    bool includeWhatsappLink = true,
   }) {
     if (template == SettlementMessageTemplate.allPlus) {
       return _buildAllParticipants();
@@ -36,7 +37,9 @@ class SettlementMessageBuilder {
       (t) => t.participantId == participant.id,
     );
     final items = state.itemsForParticipant(participant.id);
-    final waLink = PhoneFormatter.waMeLink(participant.phone);
+    final waLink = includeWhatsappLink
+        ? PhoneFormatter.waMeLink(participant.phone)
+        : null;
 
     return switch (template) {
       SettlementMessageTemplate.basic => _buildBasic(

@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/format/currency_formatter.dart';
+import '../../../core/format/phone_formatter.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
@@ -17,9 +19,9 @@ import '../utils/settlement_message_builder.dart';
 import 'participant_avatar.dart';
 
 /// Bottom-sheet summary listing per-participant items, proportional tax/
-/// service, and total. Each row has Copy and Share buttons — Share opens the
-/// native OS share sheet so the user can route the breakdown to any app
-/// (WhatsApp, Telegram, Email, SMS, etc.).
+/// service, and total. Each row has Copy and Share buttons — Share opens
+/// WhatsApp directly when the participant has a phone number, otherwise
+/// falls back to the native OS share sheet.
 class SplitSummarySheet extends ConsumerWidget {
   const SplitSummarySheet({super.key, required this.state});
 
@@ -129,14 +131,22 @@ class _ParticipantSummaryCard extends StatelessWidget {
     try {
       final template = await _chooseTemplate(context, l10n.splitSummaryShare);
       if (template == null) return;
-      await Share.share(
-        _messageBuilder.build(
-          template: template,
-          participantId: participant.id,
-        ),
-        subject:
-            '${l10n.settlementMessageBillPrefix} ${bill.bill.title} - ${participant.name}',
+      final waLink = PhoneFormatter.waMeLink(participant.phone);
+      final message = _messageBuilder.build(
+        template: template,
+        participantId: participant.id,
+        includeWhatsappLink: false,
       );
+      if (waLink != null) {
+        final uri = Uri.parse('$waLink?text=${Uri.encodeComponent(message)}');
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        await Share.share(
+          message,
+          subject:
+              '${l10n.settlementMessageBillPrefix} ${bill.bill.title} - ${participant.name}',
+        );
+      }
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(
