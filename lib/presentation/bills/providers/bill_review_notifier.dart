@@ -80,7 +80,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     // di Settings, state ini tidak rebuild (review state spesifik per OCR
     // result), dan itu sengaja: angka di review berasal dari OCR yg dipanggil
     // dengan currency saat itu.
-    final currency = ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
+    final currency = ref.read(profileProvider).value?.defaultCurrency ?? 'USD';
     final normalizedOcr = _normalizeZeroDecimalScale(ocr, currency);
     return BillReviewState(
       title: normalizedOcr.merchant?.trim().isNotEmpty == true

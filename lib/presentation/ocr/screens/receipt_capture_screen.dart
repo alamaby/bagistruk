@@ -12,6 +12,7 @@ import '../../../data/services/device_fingerprint_service.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
+import '../../settings/providers/preferences_providers.dart';
 import '../../settings/providers/profile_notifier.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/ocr_notifier.dart';
@@ -153,10 +154,11 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
           .collectHeaders(context: context);
       // Pass currency dari profile user supaya Edge Function bisa pakai
       // konvensi locale yg tepat saat parsing harga (mis. IDR gunakan '.'
-      // sebagai pemisah ribuan, bukan desimal). Fallback ke 'IDR' jika
-      // profile belum siap — sesuai pasar utama aplikasi.
+      // sebagai pemisah ribuan, bukan desimal). Fallback ke device locale
+      // currency, atau 'USD' jika tidak ada match.
       final currency =
-          ref.read(profileProvider).value?.defaultCurrency ?? 'IDR';
+          ref.read(profileProvider).value?.defaultCurrency ??
+          ref.read(currencyPrefProvider);
       await ref
           .read(ocrProvider.notifier)
           .process(

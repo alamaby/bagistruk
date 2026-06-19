@@ -8,7 +8,7 @@ abstract class UserProfile with _$UserProfile {
     required String id,
     String? displayName,
     String? email,
-    @Default('IDR') String defaultCurrency,
+    @Default('USD') String defaultCurrency,
     @Default('en') String languagePref,
     @Default('system') String themePref,
     @Default(false) bool isAnonymous,

@@ -10,7 +10,7 @@ abstract class ProfileDto with _$ProfileDto {
   const factory ProfileDto({
     required String id,
     @JsonKey(name: 'display_name') String? displayName,
-    @JsonKey(name: 'default_currency') @Default('IDR') String defaultCurrency,
+    @JsonKey(name: 'default_currency') @Default('USD') String defaultCurrency,
     @JsonKey(name: 'language_pref') @Default('en') String languagePref,
     @JsonKey(name: 'theme_pref') @Default('system') String themePref,
     @JsonKey(name: 'marketing_email_opt_in')

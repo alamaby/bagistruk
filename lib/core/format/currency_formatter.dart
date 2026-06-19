@@ -199,7 +199,7 @@ class CurrencyFormatter {
     final normalized = code.trim().toUpperCase();
     return definitions.firstWhere(
       (definition) => definition.code == normalized,
-      orElse: () => definitions.first,
+      orElse: () => definitions.firstWhere((d) => d.code == 'USD'),
     );
   }
 

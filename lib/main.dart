@@ -11,6 +11,7 @@ import 'app.dart';
 import 'core/ads/ad_service.dart';
 import 'core/config/env.dart';
 import 'core/format/app_format.dart';
+import 'core/format/device_locale_defaults.dart';
 
 /// Entry point.
 ///
@@ -31,8 +32,8 @@ Future<void> main() async {
 }
 
 Future<String?> _bootstrap() async {
-  // Default ke Indonesian — currency Rupiah, tanggal Indonesia. Inisialisasi
-  // date symbols sekali di awal supaya DateFormat('id_ID') tidak throw.
+  // Initialize Intl default locale and date symbols for all locales we may
+  // switch to at runtime.
   Intl.defaultLocale = AppFormat.locale;
   // Load symbols for every locale we may switch to at runtime and every
   // currency formatter locale used by CurrencyFormatter. Passing no argument
@@ -84,6 +85,9 @@ Future<String?> _bootstrap() async {
     final auth = Supabase.instance.client.auth;
     if (auth.currentSession == null) {
       await auth.signInAnonymously().timeout(const Duration(seconds: 8));
+      // Fresh install: stamp device-locale defaults into the new profile row
+      // so the user sees the correct language and currency from the start.
+      await _initializeProfileDefaults(auth.currentUser?.id);
     }
   } catch (e) {
     // Sign-in failure bukan blocker -- app tetap boot, scan flow akan
@@ -93,6 +97,27 @@ Future<String?> _bootstrap() async {
   }
 
   return null;
+}
+
+/// Stamps device-locale defaults (language, currency) onto a freshly-created
+/// profile row. Fails silently — the user can always change preferences in
+/// Settings, and the app works with DB defaults even if this update doesn't
+/// land.
+Future<void> _initializeProfileDefaults(String? userId) async {
+  if (userId == null) return;
+  final defaults = DeviceLocaleDefaults.fromPlatform();
+  try {
+    await Supabase.instance.client
+        .from('profiles')
+        .update({
+          'language_pref': defaults.language,
+          'default_currency': defaults.currency,
+        })
+        .eq('id', userId);
+  } catch (_) {
+    // Non-critical: DB defaults and client-side fallbacks handle the case
+    // where the update fails.
+  }
 }
 
 Future<void> _initAdsBestEffort() async {
