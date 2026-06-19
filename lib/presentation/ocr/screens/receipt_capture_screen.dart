@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
@@ -16,6 +15,7 @@ import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/profile_notifier.dart';
 import '../../shared/widgets/app_scaffold.dart';
 import '../providers/ocr_notifier.dart';
+import '../providers/scan_draft_notifier.dart';
 import '../utils/ocr_messages.dart';
 import '../widgets/receipt_preview_component.dart';
 
@@ -31,8 +31,6 @@ class ReceiptCaptureScreen extends ConsumerStatefulWidget {
 }
 
 class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
-  final _picker = ImagePicker();
-  final List<XFile> _images = [];
   ReceiptPreviewMode _mode = ReceiptPreviewMode.carousel;
 
   // Local "starting" flag supaya tombol langsung bereaksi saat di-tap.
@@ -41,21 +39,15 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
   bool _starting = false;
 
   Future<void> _addFromGallery() async {
-    final picked = await _picker.pickMultiImage(imageQuality: 90);
-    if (picked.isEmpty) return;
-    setState(() => _images.addAll(picked));
+    await ref.read(scanDraftProvider.notifier).pickFromGallery();
   }
 
   Future<void> _addFromCamera() async {
     final l10n = AppL10n.of(context);
     while (true) {
-      final shot = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 90,
-      );
+      final shot = await ref.read(scanDraftProvider.notifier).pickFromCamera();
       if (shot == null) return;
       if (!mounted) return;
-      setState(() => _images.add(shot));
 
       final again = await showDialog<bool>(
         context: context,
@@ -149,7 +141,8 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       }
       final canScan = await _checkOcrCredit();
       if (!canScan) return;
-      final bytes = await Future.wait(_images.map((f) => f.readAsBytes()));
+      final draft = ref.read(scanDraftProvider).images;
+      final bytes = await Future.wait(draft.map((f) => f.readAsBytes()));
       // Build the device fingerprint payload up front so the user pays the
       // Android plugin round-trip once per scan rather than during the
       // hot path below. MediaQuery is read here while the screen is still
@@ -180,9 +173,10 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
 
     switch (res) {
       case Success(:final data):
+        final imageCount = ref.read(scanDraftProvider).images.length;
         final creditCost = _creditCostForPlan(
           planCode: data.planCode,
-          imageCount: _images.length,
+          imageCount: imageCount,
         );
         if (data.balance >= creditCost) return true;
         await _showNoCreditDialog(
@@ -268,6 +262,10 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
     ref.listen<OcrState>(ocrProvider, (prev, next) {
       if (next is OcrSuccess && prev is! OcrSuccess) {
         final result = next.result;
+        // Clear the draft now that the user is moving to the review screen.
+        // If the user navigates back without reviewing (rare), they can
+        // re-pick without leaking references to the old temp files.
+        ref.read(scanDraftProvider.notifier).clear();
         // Safety net: provider lama yang belum kenal `is_receipt` bisa lolos
         // dengan items kosong + confidence sangat rendah. Edge Function juga
         // sudah memfilter kasus ini, tapi double-guard di client agar user
@@ -335,8 +333,9 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
       AsyncData(:final value) => value,
       _ => null,
     };
+    final images = ref.watch(scanDraftProvider).images;
     final busy = _starting || state is OcrProcessing;
-    final scanActive = _images.isNotEmpty && !busy;
+    final scanActive = images.isNotEmpty && !busy;
     final l10n = AppL10n.of(context);
     return AppScaffold(
       title: l10n.scanScreenTitle,
@@ -361,10 +360,11 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: ReceiptPreviewComponent(
-                  images: _images,
+                  images: images,
                   mode: _mode,
                   busy: busy,
-                  onRemove: (i) => setState(() => _images.removeAt(i)),
+                  onRemove: (i) =>
+                      ref.read(scanDraftProvider.notifier).removeAt(i),
                 ),
               ),
             ),
@@ -377,14 +377,14 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
               )
             else
               _StatusLabel(state: state, starting: _starting),
-            if (_images.isNotEmpty && creditStatus != null) ...[
+            if (images.isNotEmpty && creditStatus != null) ...[
               SizedBox(height: 6.h),
               _ScanCreditCostLabel(
-                imageCount: _images.length,
+                imageCount: images.length,
                 balance: creditStatus.balance,
                 creditCost: _creditCostForPlan(
                   planCode: creditStatus.planCode,
-                  imageCount: _images.length,
+                  imageCount: images.length,
                 ),
               ),
             ],

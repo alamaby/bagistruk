@@ -69,11 +69,29 @@ Future<String?> _bootstrap() async {
 
 
   // Sengaja TIDAK eager-anonymous sign-in di sini. supabase_flutter sudah
-  // memulihkan session yang disimpan saat `Supabase.initialize()` selesai;
-  // memaksa `signInAnonymously()` lagi akan menimpa session login email
-  // yang baru di-restore (race condition). Anonymous sign-in dilakukan
-  // secara lazy — lihat `IAuthRepository.ensureSignedIn()` yang dipanggil
-  // sebelum aksi yang butuh `auth.uid()` (mis. proses OCR / simpan bill).
+  // Eager anonymous sign-in: jika tidak ada session sama sekali (fresh
+  // install, no persisted session), sign-in anonymous sekarang supaya:
+  // 1. Legal acceptance gate fire di cold start, BUKAN mid-flow setelah
+  //    user sudah invest effort (pilih foto, dll).
+  // 2. profileProvider emit real profile (bukan placeholder empty-id)
+  //    sehingga router redirect bisa evaluate legal gate correctly.
+  // Guard eksplisit `currentSession == null` -- kalau ada persisted email
+  // session dari launch sebelumnya, signInAnonymously() TIDAK dipanggil
+  // sehingga tidak terjadi race condition yang dulu jadi gotcha di
+  // CLAUDE.md. Lihat TODO_EMAIL_CONFIRMATION_SIDE_EFFECTS.md untuk
+  // side effect yang masih perlu di-refactor (marketing opt-in + welcome
+  // marker di-stamp sebelum user konfirmasi email).
+  try {
+    final auth = Supabase.instance.client.auth;
+    if (auth.currentSession == null) {
+      await auth.signInAnonymously().timeout(const Duration(seconds: 8));
+    }
+  } catch (e) {
+    // Sign-in failure bukan blocker -- app tetap boot, scan flow akan
+    // trigger lazy ensureSignedIn() di action site. Legal gate akan fire
+    // kemudian (mid-flow) yang lebih buruk UX, tapi app masih jalan.
+    return 'Failed eager anonymous sign-in: $e';
+  }
 
   return null;
 }
