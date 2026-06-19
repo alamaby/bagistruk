@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/config/app_constants.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/error/result.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
@@ -156,8 +157,18 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       }
     }
 
-    state = state.copyWith(saving: true);
     final repo = ref.read(billRepositoryProvider);
+
+    final authRes = await repo.ensureSignedIn();
+    if (authRes is ResultFailure<void>) {
+      AppLogger.error(
+        'BillReviewNotifier.save: ensureSignedIn failed',
+        authRes.failure,
+      );
+      return SaveError(SaveErrorKind.saveBillFailed, _msg(authRes.failure));
+    }
+
+    state = state.copyWith(saving: true);
     final billId = _uuid.v4();
     final bill = Bill(
       id: billId,
@@ -173,6 +184,10 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     final billRes = await repo.createBill(bill);
     if (billRes is ResultFailure<Bill>) {
       state = state.copyWith(saving: false);
+      AppLogger.error(
+        'BillReviewNotifier.save: createBill failed',
+        billRes.failure,
+      );
       return SaveError(SaveErrorKind.saveBillFailed, _msg(billRes.failure));
     }
 
@@ -190,6 +205,10 @@ class BillReviewNotifier extends _$BillReviewNotifier {
     final itemsRes = await repo.upsertItems(items);
     if (itemsRes is ResultFailure<List<Item>>) {
       state = state.copyWith(saving: false);
+      AppLogger.error(
+        'BillReviewNotifier.save: upsertItems failed',
+        itemsRes.failure,
+      );
       return SaveError(SaveErrorKind.saveItemsFailed, _msg(itemsRes.failure));
     }
 

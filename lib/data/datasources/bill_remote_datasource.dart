@@ -1,5 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../core/error/failure.dart';
+import '../../core/error/result.dart';
 import '../dtos/assignment_dto.dart';
 import '../dtos/bill_dto.dart';
 import '../dtos/item_dto.dart';
@@ -53,6 +55,30 @@ class BillRemoteDataSource {
   static const _items = 'items';
   static const _participants = 'participants';
   static const _assignments = 'item_assignments';
+
+  /// Idempotent session guard. Returns the current user id if a session is
+  /// attached, or signs in anonymously otherwise. Callers (notably
+  /// [BillRepositoryImpl.createBill]) use this to prevent RLS 42501 on the
+  /// first PostgREST request after a cold start where the in-memory session
+  /// was lost but the local persisted session hasn't been re-attached yet.
+  Future<Result<String>> authEnsureSignedIn() async {
+    try {
+      final existing = _client.auth.currentUser?.id;
+      if (existing != null) return Result.success(existing);
+      final res = await _client.auth.signInAnonymously();
+      final user = res.user;
+      if (user == null) {
+        return const Result.failure(
+          Failure.auth('Anonymous sign-in returned no user'),
+        );
+      }
+      return Result.success(user.id);
+    } on AuthException catch (e) {
+      return Result.failure(Failure.auth(e.message));
+    } catch (e, st) {
+      return Result.failure(Failure.unknown(e, st));
+    }
+  }
 
   Future<List<BillDto>> listBills({DateTime? createdAfter}) async {
     var query = _client.from(_bills).select();

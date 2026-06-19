@@ -25,4 +25,8 @@ abstract interface class IBillRepository {
     String billId,
     List<Assignment> assignments,
   );
+
+  /// Idempotent session guard. Ensures a valid Supabase user session is
+  /// available before write operations that require RLS authorization.
+  Future<Result<void>> ensureSignedIn();
 }

@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.13.4+27
+version: 0.13.5+28
 
 environment:
   sdk: ^3.11.5
@@ -76,6 +76,8 @@ dev_dependencies:
   freezed: ^3.0.0
   json_serializable: ^6.9.0
   riverpod_generator: ^3.0.0
+  mockito: ^5.4.4
+  build_test: ^3.5.14
   # custom_lint / riverpod_lint are intentionally omitted: their transitive
   # analyzer_plugin 0.12.0 does not yet support analyzer 7.x (Element2 migration).
   # Re-add once the ecosystem catches up — they're IDE-only and not needed for

@@ -28,9 +28,15 @@ class BillRepositoryImpl implements IBillRepository {
       guardAsync(() async => (await _ds.getBill(id)).toEntity());
 
   @override
-  Future<Result<Bill>> createBill(Bill bill) => guardAsync(
-    () async => (await _ds.upsertBill(BillDto.fromEntity(bill))).toEntity(),
-  );
+  Future<Result<Bill>> createBill(Bill bill) async {
+    final authResult = await _ds.authEnsureSignedIn();
+    if (authResult is ResultFailure<String>) {
+      return Result.failure(authResult.failure);
+    }
+    return guardAsync(
+      () async => (await _ds.upsertBill(BillDto.fromEntity(bill))).toEntity(),
+    );
+  }
 
   @override
   Future<Result<Bill>> updateBill(Bill bill) => createBill(bill);
@@ -42,6 +48,15 @@ class BillRepositoryImpl implements IBillRepository {
   @override
   Future<Result<void>> restoreDeletedBill(String id) =>
       guardAsync(() => _ds.restoreDeletedBill(id));
+
+  @override
+  Future<Result<void>> ensureSignedIn() async {
+    final res = await _ds.authEnsureSignedIn();
+    if (res is ResultFailure<String>) {
+      return Result.failure(res.failure);
+    }
+    return const Result.success(null);
+  }
 
   @override
   Future<Result<List<DeletedBill>>> listDeletedBills() => guardAsync(
