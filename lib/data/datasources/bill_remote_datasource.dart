@@ -95,7 +95,7 @@ class BillRemoteDataSource {
   }
 
   Future<List<BillDto>> listBills({DateTime? createdAfter}) async {
-    var query = _client.from(_bills).select();
+    var query = _client.from(_bills).select().isFilter('deleted_at', null);
     if (createdAfter != null) {
       query = query.gte('created_at', createdAfter.toUtc().toIso8601String());
     }

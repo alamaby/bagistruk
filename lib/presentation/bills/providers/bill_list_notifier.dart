@@ -41,6 +41,10 @@ class BillListNotifier extends _$BillListNotifier {
 
   Future<Result<void>> deleteBill(String id) async {
     final repo = ref.read(billRepositoryProvider);
+    final authRes = await repo.ensureSignedIn();
+    if (authRes is ResultFailure) {
+      return Result.failure(authRes.failure);
+    }
     final result = await repo.deleteBill(id);
     if (result is Success<void>) {
       ref.invalidate(monthlySpendingInsightProvider);
