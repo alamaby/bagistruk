@@ -56,6 +56,11 @@ class Routes {
   static const String legalAcceptance = '/legal-acceptance';
   static const String legalAcceptanceName = 'legal-acceptance';
 
+  /// Catch-all route for Supabase email confirmation / password-reset
+  /// deep-link callbacks (`bagistruk://auth/callback`).
+  static const String callback = '/callback';
+  static const String callbackName = 'callback';
+
   /// One-time screen shown after a non-anonymous user finishes the
   /// authentication flow (currently Google sign-in) to collect an explicit
   /// marketing email opt-in. Email/password sign-up collects the same

@@ -40,13 +40,17 @@ class AuthRemoteDataSource {
     return user.id;
   }
 
-  /// Returns the current user id if a session exists, otherwise creates an
-  /// anonymous one. Idempotent — safe to call before any auth-gated action.
-  /// Used in lieu of an eager bootstrap sign-in so persisted sessions
-  /// (anonymous or email) are not overwritten on cold start.
+  /// Returns the current user id if a valid session exists, otherwise creates
+  /// an anonymous one. Idempotent — safe to call before any auth-gated action.
+  /// Checks [currentSession] rather than just [currentUser] because
+  /// Supabase can retain a stale `currentUser` while `currentSession` is null
+  /// (e.g. after a deep-link callback replaces the anonymous session).
   Future<String> ensureSignedIn() async {
-    final existing = _auth.currentUser?.id;
-    if (existing != null) return existing;
+    final session = _auth.currentSession;
+    if (session?.accessToken != null && session!.accessToken.isNotEmpty) {
+      final uid = _auth.currentUser?.id;
+      if (uid != null) return uid;
+    }
     return signInAnonymously();
   }
 

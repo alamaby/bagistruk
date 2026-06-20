@@ -45,11 +45,20 @@ GoRouter appRouter(Ref ref) {
     initialLocation: Routes.scan,
     refreshListenable: refresh,
     redirect: (context, state) async {
-      // Supabase email-link callback. Persist the callback session explicitly
-      // before routing so email confirmation does not leave the app in the
-      // previous anonymous session.
       final rawLoc = state.uri.toString();
-      if (rawLoc.contains('access_token=') ||
+      final loc = state.matchedLocation;
+
+      // ── Supabase email-link callback ──────────────────────────────────
+      // Two entry points reach this block:
+      //   1. App was cold-started by the deep link — GoRouter sees the
+      //      full URI as the initial location.
+      //   2. App was already running — DeepLinkHandler already called
+      //      `getSessionFromUrl()`, but we still land here as a redirect
+      //      target and need to route the user to the correct screen.
+      //
+      // Both rawUri patterns (fragment or query) are handled.
+      if (loc == Routes.callback ||
+          rawLoc.contains('access_token=') ||
           rawLoc.contains('refresh_token=') ||
           rawLoc.contains('code=') ||
           rawLoc.contains('type=email_change') ||
@@ -252,6 +261,14 @@ GoRouter appRouter(Ref ref) {
         name: Routes.postLoginWelcomeName,
         builder: (context, state) =>
             PostLoginWelcomeScreen(from: state.uri.queryParameters['from']),
+      ),
+      // Catch-all for Supabase email confirmation / password-reset deep
+      // links. The redirect block above processes the session; this route
+      // exists only so GoRouter doesn't 404 before the redirect fires.
+      GoRoute(
+        path: Routes.callback,
+        name: Routes.callbackName,
+        redirect: (context, state) => null,
       ),
     ],
   );

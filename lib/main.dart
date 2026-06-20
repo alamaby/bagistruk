@@ -12,6 +12,7 @@ import 'core/ads/ad_service.dart';
 import 'core/config/env.dart';
 import 'core/format/app_format.dart';
 import 'core/format/device_locale_defaults.dart';
+import 'data/services/deep_link_handler.dart';
 
 /// Entry point.
 ///
@@ -83,6 +84,14 @@ Future<String?> _bootstrap() async {
   // marker di-stamp sebelum user konfirmasi email).
   try {
     final auth = Supabase.instance.client.auth;
+
+    // Deep link callback: if the app was cold-started by a Supabase
+    // email confirmation / password-reset link, process the callback
+    // before anonymous sign-in so the verified session takes precedence.
+    await DeepLinkHandler.instance.handleInitialLink();
+    // Start listening for links arriving while the app is already open.
+    DeepLinkHandler.instance.listen();
+
     if (auth.currentSession == null) {
       await auth.signInAnonymously().timeout(const Duration(seconds: 8));
       // Fresh install: stamp device-locale defaults into the new profile row
