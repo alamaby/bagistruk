@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:app_links/app_links.dart';
-import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/utils/app_logger.dart';
@@ -21,12 +22,12 @@ class DeepLinkHandler {
   /// Process the initial link that cold-started the app (if any).
   Future<void> handleInitialLink() async {
     try {
-      final uri = await _appLinks.getInitialAppLink();
+      final uri = await _appLinks.getInitialLink();
       if (uri != null) {
         await _processUri(uri);
       }
     } catch (e) {
-      AppLogger.warning('DeepLinkHandler: failed to process initial link: $e');
+      AppLogger.warn('DeepLinkHandler: failed to process initial link', e);
     }
   }
 
@@ -35,7 +36,7 @@ class DeepLinkHandler {
     _sub?.cancel();
     _sub = _appLinks.uriLinkStream.listen(
       _processUri,
-      onError: (e) => AppLogger.warning('DeepLinkHandler: stream error: $e'),
+      onError: (Object e) => AppLogger.warn('DeepLinkHandler: stream error', e),
     );
   }
 
@@ -51,11 +52,11 @@ class DeepLinkHandler {
         raw.contains('error_description=');
     if (!isSupabaseCallback) return;
 
-    AppLogger.info('DeepLinkHandler: processing auth callback: $uri');
+    AppLogger.log('DeepLinkHandler: processing auth callback: $uri');
     try {
       await Supabase.instance.client.auth.getSessionFromUrl(uri);
     } catch (e) {
-      AppLogger.warning('DeepLinkHandler: getSessionFromUrl failed: $e');
+      AppLogger.warn('DeepLinkHandler: getSessionFromUrl failed', e);
     }
   }
 

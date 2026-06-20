@@ -24,7 +24,7 @@ import '../export/bill_csv_exporter.dart';
 import '../export/bill_pdf_exporter.dart';
 import '../providers/bill_detail_notifier.dart';
 import '../providers/split_notifier.dart' show ParticipantTotal, SplitState;
-import '../utils/settlement_message_builder.dart';
+import '../utils/settlement_share_launcher.dart';
 import '../widgets/participant_avatar.dart';
 
 /// Settlement loop screen. Shows the bill header (merchant, total, settled
@@ -121,39 +121,27 @@ class _Body extends ConsumerWidget {
     Participant participant,
   ) async {
     final l10n = AppL10n.of(context);
-    try {
-      final creditStatus = await ref.refresh(ocrCreditStatusProvider.future);
-      final isPlus = creditStatus?.isPlus ?? false;
-      final bankInfo = isPlus
-          ? await ref.read(transferBankInfoProvider.future)
-          : null;
-      final splitState = SplitState(
-        bill: state.bill,
-        items: state.items,
-        participants: state.participants,
-        assignments: state.assignments,
-      );
-      final text =
-          SettlementMessageBuilder(
-            state: splitState,
-            currency: currency,
-            l10n: l10n,
-            bankInfo: bankInfo,
-          ).build(
-            template: SettlementMessageTemplate.basic,
-            participantId: participant.id,
-          );
-      await Share.share(
-        text,
-        subject: '${l10n.settlementMessageBillPrefix} ${state.bill.title}',
-      );
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.splitShareFailed)));
-      }
-    }
+    final creditStatus = await ref.refresh(ocrCreditStatusProvider.future);
+    final isPlus = creditStatus?.isPlus ?? false;
+    final bankInfo = isPlus
+        ? await ref.read(transferBankInfoProvider.future)
+        : null;
+    final splitState = SplitState(
+      bill: state.bill,
+      items: state.items,
+      participants: state.participants,
+      assignments: state.assignments,
+    );
+    await launchSettlementShare(
+      context: context,
+      participant: participant,
+      state: splitState,
+      currency: currency,
+      l10n: l10n,
+      template: SettlementMessageTemplate.basic,
+      subject: '${l10n.settlementMessageBillPrefix} ${state.bill.title}',
+      bankInfo: bankInfo,
+    );
   }
 
   Future<void> _exportCsv(BuildContext context, WidgetRef ref) async {

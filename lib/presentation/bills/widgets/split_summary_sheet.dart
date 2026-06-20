@@ -3,11 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/format/currency_formatter.dart';
-import '../../../core/format/phone_formatter.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/transfer_bank_info.dart';
 import '../../../l10n/generated/app_l10n.dart';
@@ -15,6 +12,7 @@ import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/transfer_bank_info_provider.dart';
 import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/split_notifier.dart';
+import '../utils/settlement_share_launcher.dart';
 import '../utils/settlement_message_builder.dart';
 import 'participant_avatar.dart';
 
@@ -128,32 +126,19 @@ class _ParticipantSummaryCard extends StatelessWidget {
   );
 
   Future<void> _shareSystem(BuildContext context) async {
-    try {
-      final template = await _chooseTemplate(context, l10n.splitSummaryShare);
-      if (template == null) return;
-      final waLink = PhoneFormatter.waMeLink(participant.phone);
-      final message = _messageBuilder.build(
-        template: template,
-        participantId: participant.id,
-        includeWhatsappLink: false,
-      );
-      if (waLink != null) {
-        final uri = Uri.parse('$waLink?text=${Uri.encodeComponent(message)}');
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        await Share.share(
-          message,
-          subject:
-              '${l10n.settlementMessageBillPrefix} ${bill.bill.title} - ${participant.name}',
-        );
-      }
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.splitShareFailed)));
-      }
-    }
+    final template = await _chooseTemplate(context, l10n.splitSummaryShare);
+    if (template == null) return;
+    await launchSettlementShare(
+      context: context,
+      participant: participant,
+      state: bill,
+      currency: currency,
+      l10n: l10n,
+      template: template,
+      subject:
+          '${l10n.settlementMessageBillPrefix} ${bill.bill.title} - ${participant.name}',
+      bankInfo: bankInfo,
+    );
   }
 
   Future<void> _copyToClipboard(BuildContext context) async {

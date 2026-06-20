@@ -82,7 +82,6 @@ GoRouter appRouter(Ref ref) {
       final isAnon = snap?.isAnonymous ?? true;
       final isSignedIn = snap?.userId != null && !isAnon;
 
-      final loc = state.matchedLocation;
       final goingToProtected = loc.startsWith(Routes.history);
       final onAuthScreen =
           loc == Routes.login ||
