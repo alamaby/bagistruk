@@ -25,6 +25,7 @@ import '../export/bill_pdf_exporter.dart';
 import '../providers/bill_detail_notifier.dart';
 import '../providers/split_notifier.dart' show ParticipantTotal, SplitState;
 import '../utils/settlement_share_launcher.dart';
+import '../utils/settlement_message_builder.dart';
 import '../widgets/participant_avatar.dart';
 
 /// Settlement loop screen. Shows the bill header (merchant, total, settled

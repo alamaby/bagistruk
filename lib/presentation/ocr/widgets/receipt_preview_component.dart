@@ -96,7 +96,11 @@ class _ReceiptPreviewComponentState extends State<ReceiptPreviewComponent> {
                     Positioned(
                       top: -6.h,
                       right: -6.w,
-                      child: _RemoveButton(onPressed: () => widget.onRemove(i)),
+                      child: _RemoveButton(
+                        onPressed: widget.busy
+                            ? null
+                            : () => widget.onRemove(i),
+                      ),
                     ),
                   ],
                 ),
@@ -162,7 +166,9 @@ class _ReceiptPreviewComponentState extends State<ReceiptPreviewComponent> {
             Positioned(
               top: -6.h,
               right: -6.w,
-              child: _RemoveButton(onPressed: () => widget.onRemove(i)),
+              child: _RemoveButton(
+                onPressed: widget.busy ? null : () => widget.onRemove(i),
+              ),
             ),
           ],
         );
@@ -273,22 +279,30 @@ class _ImageThumb extends StatelessWidget {
 }
 
 class _RemoveButton extends StatelessWidget {
-  const _RemoveButton({required this.onPressed});
-  final VoidCallback onPressed;
+  const _RemoveButton({this.onPressed});
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final enabled = onPressed != null;
     return Material(
       elevation: 4,
       shape: const CircleBorder(),
       color: scheme.surface,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onPressed,
-        child: Padding(
-          padding: EdgeInsets.all(6.r),
-          child: Icon(Icons.close_rounded, color: scheme.onSurface, size: 18.r),
+      child: Opacity(
+        opacity: enabled ? 1.0 : 0.38,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: Padding(
+            padding: EdgeInsets.all(6.r),
+            child: Icon(
+              Icons.close_rounded,
+              color: scheme.onSurface,
+              size: 18.r,
+            ),
+          ),
         ),
       ),
     );
