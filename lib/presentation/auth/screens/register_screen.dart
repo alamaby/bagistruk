@@ -78,7 +78,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (_marketingOptIn) {
           final optRes = await ref
               .read(profileProvider.notifier)
-              .updateMarketingOptIn(optedIn: true, source: 'register_form');
+              .updateMarketingOptIn(
+                optedIn: true,
+                source: 'register_form',
+                preferredLanguage: Localizations.localeOf(context).languageCode,
+              );
           if (!mounted) return;
           if (optRes is ResultFailure<void>) {
             AppLogger.error(

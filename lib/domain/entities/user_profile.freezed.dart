@@ -234,7 +234,7 @@ return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_th
 
 
 class _UserProfile implements UserProfile {
-  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'IDR', this.languagePref = 'en', this.themePref = 'system', this.isAnonymous = false, this.marketingEmailOptIn = false, this.marketingEmailOptInAt, this.marketingEmailOptInSource, this.acceptedTermsAt, this.acceptedPrivacyAt, this.acceptedTermsVersion, this.acceptedPrivacyVersion, this.welcomedAt, this.isAdult = false});
+  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'USD', this.languagePref = 'en', this.themePref = 'system', this.isAnonymous = false, this.marketingEmailOptIn = false, this.marketingEmailOptInAt, this.marketingEmailOptInSource, this.acceptedTermsAt, this.acceptedPrivacyAt, this.acceptedTermsVersion, this.acceptedPrivacyVersion, this.welcomedAt, this.isAdult = false});
   
 
 @override final  String id;

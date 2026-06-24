@@ -22,12 +22,20 @@ abstract interface class IProfileRepository {
 
   /// Records or withdraws the user's marketing email opt-in. [source] is
   /// stored for audit purposes and must be one of
-  /// `register_form` | `settings_toggle` | `post_login_welcome` (enforced by
-  /// the `profiles_marketing_source_check` constraint on the database).
+  /// `register_form` | `settings_toggle` | `post_login_welcome` |
+  /// `landing_footer` | `landing_section` | `landing_preferences` |
+  /// `landing_unsubscribe` | `pre_existing_subscriber` (enforced by the
+  /// `profiles_marketing_source_check` constraint on the database).
   /// When [optedIn] is `false` the timestamp and source columns are cleared.
+  ///
+  /// Also dual-writes the preference to the unified `marketing_subscribers`
+  /// table so the landing page / future email tooling sees the same flag.
+  /// [preferredLanguage] is recorded alongside the subscriber row so the
+  /// landing-page preferences page can render in the right language.
   Future<Result<void>> setMarketingEmailOptIn({
     required bool optedIn,
     required String source,
+    String preferredLanguage = 'en',
   });
 
   /// Records that the user accepted the Terms of Service and Privacy Policy

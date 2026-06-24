@@ -222,7 +222,20 @@ class _SettingsBody extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.mark_email_read_outlined),
             title: Text(l10n.settingsMarketingOptIn),
-            subtitle: Text(l10n.settingsMarketingOptInSubtitle),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.settingsMarketingOptInSubtitle),
+                const SizedBox(height: 2),
+                Text(
+                  l10n.settingsMarketingOptInWebHint,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            isThreeLine: true,
             trailing: Switch.adaptive(
               value: profile.marketingEmailOptIn,
               onChanged: (v) async {

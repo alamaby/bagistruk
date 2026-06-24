@@ -57,6 +57,11 @@ dependencies:
   pdf: ^3.12.0
   package_info_plus: ^8.0.0
   url_launcher: ^6.3.0
+  # SHA-256 hashing for marketing_subscribers.email_canonical_hash so the
+  # in-app dual-write can identify the same row across devices without
+  # leaking the plaintext email. Matches the server-side
+  # public.canonical_email_hash() in migration 20260608130000.
+  crypto: ^3.0.6
   flutter_markdown_plus: ^1.0.7
   # Deep link handling for email confirmation / password-reset callbacks.
   # Receives initial and incoming `bagistruk://` URIs so the auth layer can

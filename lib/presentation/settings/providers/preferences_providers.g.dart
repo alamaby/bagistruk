@@ -8,20 +8,20 @@ part of 'preferences_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Active locale derived from [ProfileNotifier]. Defaults to English until the
-/// profile row resolves.
+/// Active locale derived from [ProfileNotifier]. Defaults to device language
+/// until the profile row resolves.
 
 @ProviderFor(localePref)
 const localePrefProvider = LocalePrefProvider._();
 
-/// Active locale derived from [ProfileNotifier]. Defaults to English until the
-/// profile row resolves.
+/// Active locale derived from [ProfileNotifier]. Defaults to device language
+/// until the profile row resolves.
 
 final class LocalePrefProvider
     extends $FunctionalProvider<Locale, Locale, Locale>
     with $Provider<Locale> {
-  /// Active locale derived from [ProfileNotifier]. Defaults to English until the
-  /// profile row resolves.
+  /// Active locale derived from [ProfileNotifier]. Defaults to device language
+  /// until the profile row resolves.
   const LocalePrefProvider._()
     : super(
         from: null,
@@ -55,7 +55,7 @@ final class LocalePrefProvider
   }
 }
 
-String _$localePrefHash() => r'39df0eed7d5146e1f8194b8297b77cf447b7c038';
+String _$localePrefHash() => r'e5425c982eeb664a835cf2e543490b9803645114';
 
 @ProviderFor(themeModePref)
 const themeModePrefProvider = ThemeModePrefProvider._();
@@ -137,4 +137,4 @@ final class CurrencyPrefProvider
   }
 }
 
-String _$currencyPrefHash() => r'2f454e3b3e93892c8d6ff8f168c9024cd1901694';
+String _$currencyPrefHash() => r'8ecc2000b43fafddf4289555d6660ec8a53c03dd';

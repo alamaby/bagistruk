@@ -2,6 +2,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../data/providers.dart';
+import '../../../data/services/image_picker_wrapper.dart';
+
 part 'scan_draft_notifier.freezed.dart';
 part 'scan_draft_notifier.g.dart';
 
@@ -24,7 +27,7 @@ class ScanDraftNotifier extends _$ScanDraftNotifier {
   @override
   ScanDraftState build() => const ScanDraftState(images: []);
 
-  final ImagePicker _picker = ImagePicker();
+  IImagePicker get _picker => ref.read(imagePickerProvider);
 
   Future<void> pickFromGallery() async {
     final picked = await _picker.pickMultiImage(imageQuality: _imageQuality);

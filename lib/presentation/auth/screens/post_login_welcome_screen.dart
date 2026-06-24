@@ -46,6 +46,7 @@ class _PostLoginWelcomeScreenState
       final res = await notifier.updateMarketingOptIn(
         optedIn: true,
         source: 'post_login_welcome',
+        preferredLanguage: Localizations.localeOf(context).languageCode,
       );
       if (!mounted) return;
       if (res is ResultFailure<void>) {

@@ -139,8 +139,12 @@ class ProfileNotifier extends _$ProfileNotifier {
       );
     }
     final res = await ref
-        .read(profileRepositoryProvider)
-        .setMarketingEmailOptIn(optedIn: optedIn, source: source);
+      .read(profileRepositoryProvider)
+      .setMarketingEmailOptIn(
+        optedIn: optedIn,
+        source: source,
+        preferredLanguage: state.languagePref,
+      );
     if (res is Success<void>) {
       final now = DateTime.now().toUtc();
       _patch(

@@ -13,6 +13,7 @@
 
   "settingsMarketingOptIn": "Promotional emails",
   "settingsMarketingOptInSubtitle": "Tips, feature updates, and offers from BagiStruk.",
+  "settingsMarketingOptInWebHint": "You can also manage this preference from the BagiStruk website.",
 
   "settingsTitle": "Profile & Settings",
   "settingsTab": "Settings",

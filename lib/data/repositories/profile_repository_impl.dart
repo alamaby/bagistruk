@@ -54,9 +54,11 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<Result<void>> setMarketingEmailOptIn({
     required bool optedIn,
     required String source,
-  }) {
+    String preferredLanguage = 'en',
+  }) async {
     final now = DateTime.now().toUtc();
-    return guardAsync(
+    // Step 1: write to the per-account mirror on `profiles` (existing).
+    final profileRes = await guardAsync(
       () => _ds.updateFields({
         'marketing_email_opt_in': optedIn,
         // Clear the audit columns when the user withdraws consent so the
@@ -69,6 +71,38 @@ class ProfileRepositoryImpl implements IProfileRepository {
         'marketing_email_opt_in_source': optedIn ? source : null,
       }),
     );
+    if (profileRes is ResultFailure<void>) return profileRes;
+
+    // Step 2: dual-write to the unified `marketing_subscribers` table so
+    // the landing page (and any future email blast tooling) sees the
+    // same preference. No-op for anonymous users because they have no
+    // email and cannot satisfy the RLS WITH CHECK.
+    final email = _ds.currentEmail;
+    if (email == null || email.isEmpty) {
+      return profileRes;
+    }
+    final subscriberRes = await guardAsync(
+      () => _ds.upsertMarketingSubscriber(
+        email: email,
+        optedIn: optedIn,
+        source: source,
+        preferredLanguage: preferredLanguage,
+      ),
+    );
+    if (subscriberRes is ResultFailure<void>) {
+      // Pseudo-transactional rollback: revert the profile mirror so the
+      // user-visible flag and the subscriber list never disagree.
+      await _ds.updateFields({
+        'marketing_email_opt_in': false,
+        'marketing_email_opt_in_at': null,
+        'marketing_email_opt_in_source': null,
+      }).catchError((_) {
+        // Best-effort; the original error still bubbles up to the caller.
+      });
+      return subscriberRes;
+    }
+
+    return profileRes;
   }
 
   @override

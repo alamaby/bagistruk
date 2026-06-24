@@ -1,5 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
+
 import '../dtos/profile_dto.dart';
 
 /// Thin PostgREST wrapper for the `profiles` table. Errors bubble to the
@@ -14,6 +17,57 @@ class ProfileRemoteDataSource {
   String? get currentEmail => _client.auth.currentUser?.email;
   bool get isAnonymous => _client.auth.currentUser?.isAnonymous ?? false;
 
+
+  /// Mirrors the server-side `public.canonical_email()` (lowercase + trim +
+  /// googlemail.com alias). Kept in sync so the hash computed here matches
+  /// what the database will compute and look up.
+  static String canonicaliseEmail(String raw) {
+    final trimmed = raw.trim().toLowerCase();
+    if (trimmed.endsWith('@googlemail.com')) {
+      return trimmed.replaceFirst('@googlemail.com', '@gmail.com');
+    }
+    return trimmed;
+  }
+
+  static String hashEmail(String canonical) {
+    final bytes = utf8.encode(canonical);
+    return sha256.convert(bytes).toString();
+  }
+
+  /// Dual-writes the marketing opt-in to the unified `marketing_subscribers`
+  /// table so the landing page and the app stay in sync. RLS policy
+  /// `Authenticated users manage own marketing row` restricts the write to
+  /// rows where `linked_user_id = auth.uid()` or `email_canonical =
+  /// auth.email()`, so no cross-user writes are possible.
+  ///
+  /// Idempotent: re-uses the same `email_canonical_hash` so the
+  /// post-login subscribe (sync 3) and the settings toggle (sync 4) both
+  /// collapse to the same row.
+  Future<void> upsertMarketingSubscriber({
+    required String email,
+    required bool optedIn,
+    required String source,
+    String preferredLanguage = 'en',
+  }) async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw const AuthException('No active session');
+    }
+    final canonical = canonicaliseEmail(email);
+    final emailHash = hashEmail(canonical);
+    final now = DateTime.now().toUtc().toIso8601String();
+
+    await _client.from('marketing_subscribers').upsert({
+      'email_canonical': canonical,
+      'email_canonical_hash': emailHash,
+      'linked_user_id': uid,
+      'source': source,
+      'status': optedIn ? 'subscribed' : 'unsubscribed',
+      'preferred_language': preferredLanguage,
+      'subscribed_at': optedIn ? now : null,
+      'unsubscribed_at': optedIn ? null : now,
+    }, onConflict: 'email_canonical_hash');
+  }
   /// Fetches the row for the current user. Upserts a default row first so the
   /// app keeps working even when the `auth.users` trigger has not fired yet
   /// (e.g. against a database that pre-dates that migration).

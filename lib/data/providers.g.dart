@@ -491,3 +491,44 @@ abstract class _$AppConfigNotifier extends $AsyncNotifier<AppConfig> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(imagePicker)
+const imagePickerProvider = ImagePickerProvider._();
+
+final class ImagePickerProvider
+    extends $FunctionalProvider<IImagePicker, IImagePicker, IImagePicker>
+    with $Provider<IImagePicker> {
+  const ImagePickerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'imagePickerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$imagePickerHash();
+
+  @$internal
+  @override
+  $ProviderElement<IImagePicker> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  IImagePicker create(Ref ref) {
+    return imagePicker(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IImagePicker value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IImagePicker>(value),
+    );
+  }
+}
+
+String _$imagePickerHash() => r'9b74f9f7be3e39f55705d805e70af42fbabf20bc';

@@ -39,7 +39,7 @@ final class BillListNotifierProvider
   BillListNotifier create() => BillListNotifier();
 }
 
-String _$billListNotifierHash() => r'b2b4b794a33d7e43fca0eb09ad5b8ac1fd73f19a';
+String _$billListNotifierHash() => r'2841658a050610feffef6ab1135654dde78c68ae';
 
 /// Async-loaded list of bills for the current user. Uses [AsyncValue] so the
 /// UI gets standard loading / data / error rendering for free.

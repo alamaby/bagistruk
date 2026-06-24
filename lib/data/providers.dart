@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../core/error/result.dart';
@@ -17,6 +18,7 @@ import 'repositories/auth_repository_impl.dart';
 import 'repositories/bill_repository_impl.dart';
 import 'repositories/ocr_repository_impl.dart';
 import 'repositories/profile_repository_impl.dart';
+import 'services/image_picker_wrapper.dart';
 import 'services/ocr_service.dart';
 
 part 'providers.g.dart';
@@ -83,3 +85,6 @@ class AppConfigNotifier extends _$AppConfigNotifier {
     await future;
   }
 }
+
+@Riverpod(keepAlive: true)
+IImagePicker imagePicker(Ref ref) => ImagePickerAdapter(ImagePicker());

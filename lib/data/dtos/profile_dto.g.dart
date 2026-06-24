@@ -9,7 +9,7 @@ part of 'profile_dto.dart';
 _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   id: json['id'] as String,
   displayName: json['display_name'] as String?,
-  defaultCurrency: json['default_currency'] as String? ?? 'IDR',
+  defaultCurrency: json['default_currency'] as String? ?? 'USD',
   languagePref: json['language_pref'] as String? ?? 'en',
   themePref: json['theme_pref'] as String? ?? 'system',
   marketingEmailOptIn: json['marketing_email_opt_in'] as bool? ?? false,
