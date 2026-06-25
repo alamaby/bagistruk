@@ -58,6 +58,32 @@ Placeholder assets are included so the README and Play Store listing can be fill
 
 ---
 
+## Repository Layout
+
+The `supabase/` directory is a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) pointing to the separate [bagistruk-supabase](https://github.com/alamaby/bagistruk-supabase) repository. It holds all Supabase artifacts: Edge Functions (Deno), SQL migrations, RLS policies, and branded email templates.
+
+**Clone with submodules enabled:**
+
+```bash
+git clone --recurse-submodules https://github.com/alamaby/bagistruk.git
+```
+
+If you already cloned without submodules, fetch the contents:
+
+```bash
+git submodule update --init --recursive
+```
+
+To pull the latest backend changes later:
+
+```bash
+git submodule update --remote supabase
+```
+
+Editing anything under `supabase/` happens in the submodule repo, not this one. See the [bagistruk-supabase README](https://github.com/alamaby/bagistruk-supabase#workflow) for the end-to-end workflow.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
