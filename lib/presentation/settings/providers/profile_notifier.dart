@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/ads/ad_service.dart';
@@ -123,6 +125,7 @@ class ProfileNotifier extends _$ProfileNotifier {
   Future<Result<void>> updateMarketingOptIn({
     required bool optedIn,
     required String source,
+    String? preferredLanguage,
   }) async {
     // Defensive guard: right after `signUp()` (which is `linkEmail`),
     // `_auth.updateUser` can emit a transient state where the session
@@ -139,12 +142,13 @@ class ProfileNotifier extends _$ProfileNotifier {
       );
     }
     final res = await ref
-      .read(profileRepositoryProvider)
-      .setMarketingEmailOptIn(
-        optedIn: optedIn,
-        source: source,
-        preferredLanguage: state.languagePref,
-      );
+        .read(profileRepositoryProvider)
+        .setMarketingEmailOptIn(
+          optedIn: optedIn,
+          source: source,
+          preferredLanguage:
+              preferredLanguage ?? state.value?.languagePref ?? 'en',
+        );
     if (res is Success<void>) {
       final now = DateTime.now().toUtc();
       _patch(
@@ -172,8 +176,7 @@ class ProfileNotifier extends _$ProfileNotifier {
       // already committed to the new value in DB. Failures are silent
       // because ads will still respect the new tag on next app launch
       // when AdService.initialize() runs again.
-      // ignore: discarded_futures
-      AdService.setUserIsMinor(!isAdult);
+      unawaited(AdService.setUserIsMinor(!isAdult));
     }
     return res;
   }

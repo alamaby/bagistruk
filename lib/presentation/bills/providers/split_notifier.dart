@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -10,6 +12,7 @@ import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/participant.dart';
 import '../../settings/providers/profile_notifier.dart';
+import 'saved_participants_notifier.dart';
 
 part 'split_notifier.freezed.dart';
 part 'split_notifier.g.dart';
@@ -209,6 +212,13 @@ class SplitNotifier extends _$SplitNotifier {
           if (res is Success<Participant>) {
             effectiveParticipants = [res.data];
             autoSelectedId = res.data.id;
+            if (!profile.isAnonymous) {
+              unawaited(
+                ref
+                    .read(savedParticipantsProvider.notifier)
+                    .bump(name: name, phone: null),
+              );
+            }
           }
         }
       } catch (_) {

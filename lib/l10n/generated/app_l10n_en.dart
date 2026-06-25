@@ -41,6 +41,10 @@ class AppL10nEn extends AppL10n {
       'Tips, feature updates, and offers from BagiStruk.';
 
   @override
+  String get settingsMarketingOptInWebHint =>
+      'You can also manage this preference from the BagiStruk website.';
+
+  @override
   String get settingsTitle => 'Profile & Settings';
 
   @override
@@ -995,6 +999,9 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get participantPhoneLabel => 'Phone (optional)';
+
+  @override
+  String get participantSuggestionTitle => 'Frequently used';
 
   @override
   String get participantImportFromContacts => 'Import from contacts';

@@ -151,6 +151,12 @@ abstract class AppL10n {
   /// **'Tips, info fitur, dan penawaran dari BagiStruk.'**
   String get settingsMarketingOptInSubtitle;
 
+  /// No description provided for @settingsMarketingOptInWebHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Anda juga bisa mengelola preferensi ini dari situs web BagiStruk.'**
+  String get settingsMarketingOptInWebHint;
+
   /// No description provided for @settingsTitle.
   ///
   /// In id, this message translates to:
@@ -1834,6 +1840,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Nomor (opsional)'**
   String get participantPhoneLabel;
+
+  /// No description provided for @participantSuggestionTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Sering dipakai'**
+  String get participantSuggestionTitle;
 
   /// No description provided for @participantImportFromContacts.
   ///

@@ -421,6 +421,159 @@ final class AppConfigRepositoryProvider
 String _$appConfigRepositoryHash() =>
     r'8efe8a6d66d5742ca56ab2af62c246763c966814';
 
+@ProviderFor(savedParticipantRemoteDataSource)
+const savedParticipantRemoteDataSourceProvider =
+    SavedParticipantRemoteDataSourceProvider._();
+
+final class SavedParticipantRemoteDataSourceProvider
+    extends
+        $FunctionalProvider<
+          SavedParticipantRemoteDataSource,
+          SavedParticipantRemoteDataSource,
+          SavedParticipantRemoteDataSource
+        >
+    with $Provider<SavedParticipantRemoteDataSource> {
+  const SavedParticipantRemoteDataSourceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savedParticipantRemoteDataSourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$savedParticipantRemoteDataSourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<SavedParticipantRemoteDataSource> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SavedParticipantRemoteDataSource create(Ref ref) {
+    return savedParticipantRemoteDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SavedParticipantRemoteDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SavedParticipantRemoteDataSource>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$savedParticipantRemoteDataSourceHash() =>
+    r'fcc3fe4f25fce00d3ea3b8fb00a2ec860330ee5a';
+
+@ProviderFor(savedParticipantRepository)
+const savedParticipantRepositoryProvider =
+    SavedParticipantRepositoryProvider._();
+
+final class SavedParticipantRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ISavedParticipantRepository,
+          ISavedParticipantRepository,
+          ISavedParticipantRepository
+        >
+    with $Provider<ISavedParticipantRepository> {
+  const SavedParticipantRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savedParticipantRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$savedParticipantRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ISavedParticipantRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ISavedParticipantRepository create(Ref ref) {
+    return savedParticipantRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ISavedParticipantRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ISavedParticipantRepository>(value),
+    );
+  }
+}
+
+String _$savedParticipantRepositoryHash() =>
+    r'60d046706f858cf4c01d1a5ffb8126827ec277ae';
+
+/// Local SharedPreferences cache for the cross-bill participant library.
+/// Created once on first read; reads/writes are awaited by the consumer
+/// (typically the suggestion chips widget on first paint).
+
+@ProviderFor(savedParticipantsCache)
+const savedParticipantsCacheProvider = SavedParticipantsCacheProvider._();
+
+/// Local SharedPreferences cache for the cross-bill participant library.
+/// Created once on first read; reads/writes are awaited by the consumer
+/// (typically the suggestion chips widget on first paint).
+
+final class SavedParticipantsCacheProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<SavedParticipantsCache>,
+          SavedParticipantsCache,
+          FutureOr<SavedParticipantsCache>
+        >
+    with
+        $FutureModifier<SavedParticipantsCache>,
+        $FutureProvider<SavedParticipantsCache> {
+  /// Local SharedPreferences cache for the cross-bill participant library.
+  /// Created once on first read; reads/writes are awaited by the consumer
+  /// (typically the suggestion chips widget on first paint).
+  const SavedParticipantsCacheProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savedParticipantsCacheProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$savedParticipantsCacheHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<SavedParticipantsCache> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<SavedParticipantsCache> create(Ref ref) {
+    return savedParticipantsCache(ref);
+  }
+}
+
+String _$savedParticipantsCacheHash() =>
+    r'08aaccd4a107b35b8276fd3082aa3a8dcd1cea9d';
+
 /// Exposes the runtime app configuration (legal doc versions, future feature
 /// flags) to the rest of the app. Loaded once on first read and cached
 /// in-memory by the repository; [refresh] drops the cache and re-reads.

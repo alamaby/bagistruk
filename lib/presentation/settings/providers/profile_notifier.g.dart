@@ -45,7 +45,7 @@ final class ProfileNotifierProvider
   ProfileNotifier create() => ProfileNotifier();
 }
 
-String _$profileNotifierHash() => r'a9d1bd73ad8e69c86dc10fb77077ab9c9e135696';
+String _$profileNotifierHash() => r'63d70c806c4a65465163f7347ad44f45e4c41a5f';
 
 /// Loads and exposes the current user's profile (with email + anon flag merged
 /// in from the active session). All preference mutations go through this

@@ -9,16 +9,16 @@ void main() {
   group('ScanDraftNotifier', () {
     test('initial state has empty images', () {
       final container = _createContainer([]);
-      final state = container.read(scanDraftNotifierProvider);
+      final state = container.read(scanDraftProvider);
       expect(state.images, isEmpty);
     });
 
     group('pickFromGallery', () {
       test('empty result does not change state', () async {
         final container = _createContainer([]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         await notifier.pickFromGallery();
-        expect(container.read(scanDraftNotifierProvider).images, isEmpty);
+        expect(container.read(scanDraftProvider).images, isEmpty);
       });
 
       test('appends images on non-empty result', () async {
@@ -26,9 +26,9 @@ void main() {
           XFile('/tmp/a.jpg'),
           XFile('/tmp/b.jpg'),
         ]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         await notifier.pickFromGallery();
-        final images = container.read(scanDraftNotifierProvider).images;
+        final images = container.read(scanDraftProvider).images;
         expect(images.length, 2);
         expect(images[0].path, '/tmp/a.jpg');
         expect(images[1].path, '/tmp/b.jpg');
@@ -39,12 +39,12 @@ void main() {
         final container = ProviderContainer(
           overrides: [imagePickerProvider.overrideWithValue(fake)],
         );
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
 
         await notifier.pickFromGallery();
         await notifier.pickFromGallery();
 
-        expect(container.read(scanDraftNotifierProvider).images.length, 2);
+        expect(container.read(scanDraftProvider).images.length, 2);
       });
     });
 
@@ -52,21 +52,21 @@ void main() {
       test('null result does not change state', () async {
         final fake = FakeImagePicker(singleImageResult: null);
         final container = _createContainerWithFake(fake);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         final result = await notifier.pickFromCamera();
         expect(result, isNull);
-        expect(container.read(scanDraftNotifierProvider).images, isEmpty);
+        expect(container.read(scanDraftProvider).images, isEmpty);
       });
 
       test('appends shot and returns it', () async {
         final shot = XFile('/tmp/shot.jpg');
         final fake = FakeImagePicker(singleImageResult: shot);
         final container = _createContainerWithFake(fake);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         final result = await notifier.pickFromCamera();
         expect(result?.path, '/tmp/shot.jpg');
         expect(
-          container.read(scanDraftNotifierProvider).images.single.path,
+          container.read(scanDraftProvider).images.single.path,
           '/tmp/shot.jpg',
         );
       });
@@ -75,16 +75,16 @@ void main() {
     group('removeAt', () {
       test('invalid negative index no-op', () async {
         final container = _createContainer([XFile('/tmp/a.jpg')]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         notifier.removeAt(-1);
-        expect(container.read(scanDraftNotifierProvider).images.length, 1);
+        expect(container.read(scanDraftProvider).images.length, 1);
       });
 
       test('out-of-range index no-op', () async {
         final container = _createContainer([XFile('/tmp/a.jpg')]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         notifier.removeAt(10);
-        expect(container.read(scanDraftNotifierProvider).images.length, 1);
+        expect(container.read(scanDraftProvider).images.length, 1);
       });
 
       test('removes correct item at index', () async {
@@ -93,9 +93,9 @@ void main() {
           XFile('/tmp/b.jpg'),
           XFile('/tmp/c.jpg'),
         ]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         notifier.removeAt(1);
-        final images = container.read(scanDraftNotifierProvider).images;
+        final images = container.read(scanDraftProvider).images;
         expect(images.length, 2);
         expect(images[0].path, '/tmp/a.jpg');
         expect(images[1].path, '/tmp/c.jpg');
@@ -105,16 +105,16 @@ void main() {
     group('clear', () {
       test('empty state no-op', () async {
         final container = _createContainer([]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         notifier.clear();
-        expect(container.read(scanDraftNotifierProvider).images, isEmpty);
+        expect(container.read(scanDraftProvider).images, isEmpty);
       });
 
       test('clears all images', () async {
         final container = _createContainer([XFile('/tmp/a.jpg')]);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         notifier.clear();
-        expect(container.read(scanDraftNotifierProvider).images, isEmpty);
+        expect(container.read(scanDraftProvider).images, isEmpty);
       });
     });
 
@@ -122,7 +122,7 @@ void main() {
       test('pickFromGallery uses quality 90', () async {
         final fake = FakeImagePicker(multiImageResult: []);
         final container = _createContainerWithFake(fake);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         await notifier.pickFromGallery();
         expect(fake.lastQuality, 90);
       });
@@ -130,7 +130,7 @@ void main() {
       test('pickFromCamera uses quality 90 and source camera', () async {
         final fake = FakeImagePicker(singleImageResult: null);
         final container = _createContainerWithFake(fake);
-        final notifier = container.read(scanDraftNotifierProvider.notifier);
+        final notifier = container.read(scanDraftProvider.notifier);
         await notifier.pickFromCamera();
         expect(fake.lastQuality, 90);
         expect(fake.lastSource, ImageSource.camera);

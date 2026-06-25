@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:bagistruk/core/error/failure.dart';
 import 'package:bagistruk/core/error/result.dart';
+import 'package:bagistruk/data/providers.dart';
 import 'package:bagistruk/domain/entities/ocr_result.dart';
-import 'package:bagistruk/domain/repositories/i_ocr_repository.dart';
 import 'package:bagistruk/presentation/ocr/providers/ocr_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,8 +13,10 @@ import '../../../data/repositories/fake_ocr_repository.dart';
 void main() {
   group('OcrNotifier', () {
     test('initial state is OcrIdle', () {
-      final container = _createContainer(_resultRepo(_successResult()));
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final container = _createContainer(
+        _resultRepo(Result.success(_successResult())),
+      );
+      final notifier = container.read(ocrProvider.notifier);
       expect(notifier.state, const OcrState.idle());
     });
 
@@ -22,9 +24,9 @@ void main() {
       final images = [
         Uint8List.fromList([1, 2, 3]),
       ];
-      final fake = _resultRepo(_successResult());
+      final fake = _resultRepo(Result.success(_successResult()));
       final container = _createContainer(fake);
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final notifier = container.read(ocrProvider.notifier);
 
       await notifier.process(
         images,
@@ -47,13 +49,13 @@ void main() {
       final images = [
         Uint8List.fromList([1]),
       ];
-      final fake = _resultRepo(_successResult());
+      final fake = _resultRepo(Result.success(_successResult()));
       final container = _createContainer(fake);
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final notifier = container.read(ocrProvider.notifier);
 
       // Capture state after setting processing but before result
       final states = <OcrState>[];
-      container.listen(ocrNotifierProvider, (_, next) => states.add(next));
+      container.listen<OcrState>(ocrProvider, (_, next) => states.add(next));
 
       await notifier.process(images);
 
@@ -63,22 +65,26 @@ void main() {
 
     test('process failure yields OcrFailure', () async {
       final fake = _resultRepo(
-        Result.failure(const Failure.server('OCR failed')),
+        const Result.failure(Failure.server(message: 'OCR failed')),
       );
       final container = _createContainer(fake);
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final notifier = container.read(ocrProvider.notifier);
 
       await notifier.process([
         Uint8List.fromList([1]),
       ]);
 
       expect(notifier.state, isA<OcrFailure>());
-      expect((notifier.state as OcrFailure).failure.message(), 'OCR failed');
+      final failure = (notifier.state as OcrFailure).failure;
+      expect(failure, isA<ServerFailure>());
+      expect((failure as ServerFailure).message, 'OCR failed');
     });
 
     test('reset returns to OcrIdle', () async {
-      final container = _createContainer(_resultRepo(_successResult()));
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final container = _createContainer(
+        _resultRepo(Result.success(_successResult())),
+      );
+      final notifier = container.read(ocrProvider.notifier);
 
       await notifier.process([
         Uint8List.fromList([1]),
@@ -90,8 +96,10 @@ void main() {
     });
 
     test('multiple process calls reset state each time', () async {
-      final container = _createContainer(_resultRepo(_successResult()));
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final container = _createContainer(
+        _resultRepo(Result.success(_successResult())),
+      );
+      final notifier = container.read(ocrProvider.notifier);
 
       await notifier.process([
         Uint8List.fromList([1]),
@@ -107,10 +115,10 @@ void main() {
 
     test('empty image list still processes (server may reject)', () async {
       final fake = _resultRepo(
-        Result.failure(const Failure.server('No images')),
+        const Result.failure(Failure.server(message: 'No images')),
       );
       final container = _createContainer(fake);
-      final notifier = container.read(ocrNotifierProvider.notifier);
+      final notifier = container.read(ocrProvider.notifier);
 
       await notifier.process([]);
       expect(notifier.state, isA<OcrFailure>());

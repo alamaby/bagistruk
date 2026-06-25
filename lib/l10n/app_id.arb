@@ -428,6 +428,7 @@
     "placeholders": { "message": { "type": "String" } }
   },
   "participantPhoneLabel": "Nomor (opsional)",
+  "participantSuggestionTitle": "Sering dipakai",
   "participantImportFromContacts": "Import dari kontak",
   "participantImportFailed": "Gagal membuka kontak. Coba lagi atau tambah manual.",
   "participantImportNoPhone": "(kontak ini tidak punya nomor)",

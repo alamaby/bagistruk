@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.14.1+33
+version: 0.15.0+34
 
 environment:
   sdk: ^3.11.5
@@ -73,6 +73,12 @@ dependencies:
   # requires READ_CONTACTS runtime permission on Android 6+ (declared in
   # AndroidManifest.xml, requested at runtime in bill_split_screen.dart).
   flutter_contacts: ^1.1.9+2
+  # Local JSON cache for the cross-bill participant suggestion library. Stores
+  # the top-N suggestions returned by `list_suggested_participants` so the
+  # split screen can render suggestions instantly before the network round
+  # trip completes. Already a transitive dep via supabase_flutter, pinned
+  # explicitly so the import works without relying on the transitive version.
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

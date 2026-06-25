@@ -41,6 +41,10 @@ class AppL10nId extends AppL10n {
       'Tips, info fitur, dan penawaran dari BagiStruk.';
 
   @override
+  String get settingsMarketingOptInWebHint =>
+      'Anda juga bisa mengelola preferensi ini dari situs web BagiStruk.';
+
+  @override
   String get settingsTitle => 'Profil & Pengaturan';
 
   @override
@@ -994,6 +998,9 @@ class AppL10nId extends AppL10n {
 
   @override
   String get participantPhoneLabel => 'Nomor (opsional)';
+
+  @override
+  String get participantSuggestionTitle => 'Sering dipakai';
 
   @override
   String get participantImportFromContacts => 'Import dari kontak';

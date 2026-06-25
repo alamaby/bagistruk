@@ -18,6 +18,8 @@ import '../../auth/providers/auth_providers.dart';
 import '../../shared/widgets/loading_view.dart';
 import '../providers/split_notifier.dart';
 import '../widgets/participant_avatar.dart';
+import '../providers/saved_participants_notifier.dart';
+import '../widgets/participant_suggestion_chips.dart';
 import '../widgets/split_summary_sheet.dart';
 
 /// Item-splitting screen.
@@ -167,6 +169,16 @@ class _SplitBody extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    ParticipantSuggestionChips(
+                      onSelected: (participant) {
+                        setLocal(() {
+                          nameCtrl.text = participant.name;
+                          if (participant.phone.isNotEmpty) {
+                            phoneCtrl.text = participant.phone;
+                          }
+                        });
+                      },
+                    ),
                     TextField(
                       controller: nameCtrl,
                       autofocus: true,
@@ -226,6 +238,11 @@ class _SplitBody extends ConsumerWidget {
       ref,
     ).addParticipant(result.name, phone: result.phone);
     if (err != null && context.mounted) _toast(context, err);
+    if (err == null) {
+      await ref
+          .read(savedParticipantsProvider.notifier)
+          .bump(name: result.name, phone: result.phone);
+    }
   }
 
   @override
