@@ -106,7 +106,7 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
           context,
         ).showSnackBar(SnackBar(content: Text(_saveErrorMessage(result))));
       case SaveSuccess(:final billId):
-        context.goNamed(
+        context.pushNamed(
           Routes.billSplitName,
           pathParameters: {'billId': billId},
         );

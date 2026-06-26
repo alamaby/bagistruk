@@ -53,34 +53,40 @@ class BillDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(billDetailFamily(billId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppL10n.of(context).billDetailTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.home_outlined),
-          tooltip: AppL10n.of(context).billDetailHomeTooltip,
-          onPressed: () => _goHome(context, ref),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _goHome(context, ref);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(AppL10n.of(context).billDetailTitle),
+          leading: IconButton(
+            icon: const Icon(Icons.home_outlined),
+            tooltip: AppL10n.of(context).billDetailHomeTooltip,
+            onPressed: () => _goHome(context, ref),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.document_scanner_outlined),
+              tooltip: AppL10n.of(context).billDetailScanAnotherTooltip,
+              onPressed: () => context.go(Routes.scan),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.document_scanner_outlined),
-            tooltip: AppL10n.of(context).billDetailScanAnotherTooltip,
-            onPressed: () => context.go(Routes.scan),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: async.when(
-          loading: () =>
-              LoadingView(message: AppL10n.of(context).billDetailLoading),
-          error: (e, _) => _ErrorView(
-            message: e.toString(),
-            onRetry: () => ref.invalidate(billDetailFamily(billId)),
-          ),
-          data: (state) => _Body(
-            state: state,
-            billId: billId,
-            currency: CurrencyFormatter.of(state.bill.currencyCode),
+        body: SafeArea(
+          child: async.when(
+            loading: () =>
+                LoadingView(message: AppL10n.of(context).billDetailLoading),
+            error: (e, _) => _ErrorView(
+              message: e.toString(),
+              onRetry: () => ref.invalidate(billDetailFamily(billId)),
+            ),
+            data: (state) => _Body(
+              state: state,
+              billId: billId,
+              currency: CurrencyFormatter.of(state.bill.currencyCode),
+            ),
           ),
         ),
       ),

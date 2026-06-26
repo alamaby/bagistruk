@@ -57,34 +57,40 @@ class BillSplitScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(splitFamily(billId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppL10n.of(context).billSplitTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          tooltip: AppL10n.of(context).billSplitBackTooltip,
-          onPressed: () => _exit(context, ref),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => _finish(context),
-            child: Text(AppL10n.of(context).billSplitDone),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _exit(context, ref);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(AppL10n.of(context).billSplitTitle),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            tooltip: AppL10n.of(context).billSplitBackTooltip,
+            onPressed: () => _exit(context, ref),
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: async.when(
-          loading: () => LoadingView(message: AppL10n.of(context).loading),
-          error: (e, _) => Center(
-            child: Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Text(e.toString(), textAlign: TextAlign.center),
+          actions: [
+            TextButton(
+              onPressed: () => _finish(context),
+              child: Text(AppL10n.of(context).billSplitDone),
             ),
-          ),
-          data: (state) => _SplitBody(
-            state: state,
-            billId: billId,
-            currency: CurrencyFormatter.of(state.bill.currencyCode),
+          ],
+        ),
+        body: SafeArea(
+          child: async.when(
+            loading: () => LoadingView(message: AppL10n.of(context).loading),
+            error: (e, _) => Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Text(e.toString(), textAlign: TextAlign.center),
+              ),
+            ),
+            data: (state) => _SplitBody(
+              state: state,
+              billId: billId,
+              currency: CurrencyFormatter.of(state.bill.currencyCode),
+            ),
           ),
         ),
       ),
