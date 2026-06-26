@@ -274,6 +274,35 @@ class SplitNotifier extends _$SplitNotifier {
     return null;
   }
 
+  Future<SplitActionError?> removeParticipant(String participantId) async {
+    final s = state.value;
+    if (s == null) return const SplitActionError(SplitActionErrorKind.notReady);
+
+    final repo = ref.read(billRepositoryProvider);
+    final res = await repo.deleteParticipant(participantId);
+    if (res is ResultFailure) {
+      return SplitActionError(
+        SplitActionErrorKind.removeParticipantFailed,
+        res.failure.toString(),
+      );
+    }
+
+    state = AsyncData(
+      s.copyWith(
+        participants: s.participants
+            .where((p) => p.id != participantId)
+            .toList(),
+        assignments: s.assignments
+            .where((a) => a.participantId != participantId)
+            .toList(),
+        selectedParticipantId: s.selectedParticipantId == participantId
+            ? null
+            : s.selectedParticipantId,
+      ),
+    );
+    return null;
+  }
+
   /// Toggles the selected participant's assignment on [itemId]. Returns an
   /// error message if no participant is selected; null on success.
   Future<SplitActionError?> toggleAssignment(String itemId) async {
@@ -340,4 +369,5 @@ enum SplitActionErrorKind {
   addPersonFailed,
   selectPersonFirst,
   saveAssignmentFailed,
+  removeParticipantFailed,
 }

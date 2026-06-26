@@ -427,6 +427,16 @@
   "@billSplitSaveAssignmentFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "billSplitRemoveParticipantTitle": "Remove participant?",
+  "billSplitRemoveParticipantMessage": "All items assigned to {name} will also be removed.",
+  "@billSplitRemoveParticipantMessage": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "billSplitRemoveParticipantConfirm": "Remove",
+  "billSplitRemoveParticipantFailed": "Failed to remove participant: {message}",
+  "@billSplitRemoveParticipantFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
   "participantPhoneLabel": "Phone (optional)",
   "participantSuggestionTitle": "Frequently used",
   "participantImportFromContacts": "Import from contacts",

@@ -1835,6 +1835,30 @@ abstract class AppL10n {
   /// **'Gagal simpan assignment: {message}'**
   String billSplitSaveAssignmentFailed(String message);
 
+  /// No description provided for @billSplitRemoveParticipantTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus partisipan?'**
+  String get billSplitRemoveParticipantTitle;
+
+  /// No description provided for @billSplitRemoveParticipantMessage.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua item yang ditugaskan ke {name} juga akan dihapus.'**
+  String billSplitRemoveParticipantMessage(String name);
+
+  /// No description provided for @billSplitRemoveParticipantConfirm.
+  ///
+  /// In id, this message translates to:
+  /// **'Hapus'**
+  String get billSplitRemoveParticipantConfirm;
+
+  /// No description provided for @billSplitRemoveParticipantFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal hapus partisipan: {message}'**
+  String billSplitRemoveParticipantFailed(String message);
+
   /// No description provided for @participantPhoneLabel.
   ///
   /// In id, this message translates to:

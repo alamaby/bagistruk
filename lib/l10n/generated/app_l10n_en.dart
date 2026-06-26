@@ -998,6 +998,22 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get billSplitRemoveParticipantTitle => 'Remove participant?';
+
+  @override
+  String billSplitRemoveParticipantMessage(String name) {
+    return 'All items assigned to $name will also be removed.';
+  }
+
+  @override
+  String get billSplitRemoveParticipantConfirm => 'Remove';
+
+  @override
+  String billSplitRemoveParticipantFailed(String message) {
+    return 'Failed to remove participant: $message';
+  }
+
+  @override
   String get participantPhoneLabel => 'Phone (optional)';
 
   @override

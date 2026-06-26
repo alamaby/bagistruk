@@ -107,6 +107,10 @@ class BillRepositoryImpl implements IBillRepository {
       );
 
   @override
+  Future<Result<void>> deleteParticipant(String participantId) =>
+      guardAsync(() => _ds.deleteParticipant(participantId));
+
+  @override
   Future<Result<List<Assignment>>> listAssignments(String billId) => guardAsync(
     () async => (await _ds.listAssignments(
       billId,

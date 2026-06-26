@@ -188,6 +188,19 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
           as _i3.Future<_i4.Result<_i9.Participant>>);
 
   @override
+  _i3.Future<_i4.Result<void>> deleteParticipant(String? participantId) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteParticipant, [participantId]),
+            returnValue: _i3.Future<_i4.Result<void>>.value(
+              _i6.dummyValue<_i4.Result<void>>(
+                this,
+                Invocation.method(#deleteParticipant, [participantId]),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Result<void>>);
+
+  @override
   _i3.Future<_i4.Result<List<_i10.Assignment>>> listAssignments(
     String? billId,
   ) =>

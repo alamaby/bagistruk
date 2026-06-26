@@ -166,6 +166,9 @@ class BillRemoteDataSource {
     return ParticipantDto.fromJson(row);
   }
 
+  Future<void> deleteParticipant(String participantId) =>
+      _client.from(_participants).delete().eq('id', participantId);
+
   Future<List<AssignmentDto>> listAssignments(String billId) async {
     // Assignments are joined via items.bill_id; assumes a SQL view or a
     // nested select policy is in place. Fallback: per-item fetch from caller.

@@ -997,6 +997,22 @@ class AppL10nId extends AppL10n {
   }
 
   @override
+  String get billSplitRemoveParticipantTitle => 'Hapus partisipan?';
+
+  @override
+  String billSplitRemoveParticipantMessage(String name) {
+    return 'Semua item yang ditugaskan ke $name juga akan dihapus.';
+  }
+
+  @override
+  String get billSplitRemoveParticipantConfirm => 'Hapus';
+
+  @override
+  String billSplitRemoveParticipantFailed(String message) {
+    return 'Gagal hapus partisipan: $message';
+  }
+
+  @override
   String get participantPhoneLabel => 'Nomor (opsional)';
 
   @override

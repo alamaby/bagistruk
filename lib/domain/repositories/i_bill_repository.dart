@@ -19,6 +19,7 @@ abstract interface class IBillRepository {
 
   Future<Result<List<Participant>>> listParticipants(String billId);
   Future<Result<Participant>> upsertParticipant(Participant participant);
+  Future<Result<void>> deleteParticipant(String participantId);
 
   Future<Result<List<Assignment>>> listAssignments(String billId);
   Future<Result<List<Assignment>>> replaceAssignments(

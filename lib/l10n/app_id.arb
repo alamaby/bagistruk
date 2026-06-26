@@ -427,6 +427,16 @@
   "@billSplitSaveAssignmentFailed": {
     "placeholders": { "message": { "type": "String" } }
   },
+  "billSplitRemoveParticipantTitle": "Hapus partisipan?",
+  "billSplitRemoveParticipantMessage": "Semua item yang ditugaskan ke {name} juga akan dihapus.",
+  "@billSplitRemoveParticipantMessage": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "billSplitRemoveParticipantConfirm": "Hapus",
+  "billSplitRemoveParticipantFailed": "Gagal hapus partisipan: {message}",
+  "@billSplitRemoveParticipantFailed": {
+    "placeholders": { "message": { "type": "String" } }
+  },
   "participantPhoneLabel": "Nomor (opsional)",
   "participantSuggestionTitle": "Sering dipakai",
   "participantImportFromContacts": "Import dari kontak",

@@ -117,8 +117,42 @@ class _SplitBody extends ConsumerWidget {
       SplitActionErrorKind.selectPersonFirst => l10n.billSplitSelectPersonFirst,
       SplitActionErrorKind.saveAssignmentFailed =>
         l10n.billSplitSaveAssignmentFailed(error.message ?? ''),
+      SplitActionErrorKind.removeParticipantFailed =>
+        l10n.billSplitRemoveParticipantFailed(error.message ?? ''),
     };
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  Future<void> _confirmRemoveParticipant(
+    BuildContext context,
+    WidgetRef ref,
+    Participant participant,
+  ) async {
+    final l10n = AppL10n.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.billSplitRemoveParticipantTitle),
+        content: Text(l10n.billSplitRemoveParticipantMessage(participant.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.cancelAction),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(ctx).colorScheme.error,
+              foregroundColor: Theme.of(ctx).colorScheme.onError,
+            ),
+            child: Text(l10n.billSplitRemoveParticipantConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final err = await _notifier(ref).removeParticipant(participant.id);
+    if (err != null && context.mounted) _toast(context, err);
   }
 
   Future<void> _addParticipant(BuildContext context, WidgetRef ref) async {
@@ -310,6 +344,7 @@ class _SplitBody extends ConsumerWidget {
           selectedId: state.selectedParticipantId,
           onSelect: (id) => _notifier(ref).selectParticipant(id),
           onAdd: () => _addParticipant(context, ref),
+          onRemove: (p) => _confirmRemoveParticipant(context, ref, p),
         ),
       ],
     );
@@ -541,12 +576,14 @@ class _ParticipantBar extends StatelessWidget {
     required this.selectedId,
     required this.onSelect,
     required this.onAdd,
+    required this.onRemove,
   });
 
   final List<Participant> participants;
   final String? selectedId;
   final ValueChanged<String> onSelect;
   final VoidCallback onAdd;
+  final ValueChanged<Participant> onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -559,6 +596,7 @@ class _ParticipantBar extends StatelessWidget {
         child: SizedBox(
           height: 108.h,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Scrollable participants area — takes whatever space is left
               // after the pinned add button so it never pushes the button off
@@ -579,41 +617,48 @@ class _ParticipantBar extends StatelessWidget {
                       active: active,
                       onTap: () => onSelect(p.id),
                     );
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        active
-                            ? avatar
-                                  .animate(
-                                    key: ValueKey('avatar-${p.id}-active'),
-                                    onPlay: (c) => c.repeat(reverse: true),
-                                  )
-                                  .scaleXY(
-                                    begin: 1.0,
-                                    end: 1.06,
-                                    duration: 700.ms,
-                                    curve: Curves.easeInOut,
-                                  )
-                            : avatar
-                                  .animate(key: ValueKey('avatar-${p.id}-idle'))
-                                  .fadeIn(duration: 200.ms),
-                        SizedBox(height: 4.h),
-                        SizedBox(
-                          width: 60.w,
-                          child: Text(
-                            p.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              fontWeight: active
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
+                    return Center(
+                      child: GestureDetector(
+                        onLongPress: () => onRemove(p),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            active
+                                ? avatar
+                                      .animate(
+                                        key: ValueKey('avatar-${p.id}-active'),
+                                        onPlay: (c) => c.repeat(reverse: true),
+                                      )
+                                      .scaleXY(
+                                        begin: 1.0,
+                                        end: 1.06,
+                                        duration: 700.ms,
+                                        curve: Curves.easeInOut,
+                                      )
+                                : avatar
+                                      .animate(
+                                        key: ValueKey('avatar-${p.id}-idle'),
+                                      )
+                                      .fadeIn(duration: 200.ms),
+                            SizedBox(height: 4.h),
+                            SizedBox(
+                              width: 60.w,
+                              child: Text(
+                                p.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 11.sp,
+                                  fontWeight: active
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     );
                   },
                 ),
