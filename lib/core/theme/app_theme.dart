@@ -13,10 +13,13 @@ class AppTheme {
   static ThemeData get dark => _build(Brightness.dark);
 
   static ThemeData _build(Brightness brightness) {
-    final scheme = ColorScheme.fromSeed(
+    final seeded = ColorScheme.fromSeed(
       seedColor: _seed,
       brightness: brightness,
     );
+    final scheme = brightness == Brightness.light
+        ? seeded.copyWith(surface: Colors.white)
+        : seeded;
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
