@@ -11,6 +11,7 @@ import '../../../core/router/routes.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/monthly_spending_insight.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../../core/ads/ad_config.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../bills/providers/bill_list_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
@@ -122,7 +123,9 @@ class HistoryScreen extends ConsumerWidget {
                     ),
                   ),
                 SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-                const SliverToBoxAdapter(child: BannerAdWidget()),
+                const SliverToBoxAdapter(
+                child: BannerAdWidget(placement: BannerAdPlacement.history),
+              ),
               ],
             ),
           ),

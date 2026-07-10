@@ -10,6 +10,7 @@ import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../data/services/device_fingerprint_service.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../../core/ads/ad_config.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../settings/providers/preferences_providers.dart';
@@ -372,7 +373,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
                 ),
               ),
             ),
-            const BannerAdWidget(),
+            const BannerAdWidget(placement: BannerAdPlacement.scan),
             SizedBox(height: 12.h),
             if (state is OcrFailure)
               _ErrorCard(

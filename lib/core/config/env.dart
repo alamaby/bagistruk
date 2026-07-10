@@ -17,6 +17,12 @@ class Env {
   static bool get adsEnabled => _optionalBool('ADS_ENABLED');
   static String? get admobAndroidBannerId =>
       _optional('ADMOB_ANDROID_BANNER_ID');
+  static String? get admobAndroidBannerScanId =>
+      _optional('ADMOB_ANDROID_BANNER_SCAN_ID');
+  static String? get admobAndroidBannerHistoryId =>
+      _optional('ADMOB_ANDROID_BANNER_HISTORY_ID');
+  static String? get admobAndroidBannerSettingsId =>
+      _optional('ADMOB_ANDROID_BANNER_SETTINGS_ID');
   static String? get admobIosBannerId => _optional('ADMOB_IOS_BANNER_ID');
 
   static String _required(String key) {

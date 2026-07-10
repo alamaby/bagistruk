@@ -9,7 +9,9 @@ import '../../../presentation/settings/providers/profile_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 
 class BannerAdWidget extends ConsumerStatefulWidget {
-  const BannerAdWidget({super.key});
+  const BannerAdWidget({super.key, required this.placement});
+
+  final BannerAdPlacement placement;
 
   @override
   ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -82,7 +84,7 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   }
 
   void _load() {
-    final unitId = AdConfig.bannerAdUnitId;
+    final unitId = AdConfig.bannerAdUnitId(widget.placement);
     if (!AdConfig.adsEnabled || unitId == null) return;
 
     final ad = BannerAd(

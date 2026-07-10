@@ -14,6 +14,7 @@ import '../../../data/services/google_play_billing_service.dart';
 import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
+import '../../../core/ads/ad_config.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
@@ -253,7 +254,7 @@ class _SettingsBody extends ConsumerWidget {
           ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: const BannerAdWidget(),
+          child: const BannerAdWidget(placement: BannerAdPlacement.settings),
         ),
         const Divider(),
         _SectionHeader(l10n.aboutTitle),

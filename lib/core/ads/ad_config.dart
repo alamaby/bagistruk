@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import '../config/env.dart';
 
+enum BannerAdPlacement { scan, history, settings }
+
 class AdConfig {
   const AdConfig._();
 
@@ -15,10 +17,17 @@ class AdConfig {
 
   static bool get adsEnabled => Env.adsEnabled && isSupportedPlatform;
 
-  static String? get bannerAdUnitId {
+  static String? bannerAdUnitId(BannerAdPlacement placement) {
     if (!isSupportedPlatform) return null;
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return Env.admobAndroidBannerId ?? _androidTestBannerId;
+      return switch (placement) {
+        BannerAdPlacement.scan =>
+          Env.admobAndroidBannerScanId ?? Env.admobAndroidBannerId ?? _androidTestBannerId,
+        BannerAdPlacement.history =>
+          Env.admobAndroidBannerHistoryId ?? Env.admobAndroidBannerId ?? _androidTestBannerId,
+        BannerAdPlacement.settings =>
+          Env.admobAndroidBannerSettingsId ?? Env.admobAndroidBannerId ?? _androidTestBannerId,
+      };
     }
     return Env.admobIosBannerId ?? _iosTestBannerId;
   }
