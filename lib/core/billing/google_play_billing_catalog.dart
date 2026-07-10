@@ -57,10 +57,29 @@ class GooglePlayBillingCatalog {
     ),
   ];
 
+  /// All known products, including those hidden from the client UI.
+  /// `verifyAndFinish()` may still receive a `ProductDetails.id` for a
+  /// legacy purchase (for example `bagistruk_plus_yearly` bought by an
+  /// older app build) and must be able to look the product up to drive
+  /// the correct API type when calling the verifier.
   static const products = [plusMonthly, plusYearly, ...creditPacks];
 
-  static Set<String> get productIds =>
-      products.map((product) => product.id).toSet();
+  /// Products the client is allowed to query from Google Play and to
+  /// render in the Billing UI. Yearly subscription is intentionally
+  /// hidden until the operator is ready to launch it; hiding it from the
+  /// client catalog also prevents a misleading "some products not
+  /// active" banner when the Play Console product is not yet created.
+  static const purchasableProducts = [plusMonthly, ...creditPacks];
+
+  /// Product IDs that the Billing UI will request from Google Play and
+  /// that `buy()` is allowed to start. Keep this strictly equal to
+  /// `purchasableProducts.map((p) => p.id)` to avoid drift.
+  static const Set<String> productIds = {
+    'bagistruk_plus_monthly',
+    'ocr_pack_50',
+    'ocr_pack_150',
+    'ocr_pack_500',
+  };
 
   static GooglePlayBillingProduct? byId(String id) {
     for (final product in products) {

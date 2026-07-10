@@ -569,11 +569,77 @@ abstract class AppL10n {
   /// **'Plus aktif'**
   String get billingPlusActive;
 
+  /// No description provided for @billingPlanFree.
+  ///
+  /// In id, this message translates to:
+  /// **'Free'**
+  String get billingPlanFree;
+
+  /// No description provided for @billingPlusCardTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'BagiStruk Plus'**
+  String get billingPlusCardTitle;
+
+  /// No description provided for @billingPlusBenefitCredits.
+  ///
+  /// In id, this message translates to:
+  /// **'60 credit OCR per bulan'**
+  String get billingPlusBenefitCredits;
+
+  /// No description provided for @billingPlusBenefitNoAds.
+  ///
+  /// In id, this message translates to:
+  /// **'Tanpa iklan'**
+  String get billingPlusBenefitNoAds;
+
+  /// No description provided for @billingPlusBenefitFeatures.
+  ///
+  /// In id, this message translates to:
+  /// **'Akses fitur Plus'**
+  String get billingPlusBenefitFeatures;
+
+  /// No description provided for @billingTopUpCardTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Top up credit OCR'**
+  String get billingTopUpCardTitle;
+
+  /// No description provided for @billingManageSubscription.
+  ///
+  /// In id, this message translates to:
+  /// **'Kelola langganan'**
+  String get billingManageSubscription;
+
+  /// No description provided for @billingManageOpenFailed.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak dapat membuka pengelolaan langganan.'**
+  String get billingManageOpenFailed;
+
   /// No description provided for @billingUpgradePlus.
   ///
   /// In id, this message translates to:
   /// **'Upgrade Plus'**
   String get billingUpgradePlus;
+
+  /// No description provided for @billingUpgradePlusWithPrice.
+  ///
+  /// In id, this message translates to:
+  /// **'Berlangganan bulanan • {price}'**
+  String billingUpgradePlusWithPrice(String price);
+
+  /// No description provided for @billingCreditPackTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'{credits} credit'**
+  String billingCreditPackTitle(int credits);
+
+  /// No description provided for @billingBuyAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Beli'**
+  String get billingBuyAction;
 
   /// No description provided for @billingBuyCredits.
   ///
@@ -590,7 +656,7 @@ abstract class AppL10n {
   /// No description provided for @billingRestorePurchases.
   ///
   /// In id, this message translates to:
-  /// **'Pulihkan pembelian'**
+  /// **'Pulihkan langganan'**
   String get billingRestorePurchases;
 
   /// No description provided for @billingUnavailable.

@@ -291,7 +291,45 @@ class AppL10nEn extends AppL10n {
   String get billingPlusActive => 'Plus active';
 
   @override
+  String get billingPlanFree => 'Free';
+
+  @override
+  String get billingPlusCardTitle => 'BagiStruk Plus';
+
+  @override
+  String get billingPlusBenefitCredits => '60 OCR credits per month';
+
+  @override
+  String get billingPlusBenefitNoAds => 'No ads';
+
+  @override
+  String get billingPlusBenefitFeatures => 'Access Plus features';
+
+  @override
+  String get billingTopUpCardTitle => 'Top up OCR credits';
+
+  @override
+  String get billingManageSubscription => 'Manage subscription';
+
+  @override
+  String get billingManageOpenFailed =>
+      'Could not open subscription management.';
+
+  @override
   String get billingUpgradePlus => 'Upgrade Plus';
+
+  @override
+  String billingUpgradePlusWithPrice(String price) {
+    return 'Subscribe monthly • $price';
+  }
+
+  @override
+  String billingCreditPackTitle(int credits) {
+    return '$credits credits';
+  }
+
+  @override
+  String get billingBuyAction => 'Buy';
 
   @override
   String get billingBuyCredits => 'Buy 50 credits';
@@ -300,7 +338,7 @@ class AppL10nEn extends AppL10n {
   String get billingLoading => 'Loading...';
 
   @override
-  String get billingRestorePurchases => 'Restore purchases';
+  String get billingRestorePurchases => 'Restore subscription';
 
   @override
   String get billingUnavailable =>

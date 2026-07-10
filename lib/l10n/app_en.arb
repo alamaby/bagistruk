@@ -128,10 +128,31 @@
   "billingTitle": "Plus and credit packs",
   "billingAnonSubtitle": "Create an account first to buy Plus or top up credits.",
   "billingPlusActive": "Plus active",
+  "billingPlanFree": "Free",
+  "billingPlusCardTitle": "BagiStruk Plus",
+  "billingPlusBenefitCredits": "60 OCR credits per month",
+  "billingPlusBenefitNoAds": "No ads",
+  "billingPlusBenefitFeatures": "Access Plus features",
+  "billingTopUpCardTitle": "Top up OCR credits",
+  "billingManageSubscription": "Manage subscription",
+  "billingManageOpenFailed": "Could not open subscription management.",
   "billingUpgradePlus": "Upgrade Plus",
+  "billingUpgradePlusWithPrice": "Subscribe monthly • {price}",
+  "@billingUpgradePlusWithPrice": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "billingCreditPackTitle": "{credits} credits",
+  "@billingCreditPackTitle": {
+    "placeholders": {
+      "credits": { "type": "int" }
+    }
+  },
+  "billingBuyAction": "Buy",
   "billingBuyCredits": "Buy 50 credits",
   "billingLoading": "Loading...",
-  "billingRestorePurchases": "Restore purchases",
+  "billingRestorePurchases": "Restore subscription",
   "billingUnavailable": "Google Play Billing is not available on this device.",
   "billingProductsNotActive": "Some products are not active in Play Console yet.",
   "billingProductsLoadFailed": "Products could not be loaded.",

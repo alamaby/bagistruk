@@ -290,7 +290,45 @@ class AppL10nId extends AppL10n {
   String get billingPlusActive => 'Plus aktif';
 
   @override
+  String get billingPlanFree => 'Free';
+
+  @override
+  String get billingPlusCardTitle => 'BagiStruk Plus';
+
+  @override
+  String get billingPlusBenefitCredits => '60 credit OCR per bulan';
+
+  @override
+  String get billingPlusBenefitNoAds => 'Tanpa iklan';
+
+  @override
+  String get billingPlusBenefitFeatures => 'Akses fitur Plus';
+
+  @override
+  String get billingTopUpCardTitle => 'Top up credit OCR';
+
+  @override
+  String get billingManageSubscription => 'Kelola langganan';
+
+  @override
+  String get billingManageOpenFailed =>
+      'Tidak dapat membuka pengelolaan langganan.';
+
+  @override
   String get billingUpgradePlus => 'Upgrade Plus';
+
+  @override
+  String billingUpgradePlusWithPrice(String price) {
+    return 'Berlangganan bulanan • $price';
+  }
+
+  @override
+  String billingCreditPackTitle(int credits) {
+    return '$credits credit';
+  }
+
+  @override
+  String get billingBuyAction => 'Beli';
 
   @override
   String get billingBuyCredits => 'Beli 50 credit';
@@ -299,7 +337,7 @@ class AppL10nId extends AppL10n {
   String get billingLoading => 'Memuat...';
 
   @override
-  String get billingRestorePurchases => 'Pulihkan pembelian';
+  String get billingRestorePurchases => 'Pulihkan langganan';
 
   @override
   String get billingUnavailable =>

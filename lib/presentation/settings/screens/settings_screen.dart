@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/billing/google_play_billing_catalog.dart';
+import '../../../core/config/app_constants.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
@@ -598,8 +600,10 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
   StreamSubscription<List<PurchaseDetails>>? _purchaseSub;
   List<ProductDetails> _products = const [];
   bool _loading = true;
-  bool _busy = false;
-  String? _message;
+  String? _processingProductId;
+  bool _restoring = false;
+  String? _globalMessage;
+  final Map<String, String> _rowMessage = {};
 
   @override
   void initState() {
@@ -618,9 +622,6 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
-    final theme = Theme.of(context);
-    final plus = _product(GooglePlayBillingCatalog.plusMonthly.id);
-    final pack = _product(GooglePlayBillingCatalog.creditPacks.first.id);
 
     if (widget.isAnonymous) {
       return ListTile(
@@ -632,56 +633,62 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       );
     }
 
+    final plus = _product(GooglePlayBillingCatalog.plusMonthly.id);
+    final packs = _purchasableCreditPacks();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(l10n.billingTitle, style: theme.textTheme.titleMedium),
-          if (_message != null) ...[
-            SizedBox(height: 6.h),
-            Text(_message!, style: theme.textTheme.bodySmall),
-          ],
-          SizedBox(height: 10.h),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              FilledButton.icon(
-                icon: const Icon(Icons.workspace_premium_outlined),
-                onPressed: _canBuy(plus) && !widget.isPlus
-                    ? () => _buy(plus!)
-                    : null,
-                label: Text(
-                  widget.isPlus
-                      ? l10n.billingPlusActive
-                      : _buttonLabel(l10n.billingUpgradePlus, plus),
-                ),
-              ),
-              OutlinedButton.icon(
-                icon: const Icon(Icons.add_card_outlined),
-                onPressed: _canBuy(pack) ? () => _buy(pack!) : null,
-                label: Text(_buttonLabel(l10n.billingBuyCredits, pack)),
-              ),
-              IconButton.outlined(
-                tooltip: l10n.billingRestorePurchases,
-                onPressed: _busy ? null : _restore,
-                icon: const Icon(Icons.restore_outlined),
-              ),
-            ],
+          _PlusSubscriptionCard(
+            product: plus,
+            isPlus: widget.isPlus,
+            loading: _loading,
+            busy: _processingProductId == plus?.id,
+            message: plus == null ? _globalMessage : null,
+            onSubscribe: plus == null || widget.isPlus
+                ? null
+                : () => _buy(plus),
+            onManage: widget.isPlus ? _openPlaySubscriptions : null,
           ),
+          if (packs.isNotEmpty) ...[
+            SizedBox(height: 12.h),
+            _CreditTopUpCard(
+              products: packs,
+              loading: _loading,
+              processingId: _processingProductId,
+              rowMessage: _rowMessage,
+              onBuy: _buy,
+            ),
+          ] else if (!_loading && _globalMessage == null)
+            const SizedBox.shrink(),
+          SizedBox(height: 8.h),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              icon: const Icon(Icons.restore_outlined),
+              onPressed: _restoring ? null : _restore,
+              label: Text(l10n.billingRestorePurchases),
+            ),
+          ),
+          if (_globalMessage != null && _processingProductId == null) ...[
+            SizedBox(height: 4.h),
+            Text(
+              _globalMessage!,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ],
       ),
     );
   }
 
-  bool _canBuy(ProductDetails? product) =>
-      !_loading && !_busy && product != null;
-
-  String _buttonLabel(String fallback, ProductDetails? product) {
-    if (_loading) return AppL10n.of(context).billingLoading;
-    if (product == null) return fallback;
-    return '$fallback ${product.price}';
+  List<ProductDetails> _purchasableCreditPacks() {
+    final ids = GooglePlayBillingCatalog.creditPacks
+        .map((p) => p.id)
+        .toSet();
+    return _products.where((p) => ids.contains(p.id)).toList();
   }
 
   ProductDetails? _product(String id) {
@@ -695,7 +702,8 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
     if (!mounted) return;
     setState(() {
       _loading = true;
-      _message = null;
+      _globalMessage = null;
+      _rowMessage.clear();
     });
     try {
       final billing = ref.read(googlePlayBillingServiceProvider);
@@ -704,7 +712,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
         if (!mounted) return;
         setState(() {
           _products = const [];
-          _message = AppL10n.of(context).billingUnavailable;
+          _globalMessage = AppL10n.of(context).billingUnavailable;
         });
         return;
       }
@@ -712,13 +720,12 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       if (!mounted) return;
       setState(() {
         _products = response.productDetails;
-        _message = response.notFoundIDs.isEmpty
-            ? null
-            : AppL10n.of(context).billingProductsNotActive;
       });
     } catch (_) {
       if (!mounted) return;
-      setState(() => _message = AppL10n.of(context).billingProductsLoadFailed);
+      setState(
+        () => _globalMessage = AppL10n.of(context).billingProductsLoadFailed,
+      );
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -726,33 +733,48 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
 
   Future<void> _buy(ProductDetails product) async {
     setState(() {
-      _busy = true;
-      _message = AppL10n.of(context).billingOpeningPlay;
+      _processingProductId = product.id;
+      _rowMessage[product.id] = AppL10n.of(context).billingOpeningPlay;
     });
     try {
       await ref.read(googlePlayBillingServiceProvider).buy(product);
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _busy = false;
-        _message = AppL10n.of(context).billingPurchaseStartFailed;
+        _processingProductId = null;
+        _rowMessage[product.id] =
+            AppL10n.of(context).billingPurchaseStartFailed;
       });
     }
   }
 
   Future<void> _restore() async {
     setState(() {
-      _busy = true;
-      _message = AppL10n.of(context).billingRestoringPurchases;
+      _restoring = true;
+      _globalMessage = AppL10n.of(context).billingRestoringPurchases;
     });
     try {
       await ref.read(googlePlayBillingServiceProvider).restorePurchases();
     } catch (_) {
       if (!mounted) return;
-      setState(() {
-        _busy = false;
-        _message = AppL10n.of(context).billingRestoreFailed;
-      });
+      setState(() => _globalMessage = AppL10n.of(context).billingRestoreFailed);
+    } finally {
+      if (mounted) setState(() => _restoring = false);
+    }
+  }
+
+  Future<void> _openPlaySubscriptions() async {
+    final url = Uri.parse(
+      'https://play.google.com/store/account/subscriptions?package='
+      '${Uri.encodeComponent(AppConstants.androidPackageName)}',
+    );
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = AppL10n.of(context);
+    final ok = await launchUrl(url, mode: LaunchMode.externalApplication);
+    if (!ok) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.billingManageOpenFailed)),
+      );
     }
   }
 
@@ -761,15 +783,17 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       if (!mounted) return;
       if (purchase.status == PurchaseStatus.pending) {
         setState(() {
-          _busy = true;
-          _message = AppL10n.of(context).billingPaymentPending;
+          _processingProductId = purchase.productID;
+          _rowMessage[purchase.productID] =
+              AppL10n.of(context).billingPaymentPending;
         });
         continue;
       }
       if (purchase.status == PurchaseStatus.error) {
         setState(() {
-          _busy = false;
-          _message = AppL10n.of(context).billingPurchaseFailed;
+          _processingProductId = null;
+          _rowMessage[purchase.productID] =
+              AppL10n.of(context).billingPurchaseFailed;
         });
         continue;
       }
@@ -781,16 +805,300 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
         case Success<void>():
           ref.invalidate(ocrCreditStatusProvider);
           setState(() {
-            _busy = false;
-            _message = AppL10n.of(context).billingPurchaseSuccess;
+            _processingProductId = null;
+            _rowMessage.remove(purchase.productID);
+            _globalMessage = AppL10n.of(context).billingPurchaseSuccess;
           });
         case ResultFailure<void>():
           setState(() {
-            _busy = false;
-            _message = AppL10n.of(context).billingPurchaseVerifyFailed;
+            _processingProductId = null;
+            _rowMessage[purchase.productID] =
+                AppL10n.of(context).billingPurchaseVerifyFailed;
           });
       }
     }
+  }
+}
+
+class _PlusSubscriptionCard extends StatelessWidget {
+  const _PlusSubscriptionCard({
+    required this.product,
+    required this.isPlus,
+    required this.loading,
+    required this.busy,
+    required this.message,
+    required this.onSubscribe,
+    required this.onManage,
+  });
+
+  final ProductDetails? product;
+  final bool isPlus;
+  final bool loading;
+  final bool busy;
+  final String? message;
+  final VoidCallback? onSubscribe;
+  final VoidCallback? onManage;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final canBuy = product != null && !isPlus && !loading && !busy;
+    return _BillingCard(
+      title: l10n.billingPlusCardTitle,
+      badge: isPlus ? l10n.billingPlusActive : l10n.billingPlanFree,
+      badgeTone: isPlus ? _BadgeTone.active : _BadgeTone.neutral,
+      benefits: [
+        l10n.billingPlusBenefitCredits,
+        l10n.billingPlusBenefitNoAds,
+        l10n.billingPlusBenefitFeatures,
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (isPlus && onManage != null)
+            OutlinedButton.icon(
+              icon: const Icon(Icons.open_in_new),
+              onPressed: onManage,
+              label: Text(l10n.billingManageSubscription),
+            )
+          else
+            FilledButton.icon(
+              icon: const Icon(Icons.workspace_premium_outlined),
+              onPressed: canBuy ? onSubscribe : null,
+              label: Text(
+                loading && product == null
+                    ? l10n.billingLoading
+                    : l10n.billingUpgradePlusWithPrice(
+                        product?.price ?? '',
+                      ),
+              ),
+              style: FilledButton.styleFrom(
+                backgroundColor: scheme.primary,
+                foregroundColor: scheme.onPrimary,
+              ),
+            ),
+          if (message != null) ...[
+            SizedBox(height: 8.h),
+            Text(
+              message!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _CreditTopUpCard extends StatelessWidget {
+  const _CreditTopUpCard({
+    required this.products,
+    required this.loading,
+    required this.processingId,
+    required this.rowMessage,
+    required this.onBuy,
+  });
+
+  final List<ProductDetails> products;
+  final bool loading;
+  final String? processingId;
+  final Map<String, String> rowMessage;
+  final void Function(ProductDetails) onBuy;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    return _BillingCard(
+      title: l10n.billingTopUpCardTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final product in products) ...[
+            _CreditPackRow(
+              product: product,
+              busy: processingId == product.id,
+              message: rowMessage[product.id],
+              onBuy: () => onBuy(product),
+            ),
+            if (product != products.last) Divider(height: 24.h),
+          ],
+          if (loading)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h),
+              child: Center(
+                child: Text(
+                  l10n.billingLoading,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CreditPackRow extends StatelessWidget {
+  const _CreditPackRow({
+    required this.product,
+    required this.busy,
+    required this.message,
+    required this.onBuy,
+  });
+
+  final ProductDetails product;
+  final bool busy;
+  final String? message;
+  final VoidCallback onBuy;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final catalog = GooglePlayBillingCatalog.byId(product.id);
+    final credits = catalog?.credits ?? 0;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.billingCreditPackTitle(credits),
+                style: theme.textTheme.titleSmall,
+              ),
+              if (message != null) ...[
+                SizedBox(height: 2.h),
+                Text(
+                  message!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        SizedBox(width: 12.w),
+        Text(
+          product.price,
+          style: theme.textTheme.titleSmall,
+        ),
+        SizedBox(width: 12.w),
+        FilledButton.tonalIcon(
+          icon: const Icon(Icons.add_card_outlined),
+          onPressed: busy ? null : onBuy,
+          label: Text(l10n.billingBuyAction),
+        ),
+      ],
+    );
+  }
+}
+
+enum _BadgeTone { active, neutral }
+
+class _BillingCard extends StatelessWidget {
+  const _BillingCard({
+    required this.title,
+    required this.child,
+    this.badge,
+    this.badgeTone = _BadgeTone.neutral,
+    this.benefits = const [],
+  });
+
+  final String title;
+  final String? badge;
+  final _BadgeTone badgeTone;
+  final List<String> benefits;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isActive = badgeTone == _BadgeTone.active;
+    final badgeColor = isActive ? scheme.primary : scheme.surfaceContainerHigh;
+    final badgeFg =
+        isActive ? scheme.onPrimary : scheme.onSurfaceVariant;
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: scheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              if (badge != null) ...[
+                SizedBox(width: 8.w),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 4.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: badgeColor,
+                    borderRadius: BorderRadius.circular(999.r),
+                  ),
+                  child: Text(
+                    badge!,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: badgeFg,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (benefits.isNotEmpty) ...[
+            SizedBox(height: 10.h),
+            for (final benefit in benefits) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: Icon(
+                      Icons.check_circle_outline,
+                      size: 16.r,
+                      color: scheme.primary,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Text(
+                      benefit,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 4.h),
+            ],
+          ],
+          SizedBox(height: 12.h),
+          child,
+        ],
+      ),
+    );
   }
 }
 

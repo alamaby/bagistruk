@@ -128,10 +128,31 @@
   "billingTitle": "Plus dan paket credit",
   "billingAnonSubtitle": "Daftar akun dulu untuk membeli Plus atau top-up credit.",
   "billingPlusActive": "Plus aktif",
+  "billingPlanFree": "Free",
+  "billingPlusCardTitle": "BagiStruk Plus",
+  "billingPlusBenefitCredits": "60 credit OCR per bulan",
+  "billingPlusBenefitNoAds": "Tanpa iklan",
+  "billingPlusBenefitFeatures": "Akses fitur Plus",
+  "billingTopUpCardTitle": "Top up credit OCR",
+  "billingManageSubscription": "Kelola langganan",
+  "billingManageOpenFailed": "Tidak dapat membuka pengelolaan langganan.",
   "billingUpgradePlus": "Upgrade Plus",
+  "billingUpgradePlusWithPrice": "Berlangganan bulanan • {price}",
+  "@billingUpgradePlusWithPrice": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "billingCreditPackTitle": "{credits} credit",
+  "@billingCreditPackTitle": {
+    "placeholders": {
+      "credits": { "type": "int" }
+    }
+  },
+  "billingBuyAction": "Beli",
   "billingBuyCredits": "Beli 50 credit",
   "billingLoading": "Memuat...",
-  "billingRestorePurchases": "Pulihkan pembelian",
+  "billingRestorePurchases": "Pulihkan langganan",
   "billingUnavailable": "Google Play Billing belum tersedia di perangkat ini.",
   "billingProductsNotActive": "Beberapa produk belum aktif di Play Console.",
   "billingProductsLoadFailed": "Produk belum bisa dimuat.",

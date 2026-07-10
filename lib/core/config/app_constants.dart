@@ -13,6 +13,11 @@ class AppConstants {
 
   static const String deleteAccountEdgeFunctionName = 'delete-account';
 
+  /// Android application ID. Used for Play Store subscription center deep
+  /// link and any other place that needs the canonical package name
+  /// without reading it from the Android-only build context.
+  static const String androidPackageName = 'com.alamaby.bagistruk';
+
   /// External links shown on the About screen. Keep placeholders as '#'
   /// until the final public URLs are ready.
   static const String websiteUrl = 'https://bagistruk.vercel.app/';
