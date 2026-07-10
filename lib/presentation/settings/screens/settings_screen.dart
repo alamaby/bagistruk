@@ -15,7 +15,9 @@ import '../../../domain/entities/auth_snapshot.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../../core/ads/ad_config.dart';
+import '../../../core/ads/ad_service.dart';
 import '../../ads/widgets/banner_ad_widget.dart';
+import '../providers/ad_privacy_options_provider.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
 import '../../shared/widgets/plus_info_icon.dart';
@@ -252,6 +254,7 @@ class _SettingsBody extends ConsumerWidget {
               },
             ),
           ),
+        _AdPrivacyTile(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: const BannerAdWidget(placement: BannerAdPlacement.settings),
@@ -788,6 +791,30 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
           });
       }
     }
+  }
+}
+
+class _AdPrivacyTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final required = switch (ref.watch(adPrivacyOptionsRequiredProvider)) {
+      AsyncData(:final value) => value,
+      _ => false,
+    };
+    if (!required) return const SizedBox.shrink();
+    final l10n = AppL10n.of(context);
+    final theme = Theme.of(context);
+    return ListTile(
+      leading: const Icon(Icons.privacy_tip_outlined),
+      title: Text(l10n.adPrivacyChoicesTitle),
+      subtitle: Text(
+        l10n.adPrivacyChoicesSubtitle,
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+      onTap: () => AdService.showConsentFormIfAvailable(),
+    );
   }
 }
 

@@ -1268,4 +1268,11 @@ class AppL10nId extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!';
+
+  @override
+  String get adPrivacyChoicesTitle => 'Pilihan privasi iklan';
+
+  @override
+  String get adPrivacyChoicesSubtitle =>
+      'Tinjau atau ubah persetujuan iklan bila diwajibkan.';
 }

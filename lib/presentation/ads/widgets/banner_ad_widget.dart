@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../core/ads/ad_config.dart';
+import '../../../core/ads/ad_service.dart';
 import '../../../domain/entities/user_profile.dart';
 import '../../../presentation/settings/providers/profile_notifier.dart';
 import '../../credits/providers/ocr_credit_status_provider.dart';
@@ -84,8 +87,15 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   }
 
   void _load() {
+    unawaited(_loadAd());
+  }
+
+  Future<void> _loadAd() async {
     final unitId = AdConfig.bannerAdUnitId(widget.placement);
     if (!AdConfig.adsEnabled || unitId == null) return;
+
+    final canRequestAds = await AdService.canRequestAds();
+    if (!mounted || !canRequestAds) return;
 
     final ad = BannerAd(
       adUnitId: unitId,
@@ -108,6 +118,6 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
     );
 
     _ad = ad;
-    ad.load();
+    unawaited(ad.load());
   }
 }

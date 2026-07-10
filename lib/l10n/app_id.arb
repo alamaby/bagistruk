@@ -548,5 +548,8 @@
   "paywallRegister": "Daftar",
   "paywallLogin": "Masuk",
 
-  "scanEmptyHint": "Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!"
+  "scanEmptyHint": "Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!",
+
+  "adPrivacyChoicesTitle": "Pilihan privasi iklan",
+  "adPrivacyChoicesSubtitle": "Tinjau atau ubah persetujuan iklan bila diwajibkan."
 }

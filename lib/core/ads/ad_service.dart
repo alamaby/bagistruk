@@ -91,4 +91,24 @@ class AdService {
       // need a try/catch of their own.
     }
   }
+
+  /// Returns true if the user has provided consent and ads can be
+  /// requested. Call before every ad load to respect the user's consent
+  /// choice. Returns false when ads are disabled, on unsupported
+  /// platforms, or when consent is not yet available.
+  static Future<bool> canRequestAds() async {
+    if (!AdConfig.adsEnabled) return false;
+    return ConsentInformation.instance.canRequestAds();
+  }
+
+  /// Returns true when a privacy options entry point is required so the
+  /// user can review or change their ad privacy choices at any time.
+  /// Call after `requestConsentInfoUpdate()` has completed — otherwise
+  /// the status is always `unknown`.
+  static Future<bool> isPrivacyOptionsRequired() async {
+    if (!AdConfig.adsEnabled) return false;
+    final status = await ConsentInformation.instance
+        .getPrivacyOptionsRequirementStatus();
+    return status == PrivacyOptionsRequirementStatus.required;
+  }
 }

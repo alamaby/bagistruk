@@ -1,12 +1,14 @@
 # Privacy Policy — BagiStruk
 
-**Effective date:** 2026-06-11
+**Effective date:** 2026-07-10
 
 This policy explains how BagiStruk collects, uses, stores, and deletes data. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
 ## Summary
 
 BagiStruk is a split-bill app that helps users scan receipts, extract bill items with OCR, and divide payments among participants. We collect only the data needed to provide these features. We do not sell personal data. If ads are enabled, we use Google Mobile Ads / AdMob to show ads and measure ad performance.
+
+For users in the European Economic Area, the United Kingdom, and Switzerland, we use Google's User Messaging Platform (UMP) and AdMob's European regulations message — a Google-certified Consent Management Platform (CMP) integrated with the IAB Transparency and Consent Framework (TCF) v2.3. This message may ask for consent for cookies, SDK local storage, advertising identifiers, and the collection and use of personal data for personalized ads, in line with Google's EU User Consent Policy, the ePrivacy Directive, and the GDPR.
 
 ## Who We Are
 
@@ -58,7 +60,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 - To store user preferences and personalize the app.
 - To track last activity for account retention and cleanup.
 - To send inactivity reminders to registered users before account cleanup.
-- To show ads, measure ad performance, prevent ad fraud, and respect consent choices when ads are enabled.
+- To show ads, measure ad performance, prevent ad fraud, and respect consent choices when ads are enabled. If you do not consent to personalized ads where required, Google Mobile Ads / AdMob may serve non-personalized or limited ads where supported.
 - To fill in a participant's name and phone number from the single contact you choose via the optional "Import from contacts" feature, and to generate WhatsApp deep-links in settlement messages when the bill owner shares them.
 - To diagnose errors, prevent abuse, and enforce database rate limits.
 
@@ -86,7 +88,7 @@ BagiStruk may use:
 - Google Sign-In: optional account login.
 - Google Gemini, OpenRouter, and/or Nvidia NIM: OCR and receipt parsing.
 - Resend or another email provider: inactivity reminder emails and operational OCR provider alerts, if configured.
-- Google Mobile Ads / AdMob: optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging.
+- Google User Messaging Platform (UMP) / AdMob: Google-certified CMP, optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging via the European regulations message, integrated with IAB TCF v2.3.
 - Google Play Billing / Google Play Developer API: purchase processing and server-side purchase verification for subscriptions and one-time OCR credit packs.
 
 ## International Data Transfers
@@ -151,7 +153,11 @@ We do not knowingly collect personal data from children below the applicable age
 
 ## Changes
 
-We may update this policy from time to time. The latest version should be made available in the app and on the public page hosting this document.
+We may update this policy from time to time. The latest version should be made available in the app and on the public page hosting this document. Where consent is required for processing changes, we will ask for fresh consent through our CMP.
+
+## Ad Privacy Choices
+
+If you are in a region that requires consent for personalized ads, the app will show a Google consent message the first time you launch it. You can also review or change your ad privacy choices at any time from **Profile & Settings** in the app. Outside these regions, the ad privacy entry point is hidden.
 
 ## Contact
 
@@ -169,13 +175,15 @@ Indonesia
 
 # Kebijakan Privasi — BagiStruk
 
-**Tanggal berlaku:** 2026-06-11
+**Tanggal berlaku:** 2026-07-10
 
 Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimpan, dan menghapus data. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
 ## Ringkasan
 
 BagiStruk adalah aplikasi pembagi tagihan yang membantu pengguna memindai struk, mengekstrak item tagihan dengan OCR, dan membagi pembayaran antar peserta. Kami hanya mengumpulkan data yang diperlukan agar fitur aplikasi berjalan. Kami tidak menjual data pribadi. Jika iklan diaktifkan, kami memakai Google Mobile Ads / AdMob untuk menampilkan iklan dan mengukur performa iklan.
+
+Untuk pengguna di Wilayah Ekonomi Eropa, Inggris Raya, dan Swiss, kami menggunakan Google User Messaging Platform (UMP) dan pesan European regulations AdMob — sebuah Consent Management Platform (CMP) tersertifikasi Google yang terintegrasi dengan IAB Transparency and Consent Framework (TCF) v2.3. Pesan ini dapat meminta persetujuan untuk cookie, penyimpanan lokal SDK, identifier iklan, serta pengumpulan dan penggunaan data pribadi untuk iklan yang dipersonalisasi, sesuai Google EU User Consent Policy, ePrivacy Directive, dan GDPR.
 
 ## Siapa Kami
 
@@ -227,7 +235,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 - Menyimpan preferensi pengguna dan menyesuaikan pengalaman aplikasi.
 - Melacak aktivitas terakhir untuk retensi dan pembersihan akun.
 - Mengirim reminder tidak aktif kepada pengguna terdaftar sebelum pembersihan akun.
-- Menampilkan iklan, mengukur performa iklan, mencegah fraud iklan, dan menghormati pilihan consent saat iklan diaktifkan.
+- Menampilkan iklan, mengukur performa iklan, mencegah fraud iklan, dan menghormati pilihan consent saat iklan diaktifkan. Jika Anda tidak menyetujui iklan yang dipersonalisasi di wilayah yang mewajibkan, Google Mobile Ads / AdMob dapat menayangkan iklan non-personalized atau limited ads jika didukung.
 - Mengisi nama dan nomor peserta dari satu kontak yang Anda pilih lewat fitur opsional "Import dari kontak", dan membuat deep-link WhatsApp di pesan settlement ketika pemilik tagihan membagikannya.
 - Mendiagnosis error, mencegah penyalahgunaan, dan menerapkan rate limit database.
 
@@ -255,7 +263,7 @@ BagiStruk dapat menggunakan:
 - Google Sign-In: login akun opsional.
 - Google Gemini, OpenRouter, dan/atau Nvidia NIM: OCR dan parsing struk.
 - Resend atau penyedia email lain: email reminder tidak aktif dan alert operasional penyedia OCR, jika dikonfigurasi.
-- Google Mobile Ads / AdMob: penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi.
+- Google User Messaging Platform (UMP) / AdMob: CMP tersertifikasi Google, penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi melalui European regulations message, terintegrasi dengan IAB TCF v2.3.
 - Google Play Billing / Google Play Developer API: pemrosesan pembelian dan verifikasi pembelian sisi server untuk subscription dan paket credit OCR sekali beli.
 
 ## Transfer Data Lintas Negara
@@ -320,7 +328,11 @@ Kami tidak dengan sengaja mengumpulkan data pribadi dari anak di bawah batas usi
 
 ## Perubahan
 
-Kami dapat memperbarui kebijakan ini dari waktu ke waktu. Versi terbaru sebaiknya tersedia di aplikasi dan halaman publik yang menghosting dokumen ini.
+Kami dapat memperbarui kebijakan ini dari waktu ke waktu. Versi terbaru sebaiknya tersedia di aplikasi dan halaman publik yang menghosting dokumen ini. Bila persetujuan diperlukan untuk perubahan pemrosesan, kami akan meminta persetujuan baru melalui CMP kami.
+
+## Pilihan Privasi Iklan
+
+Jika Anda berada di wilayah yang mewajibkan persetujuan untuk iklan yang dipersonalisasi, aplikasi akan menampilkan pesan persetujuan Google saat pertama kali Anda meluncurkannya. Anda juga dapat meninjau atau mengubah pilihan privasi iklan kapan saja dari **Profil & Pengaturan** di aplikasi. Di luar wilayah tersebut, pintu masuk pilihan privasi iklan tidak ditampilkan.
 
 ## Kontak
 

@@ -1,6 +1,6 @@
 # Terms of Service — BagiStruk
 
-**Effective date:** 2026-06-11
+**Effective date:** 2026-07-10
 
 These Terms explain the basic rules for using BagiStruk. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -56,6 +56,8 @@ Opening the app after receiving a reminder resets the pending inactivity deletio
 
 BagiStruk depends on third-party services such as Supabase, Google Sign-In, OCR providers, Google Mobile Ads / AdMob if ads are enabled, Google Play Billing when purchases are available, and email providers for transactional reminders or operational alerts. Their availability, policies, and behavior may affect the app. We are not responsible for outages or changes made by third-party providers.
 
+**Advertising and consent.** When ads are enabled, BagiStruk may show ads through Google Mobile Ads / AdMob. Ad personalization and related consent choices are handled as described in the Privacy Policy and, where required, through Google's User Messaging Platform (CMP).
+
 ## 9. Donations And External Links
 
 The app may include links to websites, profiles, and donation platforms such as Buy Me a Coffee, Saweria, or Patreon. These services are operated by third parties. Donations are voluntary and do not guarantee specific features, support levels, or continued service availability.
@@ -97,16 +99,16 @@ Questions about these Terms, complaints, or requests to exercise your consumer r
 **Email:** alam.aby.b@gmail.com
 
 **Postal address:**
-[Operator legal name — to be filled before public release]
-[Street address]
-[City, postal code]
-[Country]
+Alam Aby Bashit
+Komplek Kamarasan Residence A3/2 Kelurahan Buahbatu Kecamatan Bojongsoang
+Bandung, 40287
+Indonesia
 
 ---
 
 # Syarat dan Ketentuan — BagiStruk
 
-**Tanggal berlaku:** 2026-06-11
+**Tanggal berlaku:** 2026-07-10
 
 Syarat ini menjelaskan aturan dasar penggunaan BagiStruk. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -161,6 +163,8 @@ Membuka aplikasi setelah menerima reminder akan mereset status penghapusan tidak
 ## 8. Layanan Pihak Ketiga
 
 BagiStruk bergantung pada layanan pihak ketiga seperti Supabase, Google Sign-In, penyedia OCR, Google Mobile Ads / AdMob jika iklan diaktifkan, Google Play Billing saat pembelian tersedia, dan penyedia email untuk reminder transaksional atau alert operasional. Ketersediaan, kebijakan, dan perilaku layanan tersebut dapat memengaruhi aplikasi. Kami tidak bertanggung jawab atas gangguan atau perubahan dari penyedia pihak ketiga.
+
+**Iklan dan persetujuan.** Saat iklan diaktifkan, BagiStruk dapat menampilkan iklan melalui Google Mobile Ads / AdMob. Personalisasi iklan dan pilihan persetujuan terkait diatur sebagaimana dijelaskan dalam Kebijakan Privasi dan, bila diwajibkan, melalui Google User Messaging Platform (CMP).
 
 ## 9. Donasi Dan Link Eksternal
 

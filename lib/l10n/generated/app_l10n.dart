@@ -2320,6 +2320,18 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!'**
   String get scanEmptyHint;
+
+  /// No description provided for @adPrivacyChoicesTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilihan privasi iklan'**
+  String get adPrivacyChoicesTitle;
+
+  /// No description provided for @adPrivacyChoicesSubtitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Tinjau atau ubah persetujuan iklan bila diwajibkan.'**
+  String get adPrivacyChoicesSubtitle;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

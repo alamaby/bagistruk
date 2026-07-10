@@ -548,5 +548,8 @@
   "paywallRegister": "Sign Up",
   "paywallLogin": "Sign In",
 
-  "scanEmptyHint": "Take a photo of a shopping or dining receipt to start splitting fairly!"
+  "scanEmptyHint": "Take a photo of a shopping or dining receipt to start splitting fairly!",
+
+  "adPrivacyChoicesTitle": "Ad privacy choices",
+  "adPrivacyChoicesSubtitle": "Review or change ad consent where required."
 }

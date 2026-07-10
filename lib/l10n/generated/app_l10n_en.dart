@@ -1270,4 +1270,11 @@ class AppL10nEn extends AppL10n {
   @override
   String get scanEmptyHint =>
       'Take a photo of a shopping or dining receipt to start splitting fairly!';
+
+  @override
+  String get adPrivacyChoicesTitle => 'Ad privacy choices';
+
+  @override
+  String get adPrivacyChoicesSubtitle =>
+      'Review or change ad consent where required.';
 }
