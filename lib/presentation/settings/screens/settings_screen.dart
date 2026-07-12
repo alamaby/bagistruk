@@ -685,7 +685,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
             product: plus,
             isPlus: widget.isPlus,
             loading: _loading,
-            busy: _processingProductId == plus?.id,
+            busy: _processingProductId != null,
             message: plus == null ? _globalMessage : null,
             onSubscribe: plus == null || widget.isPlus
                 ? null
@@ -771,20 +771,61 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
     }
   }
 
+  // ── Purchase flow helpers ──────────────────────────────────────────
+
+  /// Resolve product ID dari purchase event.
+  /// Android plugin kadang emit cancel/error dengan productID kosong.
+  /// Fallback ke [_processingProductId].
+  String? _eventProductId(PurchaseDetails purchase) {
+    if (purchase.productID.isNotEmpty) return purchase.productID;
+    return _processingProductId;
+  }
+
+  /// Apakah event ini milik flow pembelian yang sedang aktif?
+  bool _isActiveProduct(String? productId) {
+    return productId != null && productId == _processingProductId;
+  }
+
+  /// Clear state pembelian aktif untuk [productId].
+  /// Jika [productId] null atau bukan product aktif, no-op.
+  /// Jika [tampilkanPesan] true, simpan pesan di row.
+  /// Jika false, hapus row message.
+  void _clearActivePurchase(String? productId, {String? tampilkanPesan}) {
+    if (productId == null || productId != _processingProductId) return;
+    setState(() {
+      _processingProductId = null;
+      if (tampilkanPesan != null) {
+        _rowMessage[productId] = tampilkanPesan;
+      } else {
+        _rowMessage.remove(productId);
+      }
+    });
+  }
+
+  // ── Buy / Restore / Manage ────────────────────────────────────────
+
   Future<void> _buy(ProductDetails product) async {
     setState(() {
       _processingProductId = product.id;
       _rowMessage[product.id] = AppL10n.of(context).billingOpeningPlay;
     });
     try {
-      await ref.read(googlePlayBillingServiceProvider).buy(product);
+      final ok = await ref
+          .read(googlePlayBillingServiceProvider)
+          .buy(product);
+      if (!mounted) return;
+      if (!ok) {
+        _clearActivePurchase(
+          product.id,
+          tampilkanPesan: AppL10n.of(context).billingPurchaseStartFailed,
+        );
+      }
     } catch (_) {
       if (!mounted) return;
-      setState(() {
-        _processingProductId = null;
-        _rowMessage[product.id] =
-            AppL10n.of(context).billingPurchaseStartFailed;
-      });
+      _clearActivePurchase(
+        product.id,
+        tampilkanPesan: AppL10n.of(context).billingPurchaseStartFailed,
+      );
     }
   }
 
@@ -818,43 +859,61 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
     }
   }
 
+  // ── Purchase stream handler ────────────────────────────────────────
+
   Future<void> _handlePurchases(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
       if (!mounted) return;
-      if (purchase.status == PurchaseStatus.pending) {
-        setState(() {
-          _processingProductId = purchase.productID;
-          _rowMessage[purchase.productID] =
-              AppL10n.of(context).billingPaymentPending;
-        });
-        continue;
-      }
-      if (purchase.status == PurchaseStatus.error) {
-        setState(() {
-          _processingProductId = null;
-          _rowMessage[purchase.productID] =
-              AppL10n.of(context).billingPurchaseFailed;
-        });
-        continue;
-      }
-      final result = await ref
-          .read(googlePlayBillingServiceProvider)
-          .verifyAndFinish(purchase);
-      if (!mounted) return;
-      switch (result) {
-        case Success<void>():
-          ref.invalidate(ocrCreditStatusProvider);
-          setState(() {
-            _processingProductId = null;
-            _rowMessage.remove(purchase.productID);
-            _globalMessage = AppL10n.of(context).billingPurchaseSuccess;
-          });
-        case ResultFailure<void>():
-          setState(() {
-            _processingProductId = null;
-            _rowMessage[purchase.productID] =
-                AppL10n.of(context).billingPurchaseVerifyFailed;
-          });
+
+      final productId = _eventProductId(purchase);
+
+      switch (purchase.status) {
+        case PurchaseStatus.pending:
+          if (_isActiveProduct(productId)) {
+            setState(() {
+              _rowMessage[productId!] =
+                  AppL10n.of(context).billingPaymentPending;
+            });
+          }
+          continue;
+
+        case PurchaseStatus.canceled:
+          _clearActivePurchase(productId);
+          continue;
+
+        case PurchaseStatus.error:
+          _clearActivePurchase(
+            productId,
+            tampilkanPesan: AppL10n.of(context).billingPurchaseFailed,
+          );
+          continue;
+
+        case PurchaseStatus.purchased:
+        case PurchaseStatus.restored:
+          // Hanya proses event milik product aktif.
+          if (!_isActiveProduct(productId)) continue;
+
+          final result = await ref
+              .read(googlePlayBillingServiceProvider)
+              .verifyAndFinish(purchase);
+          if (!mounted) return;
+          switch (result) {
+            case Success<void>():
+              ref.invalidate(ocrCreditStatusProvider);
+              setState(() {
+                _processingProductId = null;
+                if (productId != null) _rowMessage.remove(productId);
+                _globalMessage = AppL10n.of(context).billingPurchaseSuccess;
+              });
+            case ResultFailure<void>():
+              setState(() {
+                _processingProductId = null;
+                if (productId != null) {
+                  _rowMessage[productId] =
+                      AppL10n.of(context).billingPurchaseVerifyFailed;
+                }
+              });
+          }
       }
     }
   }
@@ -960,7 +1019,7 @@ class _CreditTopUpCard extends StatelessWidget {
           for (final product in products) ...[
             _CreditPackRow(
               product: product,
-              busy: processingId == product.id,
+              busy: processingId != null,
               message: rowMessage[product.id],
               onBuy: () => onBuy(product),
             ),

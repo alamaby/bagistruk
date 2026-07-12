@@ -21,21 +21,21 @@ class GooglePlayBillingService {
   Future<ProductDetailsResponse> loadProducts() =>
       _iap.queryProductDetails(GooglePlayBillingCatalog.productIds);
 
-  Future<void> buy(ProductDetails details) async {
+  Future<bool> buy(ProductDetails details) async {
     final catalogProduct = GooglePlayBillingCatalog.byId(details.id);
     if (catalogProduct == null) {
       throw ArgumentError.value(details.id, 'details.id', 'Unknown product');
     }
     final purchaseParam = PurchaseParam(productDetails: details);
-    switch (catalogProduct.type) {
-      case GooglePlayBillingProductType.subscription:
-        await _iap.buyNonConsumable(purchaseParam: purchaseParam);
-      case GooglePlayBillingProductType.inapp:
+    return switch (catalogProduct.type) {
+      GooglePlayBillingProductType.subscription =>
+        await _iap.buyNonConsumable(purchaseParam: purchaseParam),
+      GooglePlayBillingProductType.inapp =>
         await _iap.buyConsumable(
           purchaseParam: purchaseParam,
           autoConsume: false,
-        );
-    }
+        ),
+    };
   }
 
   Future<void> restorePurchases() => _iap.restorePurchases();
