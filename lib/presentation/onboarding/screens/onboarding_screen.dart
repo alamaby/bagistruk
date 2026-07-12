@@ -7,6 +7,18 @@ import '../../../core/router/routes.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../providers/onboarding_notifier.dart';
 
+class _OnboardingSlide {
+  const _OnboardingSlide({
+    required this.title,
+    required this.body,
+    required this.imageAsset,
+  });
+
+  final String title;
+  final String body;
+  final String imageAsset;
+}
+
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key, this.isReplay = false});
 
@@ -23,10 +35,37 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   bool get _busy => _submitting;
 
+  static const _assetPaths = [
+    'assets/images/onboarding/onboarding_scan.png',
+    'assets/images/onboarding/onboarding_split.png',
+    'assets/images/onboarding/onboarding_settle.png',
+  ];
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  List<_OnboardingSlide> _slides(String title1, String body1,
+      String title2, String body2, String title3, String body3) {
+    return [
+      _OnboardingSlide(
+        imageAsset: _assetPaths[0],
+        title: title1,
+        body: body1,
+      ),
+      _OnboardingSlide(
+        imageAsset: _assetPaths[1],
+        title: title2,
+        body: body2,
+      ),
+      _OnboardingSlide(
+        imageAsset: _assetPaths[2],
+        title: title3,
+        body: body3,
+      ),
+    ];
   }
 
   @override
@@ -39,7 +78,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Top bar: skip button (first-run only) + page indicator
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Row(
@@ -73,23 +111,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       ? const NeverScrollableScrollPhysics()
                       : null,
                   onPageChanged: (i) => setState(() => _index = i),
-                  children: [
-                    _page(
-                      l10n.onboardingTitle1,
-                      l10n.onboardingBody1,
-                      Icons.document_scanner,
-                    ),
-                    _page(
-                      l10n.onboardingTitle2,
-                      l10n.onboardingBody2,
-                      Icons.people_alt,
-                    ),
-                    _page(
-                      l10n.onboardingTitle3,
-                      l10n.onboardingBody3,
-                      Icons.send,
-                    ),
-                  ],
+                  children: _slides(
+                    l10n.onboardingTitle1, l10n.onboardingBody1,
+                    l10n.onboardingTitle2, l10n.onboardingBody2,
+                    l10n.onboardingTitle3, l10n.onboardingBody3,
+                  ).map((s) => _page(s.title, s.body, s.imageAsset)).toList(),
                 ),
               ),
               Padding(
@@ -133,38 +159,54 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  Widget _page(String title, String body, IconData icon) {
+  Widget _page(String title, String body, String imageAsset) {
     final scheme = Theme.of(context).colorScheme;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 100.r, color: scheme.primary),
-        SizedBox(height: 24.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: scheme.onSurface,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SizedBox(height: 16.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40.w),
-          child: Text(
-            body,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: scheme.onSurfaceVariant,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 24.h),
+          Semantics(
+            image: true,
+            label: title,
+            child: Image.asset(
+              imageAsset,
+              height: 250.h,
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => Icon(
+                Icons.image_not_supported_outlined,
+                size: 100.r,
+                color: scheme.primary,
+              ),
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 24.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+                color: scheme.onSurface,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.w),
+            child: Text(
+              body,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
