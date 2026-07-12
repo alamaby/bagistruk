@@ -51,6 +51,9 @@ abstract interface class IProfileRepository {
   /// where the marketing opt-in is collected on the register form itself.
   Future<Result<void>> markWelcomed();
 
+  /// Stamps the onboarding completion so the onboarding wizard is bypassed.
+  Future<Result<void>> markOnboardingCompleted({required int version});
+
   /// Records the user's declared age 18+ status. Drives the AdMob
   /// `setTagForUnderAgeOfConsent` call so minors only see non-personalized
   /// ads. Called from the legal acceptance flow after the user checks the

@@ -572,5 +572,18 @@
   "scanEmptyHint": "Take a photo of a shopping or dining receipt to start splitting fairly!",
 
   "adPrivacyChoicesTitle": "Ad privacy choices",
-  "adPrivacyChoicesSubtitle": "Review or change ad consent where required."
+  "adPrivacyChoicesSubtitle": "Review or change ad consent where required.",
+
+  "onboardingNext": "Next",
+  "onboardingFinish": "Start scanning",
+  "onboardingSkip": "Skip",
+  "onboardingTitle1": "Scan receipt",
+  "onboardingBody1": "Take a photo or pick a receipt. BagiStruk automatically reads items and the total.",
+  "onboardingTitle2": "Split it",
+  "onboardingBody2": "Organize splits for each person. Add friends and select the items they ordered.",
+  "onboardingTitle3": "Settle up",
+  "onboardingBody3": "Share the details via WhatsApp and track payments as they arrive.",
+  "onboardingReplayFinish": "Done",
+  "onboardingSettingsTile": "View app guide",
+  "onboardingSaveError": "Could not save. Please try again."
 }

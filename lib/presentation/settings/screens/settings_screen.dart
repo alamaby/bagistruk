@@ -257,6 +257,11 @@ class _SettingsBody extends ConsumerWidget {
             ),
           ),
         _AdPrivacyTile(),
+        ListTile(
+          leading: const Icon(Icons.help_outline),
+          title: Text(l10n.onboardingSettingsTile),
+          onTap: () => context.push('${Routes.onboarding}?mode=replay'),
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: const BannerAdWidget(placement: BannerAdPlacement.settings),

@@ -24,6 +24,8 @@ abstract class ProfileDto with _$ProfileDto {
     @JsonKey(name: 'accepted_terms_version') int? acceptedTermsVersion,
     @JsonKey(name: 'accepted_privacy_version') int? acceptedPrivacyVersion,
     @JsonKey(name: 'welcomed_at') DateTime? welcomedAt,
+    @JsonKey(name: 'onboarding_completed_at') DateTime? onboardingCompletedAt,
+    @JsonKey(name: 'onboarding_version') @Default(1) int onboardingVersion,
     @JsonKey(name: 'is_adult') @Default(false) bool isAdult,
   }) = _ProfileDto;
 

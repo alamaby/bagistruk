@@ -30,6 +30,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
       acceptedTermsVersion: dto.acceptedTermsVersion,
       acceptedPrivacyVersion: dto.acceptedPrivacyVersion,
       welcomedAt: dto.welcomedAt,
+      onboardingCompletedAt: dto.onboardingCompletedAt,
+      onboardingVersion: dto.onboardingVersion,
       isAdult: dto.isAdult,
     );
   });
@@ -127,6 +129,15 @@ class ProfileRepositoryImpl implements IProfileRepository {
       'welcomed_at': DateTime.now().toUtc().toIso8601String(),
     }),
   );
+
+  @override
+  Future<Result<void>> markOnboardingCompleted({required int version}) =>
+      guardAsync(
+        () => _ds.updateFields({
+          'onboarding_completed_at': DateTime.now().toUtc().toIso8601String(),
+          'onboarding_version': version,
+        }),
+      );
 
   @override
   Future<Result<void>> setIsAdult({required bool isAdult}) =>

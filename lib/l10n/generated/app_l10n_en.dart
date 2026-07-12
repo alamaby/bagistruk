@@ -1315,4 +1315,43 @@ class AppL10nEn extends AppL10n {
   @override
   String get adPrivacyChoicesSubtitle =>
       'Review or change ad consent where required.';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingFinish => 'Start scanning';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingTitle1 => 'Scan receipt';
+
+  @override
+  String get onboardingBody1 =>
+      'Take a photo or pick a receipt. BagiStruk automatically reads items and the total.';
+
+  @override
+  String get onboardingTitle2 => 'Split it';
+
+  @override
+  String get onboardingBody2 =>
+      'Organize splits for each person. Add friends and select the items they ordered.';
+
+  @override
+  String get onboardingTitle3 => 'Settle up';
+
+  @override
+  String get onboardingBody3 =>
+      'Share the details via WhatsApp and track payments as they arrive.';
+
+  @override
+  String get onboardingReplayFinish => 'Done';
+
+  @override
+  String get onboardingSettingsTile => 'View app guide';
+
+  @override
+  String get onboardingSaveError => 'Could not save. Please try again.';
 }

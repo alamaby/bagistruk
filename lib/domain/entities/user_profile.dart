@@ -28,6 +28,10 @@ abstract class UserProfile with _$UserProfile {
     // the post-login welcome (Google sign-in flow). Email/password sign-up
     // sets it directly after `signUp` so the welcome screen is skipped.
     DateTime? welcomedAt,
+    // Onboarding gate. Set when the user finishes the onboarding wizard.
+    DateTime? onboardingCompletedAt,
+    // Onboarding version. Used to re-trigger onboarding if flows change significantly.
+    @Default(1) int onboardingVersion,
     // User-declared age 18+ (or older if required by local law). Drives the
     // AdMob `setTagForUnderAgeOfConsent` call so users below the age of
     // consent only see non-personalized ads. Default FALSE so the app

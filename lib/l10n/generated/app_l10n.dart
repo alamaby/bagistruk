@@ -2398,6 +2398,78 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Tinjau atau ubah persetujuan iklan bila diwajibkan.'**
   String get adPrivacyChoicesSubtitle;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingFinish.
+  ///
+  /// In id, this message translates to:
+  /// **'Mulai scan struk'**
+  String get onboardingFinish;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In id, this message translates to:
+  /// **'Lewati'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingTitle1.
+  ///
+  /// In id, this message translates to:
+  /// **'Scan struk'**
+  String get onboardingTitle1;
+
+  /// No description provided for @onboardingBody1.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto atau pilih struk. BagiStruk membaca item dan total secara otomatis.'**
+  String get onboardingBody1;
+
+  /// No description provided for @onboardingTitle2.
+  ///
+  /// In id, this message translates to:
+  /// **'Atur bagian'**
+  String get onboardingTitle2;
+
+  /// No description provided for @onboardingBody2.
+  ///
+  /// In id, this message translates to:
+  /// **'Atur bagian tiap orang. Tambah teman, lalu pilih item yang mereka pesan.'**
+  String get onboardingBody2;
+
+  /// No description provided for @onboardingTitle3.
+  ///
+  /// In id, this message translates to:
+  /// **'Tagih sampai lunas'**
+  String get onboardingTitle3;
+
+  /// No description provided for @onboardingBody3.
+  ///
+  /// In id, this message translates to:
+  /// **'Bagikan rincian ke WhatsApp dan tandai pembayaran saat sudah masuk.'**
+  String get onboardingBody3;
+
+  /// No description provided for @onboardingReplayFinish.
+  ///
+  /// In id, this message translates to:
+  /// **'Selesai'**
+  String get onboardingReplayFinish;
+
+  /// No description provided for @onboardingSettingsTile.
+  ///
+  /// In id, this message translates to:
+  /// **'Lihat panduan aplikasi'**
+  String get onboardingSettingsTile;
+
+  /// No description provided for @onboardingSaveError.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal menyimpan. Coba lagi.'**
+  String get onboardingSaveError;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

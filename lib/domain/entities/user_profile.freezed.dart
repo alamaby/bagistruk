@@ -22,7 +22,9 @@ mixin _$UserProfile {
  DateTime? get acceptedTermsAt; DateTime? get acceptedPrivacyAt; int? get acceptedTermsVersion; int? get acceptedPrivacyVersion;// Post-login welcome gate. Set once when a non-anonymous user finishes
 // the post-login welcome (Google sign-in flow). Email/password sign-up
 // sets it directly after `signUp` so the welcome screen is skipped.
- DateTime? get welcomedAt;// User-declared age 18+ (or older if required by local law). Drives the
+ DateTime? get welcomedAt;// Onboarding gate. Set when the user finishes the onboarding wizard.
+ DateTime? get onboardingCompletedAt;// Onboarding version. Used to re-trigger onboarding if flows change significantly.
+ int get onboardingVersion;// User-declared age 18+ (or older if required by local law). Drives the
 // AdMob `setTagForUnderAgeOfConsent` call so users below the age of
 // consent only see non-personalized ads. Default FALSE so the app
 // behaves conservatively until the user explicitly declares adult age
@@ -38,16 +40,16 @@ $UserProfileCopyWith<UserProfile> get copyWith => _$UserProfileCopyWithImpl<User
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.onboardingCompletedAt, onboardingCompletedAt) || other.onboardingCompletedAt == onboardingCompletedAt)&&(identical(other.onboardingVersion, onboardingVersion) || other.onboardingVersion == onboardingVersion)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,email,defaultCurrency,languagePref,themePref,isAnonymous,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,isAdult);
+int get hashCode => Object.hash(runtimeType,id,displayName,email,defaultCurrency,languagePref,themePref,isAnonymous,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,onboardingCompletedAt,onboardingVersion,isAdult);
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, displayName: $displayName, email: $email, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, isAnonymous: $isAnonymous, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, isAdult: $isAdult)';
+  return 'UserProfile(id: $id, displayName: $displayName, email: $email, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, isAnonymous: $isAnonymous, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, onboardingCompletedAt: $onboardingCompletedAt, onboardingVersion: $onboardingVersion, isAdult: $isAdult)';
 }
 
 
@@ -58,7 +60,7 @@ abstract mixin class $UserProfileCopyWith<$Res>  {
   factory $UserProfileCopyWith(UserProfile value, $Res Function(UserProfile) _then) = _$UserProfileCopyWithImpl;
 @useResult
 $Res call({
- String id, String? displayName, String? email, String defaultCurrency, String languagePref, String themePref, bool isAnonymous, bool marketingEmailOptIn, DateTime? marketingEmailOptInAt, String? marketingEmailOptInSource, DateTime? acceptedTermsAt, DateTime? acceptedPrivacyAt, int? acceptedTermsVersion, int? acceptedPrivacyVersion, DateTime? welcomedAt, bool isAdult
+ String id, String? displayName, String? email, String defaultCurrency, String languagePref, String themePref, bool isAnonymous, bool marketingEmailOptIn, DateTime? marketingEmailOptInAt, String? marketingEmailOptInSource, DateTime? acceptedTermsAt, DateTime? acceptedPrivacyAt, int? acceptedTermsVersion, int? acceptedPrivacyVersion, DateTime? welcomedAt, DateTime? onboardingCompletedAt, int onboardingVersion, bool isAdult
 });
 
 
@@ -75,7 +77,7 @@ class _$UserProfileCopyWithImpl<$Res>
 
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = freezed,Object? email = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? isAnonymous = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? isAdult = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = freezed,Object? email = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? isAnonymous = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? onboardingCompletedAt = freezed,Object? onboardingVersion = null,Object? isAdult = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
@@ -92,7 +94,9 @@ as DateTime?,acceptedPrivacyAt: freezed == acceptedPrivacyAt ? _self.acceptedPri
 as DateTime?,acceptedTermsVersion: freezed == acceptedTermsVersion ? _self.acceptedTermsVersion : acceptedTermsVersion // ignore: cast_nullable_to_non_nullable
 as int?,acceptedPrivacyVersion: freezed == acceptedPrivacyVersion ? _self.acceptedPrivacyVersion : acceptedPrivacyVersion // ignore: cast_nullable_to_non_nullable
 as int?,welcomedAt: freezed == welcomedAt ? _self.welcomedAt : welcomedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
+as DateTime?,onboardingCompletedAt: freezed == onboardingCompletedAt ? _self.onboardingCompletedAt : onboardingCompletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,onboardingVersion: null == onboardingVersion ? _self.onboardingVersion : onboardingVersion // ignore: cast_nullable_to_non_nullable
+as int,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -178,10 +182,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  bool isAdult)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  DateTime? onboardingCompletedAt,  int onboardingVersion,  bool isAdult)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserProfile() when $default != null:
-return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
+return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.onboardingCompletedAt,_that.onboardingVersion,_that.isAdult);case _:
   return orElse();
 
 }
@@ -199,10 +203,10 @@ return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  bool isAdult)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  DateTime? onboardingCompletedAt,  int onboardingVersion,  bool isAdult)  $default,) {final _that = this;
 switch (_that) {
 case _UserProfile():
-return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
+return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.onboardingCompletedAt,_that.onboardingVersion,_that.isAdult);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -219,10 +223,10 @@ return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  bool isAdult)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? displayName,  String? email,  String defaultCurrency,  String languagePref,  String themePref,  bool isAnonymous,  bool marketingEmailOptIn,  DateTime? marketingEmailOptInAt,  String? marketingEmailOptInSource,  DateTime? acceptedTermsAt,  DateTime? acceptedPrivacyAt,  int? acceptedTermsVersion,  int? acceptedPrivacyVersion,  DateTime? welcomedAt,  DateTime? onboardingCompletedAt,  int onboardingVersion,  bool isAdult)?  $default,) {final _that = this;
 switch (_that) {
 case _UserProfile() when $default != null:
-return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.isAdult);case _:
+return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_that.languagePref,_that.themePref,_that.isAnonymous,_that.marketingEmailOptIn,_that.marketingEmailOptInAt,_that.marketingEmailOptInSource,_that.acceptedTermsAt,_that.acceptedPrivacyAt,_that.acceptedTermsVersion,_that.acceptedPrivacyVersion,_that.welcomedAt,_that.onboardingCompletedAt,_that.onboardingVersion,_that.isAdult);case _:
   return null;
 
 }
@@ -234,7 +238,7 @@ return $default(_that.id,_that.displayName,_that.email,_that.defaultCurrency,_th
 
 
 class _UserProfile implements UserProfile {
-  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'USD', this.languagePref = 'en', this.themePref = 'system', this.isAnonymous = false, this.marketingEmailOptIn = false, this.marketingEmailOptInAt, this.marketingEmailOptInSource, this.acceptedTermsAt, this.acceptedPrivacyAt, this.acceptedTermsVersion, this.acceptedPrivacyVersion, this.welcomedAt, this.isAdult = false});
+  const _UserProfile({required this.id, this.displayName, this.email, this.defaultCurrency = 'USD', this.languagePref = 'en', this.themePref = 'system', this.isAnonymous = false, this.marketingEmailOptIn = false, this.marketingEmailOptInAt, this.marketingEmailOptInSource, this.acceptedTermsAt, this.acceptedPrivacyAt, this.acceptedTermsVersion, this.acceptedPrivacyVersion, this.welcomedAt, this.onboardingCompletedAt, this.onboardingVersion = 1, this.isAdult = false});
   
 
 @override final  String id;
@@ -260,6 +264,10 @@ class _UserProfile implements UserProfile {
 // the post-login welcome (Google sign-in flow). Email/password sign-up
 // sets it directly after `signUp` so the welcome screen is skipped.
 @override final  DateTime? welcomedAt;
+// Onboarding gate. Set when the user finishes the onboarding wizard.
+@override final  DateTime? onboardingCompletedAt;
+// Onboarding version. Used to re-trigger onboarding if flows change significantly.
+@override@JsonKey() final  int onboardingVersion;
 // User-declared age 18+ (or older if required by local law). Drives the
 // AdMob `setTagForUnderAgeOfConsent` call so users below the age of
 // consent only see non-personalized ads. Default FALSE so the app
@@ -277,16 +285,16 @@ _$UserProfileCopyWith<_UserProfile> get copyWith => __$UserProfileCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.defaultCurrency, defaultCurrency) || other.defaultCurrency == defaultCurrency)&&(identical(other.languagePref, languagePref) || other.languagePref == languagePref)&&(identical(other.themePref, themePref) || other.themePref == themePref)&&(identical(other.isAnonymous, isAnonymous) || other.isAnonymous == isAnonymous)&&(identical(other.marketingEmailOptIn, marketingEmailOptIn) || other.marketingEmailOptIn == marketingEmailOptIn)&&(identical(other.marketingEmailOptInAt, marketingEmailOptInAt) || other.marketingEmailOptInAt == marketingEmailOptInAt)&&(identical(other.marketingEmailOptInSource, marketingEmailOptInSource) || other.marketingEmailOptInSource == marketingEmailOptInSource)&&(identical(other.acceptedTermsAt, acceptedTermsAt) || other.acceptedTermsAt == acceptedTermsAt)&&(identical(other.acceptedPrivacyAt, acceptedPrivacyAt) || other.acceptedPrivacyAt == acceptedPrivacyAt)&&(identical(other.acceptedTermsVersion, acceptedTermsVersion) || other.acceptedTermsVersion == acceptedTermsVersion)&&(identical(other.acceptedPrivacyVersion, acceptedPrivacyVersion) || other.acceptedPrivacyVersion == acceptedPrivacyVersion)&&(identical(other.welcomedAt, welcomedAt) || other.welcomedAt == welcomedAt)&&(identical(other.onboardingCompletedAt, onboardingCompletedAt) || other.onboardingCompletedAt == onboardingCompletedAt)&&(identical(other.onboardingVersion, onboardingVersion) || other.onboardingVersion == onboardingVersion)&&(identical(other.isAdult, isAdult) || other.isAdult == isAdult));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,email,defaultCurrency,languagePref,themePref,isAnonymous,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,isAdult);
+int get hashCode => Object.hash(runtimeType,id,displayName,email,defaultCurrency,languagePref,themePref,isAnonymous,marketingEmailOptIn,marketingEmailOptInAt,marketingEmailOptInSource,acceptedTermsAt,acceptedPrivacyAt,acceptedTermsVersion,acceptedPrivacyVersion,welcomedAt,onboardingCompletedAt,onboardingVersion,isAdult);
 
 @override
 String toString() {
-  return 'UserProfile(id: $id, displayName: $displayName, email: $email, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, isAnonymous: $isAnonymous, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, isAdult: $isAdult)';
+  return 'UserProfile(id: $id, displayName: $displayName, email: $email, defaultCurrency: $defaultCurrency, languagePref: $languagePref, themePref: $themePref, isAnonymous: $isAnonymous, marketingEmailOptIn: $marketingEmailOptIn, marketingEmailOptInAt: $marketingEmailOptInAt, marketingEmailOptInSource: $marketingEmailOptInSource, acceptedTermsAt: $acceptedTermsAt, acceptedPrivacyAt: $acceptedPrivacyAt, acceptedTermsVersion: $acceptedTermsVersion, acceptedPrivacyVersion: $acceptedPrivacyVersion, welcomedAt: $welcomedAt, onboardingCompletedAt: $onboardingCompletedAt, onboardingVersion: $onboardingVersion, isAdult: $isAdult)';
 }
 
 
@@ -297,7 +305,7 @@ abstract mixin class _$UserProfileCopyWith<$Res> implements $UserProfileCopyWith
   factory _$UserProfileCopyWith(_UserProfile value, $Res Function(_UserProfile) _then) = __$UserProfileCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? displayName, String? email, String defaultCurrency, String languagePref, String themePref, bool isAnonymous, bool marketingEmailOptIn, DateTime? marketingEmailOptInAt, String? marketingEmailOptInSource, DateTime? acceptedTermsAt, DateTime? acceptedPrivacyAt, int? acceptedTermsVersion, int? acceptedPrivacyVersion, DateTime? welcomedAt, bool isAdult
+ String id, String? displayName, String? email, String defaultCurrency, String languagePref, String themePref, bool isAnonymous, bool marketingEmailOptIn, DateTime? marketingEmailOptInAt, String? marketingEmailOptInSource, DateTime? acceptedTermsAt, DateTime? acceptedPrivacyAt, int? acceptedTermsVersion, int? acceptedPrivacyVersion, DateTime? welcomedAt, DateTime? onboardingCompletedAt, int onboardingVersion, bool isAdult
 });
 
 
@@ -314,7 +322,7 @@ class __$UserProfileCopyWithImpl<$Res>
 
 /// Create a copy of UserProfile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = freezed,Object? email = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? isAnonymous = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? isAdult = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? displayName = freezed,Object? email = freezed,Object? defaultCurrency = null,Object? languagePref = null,Object? themePref = null,Object? isAnonymous = null,Object? marketingEmailOptIn = null,Object? marketingEmailOptInAt = freezed,Object? marketingEmailOptInSource = freezed,Object? acceptedTermsAt = freezed,Object? acceptedPrivacyAt = freezed,Object? acceptedTermsVersion = freezed,Object? acceptedPrivacyVersion = freezed,Object? welcomedAt = freezed,Object? onboardingCompletedAt = freezed,Object? onboardingVersion = null,Object? isAdult = null,}) {
   return _then(_UserProfile(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
@@ -331,7 +339,9 @@ as DateTime?,acceptedPrivacyAt: freezed == acceptedPrivacyAt ? _self.acceptedPri
 as DateTime?,acceptedTermsVersion: freezed == acceptedTermsVersion ? _self.acceptedTermsVersion : acceptedTermsVersion // ignore: cast_nullable_to_non_nullable
 as int?,acceptedPrivacyVersion: freezed == acceptedPrivacyVersion ? _self.acceptedPrivacyVersion : acceptedPrivacyVersion // ignore: cast_nullable_to_non_nullable
 as int?,welcomedAt: freezed == welcomedAt ? _self.welcomedAt : welcomedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
+as DateTime?,onboardingCompletedAt: freezed == onboardingCompletedAt ? _self.onboardingCompletedAt : onboardingCompletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,onboardingVersion: null == onboardingVersion ? _self.onboardingVersion : onboardingVersion // ignore: cast_nullable_to_non_nullable
+as int,isAdult: null == isAdult ? _self.isAdult : isAdult // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

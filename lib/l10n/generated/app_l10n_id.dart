@@ -1313,4 +1313,43 @@ class AppL10nId extends AppL10n {
   @override
   String get adPrivacyChoicesSubtitle =>
       'Tinjau atau ubah persetujuan iklan bila diwajibkan.';
+
+  @override
+  String get onboardingNext => 'Lanjut';
+
+  @override
+  String get onboardingFinish => 'Mulai scan struk';
+
+  @override
+  String get onboardingSkip => 'Lewati';
+
+  @override
+  String get onboardingTitle1 => 'Scan struk';
+
+  @override
+  String get onboardingBody1 =>
+      'Foto atau pilih struk. BagiStruk membaca item dan total secara otomatis.';
+
+  @override
+  String get onboardingTitle2 => 'Atur bagian';
+
+  @override
+  String get onboardingBody2 =>
+      'Atur bagian tiap orang. Tambah teman, lalu pilih item yang mereka pesan.';
+
+  @override
+  String get onboardingTitle3 => 'Tagih sampai lunas';
+
+  @override
+  String get onboardingBody3 =>
+      'Bagikan rincian ke WhatsApp dan tandai pembayaran saat sudah masuk.';
+
+  @override
+  String get onboardingReplayFinish => 'Selesai';
+
+  @override
+  String get onboardingSettingsTile => 'Lihat panduan aplikasi';
+
+  @override
+  String get onboardingSaveError => 'Gagal menyimpan. Coba lagi.';
 }

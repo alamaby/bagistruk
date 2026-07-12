@@ -28,24 +28,31 @@ _ProfileDto _$ProfileDtoFromJson(Map<String, dynamic> json) => _ProfileDto(
   welcomedAt: json['welcomed_at'] == null
       ? null
       : DateTime.parse(json['welcomed_at'] as String),
+  onboardingCompletedAt: json['onboarding_completed_at'] == null
+      ? null
+      : DateTime.parse(json['onboarding_completed_at'] as String),
+  onboardingVersion: (json['onboarding_version'] as num?)?.toInt() ?? 1,
   isAdult: json['is_adult'] as bool? ?? false,
 );
 
-Map<String, dynamic> _$ProfileDtoToJson(_ProfileDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'display_name': ?instance.displayName,
-      'default_currency': instance.defaultCurrency,
-      'language_pref': instance.languagePref,
-      'theme_pref': instance.themePref,
-      'marketing_email_opt_in': instance.marketingEmailOptIn,
-      'marketing_email_opt_in_at': ?instance.marketingEmailOptInAt
-          ?.toIso8601String(),
-      'marketing_email_opt_in_source': ?instance.marketingEmailOptInSource,
-      'accepted_terms_at': ?instance.acceptedTermsAt?.toIso8601String(),
-      'accepted_privacy_at': ?instance.acceptedPrivacyAt?.toIso8601String(),
-      'accepted_terms_version': ?instance.acceptedTermsVersion,
-      'accepted_privacy_version': ?instance.acceptedPrivacyVersion,
-      'welcomed_at': ?instance.welcomedAt?.toIso8601String(),
-      'is_adult': instance.isAdult,
-    };
+Map<String, dynamic> _$ProfileDtoToJson(
+  _ProfileDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'display_name': ?instance.displayName,
+  'default_currency': instance.defaultCurrency,
+  'language_pref': instance.languagePref,
+  'theme_pref': instance.themePref,
+  'marketing_email_opt_in': instance.marketingEmailOptIn,
+  'marketing_email_opt_in_at': ?instance.marketingEmailOptInAt
+      ?.toIso8601String(),
+  'marketing_email_opt_in_source': ?instance.marketingEmailOptInSource,
+  'accepted_terms_at': ?instance.acceptedTermsAt?.toIso8601String(),
+  'accepted_privacy_at': ?instance.acceptedPrivacyAt?.toIso8601String(),
+  'accepted_terms_version': ?instance.acceptedTermsVersion,
+  'accepted_privacy_version': ?instance.acceptedPrivacyVersion,
+  'welcomed_at': ?instance.welcomedAt?.toIso8601String(),
+  'onboarding_completed_at': ?instance.onboardingCompletedAt?.toIso8601String(),
+  'onboarding_version': instance.onboardingVersion,
+  'is_adult': instance.isAdult,
+};

@@ -21,6 +21,7 @@ import '../../presentation/ocr/screens/receipt_capture_screen.dart';
 import '../../presentation/about/screens/about_screen.dart';
 import '../../presentation/about/screens/privacy_policy_screen.dart';
 import '../../presentation/about/screens/terms_of_service_screen.dart';
+import '../../presentation/onboarding/screens/onboarding_screen.dart';
 import '../../presentation/settings/providers/profile_notifier.dart';
 import '../../presentation/settings/screens/settings_screen.dart';
 import '../../presentation/settings/screens/transfer_bank_info_screen.dart';
@@ -141,6 +142,15 @@ GoRouter appRouter(Ref ref) {
           return '${Routes.postLoginWelcome}'
               '?from=${Uri.encodeQueryComponent(from)}';
         }
+
+        // Onboarding gate. Shown after legal acceptance & post-login welcome.
+        // Applies to anonymous users too (first app open).
+        if (profile.onboardingCompletedAt == null &&
+            state.matchedLocation != Routes.onboarding &&
+            state.matchedLocation != Routes.legalAcceptance &&
+            state.matchedLocation != Routes.postLoginWelcome) {
+          return Routes.onboarding;
+        }
       }
 
       return null;
@@ -206,6 +216,13 @@ GoRouter appRouter(Ref ref) {
         path: Routes.deletedBills,
         name: Routes.deletedBillsName,
         builder: (context, state) => const DeletedBillsScreen(),
+      ),
+      GoRoute(
+        path: Routes.onboarding,
+        name: Routes.onboardingName,
+        builder: (context, state) => OnboardingScreen(
+          isReplay: state.uri.queryParameters['mode'] == 'replay',
+        ),
       ),
       GoRoute(
         path: Routes.login,

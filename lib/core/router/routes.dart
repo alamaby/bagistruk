@@ -68,4 +68,7 @@ class Routes {
   /// welcome screen only fires for users who skipped the register form.
   static const String postLoginWelcome = '/post-login-welcome';
   static const String postLoginWelcomeName = 'post-login-welcome';
+
+  static const String onboarding = '/onboarding';
+  static const String onboardingName = 'onboarding';
 }

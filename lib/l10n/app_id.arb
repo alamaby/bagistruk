@@ -572,5 +572,18 @@
   "scanEmptyHint": "Ambil foto struk belanja atau makan bareng untuk mulai berbagi adil!",
 
   "adPrivacyChoicesTitle": "Pilihan privasi iklan",
-  "adPrivacyChoicesSubtitle": "Tinjau atau ubah persetujuan iklan bila diwajibkan."
+  "adPrivacyChoicesSubtitle": "Tinjau atau ubah persetujuan iklan bila diwajibkan.",
+
+  "onboardingNext": "Lanjut",
+  "onboardingFinish": "Mulai scan struk",
+  "onboardingSkip": "Lewati",
+  "onboardingTitle1": "Scan struk",
+  "onboardingBody1": "Foto atau pilih struk. BagiStruk membaca item dan total secara otomatis.",
+  "onboardingTitle2": "Atur bagian",
+  "onboardingBody2": "Atur bagian tiap orang. Tambah teman, lalu pilih item yang mereka pesan.",
+  "onboardingTitle3": "Tagih sampai lunas",
+  "onboardingBody3": "Bagikan rincian ke WhatsApp dan tandai pembayaran saat sudah masuk.",
+  "onboardingReplayFinish": "Selesai",
+  "onboardingSettingsTile": "Lihat panduan aplikasi",
+  "onboardingSaveError": "Gagal menyimpan. Coba lagi."
 }
