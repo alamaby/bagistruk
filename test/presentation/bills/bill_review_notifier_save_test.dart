@@ -54,8 +54,28 @@ void main() {
     providerUsed: 'gemini',
   );
 
-  BillReviewNotifier _notifier() {
-    return container.read(billReviewFamily(_dummyOcr()).notifier);
+  OcrResult _discountOcr() => const OcrResult(
+    items: [
+      OcrLineItem(name: 'CMORY SQZE BLUBR 120', price: 8500, qty: 1),
+      OcrLineItem(name: 'F.FLAG UHT BERIS 225', price: 8600, qty: 1),
+      OcrLineItem(name: 'ULTRA KCNG HIJAU 250', price: 6000, qty: 1),
+      OcrLineItem(name: 'KK MANTANCINO 220ML', price: 8700, qty: 1),
+      OcrLineItem(name: 'MY BABY H&B WSH 200', price: 14900, qty: 1),
+    ],
+    detectedTotal: 46700,
+    merchant: 'Indomaret',
+    providerUsed: 'gemini',
+  );
+
+  OcrResult _negativePriceOcr() => const OcrResult(
+    items: [OcrLineItem(name: 'VOUCHER', price: -1500, qty: 1)],
+    detectedTotal: -1500,
+    merchant: 'Indomaret',
+    providerUsed: 'gemini',
+  );
+
+  BillReviewNotifier _notifier([OcrResult? ocr]) {
+    return container.read(billReviewFamily(ocr ?? _dummyOcr()).notifier);
   }
 
   group('BillReviewNotifier.save', () {
@@ -111,6 +131,72 @@ void main() {
       verify(mockRepo.ensureSignedIn()).called(1);
       verifyNever(mockRepo.createBill(any));
     });
+
+    test(
+      'discount receipt — normalized all-positive prices → SaveSuccess',
+      () async {
+        when(
+          mockRepo.ensureSignedIn(),
+        ).thenAnswer((_) async => const Result.success(null));
+        when(mockRepo.createBill(any)).thenAnswer(
+          (_) async => Result.success(
+            Bill(
+              id: 'bill-discount',
+              title: 'Indomaret',
+              totalAmount: 46700,
+              currencyCode: 'IDR',
+              tax: 0,
+              service: 0,
+              createdAt: DateTime(2026),
+            ),
+          ),
+        );
+        when(mockRepo.upsertItems(any)).thenAnswer(
+          (_) async => const Result.success([
+            Item(id: 'i1', billId: 'bill-discount', name: 'CMORY SQZE BLUBR 120', price: 8500, qty: 1),
+            Item(id: 'i2', billId: 'bill-discount', name: 'F.FLAG UHT BERIS 225', price: 8600, qty: 1),
+            Item(id: 'i3', billId: 'bill-discount', name: 'ULTRA KCNG HIJAU 250', price: 6000, qty: 1),
+            Item(id: 'i4', billId: 'bill-discount', name: 'KK MANTANCINO 220ML', price: 8700, qty: 1),
+            Item(id: 'i5', billId: 'bill-discount', name: 'MY BABY H&B WSH 200', price: 14900, qty: 1),
+          ]),
+        );
+
+        final result = await _notifier(_discountOcr()).save();
+
+        expect(result, isA<SaveSuccess>());
+        verify(mockRepo.ensureSignedIn()).called(1);
+
+        // Verify createBill receives correct totalAmount
+        final capturedBill = verify(mockRepo.createBill(captureAny)).captured
+            .cast<Bill>().single;
+        expect(capturedBill.totalAmount, 46700);
+        expect(capturedBill.title, 'Indomaret');
+
+        // Verify upsertItems receives items with no negative prices
+        final capturedItems = verify(mockRepo.upsertItems(captureAny)).captured
+            .cast<List<Item>>().single;
+        expect(capturedItems.length, 5);
+        expect(capturedItems.every((i) => i.price >= 0), isTrue);
+        expect(
+          capturedItems.fold<double>(0, (s, i) => s + i.price * i.qty),
+          46700,
+        );
+      },
+    );
+
+    test(
+      'negative price item rejected as defense-in-depth → SaveError.invalidItem',
+      () async {
+        // No mock setup needed — validation runs before any repository call.
+        final result = await _notifier(_negativePriceOcr()).save();
+
+        expect(result, isA<SaveError>());
+        expect((result as SaveError).kind, SaveErrorKind.invalidItem);
+        verifyNever(mockRepo.ensureSignedIn());
+        verifyNever(mockRepo.createBill(any));
+        verifyNever(mockRepo.upsertItems(any));
+      },
+    );
 
     test('server 42501 — createBill fails after ensureSignedIn', () async {
       when(
