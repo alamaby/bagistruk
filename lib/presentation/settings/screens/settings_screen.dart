@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/billing/google_play_billing_catalog.dart';
 import '../../../core/config/app_constants.dart';
 import '../../../core/error/result.dart';
+import '../../../core/format/app_format.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
 import '../../../data/services/google_play_billing_service.dart';
@@ -92,6 +93,18 @@ class _SettingsBody extends ConsumerWidget {
 
   final UserProfile profile;
 
+  static String _entitlementExpiryLabel(
+    AppL10n l10n,
+    String? source,
+    String date,
+  ) {
+    return switch (source) {
+      'google_play_subscription' => l10n.creditPlusExpiresAt(date),
+      'trial_plus' => l10n.creditTrialExpiresAt(date),
+      _ => '',
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
@@ -120,15 +133,37 @@ class _SettingsBody extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.document_scanner_outlined),
           title: Text(l10n.creditScanTitle),
-          subtitle: Text(
-            creditStatus == null
-                ? l10n.creditStatusLoading
-                : l10n.creditStatusRemaining(
-                    creditStatus.balance,
-                    creditStatus.monthlyAllowance,
-                    creditStatus.planCode,
-                  ),
-          ),
+          subtitle: creditStatus == null
+              ? Text(l10n.creditStatusLoading)
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.creditStatusRemaining(
+                      creditStatus.balance,
+                      creditStatus.monthlyAllowance,
+                      creditStatus.planCode,
+                    )),
+                    if (creditStatus.entitlementExpiresAt != null) ...[
+                      SizedBox(height: 2.h),
+                      Text(
+                        _entitlementExpiryLabel(
+                          l10n,
+                          creditStatus.entitlementSource,
+                          AppFormat.longDate(
+                            AppFormat.intlLocaleOf(
+                              Localizations.localeOf(context),
+                            ),
+                          ).format(
+                            creditStatus.entitlementExpiresAt!.toLocal(),
+                          ),
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
         ),
         _BillingSection(
           isAnonymous: isAnon,

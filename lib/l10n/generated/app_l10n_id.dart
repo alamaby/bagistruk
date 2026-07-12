@@ -287,6 +287,16 @@ class AppL10nId extends AppL10n {
       'Daftar akun dulu untuk membeli Plus atau top-up credit.';
 
   @override
+  String creditPlusExpiresAt(String date) {
+    return 'Plus berakhir: $date';
+  }
+
+  @override
+  String creditTrialExpiresAt(String date) {
+    return 'Masa percobaan Plus berakhir: $date';
+  }
+
+  @override
   String get billingPlusActive => 'Plus aktif';
 
   @override

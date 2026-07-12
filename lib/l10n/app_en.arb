@@ -127,6 +127,14 @@
   },
   "billingTitle": "Plus and credit packs",
   "billingAnonSubtitle": "Create an account first to buy Plus or top up credits.",
+  "creditPlusExpiresAt": "Plus expires: {date}",
+  "@creditPlusExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "creditTrialExpiresAt": "Plus trial expires: {date}",
+  "@creditTrialExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
   "billingPlusActive": "Plus active",
   "billingPlanFree": "Free",
   "billingPlusCardTitle": "BagiStruk Plus",

@@ -563,6 +563,18 @@ abstract class AppL10n {
   /// **'Daftar akun dulu untuk membeli Plus atau top-up credit.'**
   String get billingAnonSubtitle;
 
+  /// No description provided for @creditPlusExpiresAt.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus berakhir: {date}'**
+  String creditPlusExpiresAt(String date);
+
+  /// No description provided for @creditTrialExpiresAt.
+  ///
+  /// In id, this message translates to:
+  /// **'Masa percobaan Plus berakhir: {date}'**
+  String creditTrialExpiresAt(String date);
+
   /// No description provided for @billingPlusActive.
   ///
   /// In id, this message translates to:

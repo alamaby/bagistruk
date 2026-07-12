@@ -127,6 +127,14 @@
   },
   "billingTitle": "Plus dan paket credit",
   "billingAnonSubtitle": "Daftar akun dulu untuk membeli Plus atau top-up credit.",
+  "creditPlusExpiresAt": "Plus berakhir: {date}",
+  "@creditPlusExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "creditTrialExpiresAt": "Masa percobaan Plus berakhir: {date}",
+  "@creditTrialExpiresAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
   "billingPlusActive": "Plus aktif",
   "billingPlanFree": "Free",
   "billingPlusCardTitle": "BagiStruk Plus",

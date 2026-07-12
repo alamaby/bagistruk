@@ -288,6 +288,16 @@ class AppL10nEn extends AppL10n {
       'Create an account first to buy Plus or top up credits.';
 
   @override
+  String creditPlusExpiresAt(String date) {
+    return 'Plus expires: $date';
+  }
+
+  @override
+  String creditTrialExpiresAt(String date) {
+    return 'Plus trial expires: $date';
+  }
+
+  @override
   String get billingPlusActive => 'Plus active';
 
   @override
