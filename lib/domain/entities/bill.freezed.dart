@@ -14,7 +14,14 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Bill {
 
- String get id; String get title; double get totalAmount; String get currencyCode; double get tax; double get service; bool get isSettled; DateTime? get receiptDate; DateTime get createdAt; List<bool> get participantPaymentStatuses;
+ String get id; String get title; double get totalAmount; String get currencyCode; double get tax; double get service; bool get isSettled; DateTime? get receiptDate; DateTime get createdAt;/// Summary of participant payment statuses from the History list query.
+/// Populated only via [BillDto.fromJsonWithParticipants]; `getBill()`
+/// and `upsertBill()` always return an empty list.
+/// A non-empty list means **all** participants are accounted for here.
+/// Empty does NOT imply zero participants — use `paymentStatus` getter
+/// (which returns [BillPaymentStatus.unassigned] for empty) only when
+/// this list is known to be complete (i.e. the History list route).
+ List<bool> get participantPaymentStatuses;
 /// Create a copy of Bill
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -227,7 +234,21 @@ class _Bill extends Bill {
 @override@JsonKey() final  bool isSettled;
 @override final  DateTime? receiptDate;
 @override final  DateTime createdAt;
+/// Summary of participant payment statuses from the History list query.
+/// Populated only via [BillDto.fromJsonWithParticipants]; `getBill()`
+/// and `upsertBill()` always return an empty list.
+/// A non-empty list means **all** participants are accounted for here.
+/// Empty does NOT imply zero participants — use `paymentStatus` getter
+/// (which returns [BillPaymentStatus.unassigned] for empty) only when
+/// this list is known to be complete (i.e. the History list route).
  final  List<bool> _participantPaymentStatuses;
+/// Summary of participant payment statuses from the History list query.
+/// Populated only via [BillDto.fromJsonWithParticipants]; `getBill()`
+/// and `upsertBill()` always return an empty list.
+/// A non-empty list means **all** participants are accounted for here.
+/// Empty does NOT imply zero participants — use `paymentStatus` getter
+/// (which returns [BillPaymentStatus.unassigned] for empty) only when
+/// this list is known to be complete (i.e. the History list route).
 @override@JsonKey() List<bool> get participantPaymentStatuses {
   if (_participantPaymentStatuses is EqualUnmodifiableListView) return _participantPaymentStatuses;
   // ignore: implicit_dynamic_type

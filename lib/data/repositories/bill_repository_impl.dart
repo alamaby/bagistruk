@@ -3,12 +3,16 @@ import '../../core/error/result.dart';
 import '../../domain/entities/assignment.dart';
 import '../../domain/entities/bill.dart';
 import '../../domain/entities/deleted_bill.dart';
+import '../../domain/entities/history_bill_page.dart';
+import '../../domain/entities/history_summary.dart';
 import '../../domain/entities/item.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/repositories/i_bill_repository.dart';
 import '../datasources/bill_remote_datasource.dart';
 import '../dtos/assignment_dto.dart';
 import '../dtos/bill_dto.dart';
+import '../dtos/history_bill_page_dto.dart';
+import '../dtos/history_summary_dto.dart';
 import '../dtos/item_dto.dart';
 import '../dtos/participant_dto.dart';
 
@@ -22,6 +26,40 @@ class BillRepositoryImpl implements IBillRepository {
       createdAfter: createdAfter,
     )).map((d) => d.toEntity()).toList(growable: false),
   );
+
+  @override
+  Future<Result<HistoryBillPage>> listHistoryBillsPage({
+    required DateTime createdAfter,
+    required int limit,
+    required String sort,
+    String? currencyCode,
+    String? paymentStatus,
+    String? cursorSortValue,
+    DateTime? cursorCreatedAt,
+    String? cursorId,
+  }) =>
+      guardAsync(
+        () async => (await _ds.listHistoryBillsPage(
+          createdAfter: createdAfter,
+          limit: limit,
+          sort: sort,
+          currencyCode: currencyCode,
+          paymentStatus: paymentStatus,
+          cursorSortValue: cursorSortValue,
+          cursorCreatedAt: cursorCreatedAt,
+          cursorId: cursorId,
+        )).toEntity(),
+      );
+
+  @override
+  Future<Result<HistorySummary>> getHistorySummary({
+    required DateTime createdAfter,
+  }) =>
+      guardAsync(
+        () async => (await _ds.getHistorySummary(
+          createdAfter: createdAfter,
+        )).toEntity(),
+      );
 
   @override
   Future<Result<Bill>> getBill(String id) =>

@@ -212,4 +212,72 @@ void main() {
       expect(result, true);
     });
   });
+
+  group('effectiveHistorySort', () {
+    test('passes through sort when currency filter active', () {
+      final bills = [
+        _bill(id: '1', title: 'A', currency: 'IDR'),
+        _bill(id: '2', title: 'B', currency: 'USD'),
+      ];
+      final result = effectiveHistorySort(
+        bills,
+        const HistoryFilterState(
+          currencyCode: 'IDR',
+          sort: HistorySort.amountDesc,
+        ),
+      );
+      expect(result, HistorySort.amountDesc);
+    });
+
+    test('passes through non-nominal sort for multi-currency', () {
+      final bills = [
+        _bill(id: '1', title: 'A', currency: 'IDR'),
+        _bill(id: '2', title: 'B', currency: 'USD'),
+      ];
+      final result = effectiveHistorySort(
+        bills,
+        const HistoryFilterState(sort: HistorySort.newest),
+      );
+      expect(result, HistorySort.newest);
+    });
+
+    test('downgrades amountDesc to newest for multi-currency without filter',
+        () {
+      final bills = [
+        _bill(id: '1', title: 'A', currency: 'IDR'),
+        _bill(id: '2', title: 'B', currency: 'USD'),
+      ];
+      final result = effectiveHistorySort(
+        bills,
+        const HistoryFilterState(sort: HistorySort.amountDesc),
+      );
+      expect(result, HistorySort.newest);
+    });
+
+    test('downgrades amountAsc to newest for multi-currency without filter',
+        () {
+      final bills = [
+        _bill(id: '1', title: 'A', currency: 'IDR'),
+        _bill(id: '2', title: 'B', currency: 'USD'),
+      ];
+      final result = effectiveHistorySort(
+        bills,
+        const HistoryFilterState(sort: HistorySort.amountAsc),
+      );
+      expect(result, HistorySort.newest);
+    });
+
+    test('preserves amountDesc for single currency without filter', () {
+      final bills = [
+        _bill(id: '1', title: 'A', currency: 'IDR'),
+        _bill(id: '2', title: 'B', currency: 'IDR'),
+      ];
+      final result = effectiveHistorySort(
+        bills,
+        const HistoryFilterState(sort: HistorySort.amountDesc),
+      );
+      expect(result, HistorySort.amountDesc);
+    });
+  });
 }
+

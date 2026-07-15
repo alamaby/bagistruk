@@ -2,11 +2,28 @@ import '../../core/error/result.dart';
 import '../entities/assignment.dart';
 import '../entities/bill.dart';
 import '../entities/deleted_bill.dart';
+import '../entities/history_bill_page.dart';
+import '../entities/history_summary.dart';
 import '../entities/item.dart';
 import '../entities/participant.dart';
 
 abstract interface class IBillRepository {
   Future<Result<List<Bill>>> listBills({DateTime? createdAfter});
+
+  Future<Result<HistoryBillPage>> listHistoryBillsPage({
+    required DateTime createdAfter,
+    required int limit,
+    required String sort,
+    String? currencyCode,
+    String? paymentStatus,
+    String? cursorSortValue,
+    DateTime? cursorCreatedAt,
+    String? cursorId,
+  });
+
+  Future<Result<HistorySummary>> getHistorySummary({
+    required DateTime createdAfter,
+  });
   Future<Result<Bill>> getBill(String id);
   Future<Result<Bill>> createBill(Bill bill);
   Future<Result<Bill>> updateBill(Bill bill);

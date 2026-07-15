@@ -18,6 +18,13 @@ abstract class Bill with _$Bill {
     @Default(false) bool isSettled,
     DateTime? receiptDate,
     required DateTime createdAt,
+    /// Summary of participant payment statuses from the History list query.
+    /// Populated only via [BillDto.fromJsonWithParticipants]; `getBill()`
+    /// and `upsertBill()` always return an empty list.
+    /// A non-empty list means **all** participants are accounted for here.
+    /// Empty does NOT imply zero participants — use `paymentStatus` getter
+    /// (which returns [BillPaymentStatus.unassigned] for empty) only when
+    /// this list is known to be complete (i.e. the History list route).
     @Default([]) List<bool> participantPaymentStatuses,
   }) = _Bill;
 

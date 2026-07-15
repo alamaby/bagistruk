@@ -6,6 +6,8 @@ import '../providers/history_filter_notifier.dart';
 /// Designed to be unit-testable with no Flutter dependency.
 
 /// Returns the filtered and sorted list. Input list is NOT mutated.
+/// Nominal sort falls back to [HistorySort.newest] when the result spans
+/// multiple currencies without a currency filter — see [effectiveHistorySort].
 List<Bill> applyHistoryFilter(
   List<Bill> bills,
   HistoryFilterState filter,
@@ -20,8 +22,30 @@ List<Bill> applyHistoryFilter(
     result = result.where((b) => b.currencyCode == filter.currencyCode).toList(growable: false);
   }
 
-  result = result.toList(growable: false)..sort((a, b) => _compare(a, b, filter.sort));
+  final sort = effectiveHistorySort(result, filter);
+  result = result.toList(growable: false)..sort((a, b) => _compare(a, b, sort));
   return result;
+}
+
+/// Returns the sort to actually use, potentially downgrading from a nominal
+/// sort when the data doesn't support it (multi-currency without a filter).
+///
+/// This is both the UI gate (disable chips) and the defense-in-depth fallback
+/// so that even if an invalid sort order is somehow stored, it never reaches
+/// the comparison function.
+HistorySort effectiveHistorySort(
+  List<Bill> bills,
+  HistoryFilterState filter,
+) {
+  if (filter.currencyCode != null) return filter.sort;
+  if (switch (filter.sort) {
+    HistorySort.amountAsc || HistorySort.amountDesc => true,
+    _ => false,
+  }) {
+    final currencies = bills.map((b) => b.currencyCode).toSet();
+    if (currencies.length > 1) return HistorySort.newest;
+  }
+  return filter.sort;
 }
 
 /// Whether nominal (amount) sort options are meaningful given the current

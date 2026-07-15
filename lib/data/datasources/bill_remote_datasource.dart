@@ -4,6 +4,10 @@ import '../../core/error/failure.dart';
 import '../../core/error/result.dart';
 import '../dtos/assignment_dto.dart';
 import '../dtos/bill_dto.dart';
+import '../dtos/history_bill_dto.dart';
+import '../dtos/history_bill_page_dto.dart';
+import '../dtos/history_cursor_dto.dart';
+import '../dtos/history_summary_dto.dart';
 import '../dtos/item_dto.dart';
 import '../dtos/participant_dto.dart';
 
@@ -56,6 +60,31 @@ class BillRemoteDataSource {
   static const _participants = 'participants';
   static const _assignments = 'item_assignments';
 
+  static String _sortParam(String sort) => switch (sort) {
+    'newest' => 'newest',
+    'oldest' => 'oldest',
+    'titleAsc' => 'title_asc',
+    'amountDesc' => 'amount_desc',
+    'amountAsc' => 'amount_asc',
+    _ => 'newest',
+  };
+
+  static String? _statusParam(String? status) => switch (status) {
+    'unassigned' => 'unassigned',
+    'unpaid' => 'unpaid',
+    'partial' => 'partial',
+    'settled' => 'settled',
+    _ => null,
+  };
+
+  static String _cursorSortValue(HistoryBillDto bill, String sort) =>
+      switch (sort) {
+        'newest' || 'oldest' => bill.createdAt.toUtc().toIso8601String(),
+        'titleAsc' => bill.title,
+        'amountDesc' || 'amountAsc' => bill.totalAmount.toString(),
+        _ => bill.createdAt.toUtc().toIso8601String(),
+      };
+
   /// Idempotent session guard. Returns the current user id if a session is
   /// attached, or signs in anonymously otherwise. Callers (notably
   /// [BillRepositoryImpl.createBill]) use this to prevent RLS 42501 on the
@@ -105,6 +134,63 @@ class BillRemoteDataSource {
 
     final rows = await query.order('created_at', ascending: false);
     return rows.map((r) => BillDto.fromJsonWithParticipants(r)).toList(growable: false);
+  }
+
+  Future<HistoryBillPageDto> listHistoryBillsPage({
+    required DateTime createdAfter,
+    required int limit,
+    required String sort,
+    String? currencyCode,
+    String? paymentStatus,
+    String? cursorSortValue,
+    DateTime? cursorCreatedAt,
+    String? cursorId,
+  }) async {
+    final rows = await _client.rpc<List<dynamic>>('list_history_bills_page', params: {
+      'p_created_after': createdAfter.toUtc().toIso8601String(),
+      'p_limit': limit,
+      'p_sort': _sortParam(sort),
+      if (currencyCode != null) 'p_currency_code': currencyCode,
+      if (paymentStatus != null) 'p_payment_status': _statusParam(paymentStatus),
+      if (cursorSortValue != null) 'p_cursor_sort_value': cursorSortValue,
+      if (cursorCreatedAt != null)
+        'p_cursor_created_at': cursorCreatedAt.toUtc().toIso8601String(),
+      if (cursorId != null) 'p_cursor_id': cursorId,
+    });
+    final rawList = rows;
+    final hasMore = rawList.length > limit;
+    final billRows = hasMore ? rawList.sublist(0, limit) : rawList;
+    final bills = billRows
+        .map((r) => HistoryBillDto.fromJson(r as Map<String, dynamic>))
+        .toList(growable: false);
+
+    HistoryCursorDto? cursor;
+    if (hasMore && bills.isNotEmpty) {
+      final last = bills.last;
+      cursor = HistoryCursorDto(
+        sortValue: _cursorSortValue(last, sort),
+        createdAt: last.createdAt,
+        id: last.id,
+      );
+    }
+
+    return HistoryBillPageDto(
+      bills: bills,
+      cursor: cursor,
+      hasMore: hasMore,
+    );
+  }
+
+  Future<HistorySummaryDto> getHistorySummary({
+    required DateTime createdAfter,
+  }) async {
+    final json = await _client.rpc<Map<String, dynamic>>(
+      'get_history_page_summary',
+      params: {
+        'p_created_after': createdAfter.toUtc().toIso8601String(),
+      },
+    );
+    return HistorySummaryDto.fromJson(json);
   }
 
   Future<BillDto> getBill(String id) async {

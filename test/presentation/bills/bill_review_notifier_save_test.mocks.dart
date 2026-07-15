@@ -6,11 +6,13 @@
 import 'dart:async' as _i3;
 
 import 'package:bagistruk/core/error/result.dart' as _i4;
-import 'package:bagistruk/domain/entities/assignment.dart' as _i10;
+import 'package:bagistruk/domain/entities/assignment.dart' as _i12;
 import 'package:bagistruk/domain/entities/bill.dart' as _i5;
-import 'package:bagistruk/domain/entities/deleted_bill.dart' as _i7;
-import 'package:bagistruk/domain/entities/item.dart' as _i8;
-import 'package:bagistruk/domain/entities/participant.dart' as _i9;
+import 'package:bagistruk/domain/entities/deleted_bill.dart' as _i9;
+import 'package:bagistruk/domain/entities/history_bill_page.dart' as _i7;
+import 'package:bagistruk/domain/entities/history_summary.dart' as _i8;
+import 'package:bagistruk/domain/entities/item.dart' as _i10;
+import 'package:bagistruk/domain/entities/participant.dart' as _i11;
 import 'package:bagistruk/domain/repositories/i_bill_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
@@ -52,6 +54,65 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
             ),
           )
           as _i3.Future<_i4.Result<List<_i5.Bill>>>);
+
+  @override
+  _i3.Future<_i4.Result<_i7.HistoryBillPage>> listHistoryBillsPage({
+    required DateTime? createdAfter,
+    required int? limit,
+    required String? sort,
+    String? currencyCode,
+    String? paymentStatus,
+    String? cursorSortValue,
+    DateTime? cursorCreatedAt,
+    String? cursorId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#listHistoryBillsPage, [], {
+              #createdAfter: createdAfter,
+              #limit: limit,
+              #sort: sort,
+              #currencyCode: currencyCode,
+              #paymentStatus: paymentStatus,
+              #cursorSortValue: cursorSortValue,
+              #cursorCreatedAt: cursorCreatedAt,
+              #cursorId: cursorId,
+            }),
+            returnValue: _i3.Future<_i4.Result<_i7.HistoryBillPage>>.value(
+              _i6.dummyValue<_i4.Result<_i7.HistoryBillPage>>(
+                this,
+                Invocation.method(#listHistoryBillsPage, [], {
+                  #createdAfter: createdAfter,
+                  #limit: limit,
+                  #sort: sort,
+                  #currencyCode: currencyCode,
+                  #paymentStatus: paymentStatus,
+                  #cursorSortValue: cursorSortValue,
+                  #cursorCreatedAt: cursorCreatedAt,
+                  #cursorId: cursorId,
+                }),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Result<_i7.HistoryBillPage>>);
+
+  @override
+  _i3.Future<_i4.Result<_i8.HistorySummary>> getHistorySummary({
+    required DateTime? createdAfter,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#getHistorySummary, [], {
+              #createdAfter: createdAfter,
+            }),
+            returnValue: _i3.Future<_i4.Result<_i8.HistorySummary>>.value(
+              _i6.dummyValue<_i4.Result<_i8.HistorySummary>>(
+                this,
+                Invocation.method(#getHistorySummary, [], {
+                  #createdAfter: createdAfter,
+                }),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Result<_i8.HistorySummary>>);
 
   @override
   _i3.Future<_i4.Result<_i5.Bill>> getBill(String? id) =>
@@ -119,73 +180,73 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
           as _i3.Future<_i4.Result<void>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i7.DeletedBill>>> listDeletedBills() =>
+  _i3.Future<_i4.Result<List<_i9.DeletedBill>>> listDeletedBills() =>
       (super.noSuchMethod(
             Invocation.method(#listDeletedBills, []),
-            returnValue: _i3.Future<_i4.Result<List<_i7.DeletedBill>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i7.DeletedBill>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i9.DeletedBill>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i9.DeletedBill>>>(
                 this,
                 Invocation.method(#listDeletedBills, []),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i7.DeletedBill>>>);
+          as _i3.Future<_i4.Result<List<_i9.DeletedBill>>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i8.Item>>> listItems(String? billId) =>
+  _i3.Future<_i4.Result<List<_i10.Item>>> listItems(String? billId) =>
       (super.noSuchMethod(
             Invocation.method(#listItems, [billId]),
-            returnValue: _i3.Future<_i4.Result<List<_i8.Item>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i8.Item>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i10.Item>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i10.Item>>>(
                 this,
                 Invocation.method(#listItems, [billId]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i8.Item>>>);
+          as _i3.Future<_i4.Result<List<_i10.Item>>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i8.Item>>> upsertItems(List<_i8.Item>? items) =>
+  _i3.Future<_i4.Result<List<_i10.Item>>> upsertItems(List<_i10.Item>? items) =>
       (super.noSuchMethod(
             Invocation.method(#upsertItems, [items]),
-            returnValue: _i3.Future<_i4.Result<List<_i8.Item>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i8.Item>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i10.Item>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i10.Item>>>(
                 this,
                 Invocation.method(#upsertItems, [items]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i8.Item>>>);
+          as _i3.Future<_i4.Result<List<_i10.Item>>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i9.Participant>>> listParticipants(
+  _i3.Future<_i4.Result<List<_i11.Participant>>> listParticipants(
     String? billId,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#listParticipants, [billId]),
-            returnValue: _i3.Future<_i4.Result<List<_i9.Participant>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i9.Participant>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i11.Participant>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i11.Participant>>>(
                 this,
                 Invocation.method(#listParticipants, [billId]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i9.Participant>>>);
+          as _i3.Future<_i4.Result<List<_i11.Participant>>>);
 
   @override
-  _i3.Future<_i4.Result<_i9.Participant>> upsertParticipant(
-    _i9.Participant? participant,
+  _i3.Future<_i4.Result<_i11.Participant>> upsertParticipant(
+    _i11.Participant? participant,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#upsertParticipant, [participant]),
-            returnValue: _i3.Future<_i4.Result<_i9.Participant>>.value(
-              _i6.dummyValue<_i4.Result<_i9.Participant>>(
+            returnValue: _i3.Future<_i4.Result<_i11.Participant>>.value(
+              _i6.dummyValue<_i4.Result<_i11.Participant>>(
                 this,
                 Invocation.method(#upsertParticipant, [participant]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<_i9.Participant>>);
+          as _i3.Future<_i4.Result<_i11.Participant>>);
 
   @override
   _i3.Future<_i4.Result<void>> deleteParticipant(String? participantId) =>
@@ -201,35 +262,35 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
           as _i3.Future<_i4.Result<void>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i10.Assignment>>> listAssignments(
+  _i3.Future<_i4.Result<List<_i12.Assignment>>> listAssignments(
     String? billId,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#listAssignments, [billId]),
-            returnValue: _i3.Future<_i4.Result<List<_i10.Assignment>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i10.Assignment>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i12.Assignment>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i12.Assignment>>>(
                 this,
                 Invocation.method(#listAssignments, [billId]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i10.Assignment>>>);
+          as _i3.Future<_i4.Result<List<_i12.Assignment>>>);
 
   @override
-  _i3.Future<_i4.Result<List<_i10.Assignment>>> replaceAssignments(
+  _i3.Future<_i4.Result<List<_i12.Assignment>>> replaceAssignments(
     String? billId,
-    List<_i10.Assignment>? assignments,
+    List<_i12.Assignment>? assignments,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#replaceAssignments, [billId, assignments]),
-            returnValue: _i3.Future<_i4.Result<List<_i10.Assignment>>>.value(
-              _i6.dummyValue<_i4.Result<List<_i10.Assignment>>>(
+            returnValue: _i3.Future<_i4.Result<List<_i12.Assignment>>>.value(
+              _i6.dummyValue<_i4.Result<List<_i12.Assignment>>>(
                 this,
                 Invocation.method(#replaceAssignments, [billId, assignments]),
               ),
             ),
           )
-          as _i3.Future<_i4.Result<List<_i10.Assignment>>>);
+          as _i3.Future<_i4.Result<List<_i12.Assignment>>>);
 
   @override
   _i3.Future<_i4.Result<void>> ensureSignedIn() =>
