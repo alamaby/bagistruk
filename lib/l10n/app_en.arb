@@ -551,6 +551,11 @@
   "@settlementMessageWhatsappLink": {
     "placeholders": { "url": { "type": "String" } }
   },
+
+  "settlementPromoFooter": "Made with BagiStruk. Try the app on Google Play: {url}",
+  "@settlementPromoFooter": {
+    "placeholders": { "url": { "type": "String" } }
+  },
   "aboutTitle": "About",
   "aboutSettingsTile": "About App",
   "aboutVersionLabel": "Version",

@@ -8,6 +8,9 @@ import '../providers/split_notifier.dart';
 enum SettlementMessageTemplate { basic, compactPlus, detailedPlus, allPlus }
 
 class SettlementMessageBuilder {
+  static const _playStoreUrl =
+      'https://play.google.com/store/apps/details?id=com.alamaby.bagistruk';
+
   const SettlementMessageBuilder({
     required this.state,
     required this.currency,
@@ -82,6 +85,7 @@ class SettlementMessageBuilder {
       buf.writeln();
       buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
     }
+    _writePromoFooter(buf);
     return buf.toString();
   }
 
@@ -114,6 +118,7 @@ class SettlementMessageBuilder {
       buf.writeln();
       buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
     }
+    _writePromoFooter(buf);
     return buf.toString();
   }
 
@@ -139,6 +144,7 @@ class SettlementMessageBuilder {
       buf.writeln();
       buf.writeln(l10n.settlementMessageWhatsappLink(waLink));
     }
+    _writePromoFooter(buf);
     return buf.toString();
   }
 
@@ -167,6 +173,7 @@ class SettlementMessageBuilder {
       '${l10n.settlementMessageOutstanding}: ${currency.format(outstanding)}',
     );
     _writeBankInfoIfAny(buf);
+    _writePromoFooter(buf);
     return buf.toString();
   }
 
@@ -219,5 +226,10 @@ class SettlementMessageBuilder {
     buf.writeln(
       '${l10n.transferAccountNumberLabel}: ${info.accountNumber.trim()}',
     );
+  }
+
+  void _writePromoFooter(StringBuffer buf) {
+    buf.writeln();
+    buf.writeln(l10n.settlementPromoFooter(_playStoreUrl));
   }
 }

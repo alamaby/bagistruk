@@ -2255,6 +2255,12 @@ abstract class AppL10n {
   /// **'Chat via WhatsApp: {url}'**
   String settlementMessageWhatsappLink(String url);
 
+  /// No description provided for @settlementPromoFooter.
+  ///
+  /// In id, this message translates to:
+  /// **'Dibuat dengan BagiStruk. Coba aplikasinya di Google Play: {url}'**
+  String settlementPromoFooter(String url);
+
   /// No description provided for @aboutTitle.
   ///
   /// In id, this message translates to:

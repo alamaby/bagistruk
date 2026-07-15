@@ -78,7 +78,7 @@ We process your personal data on the following legal bases, in line with Article
 
 ## Storage And Processing
 
-App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, and Nvidia NIM. API keys for those providers are stored server-side and are not bundled into the mobile app.
+App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, Nvidia NIM, and Ollama. API keys for those providers are stored server-side and are not bundled into the mobile app.
 
 ## Third-Party Services
 
@@ -86,7 +86,7 @@ BagiStruk may use:
 
 - Supabase: authentication, database, row-level security, Edge Functions, and scheduled cleanup.
 - Google Sign-In: optional account login.
-- Google Gemini, OpenRouter, and/or Nvidia NIM: OCR and receipt parsing.
+- Google Gemini, OpenRouter, Nvidia NIM, and/or Ollama: OCR and receipt parsing.
 - Resend or another email provider: inactivity reminder emails and operational OCR provider alerts, if configured.
 - Google User Messaging Platform (UMP) / AdMob: Google-certified CMP, optional ad delivery, ad measurement, fraud prevention, and consent/privacy messaging via the European regulations message, integrated with IAB TCF v2.3.
 - Google Play Billing / Google Play Developer API: purchase processing and server-side purchase verification for subscriptions and one-time OCR credit packs.
@@ -95,7 +95,7 @@ BagiStruk may use:
 
 Your data may be transferred to and processed in countries other than your country of residence. The main destinations are:
 
-- **United States** — for Google services (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, and Nvidia NIM OCR processing.
+- **United States** — for Google services (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, Nvidia NIM, and Ollama OCR processing.
 - **European Economic Area or other Supabase regions** — for authentication, database, and Edge Functions, depending on your Supabase project's configured region.
 
 When we transfer personal data outside the European Economic Area, we rely on safeguards such as the European Commission's Standard Contractual Clauses (SCCs), the EU-U.S. Data Privacy Framework (where applicable), or equivalent contractual protections. A copy of the relevant safeguards can be requested by contacting us.
@@ -253,7 +253,7 @@ Kami memproses data pribadi Anda berdasarkan dasar hukum berikut, sesuai Pasal 6
 
 ## Penyimpanan Dan Pemrosesan
 
-Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, dan Nvidia NIM. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
+Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, Nvidia NIM, dan Ollama. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
 
 ## Layanan Pihak Ketiga
 
@@ -261,7 +261,7 @@ BagiStruk dapat menggunakan:
 
 - Supabase: autentikasi, database, row-level security, Edge Functions, dan scheduled cleanup.
 - Google Sign-In: login akun opsional.
-- Google Gemini, OpenRouter, dan/atau Nvidia NIM: OCR dan parsing struk.
+- Google Gemini, OpenRouter, Nvidia NIM, dan/atau Ollama: OCR dan parsing struk.
 - Resend atau penyedia email lain: email reminder tidak aktif dan alert operasional penyedia OCR, jika dikonfigurasi.
 - Google User Messaging Platform (UMP) / AdMob: CMP tersertifikasi Google, penayangan iklan opsional, pengukuran iklan, pencegahan fraud, dan pesan consent/privasi melalui European regulations message, terintegrasi dengan IAB TCF v2.3.
 - Google Play Billing / Google Play Developer API: pemrosesan pembelian dan verifikasi pembelian sisi server untuk subscription dan paket credit OCR sekali beli.
@@ -270,7 +270,7 @@ BagiStruk dapat menggunakan:
 
 Data Anda dapat ditransfer dan diproses di negara selain negara tempat tinggal Anda. Tujuan utama:
 
-- **Amerika Serikat** — untuk layanan Google (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, dan pemrosesan OCR Nvidia NIM.
+- **Amerika Serikat** — untuk layanan Google (Sign-In, Play Billing, Mobile Ads, Gemini), OpenRouter, Nvidia NIM, dan pemrosesan OCR Ollama.
 - **Wilayah Ekonomi Eropa atau region Supabase lain** — untuk autentikasi, database, dan Edge Functions, tergantung region project Supabase Anda.
 
 Ketika kami mentransfer data pribadi keluar dari Wilayah Ekonomi Eropa, kami mengandalkan perlindungan seperti Standard Contractual Clauses (SCC) dari European Commission, EU-U.S. Data Privacy Framework (bila berlaku), atau perlindungan kontraktual setara. Salinan perlindungan relevan dapat diminta dengan menghubungi kami.

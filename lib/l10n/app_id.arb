@@ -551,6 +551,11 @@
   "@settlementMessageWhatsappLink": {
     "placeholders": { "url": { "type": "String" } }
   },
+
+  "settlementPromoFooter": "Dibuat dengan BagiStruk. Coba aplikasinya di Google Play: {url}",
+  "@settlementPromoFooter": {
+    "placeholders": { "url": { "type": "String" } }
+  },
   "aboutTitle": "Tentang",
   "aboutSettingsTile": "Tentang Aplikasi",
   "aboutVersionLabel": "Versi",

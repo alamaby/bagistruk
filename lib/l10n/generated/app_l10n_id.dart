@@ -1243,6 +1243,11 @@ class AppL10nId extends AppL10n {
   }
 
   @override
+  String settlementPromoFooter(String url) {
+    return 'Dibuat dengan BagiStruk. Coba aplikasinya di Google Play: $url';
+  }
+
+  @override
   String get aboutTitle => 'Tentang';
 
   @override

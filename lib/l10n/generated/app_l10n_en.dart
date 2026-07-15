@@ -1245,6 +1245,11 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String settlementPromoFooter(String url) {
+    return 'Made with BagiStruk. Try the app on Google Play: $url';
+  }
+
+  @override
   String get aboutTitle => 'About';
 
   @override
