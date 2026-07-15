@@ -363,6 +363,32 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade to Plus",
+  "historyFilterTooltip": "Sort & filter",
+  "historyFilterTitle": "Sort & filter",
+  "historyFilterSort": "Sort by",
+  "historyFilterStatus": "Payment status",
+  "historyFilterCurrency": "Currency",
+  "historyFilterReset": "Reset",
+  "historyFilterEmpty": "No bills match these filters.",
+  "historyFilterCount": "{filteredCount} of {totalCount} bills",
+  "@historyFilterCount": {
+    "placeholders": {
+      "filteredCount": { "type": "int" },
+      "totalCount": { "type": "int" }
+    }
+  },
+  "historySortNewest": "Newest",
+  "historySortOldest": "Oldest",
+  "historySortTitle": "Name A-Z",
+  "historySortAmountDesc": "Amount (high first)",
+  "historySortAmountAsc": "Amount (low first)",
+  "historySortNominalDisabled": "Select a single currency to sort by amount.",
+  "historyStatusAll": "All",
+  "historyStatusUnassigned": "Not split",
+  "historyStatusUnpaid": "Unpaid",
+  "historyStatusPartial": "Partially paid",
+  "historyStatusSettled": "Paid",
+  "applyAction": "Apply",
   "monthlyInsightTitle": "Monthly insight",
   "monthlyInsightMonth": "{month} spending",
   "@monthlyInsightMonth": {

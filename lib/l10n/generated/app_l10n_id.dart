@@ -852,6 +852,70 @@ class AppL10nId extends AppL10n {
   String get historyUpgradeCta => 'Upgrade ke Plus';
 
   @override
+  String get historyFilterTooltip => 'Urutkan & filter';
+
+  @override
+  String get historyFilterTitle => 'Urutkan & filter';
+
+  @override
+  String get historyFilterSort => 'Urutan';
+
+  @override
+  String get historyFilterStatus => 'Status pembayaran';
+
+  @override
+  String get historyFilterCurrency => 'Mata uang';
+
+  @override
+  String get historyFilterReset => 'Reset';
+
+  @override
+  String get historyFilterEmpty =>
+      'Tidak ada bill yang cocok dengan filter ini.';
+
+  @override
+  String historyFilterCount(int filteredCount, int totalCount) {
+    return '$filteredCount dari $totalCount bill';
+  }
+
+  @override
+  String get historySortNewest => 'Terbaru';
+
+  @override
+  String get historySortOldest => 'Terlama';
+
+  @override
+  String get historySortTitle => 'Nama A-Z';
+
+  @override
+  String get historySortAmountDesc => 'Nominal tertinggi';
+
+  @override
+  String get historySortAmountAsc => 'Nominal terendah';
+
+  @override
+  String get historySortNominalDisabled =>
+      'Pilih satu mata uang untuk mengurutkan nominal.';
+
+  @override
+  String get historyStatusAll => 'Semua';
+
+  @override
+  String get historyStatusUnassigned => 'Belum dibagi';
+
+  @override
+  String get historyStatusUnpaid => 'Belum dibayar';
+
+  @override
+  String get historyStatusPartial => 'Sebagian dibayar';
+
+  @override
+  String get historyStatusSettled => 'Lunas';
+
+  @override
+  String get applyAction => 'Terapkan';
+
+  @override
   String get monthlyInsightTitle => 'Insight bulanan';
 
   @override

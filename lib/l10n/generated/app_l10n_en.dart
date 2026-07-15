@@ -853,6 +853,69 @@ class AppL10nEn extends AppL10n {
   String get historyUpgradeCta => 'Upgrade to Plus';
 
   @override
+  String get historyFilterTooltip => 'Sort & filter';
+
+  @override
+  String get historyFilterTitle => 'Sort & filter';
+
+  @override
+  String get historyFilterSort => 'Sort by';
+
+  @override
+  String get historyFilterStatus => 'Payment status';
+
+  @override
+  String get historyFilterCurrency => 'Currency';
+
+  @override
+  String get historyFilterReset => 'Reset';
+
+  @override
+  String get historyFilterEmpty => 'No bills match these filters.';
+
+  @override
+  String historyFilterCount(int filteredCount, int totalCount) {
+    return '$filteredCount of $totalCount bills';
+  }
+
+  @override
+  String get historySortNewest => 'Newest';
+
+  @override
+  String get historySortOldest => 'Oldest';
+
+  @override
+  String get historySortTitle => 'Name A-Z';
+
+  @override
+  String get historySortAmountDesc => 'Amount (high first)';
+
+  @override
+  String get historySortAmountAsc => 'Amount (low first)';
+
+  @override
+  String get historySortNominalDisabled =>
+      'Select a single currency to sort by amount.';
+
+  @override
+  String get historyStatusAll => 'All';
+
+  @override
+  String get historyStatusUnassigned => 'Not split';
+
+  @override
+  String get historyStatusUnpaid => 'Unpaid';
+
+  @override
+  String get historyStatusPartial => 'Partially paid';
+
+  @override
+  String get historyStatusSettled => 'Paid';
+
+  @override
+  String get applyAction => 'Apply';
+
+  @override
   String get monthlyInsightTitle => 'Monthly insight';
 
   @override

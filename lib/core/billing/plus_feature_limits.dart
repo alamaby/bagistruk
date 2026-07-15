@@ -2,8 +2,8 @@ class PlusFeatureLimits {
   const PlusFeatureLimits._();
 
   static const anonymousHistoryDays = 0;
-  static const freeHistoryDays = 7;
-  static const plusHistoryDays = 90;
+  static const freeHistoryDays = 30;
+  static const plusHistoryDays = 365;
 
   static int historyDays({required String? planCode}) => switch (planCode) {
     'plus' => plusHistoryDays,

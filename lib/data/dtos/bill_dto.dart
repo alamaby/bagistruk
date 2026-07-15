@@ -19,10 +19,25 @@ abstract class BillDto with _$BillDto {
     @JsonKey(name: 'is_settled') @Default(false) bool isSettled,
     @JsonKey(name: 'receipt_date') DateTime? receiptDate,
     @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default([])
+    List<bool> participantPaymentStatuses,
   }) = _BillDto;
 
   factory BillDto.fromJson(Map<String, dynamic> json) =>
       _$BillDtoFromJson(json);
+
+  factory BillDto.fromJsonWithParticipants(
+    Map<String, dynamic> json,
+  ) {
+    final dto = BillDto.fromJson(json);
+    final participants = json['participants'];
+    final statuses = (participants as List?)
+            ?.map((e) => (e is Map ? e['is_paid'] : false) == true)
+            .toList() ??
+        [];
+    return dto.copyWith(participantPaymentStatuses: statuses);
+  }
 
   factory BillDto.fromEntity(Bill b) => BillDto(
     id: b.id,
@@ -34,6 +49,7 @@ abstract class BillDto with _$BillDto {
     isSettled: b.isSettled,
     receiptDate: b.receiptDate,
     createdAt: b.createdAt,
+    participantPaymentStatuses: b.participantPaymentStatuses,
   );
 
   Bill toEntity() => Bill(
@@ -46,5 +62,6 @@ abstract class BillDto with _$BillDto {
     isSettled: isSettled,
     receiptDate: receiptDate,
     createdAt: createdAt,
+    participantPaymentStatuses: participantPaymentStatuses,
   );
 }

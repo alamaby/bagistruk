@@ -9,6 +9,7 @@ import '../../../core/error/result.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/bill.dart';
+import '../../../domain/entities/bill_payment_status.dart';
 import '../../../domain/entities/monthly_spending_insight.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../../../core/ads/ad_config.dart';
@@ -19,6 +20,8 @@ import '../../insights/providers/monthly_spending_insight_provider.dart';
 import '../../settings/providers/preferences_providers.dart';
 import '../../shared/widgets/loading_view.dart';
 import '../../shared/widgets/plus_info_icon.dart';
+import '../providers/history_filter_notifier.dart';
+import '../utils/history_bill_filter.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
@@ -26,7 +29,8 @@ class HistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppL10n.of(context);
-    final bills = ref.watch(billListProvider);
+    final billsAsync = ref.watch(billListProvider);
+    final filter = ref.watch(historyFilterProvider);
     final creditStatusAsync = ref.watch(ocrCreditStatusProvider);
     final creditStatus = switch (creditStatusAsync) {
       AsyncData(:final value) => value,
@@ -42,93 +46,153 @@ class HistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: bills.when(
+        child: billsAsync.when(
           loading: () => LoadingView(message: l10n.historyLoadingMessage),
           error: (e, _) => _ErrorView(
             message: e.toString(),
             onRetry: () => ref.read(billListProvider.notifier).refresh(),
           ),
-          data: (list) => RefreshIndicator(
-            onRefresh: () => ref.read(billListProvider.notifier).refresh(),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(title: Text(l10n.historyTab), pinned: true),
-                SliverToBoxAdapter(child: _SummaryCards(bills: list)),
-                SliverToBoxAdapter(
-                  child: _HistoryAccessBanner(
-                    isPlus: isPlus,
-                    hasHistoryAccess: hasHistoryAccess,
-                    days: historyDays,
+          data: (list) {
+            final currencies = list.map((b) => b.currencyCode).toSet().toList()
+              ..sort();
+            final sorted = applyHistoryFilter(list, filter);
+            final canSortNominal = nominalSortAvailable(list, filter);
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await ref.read(billListProvider.notifier).refresh();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    title: Text(l10n.historyTab),
+                    pinned: true,
+                    actions: [
+                      IconButton(
+                        tooltip: l10n.historyFilterTooltip,
+                        icon: Badge(
+                          isLabelVisible: filter.hasActiveFilters,
+                          label: const Text('!'),
+                          child: const Icon(Icons.tune),
+                        ),
+                        onPressed: () => _openFilterSheet(
+                          context,
+                          ref,
+                          currencies,
+                          filter,
+                          canSortNominal,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                if (hasHistoryAccess && list.isNotEmpty)
+                  SliverToBoxAdapter(child: _SummaryCards(bills: list)),
+                  if (filter.hasActiveFilters)
+                    SliverToBoxAdapter(
+                      child: _ActiveFilterChips(
+                        filter: filter,
+                        currencies: currencies,
+                        onRemoveStatus: () =>
+                            ref.read(historyFilterProvider.notifier)
+                                .setPaymentStatus(null),
+                        onRemoveCurrency: () =>
+                            ref.read(historyFilterProvider.notifier)
+                                .setCurrencyCode(null),
+                        onReset: () =>
+                            ref.read(historyFilterProvider.notifier)
+                                .reset(),
+                      ),
+                    ),
                   SliverToBoxAdapter(
-                    child: _MonthlyInsightSection(
+                    child: _HistoryAccessBanner(
                       isPlus: isPlus,
-                      insight: monthlyInsight,
-                      currency: insightCurrency,
+                      hasHistoryAccess: hasHistoryAccess,
+                      days: historyDays,
                     ),
                   ),
-                if (list.isEmpty)
-                  const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: _EmptyState(),
-                  )
-                else
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
+                  if (hasHistoryAccess && list.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: _MonthlyInsightSection(
+                        isPlus: isPlus,
+                        insight: monthlyInsight,
+                        currency: insightCurrency,
+                      ),
                     ),
-                    sliver: SliverList.separated(
-                      itemCount: list.length,
-                      separatorBuilder: (_, _) => SizedBox(height: 8.h),
-                      itemBuilder: (context, i) {
-                        final bill = list[i];
-                        final currency = CurrencyFormatter.of(
-                          bill.currencyCode,
-                        );
-                        return Card(
-                          child: ListTile(
-                            title: Text(bill.title),
-                            subtitle: Text(currency.format(bill.totalAmount)),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  tooltip: l10n.deleteBillAction,
-                                  onPressed: () => _deleteBill(
-                                    context,
-                                    ref,
-                                    bill,
-                                    currency.format(bill.totalAmount),
+                  if (filter.hasActiveFilters && list.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: _FilteredCountLabel(
+                        filteredCount: sorted.length,
+                        totalCount: list.length,
+                      ),
+                    ),
+                  if (list.isEmpty)
+                    const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _EmptyState(),
+                    )
+                  else if (sorted.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _FilteredEmptyState(
+                        onReset: () =>
+                            ref.read(historyFilterProvider.notifier)
+                                .reset(),
+                      ),
+                    )
+                  else
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
+                      sliver: SliverList.separated(
+                        itemCount: sorted.length,
+                        separatorBuilder: (_, _) => SizedBox(height: 8.h),
+                        itemBuilder: (context, i) {
+                          final bill = sorted[i];
+                          final currency = CurrencyFormatter.of(
+                            bill.currencyCode,
+                          );
+                          return Card(
+                            child: ListTile(
+                              title: Text(bill.title),
+                              subtitle: Text(currency.format(bill.totalAmount)),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    tooltip: l10n.deleteBillAction,
+                                    onPressed: () => _deleteBill(
+                                      context,
+                                      ref,
+                                      bill,
+                                      currency.format(bill.totalAmount),
+                                    ),
+                                    icon: const Icon(Icons.delete_outline),
                                   ),
-                                  icon: const Icon(Icons.delete_outline),
-                                ),
-                                bill.isSettled
-                                    ? const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                      )
-                                    : const Icon(Icons.chevron_right),
-                              ],
+                                  _PaymentStatusIcon(
+                                    status: bill.paymentStatus,
+                                  ),
+                                ],
+                              ),
+                              onTap: () => context.pushNamed(
+                                Routes.billDetailName,
+                                pathParameters: {'billId': bill.id},
+                              ),
                             ),
-                            onTap: () => context.pushNamed(
-                              Routes.billDetailName,
-                              pathParameters: {'billId': bill.id},
-                            ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
+                    ),
+                  SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+                  const SliverToBoxAdapter(
+                    child: BannerAdWidget(
+                      placement: BannerAdPlacement.history,
                     ),
                   ),
-                SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-                const SliverToBoxAdapter(
-                child: BannerAdWidget(placement: BannerAdPlacement.history),
+                ],
               ),
-              ],
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
@@ -175,6 +239,468 @@ class HistoryScreen extends ConsumerWidget {
         ),
         behavior: SnackBarBehavior.floating,
       ),
+    );
+  }
+
+  void _openFilterSheet(
+    BuildContext context,
+    WidgetRef ref,
+    List<String> currencies,
+    HistoryFilterState currentFilter,
+    bool canSortNominal,
+  ) {
+    final draft = HistoryFilterState(
+      sort: currentFilter.sort,
+      paymentStatus: currentFilter.paymentStatus,
+      currencyCode: currentFilter.currencyCode,
+    );
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (ctx) => _FilterSheet(
+        initialFilter: draft,
+        currencies: currencies,
+        canSortNominal: canSortNominal,
+        onApply: (applied) {
+          final notifier = ref.read(historyFilterProvider.notifier);
+          notifier.setSort(applied.sort);
+          notifier.setPaymentStatus(applied.paymentStatus);
+          notifier.setCurrencyCode(applied.currencyCode);
+        },
+      ),
+    );
+  }
+}
+
+class _PaymentStatusIcon extends StatelessWidget {
+  const _PaymentStatusIcon({required this.status});
+
+  final BillPaymentStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return switch (status) {
+      BillPaymentStatus.settled => const Icon(
+          Icons.check_circle,
+          color: Colors.green,
+        ),
+      BillPaymentStatus.partial => Icon(
+          Icons.checklist,
+          color: scheme.tertiary,
+        ),
+      BillPaymentStatus.unpaid => const Icon(Icons.schedule),
+      BillPaymentStatus.unassigned => Icon(
+          Icons.people_outline,
+          color: scheme.onSurfaceVariant,
+        ),
+    };
+  }
+}
+
+class _ActiveFilterChips extends StatelessWidget {
+  const _ActiveFilterChips({
+    required this.filter,
+    required this.currencies,
+    required this.onRemoveStatus,
+    required this.onRemoveCurrency,
+    required this.onReset,
+  });
+
+  final HistoryFilterState filter;
+  final List<String> currencies;
+  final VoidCallback onRemoveStatus;
+  final VoidCallback onRemoveCurrency;
+  final VoidCallback onReset;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final chips = <Widget>[];
+
+    if (filter.paymentStatus != null) {
+      chips.add(
+        _FilterChip(
+          label: _statusLabel(l10n, filter.paymentStatus!),
+          onRemoved: onRemoveStatus,
+        ),
+      );
+    }
+
+    if (filter.currencyCode != null) {
+      chips.add(
+        _FilterChip(
+          label: filter.currencyCode!,
+          onRemoved: onRemoveCurrency,
+        ),
+      );
+    }
+
+    if (chips.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0),
+      child: Row(
+        children: [
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 4.h,
+            children: chips,
+          ),
+          SizedBox(width: 8.w),
+          TextButton.icon(
+            icon: Icon(Icons.close, size: 16.r),
+            label: Text(
+              l10n.historyFilterReset,
+              style: TextStyle(fontSize: 12.sp),
+            ),
+            onPressed: onReset,
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              foregroundColor: scheme.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _statusLabel(AppL10n l10n, BillPaymentStatus status) =>
+      switch (status) {
+        BillPaymentStatus.unassigned => l10n.historyStatusUnassigned,
+        BillPaymentStatus.unpaid => l10n.historyStatusUnpaid,
+        BillPaymentStatus.partial => l10n.historyStatusPartial,
+        BillPaymentStatus.settled => l10n.historyStatusSettled,
+      };
+}
+
+class _FilterChip extends StatelessWidget {
+  const _FilterChip({required this.label, required this.onRemoved});
+
+  final String label;
+  final VoidCallback onRemoved;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: scheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(999.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: scheme.onSecondaryContainer,
+            ),
+          ),
+          SizedBox(width: 4.w),
+          GestureDetector(
+            onTap: onRemoved,
+            child: Icon(Icons.close, size: 14.r, color: scheme.onSecondaryContainer),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilteredCountLabel extends StatelessWidget {
+  const _FilteredCountLabel({
+    required this.filteredCount,
+    required this.totalCount,
+  });
+
+  final int filteredCount;
+  final int totalCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0),
+      child: Text(
+        l10n.historyFilterCount(filteredCount, totalCount),
+        style: TextStyle(
+          fontSize: 12.sp,
+          color: scheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterSheet extends StatefulWidget {
+  const _FilterSheet({
+    required this.initialFilter,
+    required this.currencies,
+    required this.canSortNominal,
+    required this.onApply,
+  });
+
+  final HistoryFilterState initialFilter;
+  final List<String> currencies;
+  final bool canSortNominal;
+  final ValueChanged<HistoryFilterState> onApply;
+
+  @override
+  State<_FilterSheet> createState() => _FilterSheetState();
+}
+
+class _FilterSheetState extends State<_FilterSheet> {
+  late HistoryFilterState _draft;
+
+  @override
+  void initState() {
+    super.initState();
+    _draft = widget.initialFilter;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16.w,
+        right: 16.w,
+        top: 12.h,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 32.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: scheme.onSurfaceVariant.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2.r),
+              ),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            l10n.historyFilterTitle,
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(height: 16.h),
+          _SectionLabel(l10n.historyFilterSort),
+          SizedBox(height: 8.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              _SortChip(
+                label: l10n.historySortNewest,
+                selected: _draft.sort == HistorySort.newest,
+                onSelected: () => setState(() => _draft = _draft.copyWith(sort: HistorySort.newest)),
+              ),
+              _SortChip(
+                label: l10n.historySortOldest,
+                selected: _draft.sort == HistorySort.oldest,
+                onSelected: () => setState(() => _draft = _draft.copyWith(sort: HistorySort.oldest)),
+              ),
+              _SortChip(
+                label: l10n.historySortTitle,
+                selected: _draft.sort == HistorySort.titleAsc,
+                onSelected: () => setState(() => _draft = _draft.copyWith(sort: HistorySort.titleAsc)),
+              ),
+              _SortChip(
+                label: l10n.historySortAmountDesc,
+                selected: _draft.sort == HistorySort.amountDesc,
+                enabled: widget.canSortNominal,
+                onSelected: () => setState(() => _draft = _draft.copyWith(sort: HistorySort.amountDesc)),
+              ),
+              _SortChip(
+                label: l10n.historySortAmountAsc,
+                selected: _draft.sort == HistorySort.amountAsc,
+                enabled: widget.canSortNominal,
+                onSelected: () => setState(() => _draft = _draft.copyWith(sort: HistorySort.amountAsc)),
+              ),
+            ],
+          ),
+          if (!widget.canSortNominal) ...[
+            SizedBox(height: 4.h),
+            Text(
+              l10n.historySortNominalDisabled,
+              style: TextStyle(
+                fontSize: 11.sp,
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          SizedBox(height: 16.h),
+          _SectionLabel(l10n.historyFilterStatus),
+          SizedBox(height: 8.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              _StatusChoiceChip(
+                label: l10n.historyStatusAll,
+                selected: _draft.paymentStatus == null,
+                onSelected: () => setState(() => _draft = _draft.copyWith(paymentStatus: null)),
+              ),
+              _StatusChoiceChip(
+                label: l10n.historyStatusUnassigned,
+                selected: _draft.paymentStatus == BillPaymentStatus.unassigned,
+                onSelected: () => setState(() => _draft = _draft.copyWith(paymentStatus: BillPaymentStatus.unassigned)),
+              ),
+              _StatusChoiceChip(
+                label: l10n.historyStatusUnpaid,
+                selected: _draft.paymentStatus == BillPaymentStatus.unpaid,
+                onSelected: () => setState(() => _draft = _draft.copyWith(paymentStatus: BillPaymentStatus.unpaid)),
+              ),
+              _StatusChoiceChip(
+                label: l10n.historyStatusPartial,
+                selected: _draft.paymentStatus == BillPaymentStatus.partial,
+                onSelected: () => setState(() => _draft = _draft.copyWith(paymentStatus: BillPaymentStatus.partial)),
+              ),
+              _StatusChoiceChip(
+                label: l10n.historyStatusSettled,
+                selected: _draft.paymentStatus == BillPaymentStatus.settled,
+                onSelected: () => setState(() => _draft = _draft.copyWith(paymentStatus: BillPaymentStatus.settled)),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          _SectionLabel(l10n.historyFilterCurrency),
+          SizedBox(height: 8.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              _StatusChoiceChip(
+                label: l10n.historyStatusAll,
+                selected: _draft.currencyCode == null,
+                onSelected: () => setState(() => _draft = _draft.copyWith(currencyCode: null)),
+              ),
+              ...widget.currencies.map(
+                (c) => _StatusChoiceChip(
+                  label: c,
+                  selected: _draft.currencyCode == c,
+                  onSelected: () => setState(() => _draft = _draft.copyWith(currencyCode: c)),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => setState(() => _draft = const HistoryFilterState()),
+                  child: Text(l10n.historyFilterReset),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () {
+                    widget.onApply(_draft);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(l10n.applyAction),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.label);
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Text(
+      label,
+      style: TextStyle(
+        fontSize: 13.sp,
+        fontWeight: FontWeight.w700,
+        color: scheme.onSurfaceVariant,
+      ),
+    );
+  }
+}
+
+class _SortChip extends StatelessWidget {
+  const _SortChip({
+    required this.label,
+    required this.selected,
+    this.enabled = true,
+    required this.onSelected,
+  });
+
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: enabled ? (_) => onSelected() : null,
+      showCheckmark: false,
+      selectedColor: scheme.primaryContainer,
+      disabledColor: scheme.surfaceContainerHighest,
+      labelStyle: TextStyle(
+        color: selected
+            ? scheme.onPrimaryContainer
+            : enabled
+                ? null
+                : scheme.onSurfaceVariant.withValues(alpha: 0.4),
+      ),
+    );
+  }
+}
+
+class _StatusChoiceChip extends StatelessWidget {
+  const _StatusChoiceChip({
+    required this.label,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => onSelected(),
+      showCheckmark: false,
+      selectedColor: scheme.secondaryContainer,
     );
   }
 }
@@ -900,6 +1426,44 @@ class _EmptyState extends StatelessWidget {
               l10n.historyEmptyMessage,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14.sp, color: scheme.onSurfaceVariant),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FilteredEmptyState extends StatelessWidget {
+  const _FilteredEmptyState({required this.onReset});
+
+  final VoidCallback onReset;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.filter_alt_off_outlined,
+              size: 56.r,
+              color: scheme.onSurfaceVariant,
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              l10n.historyFilterEmpty,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14.sp, color: scheme.onSurfaceVariant),
+            ),
+            SizedBox(height: 16.h),
+            FilledButton.tonal(
+              onPressed: onReset,
+              child: Text(l10n.historyFilterReset),
             ),
           ],
         ),

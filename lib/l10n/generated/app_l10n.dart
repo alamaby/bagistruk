@@ -1577,6 +1577,126 @@ abstract class AppL10n {
   /// **'Upgrade ke Plus'**
   String get historyUpgradeCta;
 
+  /// No description provided for @historyFilterTooltip.
+  ///
+  /// In id, this message translates to:
+  /// **'Urutkan & filter'**
+  String get historyFilterTooltip;
+
+  /// No description provided for @historyFilterTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Urutkan & filter'**
+  String get historyFilterTitle;
+
+  /// No description provided for @historyFilterSort.
+  ///
+  /// In id, this message translates to:
+  /// **'Urutan'**
+  String get historyFilterSort;
+
+  /// No description provided for @historyFilterStatus.
+  ///
+  /// In id, this message translates to:
+  /// **'Status pembayaran'**
+  String get historyFilterStatus;
+
+  /// No description provided for @historyFilterCurrency.
+  ///
+  /// In id, this message translates to:
+  /// **'Mata uang'**
+  String get historyFilterCurrency;
+
+  /// No description provided for @historyFilterReset.
+  ///
+  /// In id, this message translates to:
+  /// **'Reset'**
+  String get historyFilterReset;
+
+  /// No description provided for @historyFilterEmpty.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak ada bill yang cocok dengan filter ini.'**
+  String get historyFilterEmpty;
+
+  /// No description provided for @historyFilterCount.
+  ///
+  /// In id, this message translates to:
+  /// **'{filteredCount} dari {totalCount} bill'**
+  String historyFilterCount(int filteredCount, int totalCount);
+
+  /// No description provided for @historySortNewest.
+  ///
+  /// In id, this message translates to:
+  /// **'Terbaru'**
+  String get historySortNewest;
+
+  /// No description provided for @historySortOldest.
+  ///
+  /// In id, this message translates to:
+  /// **'Terlama'**
+  String get historySortOldest;
+
+  /// No description provided for @historySortTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama A-Z'**
+  String get historySortTitle;
+
+  /// No description provided for @historySortAmountDesc.
+  ///
+  /// In id, this message translates to:
+  /// **'Nominal tertinggi'**
+  String get historySortAmountDesc;
+
+  /// No description provided for @historySortAmountAsc.
+  ///
+  /// In id, this message translates to:
+  /// **'Nominal terendah'**
+  String get historySortAmountAsc;
+
+  /// No description provided for @historySortNominalDisabled.
+  ///
+  /// In id, this message translates to:
+  /// **'Pilih satu mata uang untuk mengurutkan nominal.'**
+  String get historySortNominalDisabled;
+
+  /// No description provided for @historyStatusAll.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua'**
+  String get historyStatusAll;
+
+  /// No description provided for @historyStatusUnassigned.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum dibagi'**
+  String get historyStatusUnassigned;
+
+  /// No description provided for @historyStatusUnpaid.
+  ///
+  /// In id, this message translates to:
+  /// **'Belum dibayar'**
+  String get historyStatusUnpaid;
+
+  /// No description provided for @historyStatusPartial.
+  ///
+  /// In id, this message translates to:
+  /// **'Sebagian dibayar'**
+  String get historyStatusPartial;
+
+  /// No description provided for @historyStatusSettled.
+  ///
+  /// In id, this message translates to:
+  /// **'Lunas'**
+  String get historyStatusSettled;
+
+  /// No description provided for @applyAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Terapkan'**
+  String get applyAction;
+
   /// No description provided for @monthlyInsightTitle.
   ///
   /// In id, this message translates to:

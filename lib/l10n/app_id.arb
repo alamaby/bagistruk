@@ -363,6 +363,32 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade ke Plus",
+  "historyFilterTooltip": "Urutkan & filter",
+  "historyFilterTitle": "Urutkan & filter",
+  "historyFilterSort": "Urutan",
+  "historyFilterStatus": "Status pembayaran",
+  "historyFilterCurrency": "Mata uang",
+  "historyFilterReset": "Reset",
+  "historyFilterEmpty": "Tidak ada bill yang cocok dengan filter ini.",
+  "historyFilterCount": "{filteredCount} dari {totalCount} bill",
+  "@historyFilterCount": {
+    "placeholders": {
+      "filteredCount": { "type": "int" },
+      "totalCount": { "type": "int" }
+    }
+  },
+  "historySortNewest": "Terbaru",
+  "historySortOldest": "Terlama",
+  "historySortTitle": "Nama A-Z",
+  "historySortAmountDesc": "Nominal tertinggi",
+  "historySortAmountAsc": "Nominal terendah",
+  "historySortNominalDisabled": "Pilih satu mata uang untuk mengurutkan nominal.",
+  "historyStatusAll": "Semua",
+  "historyStatusUnassigned": "Belum dibagi",
+  "historyStatusUnpaid": "Belum dibayar",
+  "historyStatusPartial": "Sebagian dibayar",
+  "historyStatusSettled": "Lunas",
+  "applyAction": "Terapkan",
   "monthlyInsightTitle": "Insight bulanan",
   "monthlyInsightMonth": "Pengeluaran {month}",
   "@monthlyInsightMonth": {
