@@ -363,6 +363,7 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade to Plus",
+  "historyPlusBannerDismiss": "Dismiss",
   "historyFilterTooltip": "Sort & filter",
   "historyFilterTitle": "Sort & filter",
   "historyFilterSort": "Sort by",

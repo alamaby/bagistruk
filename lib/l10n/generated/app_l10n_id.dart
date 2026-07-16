@@ -852,6 +852,9 @@ class AppL10nId extends AppL10n {
   String get historyUpgradeCta => 'Upgrade ke Plus';
 
   @override
+  String get historyPlusBannerDismiss => 'Tutup';
+
+  @override
   String get historyFilterTooltip => 'Urutkan & filter';
 
   @override

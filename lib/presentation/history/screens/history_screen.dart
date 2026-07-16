@@ -19,6 +19,7 @@ import '../../settings/providers/preferences_providers.dart';
 import '../../shared/widgets/plus_info_icon.dart';
 import '../providers/history_filter_notifier.dart';
 import '../providers/history_list_notifier.dart';
+import '../providers/history_plus_banner_notifier.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
@@ -66,6 +67,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     final isPlus = creditStatus?.isPlus ?? false;
     final historyDays = PlusFeatureLimits.historyDays(planCode: planCode);
     final hasHistoryAccess = historyDays > 0;
+    final bannerState = ref.watch(historyPlusBannerProvider);
+    final isBannerDismissed = bannerState is AsyncData<bool> && bannerState.value;
+    final bannerReady = bannerState is AsyncData<bool>;
     final monthlyInsight = ref.watch(monthlySpendingInsightProvider);
     final items = historyState.items;
     final summary = historyState.summary;
@@ -122,13 +126,19 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         ref.read(historyFilterProvider.notifier).reset(),
                   ),
                 ),
-              SliverToBoxAdapter(
-                child: _HistoryAccessBanner(
-                  isPlus: isPlus,
-                  hasHistoryAccess: hasHistoryAccess,
-                  days: historyDays,
+              if (!isPlus || !isBannerDismissed)
+                SliverToBoxAdapter(
+                  child: _HistoryAccessBanner(
+                    isPlus: isPlus,
+                    hasHistoryAccess: hasHistoryAccess,
+                    days: historyDays,
+                    onDismiss: isPlus && bannerReady && !isBannerDismissed
+                        ? () => ref
+                            .read(historyPlusBannerProvider.notifier)
+                            .dismiss()
+                        : null,
+                  ),
                 ),
-              ),
               if (hasHistoryAccess && hasSummary)
                 SliverToBoxAdapter(
                   child: _MonthlyInsightSection(
@@ -877,8 +887,8 @@ class _BlurredMetricRow extends StatelessWidget {
 }
 
 class _HistoryAccessBanner extends StatelessWidget {
-  const _HistoryAccessBanner({required this.isPlus, required this.hasHistoryAccess, required this.days});
-  final bool isPlus; final bool hasHistoryAccess; final int days;
+  const _HistoryAccessBanner({required this.isPlus, required this.hasHistoryAccess, required this.days, this.onDismiss});
+  final bool isPlus; final bool hasHistoryAccess; final int days; final VoidCallback? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -914,6 +924,14 @@ class _HistoryAccessBanner extends StatelessWidget {
               PlusInfoIcon(title: title, message: details, iconColor: fg),
             ]),
           ])),
+          if (isPlus && onDismiss != null) ...[
+            SizedBox(width: 4.w),
+            IconButton(
+              tooltip: l10n.historyPlusBannerDismiss,
+              onPressed: onDismiss,
+              icon: Icon(Icons.close, color: fg, size: 20.r),
+            ),
+          ],
           if (!isPlus) ...[
             SizedBox(width: 8.w),
             IconButton.filledTonal(

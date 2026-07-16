@@ -853,6 +853,9 @@ class AppL10nEn extends AppL10n {
   String get historyUpgradeCta => 'Upgrade to Plus';
 
   @override
+  String get historyPlusBannerDismiss => 'Dismiss';
+
+  @override
   String get historyFilterTooltip => 'Sort & filter';
 
   @override

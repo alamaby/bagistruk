@@ -363,6 +363,7 @@
     "placeholders": { "days": { "type": "int" } }
   },
   "historyUpgradeCta": "Upgrade ke Plus",
+  "historyPlusBannerDismiss": "Tutup",
   "historyFilterTooltip": "Urutkan & filter",
   "historyFilterTitle": "Urutkan & filter",
   "historyFilterSort": "Urutan",

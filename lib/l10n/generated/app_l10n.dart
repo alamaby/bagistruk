@@ -1577,6 +1577,12 @@ abstract class AppL10n {
   /// **'Upgrade ke Plus'**
   String get historyUpgradeCta;
 
+  /// No description provided for @historyPlusBannerDismiss.
+  ///
+  /// In id, this message translates to:
+  /// **'Tutup'**
+  String get historyPlusBannerDismiss;
+
   /// No description provided for @historyFilterTooltip.
   ///
   /// In id, this message translates to:

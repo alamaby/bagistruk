@@ -685,3 +685,46 @@ final class ImagePickerProvider
 }
 
 String _$imagePickerHash() => r'9b74f9f7be3e39f55705d805e70af42fbabf20bc';
+
+@ProviderFor(historyPlusBannerPreferences)
+const historyPlusBannerPreferencesProvider =
+    HistoryPlusBannerPreferencesProvider._();
+
+final class HistoryPlusBannerPreferencesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<HistoryPlusBannerPreferences>,
+          HistoryPlusBannerPreferences,
+          FutureOr<HistoryPlusBannerPreferences>
+        >
+    with
+        $FutureModifier<HistoryPlusBannerPreferences>,
+        $FutureProvider<HistoryPlusBannerPreferences> {
+  const HistoryPlusBannerPreferencesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'historyPlusBannerPreferencesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$historyPlusBannerPreferencesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<HistoryPlusBannerPreferences> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<HistoryPlusBannerPreferences> create(Ref ref) {
+    return historyPlusBannerPreferences(ref);
+  }
+}
+
+String _$historyPlusBannerPreferencesHash() =>
+    r'680bc1a88a8c97a0ada959140f11755171874d2b';
