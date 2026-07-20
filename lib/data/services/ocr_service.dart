@@ -63,7 +63,9 @@ class OCRService {
       if (data is! Map<String, dynamic>) {
         throw const FormatException('process-receipt returned non-object body');
       }
-      return OcrResponseDto.fromJson(data);
+      // Lenient parse: the body is LLM-authored, so a strict cast would throw
+      // and discard the whole scan on any imperfect field. Skip only bad items.
+      return OcrResponseDto.fromJsonLenient(data);
     });
   }
 }
