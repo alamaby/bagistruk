@@ -162,116 +162,123 @@ class _SplitBody extends ConsumerWidget {
   }
 
   Future<void> _addParticipant(BuildContext context, WidgetRef ref) async {
-    final result = await showDialog<({String name, String? phone})>(
-      context: context,
-      builder: (ctx) {
-        final nameCtrl = TextEditingController();
-        final phoneCtrl = TextEditingController();
-        final l10n = AppL10n.of(ctx);
-        return StatefulBuilder(
-          builder: (ctx, setLocal) {
-            bool importing = false;
+    // Owned by the method (not the builder) so they are disposed exactly once
+    // when the dialog closes. Creating them inside `builder` leaked a pair of
+    // TextEditingControllers on every open.
+    final nameCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final result =
+        await showDialog<({String name, String? phone})>(
+          context: context,
+          builder: (ctx) {
+            final l10n = AppL10n.of(ctx);
+            return StatefulBuilder(
+              builder: (ctx, setLocal) {
+                bool importing = false;
 
-            Future<void> pickContact() async {
-              if (importing) return;
-              setLocal(() => importing = true);
-              try {
-                final granted = await FlutterContacts.requestPermission(
-                  readonly: true,
-                );
-                if (!granted) return;
-                final c = await FlutterContacts.openExternalPick();
-                if (c == null || !ctx.mounted) return;
-                final phone = c.phones.isNotEmpty
-                    ? PhoneFormatter.normalize(c.phones.first.number)
-                    : null;
-                setLocal(() {
-                  if (nameCtrl.text.isEmpty) nameCtrl.text = c.displayName;
-                  if (phone != null && phoneCtrl.text.isEmpty) {
-                    phoneCtrl.text = phone;
+                Future<void> pickContact() async {
+                  if (importing) return;
+                  setLocal(() => importing = true);
+                  try {
+                    final granted = await FlutterContacts.requestPermission(
+                      readonly: true,
+                    );
+                    if (!granted) return;
+                    final c = await FlutterContacts.openExternalPick();
+                    if (c == null || !ctx.mounted) return;
+                    final phone = c.phones.isNotEmpty
+                        ? PhoneFormatter.normalize(c.phones.first.number)
+                        : null;
+                    setLocal(() {
+                      if (nameCtrl.text.isEmpty) nameCtrl.text = c.displayName;
+                      if (phone != null && phoneCtrl.text.isEmpty) {
+                        phoneCtrl.text = phone;
+                      }
+                    });
+                  } catch (_) {
+                    if (ctx.mounted) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        SnackBar(content: Text(l10n.participantImportFailed)),
+                      );
+                    }
+                  } finally {
+                    if (ctx.mounted) setLocal(() => importing = false);
                   }
-                });
-              } catch (_) {
-                if (ctx.mounted) {
-                  ScaffoldMessenger.of(ctx).showSnackBar(
-                    SnackBar(content: Text(l10n.participantImportFailed)),
-                  );
                 }
-              } finally {
-                if (ctx.mounted) setLocal(() => importing = false);
-              }
-            }
 
-            return AlertDialog(
-              title: Text(l10n.billSplitAddPersonTitle),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ParticipantSuggestionChips(
-                      onSelected: (participant) {
-                        setLocal(() {
-                          nameCtrl.text = participant.name;
-                          if (participant.phone.isNotEmpty) {
-                            phoneCtrl.text = participant.phone;
-                          }
-                        });
-                      },
+                return AlertDialog(
+                  title: Text(l10n.billSplitAddPersonTitle),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ParticipantSuggestionChips(
+                          onSelected: (participant) {
+                            setLocal(() {
+                              nameCtrl.text = participant.name;
+                              if (participant.phone.isNotEmpty) {
+                                phoneCtrl.text = participant.phone;
+                              }
+                            });
+                          },
+                        ),
+                        TextField(
+                          controller: nameCtrl,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            hintText: l10n.billSplitNameHint,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            icon: importing
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Icon(Icons.contacts_outlined, size: 18),
+                            label: Text(l10n.participantImportFromContacts),
+                            onPressed: importing ? null : pickContact,
+                          ),
+                        ),
+                        TextField(
+                          controller: phoneCtrl,
+                          decoration: InputDecoration(
+                            labelText: l10n.participantPhoneLabel,
+                          ),
+                          keyboardType: TextInputType.phone,
+                        ),
+                      ],
                     ),
-                    TextField(
-                      controller: nameCtrl,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: l10n.billSplitNameHint,
-                      ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: Text(l10n.cancelAction),
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        icon: importing
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.contacts_outlined, size: 18),
-                        label: Text(l10n.participantImportFromContacts),
-                        onPressed: importing ? null : pickContact,
-                      ),
-                    ),
-                    TextField(
-                      controller: phoneCtrl,
-                      decoration: InputDecoration(
-                        labelText: l10n.participantPhoneLabel,
-                      ),
-                      keyboardType: TextInputType.phone,
+                    FilledButton(
+                      onPressed: () => Navigator.pop(ctx, (
+                        name: nameCtrl.text,
+                        phone: phoneCtrl.text.trim().isEmpty
+                            ? null
+                            : phoneCtrl.text.trim(),
+                      )),
+                      child: Text(l10n.billSplitAdd),
                     ),
                   ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: Text(l10n.cancelAction),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.pop(ctx, (
-                    name: nameCtrl.text,
-                    phone: phoneCtrl.text.trim().isEmpty
-                        ? null
-                        : phoneCtrl.text.trim(),
-                  )),
-                  child: Text(l10n.billSplitAdd),
-                ),
-              ],
+                );
+              },
             );
           },
-        );
-      },
-    );
+        ).whenComplete(() {
+          nameCtrl.dispose();
+          phoneCtrl.dispose();
+        });
     if (result == null) return;
     if (result.name.trim().isEmpty) return;
     final err = await _notifier(
