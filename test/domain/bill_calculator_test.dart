@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const calc = BillCalculator();
 
-  group('BillCalculator.distributeProportionally', () {
+  group('BillCalculator.distributeProportionally (USD, 2-decimal)', () {
     test('equal split — two diners share one item, no extras', () {
       final items = [
         const Item(id: 'i1', billId: 'b', name: 'Pizza', price: 100, qty: 1),
@@ -17,7 +17,11 @@ void main() {
       ];
 
       final owed = calc.distributeProportionally(
-        items: items, assignments: assignments, tax: 0, service: 0,
+        items: items,
+        assignments: assignments,
+        tax: 0,
+        service: 0,
+        currencyCode: 'USD',
       );
 
       expect(owed, {'alice': 50.00, 'bob': 50.00});
@@ -28,12 +32,21 @@ void main() {
         const Item(id: 'i1', billId: 'b', name: 'Steak', price: 90, qty: 1),
       ];
       final assignments = [
-        const Assignment(id: 'a1', itemId: 'i1', participantId: 'alice', shareWeight: 2),
+        const Assignment(
+          id: 'a1',
+          itemId: 'i1',
+          participantId: 'alice',
+          shareWeight: 2,
+        ),
         const Assignment(id: 'a2', itemId: 'i1', participantId: 'bob'),
       ];
 
       final owed = calc.distributeProportionally(
-        items: items, assignments: assignments, tax: 0, service: 0,
+        items: items,
+        assignments: assignments,
+        tax: 0,
+        service: 0,
+        currencyCode: 'USD',
       );
 
       expect(owed['alice'], closeTo(60.00, 0.001));
@@ -52,14 +65,21 @@ void main() {
 
       // 10% tax + 5% service on a 100 subtotal = 15 extras.
       final owed = calc.distributeProportionally(
-        items: items, assignments: assignments, tax: 10, service: 5,
+        items: items,
+        assignments: assignments,
+        tax: 10,
+        service: 5,
+        currencyCode: 'USD',
       );
 
       // Alice: 80 + 80% of 15 = 92.00 ; Bob: 20 + 20% of 15 = 23.00
       expect(owed['alice'], closeTo(92.00, 0.001));
       expect(owed['bob'], closeTo(23.00, 0.001));
       // Reconciles exactly to the total.
-      expect(owed.values.fold<double>(0, (a, b) => a + b), closeTo(115.00, 0.001));
+      expect(
+        owed.values.fold<double>(0, (a, b) => a + b),
+        closeTo(115.00, 0.001),
+      );
     });
 
     test('cent-residual reconciliation — 100 split 3 ways with tax', () {
@@ -73,7 +93,11 @@ void main() {
       ];
 
       final owed = calc.distributeProportionally(
-        items: items, assignments: assignments, tax: 10, service: 0,
+        items: items,
+        assignments: assignments,
+        tax: 10,
+        service: 0,
+        currencyCode: 'USD',
       );
 
       // Sum must equal 110.00 exactly even though 110/3 = 36.6666… cannot be
@@ -88,9 +112,71 @@ void main() {
 
     test('empty assignments returns empty map', () {
       final owed = calc.distributeProportionally(
-        items: const [], assignments: const [], tax: 0, service: 0,
+        items: const [],
+        assignments: const [],
+        tax: 0,
+        service: 0,
+        currencyCode: 'USD',
       );
       expect(owed, isEmpty);
+    });
+  });
+
+  group('BillCalculator.distributeProportionally (IDR, zero-decimal)', () {
+    test('3-way split of Rp 100.000 with tax yields whole rupiah', () {
+      final items = [
+        const Item(id: 'i1', billId: 'b', name: 'Paket', price: 100000, qty: 1),
+      ];
+      final assignments = [
+        const Assignment(id: 'a1', itemId: 'i1', participantId: 'a'),
+        const Assignment(id: 'a2', itemId: 'i1', participantId: 'b'),
+        const Assignment(id: 'a3', itemId: 'i1', participantId: 'c'),
+      ];
+
+      // 10.000 tax on a 100.000 subtotal = 110.000 grand total.
+      final owed = calc.distributeProportionally(
+        items: items,
+        assignments: assignments,
+        tax: 10000,
+        service: 0,
+        currencyCode: 'IDR',
+      );
+
+      // Every owed amount must be a whole rupiah — no fractional sub-unit.
+      for (final v in owed.values) {
+        expect(v, equals(v.roundToDouble()), reason: 'IDR must be integer');
+      }
+      // Sum reconciles exactly to 110.000.
+      final total = owed.values.fold<double>(0, (a, b) => a + b);
+      expect(total, equals(110000.0));
+      // 110.000 / 3 = 36.666,67 → 36.667 / 36.667 / 36.666 (drift absorbed).
+      for (final v in owed.values) {
+        expect(v, anyOf(36666.0, 36667.0));
+      }
+    });
+
+    test('default currency is IDR (zero-decimal)', () {
+      final items = [
+        const Item(id: 'i1', billId: 'b', name: 'Kopi', price: 25000, qty: 1),
+      ];
+      final assignments = [
+        const Assignment(id: 'a1', itemId: 'i1', participantId: 'a'),
+        const Assignment(id: 'a2', itemId: 'i1', participantId: 'b'),
+        const Assignment(id: 'a3', itemId: 'i1', participantId: 'c'),
+      ];
+
+      // No currencyCode passed → defaults to IDR.
+      final owed = calc.distributeProportionally(
+        items: items,
+        assignments: assignments,
+        tax: 0,
+        service: 0,
+      );
+
+      for (final v in owed.values) {
+        expect(v, equals(v.roundToDouble()), reason: 'IDR must be integer');
+      }
+      expect(owed.values.fold<double>(0, (a, b) => a + b), equals(25000.0));
     });
   });
 }

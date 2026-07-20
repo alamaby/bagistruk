@@ -1,5 +1,6 @@
 import '../entities/assignment.dart';
 import '../entities/item.dart';
+import 'money.dart';
 
 /// Pure domain service. No Flutter, no Supabase, no Riverpod imports — so it
 /// stays trivially unit-testable and can be reused on a server (e.g. inside an
@@ -7,7 +8,8 @@ import '../entities/item.dart';
 class BillCalculator {
   const BillCalculator();
 
-  /// Returns `participantId -> amountOwed` (rounded to 2dp).
+  /// Returns `participantId -> amountOwed`, rounded to [currencyCode]'s
+  /// smallest payable unit (whole rupiah for IDR, cents for USD).
   ///
   /// Algorithm — proportional distribution of tax+service:
   ///   1. Split each item's [Item.subtotal] across its [Assignment]s by weight.
@@ -17,13 +19,14 @@ class BillCalculator {
   ///      splitting a \$6 service charge 50/50 would make Bob pay 30% service
   ///      on his order while Alice pays 6%. Proportional keeps the percentage
   ///      uniform across diners.
-  ///   4. Round to cents and reconcile any residual to the largest payer so
-  ///      Σ(owed) == subtotal + tax + service exactly.
+  ///   4. Round to the currency's minor unit and reconcile any residual to the
+  ///      largest payer so Σ(owed) == subtotal + tax + service exactly.
   Map<String, double> distributeProportionally({
     required List<Item> items,
     required List<Assignment> assignments,
     required double tax,
     required double service,
+    String currencyCode = 'IDR',
   }) {
     if (assignments.isEmpty) return const {};
 
@@ -61,24 +64,34 @@ class BillCalculator {
     final owed = <String, double>{};
     subtotalByParticipant.forEach((pid, sub) {
       final raw = sub + (sub / grandSubtotal) * extras;
-      owed[pid] = _round2(raw);
+      owed[pid] = Money.roundToCurrency(raw, currencyCode);
     });
 
-    _reconcileResidual(owed, _round2(grandSubtotal + extras));
+    _reconcileResidual(
+      owed,
+      Money.roundToCurrency(grandSubtotal + extras, currencyCode),
+      currencyCode,
+    );
     return owed;
   }
 
-  static double _round2(double v) => (v * 100).roundToDouble() / 100;
-
   /// Push the rounding residual onto the largest payer. Keeps the receipt
-  /// math reconciled to the cent without distorting smaller balances.
-  static void _reconcileResidual(Map<String, double> owed, double expected) {
+  /// math reconciled to the currency's minor unit without distorting smaller
+  /// balances.
+  static void _reconcileResidual(
+    Map<String, double> owed,
+    double expected,
+    String currencyCode,
+  ) {
     final actual = owed.values.fold<double>(0, (a, b) => a + b);
-    final residual = _round2(expected - actual);
+    final residual = Money.roundToCurrency(expected - actual, currencyCode);
     if (residual == 0 || owed.isEmpty) return;
     final topPayer = owed.entries
         .reduce((a, b) => a.value >= b.value ? a : b)
         .key;
-    owed[topPayer] = _round2(owed[topPayer]! + residual);
+    owed[topPayer] = Money.roundToCurrency(
+      owed[topPayer]! + residual,
+      currencyCode,
+    );
   }
 }

@@ -11,6 +11,7 @@ import '../../../domain/entities/assignment.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../domain/services/money.dart';
 import '../../settings/providers/profile_notifier.dart';
 import 'saved_participants_notifier.dart';
 
@@ -80,11 +81,13 @@ abstract class SplitState with _$SplitState {
   /// share of the items' subtotal. Items with multiple assignees split the
   /// item subtotal evenly (50:50 for two, etc.).
   ///
-  /// Rounding: each per-participant total is rounded to whole units (rupiah);
-  /// any drift caused by rounding is absorbed by the last participant so the
-  /// sum of participant totals exactly matches [Bill.totalAmount] when every
-  /// item is assigned.
+  /// Rounding: each per-participant total is rounded to the bill currency's
+  /// smallest payable unit (whole rupiah for IDR, cents for USD); any drift
+  /// caused by rounding is absorbed by the last participant so the sum of
+  /// participant totals exactly matches [Bill.totalAmount] when every item is
+  /// assigned.
   List<ParticipantTotal> calculateTotals() {
+    final currency = bill.currencyCode;
     final totalSubtotal = itemsSubtotal;
     final raw = <_RawTotal>[];
     for (final p in participants) {
@@ -113,10 +116,13 @@ abstract class SplitState with _$SplitState {
         .map(
           (r) => ParticipantTotal(
             participantId: r.participantId,
-            subtotal: _round(r.subtotal),
-            tax: _round(r.tax),
-            service: _round(r.service),
-            total: _round(r.subtotal + r.tax + r.service),
+            subtotal: Money.roundToCurrency(r.subtotal, currency),
+            tax: Money.roundToCurrency(r.tax, currency),
+            service: Money.roundToCurrency(r.service, currency),
+            total: Money.roundToCurrency(
+              r.subtotal + r.tax + r.service,
+              currency,
+            ),
           ),
         )
         .toList();
@@ -125,7 +131,7 @@ abstract class SplitState with _$SplitState {
     // displayed totals matches the bill total exactly.
     if (result.isNotEmpty && unassignedSubtotal <= 0.0001) {
       final summed = result.fold<double>(0, (s, r) => s + r.total);
-      final drift = _round(bill.totalAmount) - summed;
+      final drift = Money.roundToCurrency(bill.totalAmount, currency) - summed;
       if (drift != 0) {
         for (var i = result.length - 1; i >= 0; i--) {
           if (result[i].total > 0) {
@@ -138,8 +144,6 @@ abstract class SplitState with _$SplitState {
 
     return result;
   }
-
-  static double _round(double v) => v.roundToDouble();
 }
 
 class _RawTotal {

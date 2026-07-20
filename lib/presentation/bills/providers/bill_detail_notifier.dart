@@ -8,6 +8,7 @@ import '../../../domain/entities/assignment.dart';
 import '../../../domain/entities/bill.dart';
 import '../../../domain/entities/item.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../domain/services/money.dart';
 import 'split_notifier.dart' show ParticipantTotal;
 
 part 'bill_detail_notifier.freezed.dart';
@@ -30,6 +31,7 @@ abstract class BillDetailState with _$BillDetailState {
   /// — duplicated here intentionally to keep the detail screen decoupled from
   /// split-screen state shape; refactor to a shared util if drift appears.
   List<ParticipantTotal> calculateTotals() {
+    final currency = bill.currencyCode;
     final totalSubtotal = items.fold<double>(0, (s, i) => s + i.price * i.qty);
     final raw = <_RawTotal>[];
     for (final p in participants) {
@@ -58,10 +60,13 @@ abstract class BillDetailState with _$BillDetailState {
         .map(
           (r) => ParticipantTotal(
             participantId: r.participantId,
-            subtotal: _round(r.subtotal),
-            tax: _round(r.tax),
-            service: _round(r.service),
-            total: _round(r.subtotal + r.tax + r.service),
+            subtotal: Money.roundToCurrency(r.subtotal, currency),
+            tax: Money.roundToCurrency(r.tax, currency),
+            service: Money.roundToCurrency(r.service, currency),
+            total: Money.roundToCurrency(
+              r.subtotal + r.tax + r.service,
+              currency,
+            ),
           ),
         )
         .toList();
@@ -71,7 +76,7 @@ abstract class BillDetailState with _$BillDetailState {
     final unassignedSubtotal = _unassignedSubtotal();
     if (result.isNotEmpty && unassignedSubtotal <= 0.0001) {
       final summed = result.fold<double>(0, (s, r) => s + r.total);
-      final drift = _round(bill.totalAmount) - summed;
+      final drift = Money.roundToCurrency(bill.totalAmount, currency) - summed;
       if (drift != 0) {
         for (var i = result.length - 1; i >= 0; i--) {
           if (result[i].total > 0) {
@@ -93,8 +98,6 @@ abstract class BillDetailState with _$BillDetailState {
     }
     return sum;
   }
-
-  static double _round(double v) => v.roundToDouble();
 }
 
 class _RawTotal {

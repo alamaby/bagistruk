@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../domain/services/money.dart';
+
 class AppConstants {
   const AppConstants._();
 
@@ -52,17 +54,8 @@ class AppConstants {
   /// OCR untuk currency ini punya pecahan, kemungkinan besar pemisah ribuan
   /// salah ditafsirkan sebagai desimal — tampilkan banner peringatan agar
   /// user verifikasi sebelum simpan.
-  static const Set<String> zeroDecimalCurrencies = {
-    'IDR',
-    'KHR',
-    'LAK',
-    'MMK',
-    'VND',
-    'JPY',
-    'KRW',
-    'CLP',
-    'ISK',
-    'HUF',
-    'TWD',
-  };
+  ///
+  /// Sumber kebenaran tunggal ada di [Money.zeroDecimalCurrencies] (pure
+  /// domain, juga dipakai untuk pembulatan uang) — jangan duplikasi daftarnya.
+  static const Set<String> zeroDecimalCurrencies = Money.zeroDecimalCurrencies;
 }
