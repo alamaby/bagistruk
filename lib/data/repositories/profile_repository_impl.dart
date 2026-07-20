@@ -1,5 +1,6 @@
 import '../../core/error/exception_mapper.dart';
 import '../../core/error/result.dart';
+import '../../core/utils/app_logger.dart';
 import '../../domain/entities/monthly_spending_insight.dart';
 import '../../domain/entities/ocr_credit_status.dart';
 import '../../domain/entities/transfer_bank_info.dart';
@@ -59,6 +60,17 @@ class ProfileRepositoryImpl implements IProfileRepository {
     String preferredLanguage = 'en',
   }) async {
     final now = DateTime.now().toUtc();
+
+    // Capture the pre-call marketing state so a failed dual-write can roll back
+    // to exactly what was there before — not a hardcoded `false`, which would
+    // wrongly clear a user who was already opted in (e.g. a re-affirm that
+    // fails at step 2). If the read fails we fall back to clearing, the old
+    // behaviour, since we then cannot know the prior state.
+    final prev = (await guardAsync(() => _ds.getCurrentProfile())).dataOrNull;
+    final prevOptIn = prev?.marketingEmailOptIn ?? false;
+    final prevOptInAt = prev?.marketingEmailOptInAt;
+    final prevOptInSource = prev?.marketingEmailOptInSource;
+
     // Step 1: write to the per-account mirror on `profiles` (existing).
     final profileRes = await guardAsync(
       () => _ds.updateFields({
@@ -92,15 +104,24 @@ class ProfileRepositoryImpl implements IProfileRepository {
       ),
     );
     if (subscriberRes is ResultFailure<void>) {
-      // Pseudo-transactional rollback: revert the profile mirror so the
-      // user-visible flag and the subscriber list never disagree.
-      await _ds.updateFields({
-        'marketing_email_opt_in': false,
-        'marketing_email_opt_in_at': null,
-        'marketing_email_opt_in_source': null,
-      }).catchError((_) {
-        // Best-effort; the original error still bubbles up to the caller.
-      });
+      // Pseudo-transactional rollback: restore the PREVIOUS profile mirror so
+      // the user-visible flag and the subscriber list never disagree — and a
+      // re-affirm that fails at step 2 never clobbers an existing opt-in.
+      await _ds
+          .updateFields({
+            'marketing_email_opt_in': prevOptIn,
+            'marketing_email_opt_in_at': prevOptInAt?.toIso8601String(),
+            'marketing_email_opt_in_source': prevOptInSource,
+          })
+          .catchError((Object e) {
+            // If the rollback itself fails, `profiles` and `marketing_subscribers`
+            // can diverge — log it so the divergence is at least observable. The
+            // original error still bubbles up to the caller.
+            AppLogger.warn(
+              'marketing opt-in rollback failed; profiles/subscribers may diverge',
+              e,
+            );
+          });
       return subscriberRes;
     }
 
