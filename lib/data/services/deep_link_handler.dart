@@ -52,13 +52,21 @@ class DeepLinkHandler {
         raw.contains('error_description=');
     if (!isSupabaseCallback) return;
 
-    AppLogger.log('DeepLinkHandler: processing auth callback: $uri');
+    // Never log the raw URI — its query/fragment carry access_token,
+    // refresh_token and the OAuth code. Log only the non-sensitive location.
+    AppLogger.log(
+      'DeepLinkHandler: processing auth callback: ${_redactUri(uri)}',
+    );
     try {
       await Supabase.instance.client.auth.getSessionFromUrl(uri);
     } catch (e) {
       AppLogger.warn('DeepLinkHandler: getSessionFromUrl failed', e);
     }
   }
+
+  /// A log-safe rendering of a callback URI: scheme/host/path only. Drops the
+  /// query and fragment, which carry auth tokens and the OAuth code.
+  static String _redactUri(Uri uri) => '${uri.scheme}://${uri.host}${uri.path}';
 
   void dispose() {
     _sub?.cancel();
