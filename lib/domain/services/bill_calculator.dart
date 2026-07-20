@@ -32,12 +32,14 @@ class BillCalculator {
 
     final itemsById = {for (final i in items) i.id: i};
     final weightByItem = <String, double>{};
+    final assigneeCountByItem = <String, int>{};
     for (final a in assignments) {
       weightByItem.update(
         a.itemId,
         (w) => w + a.shareWeight,
         ifAbsent: () => a.shareWeight,
       );
+      assigneeCountByItem.update(a.itemId, (c) => c + 1, ifAbsent: () => 1);
     }
 
     final subtotalByParticipant = <String, double>{};
@@ -45,8 +47,15 @@ class BillCalculator {
       final item = itemsById[a.itemId];
       if (item == null) continue;
       final totalWeight = weightByItem[a.itemId]!;
-      if (totalWeight == 0) continue;
-      final share = item.subtotal * (a.shareWeight / totalWeight);
+      final double share;
+      if (totalWeight <= 0) {
+        // Degenerate weights (all zero, or negatives that cancel out): weight
+        // ratios are undefined. Fall back to an equal split among the item's
+        // assignees so the item's cost is never silently dropped from the bill.
+        share = item.subtotal / assigneeCountByItem[a.itemId]!;
+      } else {
+        share = item.subtotal * (a.shareWeight / totalWeight);
+      }
       subtotalByParticipant.update(
         a.participantId,
         (v) => v + share,
@@ -58,7 +67,10 @@ class BillCalculator {
       0,
       (a, b) => a + b,
     );
-    if (grandSubtotal == 0) return const {};
+    // Bail on a non-positive grand subtotal: a negative total (from negative
+    // prices/weights) would invert the sign of every participant's extras
+    // allocation via `sub / grandSubtotal`, distributing charges backwards.
+    if (grandSubtotal <= 0) return const {};
 
     final extras = tax + service;
     final owed = <String, double>{};

@@ -155,6 +155,77 @@ void main() {
       }
     });
 
+    test(
+      'zero total weight — item cost falls back to equal split, not dropped',
+      () {
+        final items = [
+          const Item(
+            id: 'i1',
+            billId: 'b',
+            name: 'Combo',
+            price: 30000,
+            qty: 1,
+          ),
+        ];
+        // Both assignees have shareWeight 0 → total weight 0 (degenerate).
+        final assignments = [
+          const Assignment(
+            id: 'a1',
+            itemId: 'i1',
+            participantId: 'a',
+            shareWeight: 0,
+          ),
+          const Assignment(
+            id: 'a2',
+            itemId: 'i1',
+            participantId: 'b',
+            shareWeight: 0,
+          ),
+        ];
+
+        final owed = calc.distributeProportionally(
+          items: items,
+          assignments: assignments,
+          tax: 0,
+          service: 0,
+          currencyCode: 'IDR',
+        );
+
+        // Cost must NOT vanish: 30.000 split equally = 15.000 each, sum intact.
+        expect(owed.values.fold<double>(0, (a, b) => a + b), equals(30000.0));
+        expect(owed['a'], equals(15000.0));
+        expect(owed['b'], equals(15000.0));
+      },
+    );
+
+    test(
+      'non-positive grand subtotal returns empty map (no sign inversion)',
+      () {
+        final items = [
+          const Item(
+            id: 'i1',
+            billId: 'b',
+            name: 'Refund',
+            price: -5000,
+            qty: 1,
+          ),
+        ];
+        final assignments = [
+          const Assignment(id: 'a1', itemId: 'i1', participantId: 'a'),
+        ];
+
+        final owed = calc.distributeProportionally(
+          items: items,
+          assignments: assignments,
+          tax: 1000,
+          service: 0,
+          currencyCode: 'IDR',
+        );
+
+        expect(owed, isEmpty);
+      },
+    );
+
     test('default currency is IDR (zero-decimal)', () {
       final items = [
         const Item(id: 'i1', billId: 'b', name: 'Kopi', price: 25000, qty: 1),
