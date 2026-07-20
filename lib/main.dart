@@ -12,6 +12,7 @@ import 'core/ads/ad_service.dart';
 import 'core/config/env.dart';
 import 'core/format/app_format.dart';
 import 'core/format/device_locale_defaults.dart';
+import 'core/utils/app_logger.dart';
 import 'data/services/deep_link_handler.dart';
 
 /// Entry point.
@@ -98,11 +99,15 @@ Future<String?> _bootstrap() async {
       // so the user sees the correct language and currency from the start.
       await _initializeProfileDefaults(auth.currentUser?.id);
     }
-  } catch (e) {
-    // Sign-in failure bukan blocker -- app tetap boot, scan flow akan
-    // trigger lazy ensureSignedIn() di action site. Legal gate akan fire
-    // kemudian (mid-flow) yang lebih buruk UX, tapi app masih jalan.
-    return 'Failed eager anonymous sign-in: $e';
+  } catch (e, st) {
+    // Sign-in failure bukan blocker -- app TETAP boot. Scan/settings akan
+    // trigger lazy ensureSignedIn() di action site; legal gate fire kemudian
+    // (mid-flow) -- UX kurang ideal, tapi jauh lebih baik daripada memblokir
+    // seluruh app dengan layar error hanya karena network flaky / latensi auth
+    // di cold start. Karena itu kita LOG lalu lanjut boot (return null), bukan
+    // mengembalikan string error yang memicu _StartupErrorApp.
+    AppLogger.error('Eager anonymous sign-in failed (non-blocking)', e, st);
+    return null;
   }
 
   return null;
