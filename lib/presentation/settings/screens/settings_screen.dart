@@ -43,6 +43,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   // Guard supaya `ensureSignedIn` hanya dipicu sekali per mount, walaupun
   // build dijalankan ulang oleh perubahan state lain.
   bool _ensuringSession = false;
+  // Non-null ketika lazy anon sign-in gagal → tampilkan error+retry, bukan
+  // spinner permanen.
+  Object? _sessionError;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +62,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     // langsung tampilkan settings dengan profil anon ketimbang memaksa user
     // melalui paywall login.
     if (authSnap?.userId == null) {
+      // Lazy anon sign-in gagal sebelumnya → jangan biarkan spinner selamanya;
+      // tawarkan retry.
+      if (_sessionError != null) {
+        return Scaffold(
+          appBar: AppBar(title: Text(l10n.settingsTitle)),
+          body: _ErrorView(
+            message: l10n.errorGeneric,
+            onRetry: () => setState(() {
+              _sessionError = null;
+              _ensuringSession = false;
+            }),
+          ),
+        );
+      }
       if (!_ensuringSession) {
         _ensuringSession = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
           if (!mounted) return;
-          ref.read(authRepositoryProvider).ensureSignedIn();
+          final res = await ref.read(authRepositoryProvider).ensureSignedIn();
+          if (!mounted) return;
+          // Sukses → authStateProvider emit userId → widget rebuild & lanjut ke
+          // body profil. Gagal → tampilkan error+retry, bukan spinner abadi.
+          if (res is ResultFailure<String>) {
+            setState(() => _sessionError = res.failure);
+          }
         });
       }
       return Scaffold(
@@ -138,11 +161,13 @@ class _SettingsBody extends ConsumerWidget {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.creditStatusRemaining(
-                      creditStatus.balance,
-                      creditStatus.monthlyAllowance,
-                      creditStatus.planCode,
-                    )),
+                    Text(
+                      l10n.creditStatusRemaining(
+                        creditStatus.balance,
+                        creditStatus.monthlyAllowance,
+                        creditStatus.planCode,
+                      ),
+                    ),
                     if (creditStatus.entitlementExpiresAt != null) ...[
                       SizedBox(height: 2.h),
                       Text(
@@ -714,10 +739,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
           ),
           if (_globalMessage != null && _processingProductId == null) ...[
             SizedBox(height: 4.h),
-            Text(
-              _globalMessage!,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text(_globalMessage!, style: Theme.of(context).textTheme.bodySmall),
           ],
         ],
       ),
@@ -725,9 +747,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
   }
 
   List<ProductDetails> _purchasableCreditPacks() {
-    final ids = GooglePlayBillingCatalog.creditPacks
-        .map((p) => p.id)
-        .toSet();
+    final ids = GooglePlayBillingCatalog.creditPacks.map((p) => p.id).toSet();
     return _products.where((p) => ids.contains(p.id)).toList();
   }
 
@@ -810,9 +830,7 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
       _rowMessage[product.id] = AppL10n.of(context).billingOpeningPlay;
     });
     try {
-      final ok = await ref
-          .read(googlePlayBillingServiceProvider)
-          .buy(product);
+      final ok = await ref.read(googlePlayBillingServiceProvider).buy(product);
       if (!mounted) return;
       if (!ok) {
         _clearActivePurchase(
@@ -871,8 +889,9 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
         case PurchaseStatus.pending:
           if (_isActiveProduct(productId)) {
             setState(() {
-              _rowMessage[productId!] =
-                  AppL10n.of(context).billingPaymentPending;
+              _rowMessage[productId!] = AppL10n.of(
+                context,
+              ).billingPaymentPending;
             });
           }
           continue;
@@ -909,8 +928,9 @@ class _BillingSectionState extends ConsumerState<_BillingSection> {
               setState(() {
                 _processingProductId = null;
                 if (productId != null) {
-                  _rowMessage[productId] =
-                      AppL10n.of(context).billingPurchaseVerifyFailed;
+                  _rowMessage[productId] = AppL10n.of(
+                    context,
+                  ).billingPurchaseVerifyFailed;
                 }
               });
           }
@@ -969,9 +989,7 @@ class _PlusSubscriptionCard extends StatelessWidget {
               label: Text(
                 loading && product == null
                     ? l10n.billingLoading
-                    : l10n.billingUpgradePlusWithPrice(
-                        product?.price ?? '',
-                      ),
+                    : l10n.billingUpgradePlusWithPrice(product?.price ?? ''),
               ),
               style: FilledButton.styleFrom(
                 backgroundColor: scheme.primary,
@@ -1085,10 +1103,7 @@ class _CreditPackRow extends StatelessWidget {
           ),
         ),
         SizedBox(width: 12.w),
-        Text(
-          product.price,
-          style: theme.textTheme.titleSmall,
-        ),
+        Text(product.price, style: theme.textTheme.titleSmall),
         SizedBox(width: 12.w),
         FilledButton.tonalIcon(
           icon: const Icon(Icons.add_card_outlined),
@@ -1123,8 +1138,7 @@ class _BillingCard extends StatelessWidget {
     final scheme = theme.colorScheme;
     final isActive = badgeTone == _BadgeTone.active;
     final badgeColor = isActive ? scheme.primary : scheme.surfaceContainerHigh;
-    final badgeFg =
-        isActive ? scheme.onPrimary : scheme.onSurfaceVariant;
+    final badgeFg = isActive ? scheme.onPrimary : scheme.onSurfaceVariant;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -1183,10 +1197,7 @@ class _BillingCard extends StatelessWidget {
                   ),
                   SizedBox(width: 8.w),
                   Expanded(
-                    child: Text(
-                      benefit,
-                      style: theme.textTheme.bodyMedium,
-                    ),
+                    child: Text(benefit, style: theme.textTheme.bodyMedium),
                   ),
                 ],
               ),
