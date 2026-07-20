@@ -149,6 +149,11 @@ class BillReviewNotifier extends _$BillReviewNotifier {
   /// success so the caller can navigate to the split screen, or `SaveError`
   /// with a human-readable message on failure.
   Future<SaveResult> save() async {
+    // Re-entrancy guard: a second tap while a save is already in flight (e.g.
+    // during the ensureSignedIn / createBill round-trips) would generate a
+    // second bill id and persist a duplicate bill. Reject it silently.
+    if (state.saving) return const SaveInProgress();
+
     if (state.title.trim().isEmpty) {
       return const SaveError(SaveErrorKind.titleRequired);
     }
@@ -161,10 +166,15 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       }
     }
 
+    // Mark saving BEFORE the first await so a rapid second tap is caught by the
+    // re-entrancy guard above instead of racing into a duplicate insert.
+    state = state.copyWith(saving: true);
+
     final repo = ref.read(billRepositoryProvider);
 
     final authRes = await repo.ensureSignedIn();
     if (authRes is ResultFailure<void>) {
+      state = state.copyWith(saving: false);
       AppLogger.error(
         'BillReviewNotifier.save: ensureSignedIn failed',
         authRes.failure,
@@ -172,7 +182,6 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       return SaveError(SaveErrorKind.saveBillFailed, _msg(authRes.failure));
     }
 
-    state = state.copyWith(saving: true);
     final billId = _uuid.v4();
     final bill = Bill(
       id: billId,
@@ -230,6 +239,12 @@ sealed class SaveResult {
 class SaveSuccess extends SaveResult {
   const SaveSuccess(this.billId);
   final String billId;
+}
+
+/// Returned when [BillReviewNotifier.save] is invoked while a previous save is
+/// still in flight. The caller should ignore it (no error surfaced to the user).
+class SaveInProgress extends SaveResult {
+  const SaveInProgress();
 }
 
 class SaveError extends SaveResult {

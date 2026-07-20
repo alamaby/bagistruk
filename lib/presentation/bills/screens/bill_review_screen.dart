@@ -101,6 +101,9 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
     final result = await _notifier.save();
     if (!mounted) return;
     switch (result) {
+      case SaveInProgress():
+        // A save is already running (duplicate tap) — ignore silently.
+        break;
       case SaveError():
         ScaffoldMessenger.of(
           context,

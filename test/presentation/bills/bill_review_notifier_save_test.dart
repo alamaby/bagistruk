@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bagistruk/core/error/failure.dart';
 import 'package:bagistruk/core/error/result.dart';
 import 'package:bagistruk/data/providers.dart';
@@ -153,11 +155,41 @@ void main() {
         );
         when(mockRepo.upsertItems(any)).thenAnswer(
           (_) async => const Result.success([
-            Item(id: 'i1', billId: 'bill-discount', name: 'CMORY SQZE BLUBR 120', price: 8500, qty: 1),
-            Item(id: 'i2', billId: 'bill-discount', name: 'F.FLAG UHT BERIS 225', price: 8600, qty: 1),
-            Item(id: 'i3', billId: 'bill-discount', name: 'ULTRA KCNG HIJAU 250', price: 6000, qty: 1),
-            Item(id: 'i4', billId: 'bill-discount', name: 'KK MANTANCINO 220ML', price: 8700, qty: 1),
-            Item(id: 'i5', billId: 'bill-discount', name: 'MY BABY H&B WSH 200', price: 14900, qty: 1),
+            Item(
+              id: 'i1',
+              billId: 'bill-discount',
+              name: 'CMORY SQZE BLUBR 120',
+              price: 8500,
+              qty: 1,
+            ),
+            Item(
+              id: 'i2',
+              billId: 'bill-discount',
+              name: 'F.FLAG UHT BERIS 225',
+              price: 8600,
+              qty: 1,
+            ),
+            Item(
+              id: 'i3',
+              billId: 'bill-discount',
+              name: 'ULTRA KCNG HIJAU 250',
+              price: 6000,
+              qty: 1,
+            ),
+            Item(
+              id: 'i4',
+              billId: 'bill-discount',
+              name: 'KK MANTANCINO 220ML',
+              price: 8700,
+              qty: 1,
+            ),
+            Item(
+              id: 'i5',
+              billId: 'bill-discount',
+              name: 'MY BABY H&B WSH 200',
+              price: 14900,
+              qty: 1,
+            ),
           ]),
         );
 
@@ -167,14 +199,16 @@ void main() {
         verify(mockRepo.ensureSignedIn()).called(1);
 
         // Verify createBill receives correct totalAmount
-        final capturedBill = verify(mockRepo.createBill(captureAny)).captured
-            .cast<Bill>().single;
+        final capturedBill = verify(
+          mockRepo.createBill(captureAny),
+        ).captured.cast<Bill>().single;
         expect(capturedBill.totalAmount, 46700);
         expect(capturedBill.title, 'Indomaret');
 
         // Verify upsertItems receives items with no negative prices
-        final capturedItems = verify(mockRepo.upsertItems(captureAny)).captured
-            .cast<List<Item>>().single;
+        final capturedItems = verify(
+          mockRepo.upsertItems(captureAny),
+        ).captured.cast<List<Item>>().single;
         expect(capturedItems.length, 5);
         expect(capturedItems.every((i) => i.price >= 0), isTrue);
         expect(
@@ -221,5 +255,55 @@ void main() {
       verify(mockRepo.createBill(any)).called(1);
       verifyNever(mockRepo.upsertItems(any));
     });
+
+    test(
+      'double-submit — second concurrent save rejected, only one bill created',
+      () async {
+        // Gate ensureSignedIn so the first save() is still in flight (saving ==
+        // true) when the second save() is invoked, reproducing a rapid double
+        // tap on a slow connection.
+        final gate = Completer<Result<void>>();
+        when(mockRepo.ensureSignedIn()).thenAnswer((_) => gate.future);
+        when(mockRepo.createBill(any)).thenAnswer(
+          (_) async => Result.success(
+            Bill(
+              id: 'bill-1',
+              title: 'Warung Test',
+              totalAmount: 25000,
+              currencyCode: 'IDR',
+              tax: 0,
+              service: 0,
+              createdAt: DateTime(2026),
+            ),
+          ),
+        );
+        when(mockRepo.upsertItems(any)).thenAnswer(
+          (_) async => const Result.success([
+            Item(
+              id: 'item-1',
+              billId: 'bill-1',
+              name: 'Nasi Goreng',
+              price: 25000,
+              qty: 1,
+            ),
+          ]),
+        );
+
+        final notifier = _notifier();
+        final first = notifier.save(); // runs until awaiting the gate
+        final second = notifier.save(); // sees saving == true → rejected
+        gate.complete(const Result.success(null)); // release the first save
+
+        final r1 = await first;
+        final r2 = await second;
+
+        expect(r2, isA<SaveInProgress>());
+        expect(r1, isA<SaveSuccess>());
+        // The duplicate tap must NOT have produced a second bill/item write.
+        verify(mockRepo.ensureSignedIn()).called(1);
+        verify(mockRepo.createBill(any)).called(1);
+        verify(mockRepo.upsertItems(any)).called(1);
+      },
+    );
   });
 }
