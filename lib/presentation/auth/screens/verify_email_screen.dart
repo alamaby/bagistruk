@@ -26,6 +26,7 @@ class VerifyEmailScreen extends ConsumerStatefulWidget {
 
 class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   bool _resending = false;
+  bool _cancelling = false;
 
   Future<void> _resend() async {
     if (_resending) return;
@@ -56,13 +57,33 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   }
 
   Future<void> _cancel() async {
+    // Re-entrancy guard: the back button and the "use different email" button
+    // both call this; without the guard, rapid taps fire overlapping
+    // signOut/signInAnonymously cycles.
+    if (_cancelling) return;
+    setState(() => _cancelling = true);
     // User changed their mind — sign out the partial upgrade and start fresh
     // anonymous so they can re-enter the register form with a different email.
     final repo = ref.read(authRepositoryProvider);
     await repo.signOut();
-    await repo.signInAnonymously();
+    final res = await repo.signInAnonymously();
     if (!mounted) return;
-    context.go(Routes.scan);
+    switch (res) {
+      case Success():
+        context.go(Routes.scan);
+      case ResultFailure(:final failure):
+        // Fresh anon sign-in failed — surface it and let the user retry rather
+        // than navigating into a session-less state.
+        setState(() => _cancelling = false);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(friendlyAuthMessage(failure, AppL10n.of(context))),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+    }
   }
 
   @override
@@ -76,7 +97,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           tooltip: l10n.verifyEmailBackTooltip,
-          onPressed: _cancel,
+          onPressed: _cancelling ? null : _cancel,
         ),
       ),
       body: SafeArea(
@@ -178,7 +199,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
               ),
               SizedBox(height: 12.h),
               TextButton(
-                onPressed: _cancel,
+                onPressed: _cancelling ? null : _cancel,
                 child: Text(
                   l10n.verifyEmailUseDifferent,
                   style: TextStyle(fontSize: 13.sp),
