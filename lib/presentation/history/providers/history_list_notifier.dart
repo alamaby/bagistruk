@@ -79,22 +79,28 @@ class HistoryListNotifier extends _$HistoryListNotifier {
     final success = await _fetchPage(cursor: state.nextCursor!, append: true);
     state = state.copyWith(
       isLoadingMore: false,
-      loadMoreFailure: success ? null : Failure.unknown('Load more failed', null),
+      loadMoreFailure: success
+          ? null
+          : Failure.unknown('Load more failed', null),
     );
   }
 
-  Future<void> deleteBill(String billId) async {
+  /// Deletes a bill. Returns `true` on success, `false` when sign-in or the
+  /// delete fails, so the caller can surface feedback instead of silently
+  /// leaving the row in place.
+  Future<bool> deleteBill(String billId) async {
     final repo = ref.read(billRepositoryProvider);
     final authRes = await repo.ensureSignedIn();
-    if (authRes is ResultFailure) return;
+    if (authRes is ResultFailure) return false;
     final result = await repo.deleteBill(billId);
-    if (result is ResultFailure) return;
+    if (result is ResultFailure) return false;
 
     state = state.copyWith(
       items: state.items.where((b) => b.id != billId).toList(growable: false),
     );
     await _updateSummary();
     ref.invalidate(monthlySpendingInsightProvider);
+    return true;
   }
 
   Future<void> _updateSummary() async {
@@ -165,7 +171,9 @@ class HistoryListNotifier extends _$HistoryListNotifier {
 
     final data = (result as Success<HistoryBillPage>).data;
     final existingIds = state.items.map((b) => b.id).toSet();
-    final newItems = data.bills.where((b) => !existingIds.contains(b.id)).toList();
+    final newItems = data.bills
+        .where((b) => !existingIds.contains(b.id))
+        .toList();
     final updatedItems = append ? [...state.items, ...newItems] : newItems;
     state = state.copyWith(
       items: updatedItems,
