@@ -1,8 +1,6 @@
+import 'package:bagistruk/domain/entities/bill.dart';
+import 'package:bagistruk/domain/entities/bill_payment_status.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../lib/domain/entities/bill.dart';
-import '../../../lib/domain/entities/bill_payment_status.dart';
 
 void main() {
   Bill _bill({required List<bool> statuses}) => Bill(

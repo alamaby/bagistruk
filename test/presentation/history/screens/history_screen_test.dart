@@ -1,4 +1,3 @@
-import 'package:bagistruk/data/providers.dart';
 import 'package:bagistruk/domain/entities/ocr_credit_status.dart';
 import 'package:bagistruk/l10n/generated/app_l10n.dart';
 import 'package:bagistruk/presentation/credits/providers/ocr_credit_status_provider.dart';
