@@ -33,6 +33,7 @@ void main() {
   group('HistoryScreen banner', () {
     Widget buildApp({
       required OcrCreditStatus? creditStatus,
+      Locale locale = const Locale('id'),
     }) {
       return ProviderScope(
         overrides: [
@@ -46,7 +47,7 @@ void main() {
           ),
         ],
         child: MaterialApp(
-          locale: const Locale('id'),
+          locale: locale,
           localizationsDelegates: AppL10n.localizationsDelegates,
           supportedLocales: AppL10n.supportedLocales,
           home: ScreenUtilInit(
@@ -82,7 +83,7 @@ void main() {
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
 
-    testWidgets('Plus close button not present during loading state',
+    testWidgets('Plus banner renders immediately before provider resolves',
         (tester) async {
       SharedPreferences.setMockInitialValues({});
       await tester.pumpWidget(buildApp(creditStatus: plusStatus));
@@ -124,7 +125,7 @@ void main() {
       expect(find.byIcon(Icons.close), findsNothing);
     });
 
-    testWidgets('Free banner visible even with persisted dismiss',
+    testWidgets('Free banner visible with CTA even with persisted dismiss',
         (tester) async {
       SharedPreferences.setMockInitialValues({
         'history_plus_banner_dismissed_v1': true,
@@ -134,6 +135,84 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('Riwayat Free'), findsOneWidget);
+      expect(find.byIcon(Icons.workspace_premium_outlined), findsOneWidget);
+    });
+  });
+
+  group('HistoryScreen banner English locale', () {
+    Widget buildApp({
+      required OcrCreditStatus? creditStatus,
+    }) {
+      return ProviderScope(
+        overrides: [
+          _historyListOverride,
+          ocrCreditStatusProvider.overrideWithValue(
+            AsyncValue.data(creditStatus),
+          ),
+          currencyPrefProvider.overrideWithValue('USD'),
+          monthlySpendingInsightProvider.overrideWithValue(
+            AsyncValue.data(null),
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppL10n.localizationsDelegates,
+          supportedLocales: AppL10n.supportedLocales,
+          home: ScreenUtilInit(
+            designSize: const Size(393, 852),
+            child: const HistoryScreen(),
+          ),
+        ),
+      );
+    }
+
+    final plusStatus = OcrCreditStatus(
+      planCode: 'plus',
+      balance: 10,
+      monthlyAllowance: 50,
+      adsEnabled: false,
+      plusFeaturesEnabled: true,
+    );
+    final freeStatus = OcrCreditStatus(
+      planCode: 'free',
+      balance: 5,
+      monthlyAllowance: 10,
+      adsEnabled: true,
+      plusFeaturesEnabled: false,
+    );
+
+    testWidgets('Plus shows Plus history banner and close button',
+        (tester) async {
+      await tester.pumpWidget(buildApp(creditStatus: plusStatus));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Plus history'), findsOneWidget);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+    });
+
+    testWidgets('Free shows Free history banner and upgrade CTA',
+        (tester) async {
+      await tester.pumpWidget(buildApp(creditStatus: freeStatus));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Free history'), findsOneWidget);
+      expect(find.byIcon(Icons.workspace_premium_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.close), findsNothing);
+    });
+
+    testWidgets('Free banner persists in English with persisted dismiss',
+        (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'history_plus_banner_dismissed_v1': true,
+      });
+      await tester.pumpWidget(buildApp(creditStatus: freeStatus));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Free history'), findsOneWidget);
+      expect(find.byIcon(Icons.workspace_premium_outlined), findsOneWidget);
     });
   });
 }
