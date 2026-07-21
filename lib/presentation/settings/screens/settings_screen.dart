@@ -111,10 +111,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 }
 
-class _SettingsBody extends ConsumerWidget {
+class _SettingsBody extends ConsumerStatefulWidget {
   const _SettingsBody({required this.profile});
 
   final UserProfile profile;
+
+  @override
+  ConsumerState<_SettingsBody> createState() => _SettingsBodyState();
+}
+
+class _SettingsBodyState extends ConsumerState<_SettingsBody> {
+  bool _resettingPassword = false;
+
+  UserProfile get profile => widget.profile;
 
   static String _entitlementExpiryLabel(
     AppL10n l10n,
@@ -129,7 +138,7 @@ class _SettingsBody extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
     final theme = Theme.of(context);
     final isAnon = profile.isAnonymous;
@@ -234,13 +243,22 @@ class _SettingsBody extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(l10n.changeName),
-            onTap: () => _onChangeName(context, ref),
+            onTap: () => _onChangeName(context),
           ),
         if (!isAnon)
           ListTile(
-            leading: const Icon(Icons.lock_reset_outlined),
+            leading: _resettingPassword
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  )
+                : const Icon(Icons.lock_reset_outlined),
             title: Text(l10n.resetPassword),
-            onTap: () => _onResetPassword(context, ref, profile.email ?? ''),
+            enabled: !_resettingPassword,
+            onTap: _resettingPassword
+                ? null
+                : () => _onResetPassword(context, profile.email ?? ''),
           ),
         ListTile(
           leading: Icon(
@@ -252,7 +270,7 @@ class _SettingsBody extends ConsumerWidget {
             style: TextStyle(color: theme.colorScheme.error),
           ),
           subtitle: Text(l10n.deleteAccountSubtitle),
-          onTap: () => _onDeleteAccount(context, ref),
+          onTap: () => _onDeleteAccount(context),
         ),
         const Divider(),
         _SectionHeader(l10n.preferencesSection),
@@ -263,7 +281,7 @@ class _SettingsBody extends ConsumerWidget {
             profile.defaultCurrency,
             style: theme.textTheme.bodyMedium,
           ),
-          onTap: () => _onPickCurrency(context, ref, profile.defaultCurrency),
+          onTap: () => _onPickCurrency(context, profile.defaultCurrency),
         ),
         ListTile(
           leading: const Icon(Icons.language_outlined),
@@ -272,7 +290,7 @@ class _SettingsBody extends ConsumerWidget {
             profile.languagePref.toUpperCase(),
             style: theme.textTheme.bodyMedium,
           ),
-          onTap: () => _onPickLanguage(context, ref, profile.languagePref),
+          onTap: () => _onPickLanguage(context, profile.languagePref),
         ),
         ListTile(
           leading: const Icon(Icons.brightness_6_outlined),
@@ -281,7 +299,7 @@ class _SettingsBody extends ConsumerWidget {
             _themeLabel(l10n, profile.themePref),
             style: theme.textTheme.bodyMedium,
           ),
-          onTap: () => _onPickTheme(context, ref, profile.themePref),
+          onTap: () => _onPickTheme(context, profile.themePref),
         ),
         if (!isAnon)
           ListTile(
@@ -348,7 +366,7 @@ class _SettingsBody extends ConsumerWidget {
                     backgroundColor: theme.colorScheme.errorContainer,
                     foregroundColor: theme.colorScheme.onErrorContainer,
                   ),
-                  onPressed: () => _onLogout(context, ref),
+                  onPressed: () => _onLogout(context),
                   label: Text(l10n.logout),
                 ),
         ),
@@ -364,7 +382,7 @@ class _SettingsBody extends ConsumerWidget {
     _ => l10n.themeSystem,
   };
 
-  Future<void> _onChangeName(BuildContext context, WidgetRef ref) async {
+  Future<void> _onChangeName(BuildContext context) async {
     final next = await showEditNameSheet(context, profile.displayName ?? '');
     if (next == null || next.trim().isEmpty) return;
     final res = await ref
@@ -375,11 +393,7 @@ class _SettingsBody extends ConsumerWidget {
       _snack(context, AppL10n.of(context).errorGeneric);
   }
 
-  Future<void> _onResetPassword(
-    BuildContext context,
-    WidgetRef ref,
-    String email,
-  ) async {
+  Future<void> _onResetPassword(BuildContext context, String email) async {
     final l10n = AppL10n.of(context);
     if (email.isEmpty) return;
     final ok = await showConfirmDialog(
@@ -389,21 +403,24 @@ class _SettingsBody extends ConsumerWidget {
       confirmLabel: l10n.saveAction,
     );
     if (ok != true || !context.mounted) return;
+    setState(() => _resettingPassword = true);
     final res = await ref
         .read(authRepositoryProvider)
         .resetPasswordForEmail(email);
     if (!context.mounted) return;
-    _snack(
-      context,
-      res is Success<void> ? l10n.resetPasswordSent : l10n.errorGeneric,
-    );
+    setState(() => _resettingPassword = false);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            res is Success<void> ? l10n.resetPasswordSent : l10n.errorGeneric,
+          ),
+        ),
+      );
   }
 
-  Future<void> _onPickCurrency(
-    BuildContext context,
-    WidgetRef ref,
-    String current,
-  ) async {
+  Future<void> _onPickCurrency(BuildContext context, String current) async {
     final code = await showCurrencyPickerDialog(context, current);
     if (code == null || code == current) return;
     final res = await ref.read(profileProvider.notifier).updateCurrency(code);
@@ -412,11 +429,7 @@ class _SettingsBody extends ConsumerWidget {
       _snack(context, AppL10n.of(context).errorGeneric);
   }
 
-  Future<void> _onPickLanguage(
-    BuildContext context,
-    WidgetRef ref,
-    String current,
-  ) async {
+  Future<void> _onPickLanguage(BuildContext context, String current) async {
     final code = await showLanguagePickerDialog(context, current);
     if (code == null || code == current) return;
     final res = await ref.read(profileProvider.notifier).updateLanguage(code);
@@ -425,11 +438,7 @@ class _SettingsBody extends ConsumerWidget {
       _snack(context, AppL10n.of(context).errorGeneric);
   }
 
-  Future<void> _onPickTheme(
-    BuildContext context,
-    WidgetRef ref,
-    String current,
-  ) async {
+  Future<void> _onPickTheme(BuildContext context, String current) async {
     final mode = await showThemePickerDialog(context, current);
     if (mode == null || mode == current) return;
     final res = await ref.read(profileProvider.notifier).updateTheme(mode);
@@ -438,7 +447,7 @@ class _SettingsBody extends ConsumerWidget {
       _snack(context, AppL10n.of(context).errorGeneric);
   }
 
-  Future<void> _onLogout(BuildContext context, WidgetRef ref) async {
+  Future<void> _onLogout(BuildContext context) async {
     final l10n = AppL10n.of(context);
     final ok = await showConfirmDialog(
       context,
@@ -452,7 +461,7 @@ class _SettingsBody extends ConsumerWidget {
     // Router redirect handles navigation back to /scan when authState emits.
   }
 
-  Future<void> _onDeleteAccount(BuildContext context, WidgetRef ref) async {
+  Future<void> _onDeleteAccount(BuildContext context) async {
     final l10n = AppL10n.of(context);
     final firstOk = await showConfirmDialog(
       context,

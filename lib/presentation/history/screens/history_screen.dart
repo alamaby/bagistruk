@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/billing/plus_feature_limits.dart';
+import '../../../core/format/app_format.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
 import '../../../domain/entities/bill_payment_status.dart';
@@ -198,11 +199,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     itemBuilder: (context, i) {
                       final bill = items[i];
                       final currency = CurrencyFormatter.of(bill.currencyCode);
+                      final createdLabel = AppFormat.longDate(
+                        AppFormat.intlLocaleOf(Localizations.localeOf(context)),
+                      ).format(bill.createdAt);
                       return Card(
                         child: ListTile(
                           title: Text(bill.title),
                           subtitle: Text(
-                            '${currency.format(bill.totalAmount)}  •  ${_paymentStatusLabel(l10n, bill.paymentStatus)}',
+                            '${currency.format(bill.totalAmount)}  •  ${_paymentStatusLabel(l10n, bill.paymentStatus)}  •  $createdLabel',
                           ),
                           trailing: IconButton(
                             tooltip: l10n.deleteBillAction,
