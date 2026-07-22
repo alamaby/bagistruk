@@ -12,6 +12,13 @@ class Routes {
   static const String transferBankInfo = '/settings/transfer-bank';
   static const String transferBankInfoName = 'transfer-bank-info';
 
+  /// Form untuk set password baru setelah user klik link di email
+  /// password-reset. Hanya reachable via `AuthChangeEvent.passwordRecovery`.
+  /// Jika user nyasar ke sini tanpa sesi recovery aktif, router redirect
+  /// ke `/login?reason=reset_expired`.
+  static const String resetPassword = '/reset-password';
+  static const String resetPasswordName = 'reset-password';
+
   static const String capture = '/capture';
   static const String captureName = 'capture';
 

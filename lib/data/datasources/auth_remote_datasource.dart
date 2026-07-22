@@ -28,6 +28,7 @@ class AuthRemoteDataSource {
       userId: user?.id,
       isAnonymous: user?.isAnonymous ?? false,
       emailConfirmed: user?.emailConfirmedAt != null,
+      isPasswordRecovery: s.event == AuthChangeEvent.passwordRecovery,
     );
   });
 
@@ -222,6 +223,12 @@ class AuthRemoteDataSource {
   /// fragments and lands the user on a real route.
   Future<void> resetPasswordForEmail(String email) =>
       _auth.resetPasswordForEmail(email, redirectTo: _authEmailRedirectTo);
+
+  /// Updates the current user's password. Must be invoked within an active
+  /// recovery session (after consuming the `type=recovery` deep link) or as a
+  /// fully signed-in user. Supabase's server-side password policy applies.
+  Future<void> updatePassword(String newPassword) =>
+      _auth.updateUser(UserAttributes(password: newPassword));
 
   Future<void> _ensureGoogleInitialized() {
     return _googleInitFuture ??= GoogleSignIn.instance.initialize(

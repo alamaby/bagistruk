@@ -8,6 +8,11 @@ sealed class AuthSnapshot with _$AuthSnapshot {
     required String? userId,
     required bool isAnonymous,
     @Default(false) bool emailConfirmed,
+    // True when the current session was established by a Supabase
+    // password-recovery callback (`type=recovery` deep link). The router
+    // uses this to route the user to the reset-password form instead of
+    // the normal scan/history entry points.
+    @Default(false) bool isPasswordRecovery,
   }) = _AuthSnapshot;
 
   const AuthSnapshot._();

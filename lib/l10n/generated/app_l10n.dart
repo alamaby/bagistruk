@@ -875,6 +875,72 @@ abstract class AppL10n {
   /// **'Email reset password telah dikirim.'**
   String get resetPasswordSent;
 
+  /// No description provided for @resetPasswordScreenTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Atur Ulang Password'**
+  String get resetPasswordScreenTitle;
+
+  /// No description provided for @resetPasswordScreenHeading.
+  ///
+  /// In id, this message translates to:
+  /// **'Buat Password Baru'**
+  String get resetPasswordScreenHeading;
+
+  /// No description provided for @resetPasswordScreenBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Masukkan password baru untuk akun Anda. Setelah disimpan, Anda akan kembali ke Pengaturan.'**
+  String get resetPasswordScreenBody;
+
+  /// No description provided for @resetPasswordNewLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Password Baru'**
+  String get resetPasswordNewLabel;
+
+  /// No description provided for @resetPasswordConfirmLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Konfirmasi Password'**
+  String get resetPasswordConfirmLabel;
+
+  /// No description provided for @resetPasswordSaveAction.
+  ///
+  /// In id, this message translates to:
+  /// **'Simpan Password'**
+  String get resetPasswordSaveAction;
+
+  /// No description provided for @resetPasswordMinChars.
+  ///
+  /// In id, this message translates to:
+  /// **'Minimal 8 karakter'**
+  String get resetPasswordMinChars;
+
+  /// No description provided for @resetPasswordNeedsAlphaDigit.
+  ///
+  /// In id, this message translates to:
+  /// **'Harus mengandung huruf dan angka'**
+  String get resetPasswordNeedsAlphaDigit;
+
+  /// No description provided for @resetPasswordMismatch.
+  ///
+  /// In id, this message translates to:
+  /// **'Password tidak cocok'**
+  String get resetPasswordMismatch;
+
+  /// No description provided for @resetPasswordSuccess.
+  ///
+  /// In id, this message translates to:
+  /// **'Password berhasil diubah'**
+  String get resetPasswordSuccess;
+
+  /// No description provided for @resetPasswordSessionExpired.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesi reset sudah berakhir. Silakan minta link baru.'**
+  String get resetPasswordSessionExpired;
+
   /// No description provided for @currencyLabel.
   ///
   /// In id, this message translates to:
@@ -1222,6 +1288,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Daftar untuk menyimpan riwayat tagihanmu'**
   String get loginSaveBanner;
+
+  /// No description provided for @loginResetExpiredBanner.
+  ///
+  /// In id, this message translates to:
+  /// **'Sesi reset password sudah berakhir. Silakan minta tautan baru dari Pengaturan.'**
+  String get loginResetExpiredBanner;
 
   /// No description provided for @loginButton.
   ///

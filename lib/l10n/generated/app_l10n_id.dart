@@ -462,6 +462,41 @@ class AppL10nId extends AppL10n {
   String get resetPasswordSent => 'Email reset password telah dikirim.';
 
   @override
+  String get resetPasswordScreenTitle => 'Atur Ulang Password';
+
+  @override
+  String get resetPasswordScreenHeading => 'Buat Password Baru';
+
+  @override
+  String get resetPasswordScreenBody =>
+      'Masukkan password baru untuk akun Anda. Setelah disimpan, Anda akan kembali ke Pengaturan.';
+
+  @override
+  String get resetPasswordNewLabel => 'Password Baru';
+
+  @override
+  String get resetPasswordConfirmLabel => 'Konfirmasi Password';
+
+  @override
+  String get resetPasswordSaveAction => 'Simpan Password';
+
+  @override
+  String get resetPasswordMinChars => 'Minimal 8 karakter';
+
+  @override
+  String get resetPasswordNeedsAlphaDigit => 'Harus mengandung huruf dan angka';
+
+  @override
+  String get resetPasswordMismatch => 'Password tidak cocok';
+
+  @override
+  String get resetPasswordSuccess => 'Password berhasil diubah';
+
+  @override
+  String get resetPasswordSessionExpired =>
+      'Sesi reset sudah berakhir. Silakan minta link baru.';
+
+  @override
   String get currencyLabel => 'Mata Uang Default';
 
   @override
@@ -657,6 +692,10 @@ class AppL10nId extends AppL10n {
 
   @override
   String get loginSaveBanner => 'Daftar untuk menyimpan riwayat tagihanmu';
+
+  @override
+  String get loginResetExpiredBanner =>
+      'Sesi reset password sudah berakhir. Silakan minta tautan baru dari Pengaturan.';
 
   @override
   String get loginButton => 'Masuk';

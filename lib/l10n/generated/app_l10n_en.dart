@@ -462,6 +462,41 @@ class AppL10nEn extends AppL10n {
   String get resetPasswordSent => 'Password reset email sent.';
 
   @override
+  String get resetPasswordScreenTitle => 'Reset Password';
+
+  @override
+  String get resetPasswordScreenHeading => 'Create a New Password';
+
+  @override
+  String get resetPasswordScreenBody =>
+      'Enter a new password for your account. Once saved, you will be returned to Settings.';
+
+  @override
+  String get resetPasswordNewLabel => 'New Password';
+
+  @override
+  String get resetPasswordConfirmLabel => 'Confirm Password';
+
+  @override
+  String get resetPasswordSaveAction => 'Save Password';
+
+  @override
+  String get resetPasswordMinChars => 'At least 8 characters';
+
+  @override
+  String get resetPasswordNeedsAlphaDigit => 'Must contain letters and numbers';
+
+  @override
+  String get resetPasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get resetPasswordSuccess => 'Password updated successfully';
+
+  @override
+  String get resetPasswordSessionExpired =>
+      'Reset session expired. Please request a new link.';
+
+  @override
   String get currencyLabel => 'Default Currency';
 
   @override
@@ -659,6 +694,10 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get loginSaveBanner => 'Sign up to save your bill history';
+
+  @override
+  String get loginResetExpiredBanner =>
+      'The password reset session has expired. Please request a new link from Settings.';
 
   @override
   String get loginButton => 'Sign In';

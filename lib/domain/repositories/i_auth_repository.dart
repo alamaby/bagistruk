@@ -78,4 +78,9 @@ abstract interface class IAuthRepository {
 
   /// Sends a password-reset email to [email].
   Future<Result<void>> resetPasswordForEmail(String email);
+
+  /// Updates the current user's password. Must be invoked within an active
+  /// recovery session (after consuming the `type=recovery` deep link) or as a
+  /// fully signed-in user. Supabase's server-side password policy applies.
+  Future<Result<void>> updatePassword(String newPassword);
 }

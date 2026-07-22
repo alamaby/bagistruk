@@ -10,6 +10,7 @@ import '../../presentation/auth/screens/legal_acceptance_screen.dart';
 import '../../presentation/auth/screens/login_screen.dart';
 import '../../presentation/auth/screens/post_login_welcome_screen.dart';
 import '../../presentation/auth/screens/register_screen.dart';
+import '../../presentation/auth/screens/reset_password_screen.dart';
 import '../../presentation/auth/screens/verify_email_screen.dart';
 import '../../presentation/auth/screens/verify_otp_screen.dart';
 import '../../presentation/bills/screens/bill_detail_screen.dart';
@@ -66,10 +67,13 @@ GoRouter appRouter(Ref ref) {
           rawLoc.contains('type=signup') ||
           rawLoc.contains('type=recovery') ||
           rawLoc.contains('error_description=')) {
+        final isRecovery = rawLoc.contains('type=recovery');
         final result = await ref
             .read(authRepositoryProvider)
             .recoverSessionFromUri(state.uri);
-        if (result is Success<void>) return Routes.history;
+        if (result is Success<void>) {
+          return isRecovery ? Routes.resetPassword : Routes.history;
+        }
         return Routes.scan;
       }
 
@@ -153,6 +157,15 @@ GoRouter appRouter(Ref ref) {
         }
       }
 
+      // Reset-password form is only reachable while a Supabase password-recovery
+      // session is active. If the user somehow lands here without one (deep
+      // link token already expired, or someone navigated manually), bounce
+      // them to /login so they can request a fresh reset link.
+      if (loc == Routes.resetPassword &&
+          !(snap?.isPasswordRecovery ?? false)) {
+        return '${Routes.login}?reason=reset_expired';
+      }
+
       return null;
     },
     routes: [
@@ -193,6 +206,11 @@ GoRouter appRouter(Ref ref) {
         path: Routes.transferBankInfo,
         name: Routes.transferBankInfoName,
         builder: (context, state) => const TransferBankInfoScreen(),
+      ),
+      GoRoute(
+        path: Routes.resetPassword,
+        name: Routes.resetPasswordName,
+        builder: (context, state) => const ResetPasswordScreen(),
       ),
       GoRoute(
         path: Routes.billReview,

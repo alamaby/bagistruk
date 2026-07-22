@@ -42,7 +42,7 @@ final class HistoryListNotifierProvider
 }
 
 String _$historyListNotifierHash() =>
-    r'dbd39a7d574520cad866c85a60cf30d56a424c8e';
+    r'cb0c0337fd73ad5bd5b14604140298c1bbc9d917';
 
 abstract class _$HistoryListNotifier extends $Notifier<HistoryListState> {
   HistoryListState build();

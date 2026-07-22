@@ -151,6 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppL10n.of(context);
     final scheme = Theme.of(context).colorScheme;
     final showSaveBanner = widget.reason == 'save_history';
+    final showResetExpiredBanner = widget.reason == 'reset_expired';
 
     return Scaffold(
       appBar: AppBar(),
@@ -185,6 +186,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
                               color: scheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+                ],
+                if (showResetExpiredBanner) ...[
+                  Container(
+                    padding: EdgeInsets.all(14.w),
+                    decoration: BoxDecoration(
+                      color: scheme.errorContainer.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: scheme.error.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: scheme.error,
+                          size: 20.r,
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: Text(
+                            l10n.loginResetExpiredBanner,
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: scheme.onErrorContainer,
                             ),
                           ),
                         ),
