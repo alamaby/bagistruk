@@ -71,7 +71,8 @@ class Routes {
   /// One-time screen shown after a non-anonymous user finishes the
   /// authentication flow (currently Google sign-in) to collect an explicit
   /// marketing email opt-in. Email/password sign-up collects the same
-  /// opt-in on the register form and stamps `welcomed_at` directly, so the
+  /// opt-in on the register form and stamps `welcomed_at` after email
+  /// confirmation through the pending registration executor, so the
   /// welcome screen only fires for users who skipped the register form.
   static const String postLoginWelcome = '/post-login-welcome';
   static const String postLoginWelcomeName = 'post-login-welcome';

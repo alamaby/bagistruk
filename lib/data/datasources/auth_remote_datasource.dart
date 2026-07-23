@@ -15,6 +15,8 @@ class AuthRemoteDataSource {
 
   String? get currentUserId => _auth.currentUser?.id;
 
+  String? get currentEmail => _auth.currentUser?.email;
+
   bool get isAnonymous => _auth.currentUser?.isAnonymous ?? false;
 
   bool get isEmailConfirmed => _auth.currentUser?.emailConfirmedAt != null;

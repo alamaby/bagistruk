@@ -12,8 +12,9 @@ import '../../settings/providers/profile_notifier.dart';
 /// authenticates (currently Google sign-in) and has not been welcomed yet.
 /// Collects an explicit marketing email opt-in and stamps `welcomed_at`
 /// so the screen is not shown again. Email/password sign-up collects the
-/// same opt-in on the register form and calls [ProfileNotifier.markWelcomed]
-/// directly, so this screen is bypassed for that flow.
+/// same opt-in on the register form and applies it after email confirmation
+/// via the pending registration executor, so this screen is bypassed for
+/// that flow.
 class PostLoginWelcomeScreen extends ConsumerStatefulWidget {
   const PostLoginWelcomeScreen({super.key, this.from});
 

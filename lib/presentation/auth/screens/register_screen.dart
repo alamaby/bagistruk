@@ -8,7 +8,6 @@ import '../../../core/router/routes.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
 import '../../../l10n/generated/app_l10n.dart';
-import '../../settings/providers/profile_notifier.dart';
 import '../utils/auth_messages.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_validators.dart';
@@ -66,48 +65,42 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     setState(() => _loading = false);
     switch (res) {
       case Success():
-        // Stamp the marketing opt-in (if any) and the post-login welcome
-        // marker so the welcome screen does not fire for email/password
-        // sign-ups. The writes are awaited AND their Result is checked
-        // because failing silently would leave the welcome screen
-        // re-appearing on every launch AND leave `marketing_email_opt_in`
-        // out of sync with what the user just consented to. If anything
-        // fails here the user is stuck on the register screen with a
-        // clear message -- they can re-try and the account is already
-        // created, so the retry is cheap.
-        if (_marketingOptIn) {
-          final optRes = await ref
-              .read(profileProvider.notifier)
-              .updateMarketingOptIn(
-                optedIn: true,
-                source: 'register_form',
-                preferredLanguage: Localizations.localeOf(context).languageCode,
-              );
-          if (!mounted) return;
-          if (optRes is ResultFailure<void>) {
-            AppLogger.error(
-              'RegisterScreen: updateMarketingOptIn failed',
-              optRes.failure,
-            );
-            setState(() => _loading = false);
-            _showError(AppL10n.of(context).registerErrorSaveProfile);
-            return;
-          }
-        }
-        final welcomedRes = await ref
-            .read(profileProvider.notifier)
-            .markWelcomed();
-        if (!mounted) return;
-        if (welcomedRes is ResultFailure<void>) {
-          AppLogger.error(
-            'RegisterScreen: markWelcomed failed',
-            welcomedRes.failure,
+        // Defer marketing opt-in and welcome marker until the user
+        // actually confirms their email. Save the user's intent locally
+        // so it can be applied after email confirmation. The router
+        // callback consumes this pending action when it processes the
+        // confirmation deep link. This avoids writing `welcomed_at`
+        // and `marketing_email_opt_in_at` for unconfirmed accounts.
+        //
+        // Capture the values before any async gap so we don't reach
+        // for `context` after `await` and don't lose the user's intent
+        // if the screen unmounts.
+        final rawEmail = _email.text.trim();
+        final marketingOptIn = _marketingOptIn;
+        final preferredLanguage =
+            Localizations.localeOf(context).languageCode;
+        try {
+          final pendingPrefs = await ref
+              .read(pendingRegistrationPreferencesProvider.future);
+          await pendingPrefs.save(
+            email: rawEmail,
+            marketingOptIn: marketingOptIn,
+            preferredLanguage: preferredLanguage,
           );
-          setState(() => _loading = false);
-          _showError(AppL10n.of(context).registerErrorSaveProfile);
-          return;
+        } catch (e, st) {
+          // Pending action save is best-effort. Account creation has
+          // already succeeded; failing to stash the register-form intent
+          // locally just means the welcome gate will pick the user up
+          // after confirmation instead of the executor. Surface the
+          // failure for observability but don't trap the user.
+          AppLogger.error(
+            'RegisterScreen: failed to save pending registration action',
+            e,
+            st,
+          );
         }
-        final email = Uri.encodeQueryComponent(_email.text.trim());
+        if (!mounted) return;
+        final email = Uri.encodeQueryComponent(rawEmail);
         context.go('${Routes.verifyEmail}?email=$email');
       case ResultFailure(:final failure):
         _showError(friendlyAuthMessage(failure, AppL10n.of(context)));

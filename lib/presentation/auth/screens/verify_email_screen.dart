@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/error/result.dart';
 import '../../../core/router/routes.dart';
 import '../../../data/providers.dart';
+import '../../../data/services/pending_registration_preferences.dart';
 import '../../../l10n/generated/app_l10n.dart';
 import '../utils/auth_messages.dart';
 
@@ -56,14 +57,27 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
     }
   }
 
+  Future<void> _clearPendingRegistration() async {
+    try {
+      final prefs =
+          await ref.read(pendingRegistrationPreferencesProvider.future);
+      await prefs.clear();
+    } catch (e) {
+      // Silent: pending action is best-effort; the user is already
+      // cancelling and the stale action will expire via the TTL check.
+    }
+  }
+
   Future<void> _cancel() async {
     // Re-entrancy guard: the back button and the "use different email" button
     // both call this; without the guard, rapid taps fire overlapping
     // signOut/signInAnonymously cycles.
     if (_cancelling) return;
     setState(() => _cancelling = true);
-    // User changed their mind — sign out the partial upgrade and start fresh
-    // anonymous so they can re-enter the register form with a different email.
+    // User changed their mind — clear any pending registration action and
+    // sign out the partial upgrade, then start fresh anonymous so they can
+    // re-enter the register form with a different email.
+    await _clearPendingRegistration();
     final repo = ref.read(authRepositoryProvider);
     await repo.signOut();
     final res = await repo.signInAnonymously();

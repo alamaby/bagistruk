@@ -1,6 +1,6 @@
 # Terms of Service — BagiStruk
 
-**Effective date:** 2026-07-10
+**Effective date:** 2026-07-22
 
 These Terms explain the basic rules for using BagiStruk. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 

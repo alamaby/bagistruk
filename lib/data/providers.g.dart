@@ -728,3 +728,46 @@ final class HistoryPlusBannerPreferencesProvider
 
 String _$historyPlusBannerPreferencesHash() =>
     r'680bc1a88a8c97a0ada959140f11755171874d2b';
+
+@ProviderFor(pendingRegistrationPreferences)
+const pendingRegistrationPreferencesProvider =
+    PendingRegistrationPreferencesProvider._();
+
+final class PendingRegistrationPreferencesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<PendingRegistrationPreferences>,
+          PendingRegistrationPreferences,
+          FutureOr<PendingRegistrationPreferences>
+        >
+    with
+        $FutureModifier<PendingRegistrationPreferences>,
+        $FutureProvider<PendingRegistrationPreferences> {
+  const PendingRegistrationPreferencesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'pendingRegistrationPreferencesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$pendingRegistrationPreferencesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<PendingRegistrationPreferences> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<PendingRegistrationPreferences> create(Ref ref) {
+    return pendingRegistrationPreferences(ref);
+  }
+}
+
+String _$pendingRegistrationPreferencesHash() =>
+    r'9de2cafaa81966a8588ce29f68f484b8e1cb4b39';

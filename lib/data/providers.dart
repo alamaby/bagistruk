@@ -22,6 +22,7 @@ import 'repositories/ocr_repository_impl.dart';
 import 'repositories/profile_repository_impl.dart';
 import 'repositories/saved_participant_repository_impl.dart';
 import 'services/history_plus_banner_preferences.dart';
+import 'services/pending_registration_preferences.dart';
 import 'services/saved_participants_cache.dart';
 import 'services/image_picker_wrapper.dart';
 import 'services/ocr_service.dart';
@@ -114,3 +115,7 @@ IImagePicker imagePicker(Ref ref) => ImagePickerAdapter(ImagePicker());
 @Riverpod(keepAlive: true)
 Future<HistoryPlusBannerPreferences> historyPlusBannerPreferences(Ref ref) =>
     HistoryPlusBannerPreferences.create();
+
+@Riverpod(keepAlive: true)
+Future<PendingRegistrationPreferences> pendingRegistrationPreferences(Ref ref) =>
+    PendingRegistrationPreferences.create();

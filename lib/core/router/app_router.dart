@@ -6,6 +6,7 @@ import '../../data/providers.dart';
 import '../../domain/entities/auth_snapshot.dart';
 import '../../domain/entities/ocr_result.dart';
 import '../../presentation/auth/providers/auth_providers.dart';
+import '../../presentation/auth/providers/pending_registration_executor.dart';
 import '../../presentation/auth/screens/legal_acceptance_screen.dart';
 import '../../presentation/auth/screens/login_screen.dart';
 import '../../presentation/auth/screens/post_login_welcome_screen.dart';
@@ -72,6 +73,14 @@ GoRouter appRouter(Ref ref) {
             .read(authRepositoryProvider)
             .recoverSessionFromUri(state.uri);
         if (result is Success<void>) {
+          // Apply any pending post-signup actions (marketing opt-in, welcome
+          // marker) that were deferred from the register screen so they are
+          // only written after the email is confirmed.
+          if (!isRecovery) {
+            await ref
+                .read(pendingRegistrationExecutorProvider.notifier)
+                .execute();
+          }
           return isRecovery ? Routes.resetPassword : Routes.history;
         }
         return Routes.scan;
@@ -134,8 +143,9 @@ GoRouter appRouter(Ref ref) {
         }
 
         // Post-login welcome (Google sign-in only). Email/password sign-up
-        // stamps `welcomed_at` from the register screen, so this gate only
-        // fires for non-anonymous users who have not been welcomed yet.
+        // defers `welcomed_at` until after email confirmation — the pending
+        // registration executor stamps it in the callback, so the welcome
+        // gate does not fire for freshly-confirmed email users.
         // Excluded from the legal-acceptance screen so a user mid-acceptance
         // is not bounced to the welcome screen.
         if (!profile.isAnonymous &&

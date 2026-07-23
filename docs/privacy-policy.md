@@ -1,6 +1,6 @@
 # Privacy Policy — BagiStruk
 
-**Effective date:** 2026-07-10
+**Effective date:** 2026-07-22
 
 This policy explains how BagiStruk collects, uses, stores, and deletes data. This document is provided for product transparency and should be reviewed for legal compliance before publication.
 
@@ -33,7 +33,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 - App activity metadata: `last_active_at`, used to understand when an account was last active and to support inactivity cleanup.
 - Receipt photos: images you choose or capture for OCR processing.
 - Bill data: merchant names, receipt dates, items, quantities, prices, taxes, service charges, participants, split assignments, settlement status, deleted-bill recovery metadata, exports generated on device, and optional transfer bank information used in settlement messages.
-- **Participant contact info**: when you import a participant from your address book, only the name and phone number of the single contact you select are stored on our server as part of the bill. We never upload your full address book.
+- **Participant contact info**: when you import a participant using the Android system Contact Picker, only the name and phone number of the single contact you explicitly select are stored on our server as part of the bill. We do not access, read, or upload your full address book. No contacts permission is required.
 - OCR credit data: plan/entitlement status, Plus trial start/end/consumption metadata, monthly credit grants, credit usage, and audit records needed to enforce scan limits and feature access.
 - Google Play Billing data when purchases are available: product IDs, purchase tokens, order IDs, subscription status/expiry, and verification responses needed to grant Plus access or OCR credit packs.
 - Support and reminder data: email address and inactivity reminder timestamps when reminders are sent.
@@ -45,7 +45,7 @@ For Indonesian users, you may lodge a complaint with the Ministry of Communicati
 
 - **Camera**: to capture receipt photos.
 - **Photos / media access**: to pick receipt photos from the gallery.
-- **Contacts** (optional): when you tap "Import from contacts" while adding a participant, the system contact picker returns only the single contact you select. We store that contact's name and phone number as part of the bill; your full address book is never uploaded.
+- **Contacts** (no permission required): when you tap "Import from contacts" while adding a participant, the Android system Contact Picker opens. We receive only the name and phone number of the single contact you explicitly select. We do not access, read, or store your full address book. No `READ_CONTACTS` permission is requested.
 - **Internet / network state**: to communicate with Supabase and OCR services.
 
 ## How We Use Data
@@ -78,7 +78,7 @@ We process your personal data on the following legal bases, in line with Article
 
 ## Storage And Processing
 
-App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, Nvidia NIM, and Ollama. API keys for those providers are stored server-side and are not bundled into the mobile app.
+App data is stored in Supabase, including authentication data and PostgreSQL database records. Receipt images are processed by Supabase Edge Functions. OCR processing may call third-party AI/OCR providers such as Google Gemini, OpenRouter, Nvidia NIM, and Ollama. **Receipt photos are sent to these providers for text extraction; images are processed transiently and are not stored by these providers.** API keys for those providers are stored server-side and are not bundled into the mobile app.
 
 ## Third-Party Services
 
@@ -175,7 +175,7 @@ Indonesia
 
 # Kebijakan Privasi — BagiStruk
 
-**Tanggal berlaku:** 2026-07-10
+**Tanggal berlaku:** 2026-07-22
 
 Kebijakan ini menjelaskan bagaimana BagiStruk mengumpulkan, menggunakan, menyimpan, dan menghapus data. Dokumen ini disediakan untuk transparansi produk dan sebaiknya ditinjau kembali untuk kepatuhan hukum sebelum dipublikasikan.
 
@@ -208,7 +208,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 - Metadata aktivitas aplikasi: `last_active_at`, digunakan untuk mengetahui kapan akun terakhir aktif dan mendukung pembersihan akun tidak aktif.
 - Foto struk: gambar yang Anda pilih atau ambil untuk pemrosesan OCR.
 - Data tagihan: nama merchant, tanggal struk, item, jumlah, harga, pajak, service, peserta, pembagian item, status pembayaran, metadata pemulihan bill terhapus, export yang dibuat di perangkat, dan info bank transfer opsional untuk pesan settlement.
-- **Info kontak peserta**: ketika Anda mengimpor peserta dari buku alamat, hanya nama dan nomor telepon dari satu kontak yang Anda pilih yang disimpan di server kami sebagai bagian dari tagihan. Kami tidak pernah mengunggah buku alamat lengkap Anda.
+- **Info kontak peserta**: ketika Anda mengimpor peserta menggunakan Android system Contact Picker, hanya nama dan nomor telepon dari satu kontak yang Anda pilih secara eksplisit yang disimpan di server kami sebagai bagian dari tagihan. Kami tidak mengakses, membaca, atau mengunggah buku alamat lengkap Anda. Tidak diperlukan izin kontak.
 - Data credit OCR: status plan/entitlement, metadata mulai/akhir/pemakaian trial Plus, grant credit bulanan, penggunaan credit, dan audit yang dibutuhkan untuk menerapkan batas scan dan akses fitur.
 - Data Google Play Billing saat pembelian tersedia: product ID, purchase token, order ID, status/expiry subscription, dan respons verifikasi yang dibutuhkan untuk memberi akses Plus atau paket credit OCR.
 - Data dukungan dan reminder: alamat email dan timestamp reminder tidak aktif saat reminder dikirim.
@@ -220,7 +220,7 @@ Untuk pengguna di Indonesia, Anda dapat mengajukan keluhan ke Kementerian Komuni
 
 - **Kamera**: untuk mengambil foto struk.
 - **Akses foto / media**: untuk memilih foto struk dari galeri.
-- **Kontak** (opsional): ketika Anda memilih "Import dari kontak" saat menambahkan peserta, picker kontak sistem hanya mengembalikan satu kontak yang Anda pilih. Kami menyimpan nama dan nomor telepon kontak tersebut sebagai bagian dari tagihan; buku alamat lengkap Anda tidak pernah diunggah.
+- **Kontak** (tidak perlu izin): ketika Anda memilih "Import dari kontak" saat menambahkan peserta, Android system Contact Picker akan terbuka. Kami hanya menerima nama dan nomor telepon dari satu kontak yang Anda pilih secara eksplisit. Kami tidak mengakses, membaca, atau menyimpan buku alamat lengkap Anda. Izin `READ_CONTACTS` tidak diminta.
 - **Internet / status jaringan**: untuk berkomunikasi dengan Supabase dan layanan OCR.
 
 ## Cara Kami Menggunakan Data
@@ -253,7 +253,7 @@ Kami memproses data pribadi Anda berdasarkan dasar hukum berikut, sesuai Pasal 6
 
 ## Penyimpanan Dan Pemrosesan
 
-Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, Nvidia NIM, dan Ollama. API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
+Data aplikasi disimpan di Supabase, termasuk data autentikasi dan record database PostgreSQL. Foto struk diproses oleh Supabase Edge Functions. Pemrosesan OCR dapat memanggil penyedia AI/OCR pihak ketiga seperti Google Gemini, OpenRouter, Nvidia NIM, dan Ollama. **Foto struk dikirim ke penyedia tersebut untuk ekstraksi teks; gambar diproses secara sementara dan tidak disimpan oleh penyedia tersebut.** API key untuk layanan tersebut disimpan di sisi server dan tidak dibundel ke aplikasi mobile.
 
 ## Layanan Pihak Ketiga
 

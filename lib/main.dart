@@ -91,8 +91,9 @@ Future<String?> _bootstrap() async {
   // session dari launch sebelumnya, signInAnonymously() TIDAK dipanggil
   // sehingga tidak terjadi race condition yang dulu jadi gotcha di
   // CLAUDE.md. Lihat TODO_EMAIL_CONFIRMATION_SIDE_EFFECTS.md untuk
-  // side effect yang masih perlu di-refactor (marketing opt-in + welcome
-  // marker di-stamp sebelum user konfirmasi email).
+  // side effect yang dulu menulis marketing opt-in + welcome marker sebelum
+  // user konfirmasi email — sudah di-refactor ke pending action lokal yang
+  // dieksekusi setelah email confirmation callback).
   try {
     final auth = Supabase.instance.client.auth;
 

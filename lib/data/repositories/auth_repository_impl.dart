@@ -18,6 +18,9 @@ class AuthRepositoryImpl implements IAuthRepository {
   bool get isEmailConfirmed => _ds.isEmailConfirmed;
 
   @override
+  String? get currentEmail => _ds.currentEmail;
+
+  @override
   Stream<String?> watchUserId() => _ds.watchUserId();
 
   @override

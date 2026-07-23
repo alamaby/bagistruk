@@ -13,6 +13,13 @@ abstract interface class IAuthRepository {
   /// registered user parked on the verify-email screen.
   bool get isEmailConfirmed;
 
+  /// The current session user's email, or null when signed out or the
+  /// session is anonymous. Used as the identity source for matching
+  /// pending post-signup actions that were deferred from the register
+  /// screen, since `profileProvider` may still hold stale data right
+  /// after a Supabase callback swaps the session.
+  String? get currentEmail;
+
   /// Stream of user-id transitions; null when signed out.
   Stream<String?> watchUserId();
 
