@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../l10n/generated/app_l10n.dart';
+
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({
     super.key,
@@ -16,6 +18,7 @@ class GoogleSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     return OutlinedButton.icon(
       onPressed: enabled && !loading ? onPressed : null,
       style: OutlinedButton.styleFrom(
@@ -52,7 +55,7 @@ class GoogleSignInButton extends StatelessWidget {
               ),
             ),
       label: Text(
-        loading ? 'Signing in...' : 'Sign in with Google',
+        loading ? l10n.authGoogleSigningIn : l10n.authSignInWithGoogle,
         style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       ),
     );

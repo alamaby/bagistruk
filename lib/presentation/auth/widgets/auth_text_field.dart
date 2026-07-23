@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../l10n/generated/app_l10n.dart';
+
 class AuthTextField extends StatefulWidget {
   const AuthTextField({
     super.key,
@@ -38,6 +40,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscured,
@@ -61,9 +64,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
                   size: 20.r,
                 ),
                 onPressed: () => setState(() => _obscured = !_obscured),
-                tooltip: _obscured
-                    ? 'Tampilkan password'
-                    : 'Sembunyikan password',
+                tooltip: _obscured ? l10n.authShowPassword : l10n.authHidePassword,
               )
             : null,
         filled: true,

@@ -98,7 +98,10 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     tooltip: l10n.historyFilterTooltip,
                     icon: Badge(
                       isLabelVisible: filter.hasActiveFilters,
-                      label: const Text('!'),
+                      label: Text(
+                        l10n.historyFilterActiveBadge,
+                        style: const TextStyle(fontSize: 10),
+                      ),
                       child: const Icon(Icons.tune),
                     ),
                     onPressed: () => _openFilterSheet(
@@ -1168,8 +1171,9 @@ class _SmallPlusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
     return Semantics(
-      label: 'Plus',
+      label: l10n.commonPlus,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
         decoration: BoxDecoration(
@@ -1177,7 +1181,7 @@ class _SmallPlusPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(999.r),
         ),
         child: Text(
-          'Plus',
+          l10n.commonPlus,
           style: TextStyle(
             color: color,
             fontSize: 11.sp,
@@ -1286,7 +1290,7 @@ class _HistoryAccessBanner extends StatelessWidget {
                       ),
                       if (isPlus)
                         Semantics(
-                          label: 'Plus',
+                          label: l10n.commonPlus,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 8.w,
@@ -1297,7 +1301,7 @@ class _HistoryAccessBanner extends StatelessWidget {
                               borderRadius: BorderRadius.circular(999.r),
                             ),
                             child: Text(
-                              'Plus',
+                              l10n.commonPlus,
                               style: TextStyle(
                                 color: fg,
                                 fontSize: 11.sp,

@@ -14,13 +14,10 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
-    <!-- Participant import. flutter_contacts.openExternalPick() opens the
-         system contact picker, but after the user selects a contact the
-         plugin automatically fetches full contact details (including photo
-         and phone) via the Contacts Provider, which requires READ_CONTACTS
-         runtime permission on Android 6+. The permission is requested in
-         bill_split_screen.dart before opening the picker. -->
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!-- Participant import uses flutter_native_contact_picker which opens
+         the system contact picker intent. The user explicitly selects a
+         contact, granting temporary read access to that contact only.
+         No READ_CONTACTS permission required. -->
 
     <application
         android:label="Bagi Struk"

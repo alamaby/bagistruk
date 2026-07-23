@@ -617,6 +617,117 @@
 
   "reviewSuspectThousandsBug": "Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.",
 
+  "authFieldEmail": "Email",
+  "authFieldPassword": "Password",
+  "authEmailRequired": "Email is required",
+  "authInvalidEmailFormat": "Email format is invalid",
+  "authPasswordRequired": "Password is required",
+  "authPasswordMinLength": "Password must be at least 6 characters",
+  "authShowPassword": "Show password",
+  "authHidePassword": "Hide password",
+  "authSignInWithGoogle": "Sign in with Google",
+  "authGoogleSigningIn": "Signing in...",
+
+  "failureRetry": "Retry",
+  "failurePrefixNetwork": "Network: {message}",
+  "@failurePrefixNetwork": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixServer": "Server ({code}): {message}",
+  "@failurePrefixServer": {
+    "placeholders": {
+      "code": { "type": "String" },
+      "message": { "type": "String" }
+    }
+  },
+  "failurePrefixServerNoCode": "Server: {message}",
+  "@failurePrefixServerNoCode": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixParsing": "Could not parse response: {message}",
+  "@failurePrefixParsing": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixAuth": "Auth: {message}",
+  "@failurePrefixAuth": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixUnexpected": "Unexpected: {error}",
+  "@failurePrefixUnexpected": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "historyFilterActiveBadge": "Active",
+  "commonPlus": "Plus",
+  "billReviewQtyLabel": "Qty",
+  "billReviewSubtotalLabel": "Subtotal",
+  "billReviewTotalLabel": "Total",
+
+  "exportLabelItems": "Items",
+  "exportLabelParticipants": "Participants",
+  "exportLabelCurrency": "Currency",
+  "exportLabelName": "Name",
+  "exportLabelQty": "Qty",
+  "exportLabelPrice": "Price",
+  "exportLabelSubtotal": "Subtotal",
+  "exportLabelTax": "Tax",
+  "exportLabelService": "Service",
+  "exportLabelTotal": "Total",
+  "exportLabelStatus": "Status",
+  "exportLabelAssignedParticipants": "Assigned participants",
+  "exportLabelBillTitle": "Title",
+  "exportLabelReceiptDate": "Receipt date",
+  "exportLabelCreatedAt": "Created at",
+  "exportLabelTotalAmount": "Total amount",
+  "exportLabelSettledYes": "yes",
+  "exportLabelSettledNo": "no",
+  "exportLabelPaidStatus": "paid",
+  "exportLabelUnpaidStatus": "unpaid",
+  "exportCsvTopTitle": "Bill Detail: {title}",
+  "@exportCsvTopTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfSubjectFallback": "PDF export {title}",
+  "@exportPdfSubjectFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfShareTextFallback": "PDF export for {title}",
+  "@exportPdfShareTextFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvSubjectFallback": "CSV export {title}",
+  "@exportCsvSubjectFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvShareTextFallback": "CSV export for {title}",
+  "@exportCsvShareTextFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageCompactTitle": "BagiStruk - {title}",
+  "@settlementMessageCompactTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageDetailedTitle": "BagiStruk - {title}",
+  "@settlementMessageDetailedTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageBasicTitle": "{title}",
+  "@settlementMessageBasicTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "billDetailParticipantPhoneHint": "Phone (optional)",
+
+  "appInitErrorTitle": "BagiStruk failed to start",
+  "appInitErrorRetryHint": "Check your internet connection, then reopen the app. If the issue persists, check the .env file and Supabase settings.",
+  "appInitErrorEnvLoad": "Failed to load configuration (.env): {message}",
+  "@appInitErrorEnvLoad": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "appInitErrorSupabase": "Failed to initialize Supabase: {message}",
+  "@appInitErrorSupabase": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+
   "paywallTitle": "Save history & track debts",
   "paywallSubtitle": "Sign up or log in to save your history and track money you’re owed.",
   "paywallRegister": "Sign Up",
@@ -638,5 +749,7 @@
   "onboardingBody3": "Share the details via WhatsApp and track payments as they arrive.",
   "onboardingReplayFinish": "Done",
   "onboardingSettingsTile": "View app guide",
-  "onboardingSaveError": "Could not save. Please try again."
+  "onboardingSaveError": "Could not save. Please try again.",
+
+  "ocrAiDisclosure": "Receipt photos are processed by third-party AI services for item extraction."
 }

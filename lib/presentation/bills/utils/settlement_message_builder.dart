@@ -95,7 +95,7 @@ class SettlementMessageBuilder {
     String? waLink,
   }) {
     final buf = StringBuffer();
-    buf.writeln('*BagiStruk - ${state.bill.title}*');
+    buf.writeln('*${l10n.settlementMessageCompactTitle(state.bill.title)}*');
     buf.writeln();
     buf.writeln(l10n.settlementMessageGreeting(participantName));
     buf.writeln('*${currency.format(total.total)}*');
@@ -130,7 +130,7 @@ class SettlementMessageBuilder {
     String? waLink,
   }) {
     final buf = StringBuffer();
-    buf.writeln('*BagiStruk - ${state.bill.title}*');
+    buf.writeln('*${l10n.settlementMessageDetailedTitle(state.bill.title)}*');
     buf.writeln('${l10n.settlementMessageFor}: *$participantName*');
     buf.writeln();
     _writeItems(buf, items);

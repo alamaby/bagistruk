@@ -617,6 +617,117 @@
 
   "reviewSuspectThousandsBug": "Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.",
 
+  "authFieldEmail": "Email",
+  "authFieldPassword": "Password",
+  "authEmailRequired": "Email wajib diisi",
+  "authInvalidEmailFormat": "Format email tidak valid",
+  "authPasswordRequired": "Password wajib diisi",
+  "authPasswordMinLength": "Password minimal 6 karakter",
+  "authShowPassword": "Tampilkan password",
+  "authHidePassword": "Sembunyikan password",
+  "authSignInWithGoogle": "Masuk dengan Google",
+  "authGoogleSigningIn": "Sedang masuk...",
+
+  "failureRetry": "Coba Lagi",
+  "failurePrefixNetwork": "Jaringan: {message}",
+  "@failurePrefixNetwork": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixServer": "Server ({code}): {message}",
+  "@failurePrefixServer": {
+    "placeholders": {
+      "code": { "type": "String" },
+      "message": { "type": "String" }
+    }
+  },
+  "failurePrefixServerNoCode": "Server: {message}",
+  "@failurePrefixServerNoCode": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixParsing": "Respons tidak terbaca: {message}",
+  "@failurePrefixParsing": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixAuth": "Autentikasi: {message}",
+  "@failurePrefixAuth": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "failurePrefixUnexpected": "Tidak terduga: {error}",
+  "@failurePrefixUnexpected": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "historyFilterActiveBadge": "Aktif",
+  "commonPlus": "Plus",
+  "billReviewQtyLabel": "Qty",
+  "billReviewSubtotalLabel": "Subtotal",
+  "billReviewTotalLabel": "Total",
+
+  "exportLabelItems": "Item",
+  "exportLabelParticipants": "Peserta",
+  "exportLabelCurrency": "Mata Uang",
+  "exportLabelName": "Nama",
+  "exportLabelQty": "Qty",
+  "exportLabelPrice": "Harga",
+  "exportLabelSubtotal": "Subtotal",
+  "exportLabelTax": "Pajak",
+  "exportLabelService": "Service",
+  "exportLabelTotal": "Total",
+  "exportLabelStatus": "Status",
+  "exportLabelAssignedParticipants": "Partisipan yang ditugaskan",
+  "exportLabelBillTitle": "Judul",
+  "exportLabelReceiptDate": "Tanggal struk",
+  "exportLabelCreatedAt": "Dibuat pada",
+  "exportLabelTotalAmount": "Total tagihan",
+  "exportLabelSettledYes": "ya",
+  "exportLabelSettledNo": "tidak",
+  "exportLabelPaidStatus": "lunas",
+  "exportLabelUnpaidStatus": "belum lunas",
+  "exportCsvTopTitle": "Detail Bill: {title}",
+  "@exportCsvTopTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfSubjectFallback": "Export PDF {title}",
+  "@exportPdfSubjectFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportPdfShareTextFallback": "Export PDF untuk {title}",
+  "@exportPdfShareTextFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvSubjectFallback": "Export CSV {title}",
+  "@exportCsvSubjectFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "exportCsvShareTextFallback": "Export CSV untuk {title}",
+  "@exportCsvShareTextFallback": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageCompactTitle": "BagiStruk - {title}",
+  "@settlementMessageCompactTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageDetailedTitle": "BagiStruk - {title}",
+  "@settlementMessageDetailedTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "settlementMessageBasicTitle": "{title}",
+  "@settlementMessageBasicTitle": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "billDetailParticipantPhoneHint": "Telepon (opsional)",
+
+  "appInitErrorTitle": "BagiStruk gagal dimulai",
+  "appInitErrorRetryHint": "Cek koneksi internet, lalu buka ulang aplikasi. Kalau masih bermasalah, periksa file .env dan setting Supabase.",
+  "appInitErrorEnvLoad": "Gagal muat konfigurasi (.env): {message}",
+  "@appInitErrorEnvLoad": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "appInitErrorSupabase": "Gagal inisialisasi Supabase: {message}",
+  "@appInitErrorSupabase": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+
   "paywallTitle": "Simpan riwayat & lacak piutang",
   "paywallSubtitle": "Daftar atau masuk untuk menyimpan riwayat dan melacak piutangmu.",
   "paywallRegister": "Daftar",
@@ -638,5 +749,7 @@
   "onboardingBody3": "Bagikan rincian ke WhatsApp dan tandai pembayaran saat sudah masuk.",
   "onboardingReplayFinish": "Selesai",
   "onboardingSettingsTile": "Lihat panduan aplikasi",
-  "onboardingSaveError": "Gagal menyimpan. Coba lagi."
+  "onboardingSaveError": "Gagal menyimpan. Coba lagi.",
+
+  "ocrAiDisclosure": "Foto struk diproses oleh layanan AI pihak ketiga untuk ekstraksi item."
 }

@@ -530,7 +530,7 @@ class _ItemCard extends StatelessWidget {
                     ],
                     onChanged: onQtyChanged,
                     decoration: InputDecoration(
-                      labelText: 'Qty',
+                      labelText: AppL10n.of(context).billReviewQtyLabel,
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.r),
@@ -615,6 +615,7 @@ class _StickyBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     final totalColor = state.hasMismatch
         ? Colors.orange.shade700
         : scheme.onSurface;
@@ -639,7 +640,7 @@ class _StickyBottom extends StatelessWidget {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Subtotal', style: TextStyle(fontSize: 14.sp)),
+                      Text(l10n.billReviewSubtotalLabel, style: TextStyle(fontSize: 14.sp)),
                       Text(
                         currency.format(state.subtotal),
                         style: TextStyle(fontSize: 14.sp),
@@ -712,7 +713,7 @@ class _StickyBottom extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total',
+                    l10n.billReviewTotalLabel,
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,

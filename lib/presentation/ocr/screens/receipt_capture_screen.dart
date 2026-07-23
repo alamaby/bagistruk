@@ -394,6 +394,7 @@ class _ReceiptCaptureScreenState extends ConsumerState<ReceiptCaptureScreen> {
               ),
             ],
             SizedBox(height: 12.h),
+            _OcrAiDisclosureBanner(),
             Row(
               children: [
                 Expanded(
@@ -605,5 +606,37 @@ class _ErrorCard extends StatelessWidget {
         ],
       ),
     ).animate().fadeIn(duration: 200.ms).slideY(begin: 0.1, end: 0);
+  }
+}
+
+class _OcrAiDisclosureBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppL10n.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.info_outline,
+            size: 16.r,
+            color: scheme.onSurfaceVariant,
+          ),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              l10n.ocrAiDisclosure,
+              style: TextStyle(
+                fontSize: 11.sp,
+                color: scheme.onSurfaceVariant,
+                height: 1.3,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

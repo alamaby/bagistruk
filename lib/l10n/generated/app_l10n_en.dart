@@ -1413,6 +1413,204 @@ class AppL10nEn extends AppL10n {
       'Prices look like the thousand separator may have been read as a decimal. Please verify each amount before saving.';
 
   @override
+  String get authFieldEmail => 'Email';
+
+  @override
+  String get authFieldPassword => 'Password';
+
+  @override
+  String get authEmailRequired => 'Email is required';
+
+  @override
+  String get authInvalidEmailFormat => 'Email format is invalid';
+
+  @override
+  String get authPasswordRequired => 'Password is required';
+
+  @override
+  String get authPasswordMinLength => 'Password must be at least 6 characters';
+
+  @override
+  String get authShowPassword => 'Show password';
+
+  @override
+  String get authHidePassword => 'Hide password';
+
+  @override
+  String get authSignInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get authGoogleSigningIn => 'Signing in...';
+
+  @override
+  String get failureRetry => 'Retry';
+
+  @override
+  String failurePrefixNetwork(String message) {
+    return 'Network: $message';
+  }
+
+  @override
+  String failurePrefixServer(String code, String message) {
+    return 'Server ($code): $message';
+  }
+
+  @override
+  String failurePrefixServerNoCode(String message) {
+    return 'Server: $message';
+  }
+
+  @override
+  String failurePrefixParsing(String message) {
+    return 'Could not parse response: $message';
+  }
+
+  @override
+  String failurePrefixAuth(String message) {
+    return 'Auth: $message';
+  }
+
+  @override
+  String failurePrefixUnexpected(String error) {
+    return 'Unexpected: $error';
+  }
+
+  @override
+  String get historyFilterActiveBadge => 'Active';
+
+  @override
+  String get commonPlus => 'Plus';
+
+  @override
+  String get billReviewQtyLabel => 'Qty';
+
+  @override
+  String get billReviewSubtotalLabel => 'Subtotal';
+
+  @override
+  String get billReviewTotalLabel => 'Total';
+
+  @override
+  String get exportLabelItems => 'Items';
+
+  @override
+  String get exportLabelParticipants => 'Participants';
+
+  @override
+  String get exportLabelCurrency => 'Currency';
+
+  @override
+  String get exportLabelName => 'Name';
+
+  @override
+  String get exportLabelQty => 'Qty';
+
+  @override
+  String get exportLabelPrice => 'Price';
+
+  @override
+  String get exportLabelSubtotal => 'Subtotal';
+
+  @override
+  String get exportLabelTax => 'Tax';
+
+  @override
+  String get exportLabelService => 'Service';
+
+  @override
+  String get exportLabelTotal => 'Total';
+
+  @override
+  String get exportLabelStatus => 'Status';
+
+  @override
+  String get exportLabelAssignedParticipants => 'Assigned participants';
+
+  @override
+  String get exportLabelBillTitle => 'Title';
+
+  @override
+  String get exportLabelReceiptDate => 'Receipt date';
+
+  @override
+  String get exportLabelCreatedAt => 'Created at';
+
+  @override
+  String get exportLabelTotalAmount => 'Total amount';
+
+  @override
+  String get exportLabelSettledYes => 'yes';
+
+  @override
+  String get exportLabelSettledNo => 'no';
+
+  @override
+  String get exportLabelPaidStatus => 'paid';
+
+  @override
+  String get exportLabelUnpaidStatus => 'unpaid';
+
+  @override
+  String exportCsvTopTitle(String title) {
+    return 'Bill Detail: $title';
+  }
+
+  @override
+  String exportPdfSubjectFallback(String title) {
+    return 'PDF export $title';
+  }
+
+  @override
+  String exportPdfShareTextFallback(String title) {
+    return 'PDF export for $title';
+  }
+
+  @override
+  String exportCsvSubjectFallback(String title) {
+    return 'CSV export $title';
+  }
+
+  @override
+  String exportCsvShareTextFallback(String title) {
+    return 'CSV export for $title';
+  }
+
+  @override
+  String settlementMessageCompactTitle(String title) {
+    return 'BagiStruk - $title';
+  }
+
+  @override
+  String settlementMessageDetailedTitle(String title) {
+    return 'BagiStruk - $title';
+  }
+
+  @override
+  String settlementMessageBasicTitle(String title) {
+    return '$title';
+  }
+
+  @override
+  String get billDetailParticipantPhoneHint => 'Phone (optional)';
+
+  @override
+  String get appInitErrorTitle => 'BagiStruk failed to start';
+
+  @override
+  String get appInitErrorRetryHint =>
+      'Check your internet connection, then reopen the app. If the issue persists, check the .env file and Supabase settings.';
+
+  @override
+  String appInitErrorEnvLoad(String message) {
+    return 'Failed to load configuration (.env): $message';
+  }
+
+  @override
+  String appInitErrorSupabase(String message) {
+    return 'Failed to initialize Supabase: $message';
+  }
+
+  @override
   String get paywallTitle => 'Save history & track debts';
 
   @override
@@ -1474,4 +1672,8 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get onboardingSaveError => 'Could not save. Please try again.';
+
+  @override
+  String get ocrAiDisclosure =>
+      'Receipt photos are processed by third-party AI services for item extraction.';
 }

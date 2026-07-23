@@ -189,24 +189,12 @@ class _EmptyState extends StatelessWidget {
             Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // TODO: ganti placeholder ini dengan Lottie/SVG ilustrasi final.
-                    Container(
+                    // Final ilustrasi empty state.
+                    Image.asset(
+                      'assets/images/ocr_empty_state.png',
                       width: 180.w,
                       height: 180.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: scheme.primary.withValues(alpha: 0.08),
-                        border: Border.all(
-                          color: scheme.primary.withValues(alpha: 0.25),
-                          width: 1.5,
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.receipt_long_rounded,
-                        size: 96.r,
-                        color: scheme.primary.withValues(alpha: 0.6),
-                      ),
+                      fit: BoxFit.contain,
                     ),
                     SizedBox(height: 20.h),
                     Padding(
@@ -241,7 +229,8 @@ class _ScanningLottieOverlay extends StatelessWidget {
     return Container(
       color: Colors.black.withValues(alpha: 0.45),
       alignment: Alignment.center,
-      // TODO: ganti dengan Lottie asset final (mis. 'assets/lottie/scanning.json').
+      // P2 OK: scanning Lottie existing dipertahankan per P2 scope.
+      // Asset file adalah final path — jika diganti cukup replace file, tidak perlu ubah code.
       child: Lottie.asset(
         'assets/lottie/scanning.json',
         width: 180.w,

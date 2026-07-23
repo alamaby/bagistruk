@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/format/phone_formatter.dart';
@@ -180,17 +180,18 @@ class _SplitBody extends ConsumerWidget {
                   if (importing) return;
                   setLocal(() => importing = true);
                   try {
-                    final granted = await FlutterContacts.requestPermission(
-                      readonly: true,
-                    );
-                    if (!granted) return;
-                    final c = await FlutterContacts.openExternalPick();
-                    if (c == null || !ctx.mounted) return;
-                    final phone = c.phones.isNotEmpty
-                        ? PhoneFormatter.normalize(c.phones.first.number)
+                    final picker = FlutterNativeContactPicker();
+                    final contact = await picker.selectPhoneNumber();
+                    if (contact == null || !ctx.mounted) return;
+                    final phone = contact.selectedPhoneNumber != null
+                        ? PhoneFormatter.normalize(
+                            contact.selectedPhoneNumber!,
+                          )
                         : null;
                     setLocal(() {
-                      if (nameCtrl.text.isEmpty) nameCtrl.text = c.displayName;
+                      if (nameCtrl.text.isEmpty && contact.fullName != null) {
+                        nameCtrl.text = contact.fullName!;
+                      }
                       if (phone != null && phoneCtrl.text.isEmpty) {
                         phoneCtrl.text = phone;
                       }

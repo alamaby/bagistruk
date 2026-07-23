@@ -163,7 +163,7 @@ class _Body extends ConsumerWidget {
     }
 
     try {
-      final csv = BillCsvExporter(state).build();
+      final csv = BillCsvExporter(state, l10n: l10n).build();
       final filename = '${_safeFileName(state.bill.title)}.csv';
       await Share.shareXFiles(
         [

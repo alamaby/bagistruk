@@ -14,6 +14,9 @@ import 'core/format/app_format.dart';
 import 'core/format/device_locale_defaults.dart';
 import 'core/utils/app_logger.dart';
 import 'data/services/deep_link_handler.dart';
+import 'l10n/generated/app_l10n.dart';
+import 'l10n/generated/app_l10n_en.dart';
+import 'l10n/generated/app_l10n_id.dart';
 
 /// Entry point.
 ///
@@ -26,11 +29,18 @@ Future<void> main() async {
   final initError = await _bootstrap();
 
   if (initError != null) {
-    runApp(_StartupErrorApp(error: initError));
+    final l10n = _resolveStartupL10n();
+    runApp(_StartupErrorApp(error: initError, l10n: l10n));
     return;
   }
 
   runApp(const ProviderScope(child: BagiStrukApp()));
+}
+
+AppL10n _resolveStartupL10n() {
+  return Intl.defaultLocale?.toLowerCase().startsWith('id') == true
+      ? AppL10nId()
+      : AppL10nEn();
 }
 
 Future<String?> _bootstrap() async {
@@ -147,9 +157,10 @@ Future<void> _initAdsBestEffort() async {
 }
 
 class _StartupErrorApp extends StatelessWidget {
-  const _StartupErrorApp({required this.error});
+  const _StartupErrorApp({required this.error, required this.l10n});
 
   final String error;
+  final AppL10n l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -169,17 +180,16 @@ class _StartupErrorApp extends StatelessWidget {
                   color: Colors.redAccent,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'BagiStruk gagal dimulai',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                Text(
+                  l10n.appInitErrorTitle,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 8),
                 Text(error, style: const TextStyle(fontSize: 14)),
                 const SizedBox(height: 24),
-                const Text(
-                  'Cek koneksi internet, lalu buka ulang aplikasi. Kalau '
-                  'masih bermasalah, periksa file .env dan setting Supabase.',
-                  style: TextStyle(fontSize: 13, color: Colors.black54),
+                Text(
+                  l10n.appInitErrorRetryHint,
+                  style: const TextStyle(fontSize: 13, color: Colors.black54),
                 ),
               ],
             ),

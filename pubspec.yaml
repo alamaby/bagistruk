@@ -1,7 +1,7 @@
 name: bagistruk
 description: "BagiStruk — split-bill app with multi-photo OCR via Supabase Edge Functions."
 publish_to: 'none'
-version: 0.22.1+52
+version: 0.22.3+54
 
 environment:
   sdk: ^3.11.5
@@ -67,12 +67,10 @@ dependencies:
   # Receives initial and incoming `bagistruk://` URIs so the auth layer can
   # call `getSessionFromUrl()` even when the app was cold-started by the link.
   app_links: ^6.2.0
-  # Local contact picker for the participant import flow. Uses
-  # FlutterContacts.openExternalPick() which opens the OS-native picker, then
-  # automatically fetches full contact details via the Contacts Provider —
-  # requires READ_CONTACTS runtime permission on Android 6+ (declared in
-  # AndroidManifest.xml, requested at runtime in bill_split_screen.dart).
-  flutter_contacts: ^1.1.9+2
+  # Native contact picker for the participant import flow. Opens the
+  # OS-native picker via Intent — no READ_CONTACTS permission required.
+  # Returns only the user-selected contact's name and phone number.
+  flutter_native_contact_picker: ^0.0.12
   # Local JSON cache for the cross-bill participant suggestion library. Stores
   # the top-N suggestions returned by `list_suggested_participants` so the
   # split screen can render suggestions instantly before the network round

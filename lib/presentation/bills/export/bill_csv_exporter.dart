@@ -1,26 +1,40 @@
+import '../../../l10n/generated/app_l10n.dart';
 import '../providers/bill_detail_notifier.dart';
 
 class BillCsvExporter {
-  const BillCsvExporter(this.state);
+  const BillCsvExporter(this.state, {required this.l10n});
 
   final BillDetailState state;
+  final AppL10n l10n;
 
   String build() {
     final rows = <List<Object?>>[
-      ['BagiStruk Bill Export'],
+      [l10n.exportCsvTopTitle(state.bill.title)],
       [],
-      ['Bill'],
-      ['Title', state.bill.title],
-      ['Currency', state.bill.currencyCode],
-      ['Receipt date', state.bill.receiptDate?.toIso8601String() ?? ''],
-      ['Created at', state.bill.createdAt.toIso8601String()],
-      ['Total amount', state.bill.totalAmount],
-      ['Tax', state.bill.tax],
-      ['Service', state.bill.service],
-      ['Settled', state.bill.isSettled ? 'yes' : 'no'],
+      [l10n.exportLabelBillTitle, state.bill.title],
+      [l10n.exportLabelCurrency, state.bill.currencyCode],
+      [l10n.exportLabelReceiptDate, state.bill.receiptDate?.toIso8601String() ?? ''],
+      [l10n.exportLabelCreatedAt, state.bill.createdAt.toIso8601String()],
+      [l10n.exportLabelTotalAmount, state.bill.totalAmount],
+      [l10n.exportLabelTax, state.bill.tax],
+      [l10n.exportLabelService, state.bill.service],
+      [
+        l10n.exportLabelStatus,
+        state.bill.isSettled
+            ? l10n.exportLabelSettledYes
+            : l10n.exportLabelSettledNo,
+      ],
       [],
-      ['Items'],
-      ['Item', 'Qty', 'Price', 'Subtotal', 'Assigned participants'],
+      [
+        l10n.exportLabelItems,
+      ],
+      [
+        l10n.exportLabelName,
+        l10n.exportLabelQty,
+        l10n.exportLabelPrice,
+        l10n.exportLabelSubtotal,
+        l10n.exportLabelAssignedParticipants,
+      ],
     ];
 
     final participantById = {
@@ -37,8 +51,15 @@ class BillCsvExporter {
 
     rows.addAll([
       [],
-      ['Participants'],
-      ['Name', 'Subtotal', 'Tax', 'Service', 'Total', 'Status'],
+      [l10n.exportLabelParticipants],
+      [
+        l10n.exportLabelName,
+        l10n.exportLabelSubtotal,
+        l10n.exportLabelTax,
+        l10n.exportLabelService,
+        l10n.exportLabelTotal,
+        l10n.exportLabelStatus,
+      ],
     ]);
     final totalsByParticipant = {
       for (final total in state.calculateTotals()) total.participantId: total,
@@ -51,7 +72,9 @@ class BillCsvExporter {
         total?.tax ?? 0,
         total?.service ?? 0,
         total?.total ?? 0,
-        participant.isPaid ? 'paid' : 'unpaid',
+        participant.isPaid
+            ? l10n.exportLabelPaidStatus
+            : l10n.exportLabelUnpaidStatus,
       ]);
     }
 

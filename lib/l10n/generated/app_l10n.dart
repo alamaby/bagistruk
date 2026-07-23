@@ -2573,6 +2573,336 @@ abstract class AppL10n {
   /// **'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.'**
   String get reviewSuspectThousandsBug;
 
+  /// No description provided for @authFieldEmail.
+  ///
+  /// In id, this message translates to:
+  /// **'Email'**
+  String get authFieldEmail;
+
+  /// No description provided for @authFieldPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Password'**
+  String get authFieldPassword;
+
+  /// No description provided for @authEmailRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Email wajib diisi'**
+  String get authEmailRequired;
+
+  /// No description provided for @authInvalidEmailFormat.
+  ///
+  /// In id, this message translates to:
+  /// **'Format email tidak valid'**
+  String get authInvalidEmailFormat;
+
+  /// No description provided for @authPasswordRequired.
+  ///
+  /// In id, this message translates to:
+  /// **'Password wajib diisi'**
+  String get authPasswordRequired;
+
+  /// No description provided for @authPasswordMinLength.
+  ///
+  /// In id, this message translates to:
+  /// **'Password minimal 6 karakter'**
+  String get authPasswordMinLength;
+
+  /// No description provided for @authShowPassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Tampilkan password'**
+  String get authShowPassword;
+
+  /// No description provided for @authHidePassword.
+  ///
+  /// In id, this message translates to:
+  /// **'Sembunyikan password'**
+  String get authHidePassword;
+
+  /// No description provided for @authSignInWithGoogle.
+  ///
+  /// In id, this message translates to:
+  /// **'Masuk dengan Google'**
+  String get authSignInWithGoogle;
+
+  /// No description provided for @authGoogleSigningIn.
+  ///
+  /// In id, this message translates to:
+  /// **'Sedang masuk...'**
+  String get authGoogleSigningIn;
+
+  /// No description provided for @failureRetry.
+  ///
+  /// In id, this message translates to:
+  /// **'Coba Lagi'**
+  String get failureRetry;
+
+  /// No description provided for @failurePrefixNetwork.
+  ///
+  /// In id, this message translates to:
+  /// **'Jaringan: {message}'**
+  String failurePrefixNetwork(String message);
+
+  /// No description provided for @failurePrefixServer.
+  ///
+  /// In id, this message translates to:
+  /// **'Server ({code}): {message}'**
+  String failurePrefixServer(String code, String message);
+
+  /// No description provided for @failurePrefixServerNoCode.
+  ///
+  /// In id, this message translates to:
+  /// **'Server: {message}'**
+  String failurePrefixServerNoCode(String message);
+
+  /// No description provided for @failurePrefixParsing.
+  ///
+  /// In id, this message translates to:
+  /// **'Respons tidak terbaca: {message}'**
+  String failurePrefixParsing(String message);
+
+  /// No description provided for @failurePrefixAuth.
+  ///
+  /// In id, this message translates to:
+  /// **'Autentikasi: {message}'**
+  String failurePrefixAuth(String message);
+
+  /// No description provided for @failurePrefixUnexpected.
+  ///
+  /// In id, this message translates to:
+  /// **'Tidak terduga: {error}'**
+  String failurePrefixUnexpected(String error);
+
+  /// No description provided for @historyFilterActiveBadge.
+  ///
+  /// In id, this message translates to:
+  /// **'Aktif'**
+  String get historyFilterActiveBadge;
+
+  /// No description provided for @commonPlus.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus'**
+  String get commonPlus;
+
+  /// No description provided for @billReviewQtyLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Qty'**
+  String get billReviewQtyLabel;
+
+  /// No description provided for @billReviewSubtotalLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Subtotal'**
+  String get billReviewSubtotalLabel;
+
+  /// No description provided for @billReviewTotalLabel.
+  ///
+  /// In id, this message translates to:
+  /// **'Total'**
+  String get billReviewTotalLabel;
+
+  /// No description provided for @exportLabelItems.
+  ///
+  /// In id, this message translates to:
+  /// **'Item'**
+  String get exportLabelItems;
+
+  /// No description provided for @exportLabelParticipants.
+  ///
+  /// In id, this message translates to:
+  /// **'Peserta'**
+  String get exportLabelParticipants;
+
+  /// No description provided for @exportLabelCurrency.
+  ///
+  /// In id, this message translates to:
+  /// **'Mata Uang'**
+  String get exportLabelCurrency;
+
+  /// No description provided for @exportLabelName.
+  ///
+  /// In id, this message translates to:
+  /// **'Nama'**
+  String get exportLabelName;
+
+  /// No description provided for @exportLabelQty.
+  ///
+  /// In id, this message translates to:
+  /// **'Qty'**
+  String get exportLabelQty;
+
+  /// No description provided for @exportLabelPrice.
+  ///
+  /// In id, this message translates to:
+  /// **'Harga'**
+  String get exportLabelPrice;
+
+  /// No description provided for @exportLabelSubtotal.
+  ///
+  /// In id, this message translates to:
+  /// **'Subtotal'**
+  String get exportLabelSubtotal;
+
+  /// No description provided for @exportLabelTax.
+  ///
+  /// In id, this message translates to:
+  /// **'Pajak'**
+  String get exportLabelTax;
+
+  /// No description provided for @exportLabelService.
+  ///
+  /// In id, this message translates to:
+  /// **'Service'**
+  String get exportLabelService;
+
+  /// No description provided for @exportLabelTotal.
+  ///
+  /// In id, this message translates to:
+  /// **'Total'**
+  String get exportLabelTotal;
+
+  /// No description provided for @exportLabelStatus.
+  ///
+  /// In id, this message translates to:
+  /// **'Status'**
+  String get exportLabelStatus;
+
+  /// No description provided for @exportLabelAssignedParticipants.
+  ///
+  /// In id, this message translates to:
+  /// **'Partisipan yang ditugaskan'**
+  String get exportLabelAssignedParticipants;
+
+  /// No description provided for @exportLabelBillTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Judul'**
+  String get exportLabelBillTitle;
+
+  /// No description provided for @exportLabelReceiptDate.
+  ///
+  /// In id, this message translates to:
+  /// **'Tanggal struk'**
+  String get exportLabelReceiptDate;
+
+  /// No description provided for @exportLabelCreatedAt.
+  ///
+  /// In id, this message translates to:
+  /// **'Dibuat pada'**
+  String get exportLabelCreatedAt;
+
+  /// No description provided for @exportLabelTotalAmount.
+  ///
+  /// In id, this message translates to:
+  /// **'Total tagihan'**
+  String get exportLabelTotalAmount;
+
+  /// No description provided for @exportLabelSettledYes.
+  ///
+  /// In id, this message translates to:
+  /// **'ya'**
+  String get exportLabelSettledYes;
+
+  /// No description provided for @exportLabelSettledNo.
+  ///
+  /// In id, this message translates to:
+  /// **'tidak'**
+  String get exportLabelSettledNo;
+
+  /// No description provided for @exportLabelPaidStatus.
+  ///
+  /// In id, this message translates to:
+  /// **'lunas'**
+  String get exportLabelPaidStatus;
+
+  /// No description provided for @exportLabelUnpaidStatus.
+  ///
+  /// In id, this message translates to:
+  /// **'belum lunas'**
+  String get exportLabelUnpaidStatus;
+
+  /// No description provided for @exportCsvTopTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Detail Bill: {title}'**
+  String exportCsvTopTitle(String title);
+
+  /// No description provided for @exportPdfSubjectFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF {title}'**
+  String exportPdfSubjectFallback(String title);
+
+  /// No description provided for @exportPdfShareTextFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Export PDF untuk {title}'**
+  String exportPdfShareTextFallback(String title);
+
+  /// No description provided for @exportCsvSubjectFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Export CSV {title}'**
+  String exportCsvSubjectFallback(String title);
+
+  /// No description provided for @exportCsvShareTextFallback.
+  ///
+  /// In id, this message translates to:
+  /// **'Export CSV untuk {title}'**
+  String exportCsvShareTextFallback(String title);
+
+  /// No description provided for @settlementMessageCompactTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'BagiStruk - {title}'**
+  String settlementMessageCompactTitle(String title);
+
+  /// No description provided for @settlementMessageDetailedTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'BagiStruk - {title}'**
+  String settlementMessageDetailedTitle(String title);
+
+  /// No description provided for @settlementMessageBasicTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'{title}'**
+  String settlementMessageBasicTitle(String title);
+
+  /// No description provided for @billDetailParticipantPhoneHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Telepon (opsional)'**
+  String get billDetailParticipantPhoneHint;
+
+  /// No description provided for @appInitErrorTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'BagiStruk gagal dimulai'**
+  String get appInitErrorTitle;
+
+  /// No description provided for @appInitErrorRetryHint.
+  ///
+  /// In id, this message translates to:
+  /// **'Cek koneksi internet, lalu buka ulang aplikasi. Kalau masih bermasalah, periksa file .env dan setting Supabase.'**
+  String get appInitErrorRetryHint;
+
+  /// No description provided for @appInitErrorEnvLoad.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal muat konfigurasi (.env): {message}'**
+  String appInitErrorEnvLoad(String message);
+
+  /// No description provided for @appInitErrorSupabase.
+  ///
+  /// In id, this message translates to:
+  /// **'Gagal inisialisasi Supabase: {message}'**
+  String appInitErrorSupabase(String message);
+
   /// No description provided for @paywallTitle.
   ///
   /// In id, this message translates to:
@@ -2686,6 +3016,12 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Gagal menyimpan. Coba lagi.'**
   String get onboardingSaveError;
+
+  /// No description provided for @ocrAiDisclosure.
+  ///
+  /// In id, this message translates to:
+  /// **'Foto struk diproses oleh layanan AI pihak ketiga untuk ekstraksi item.'**
+  String get ocrAiDisclosure;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

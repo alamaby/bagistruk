@@ -1412,6 +1412,204 @@ class AppL10nId extends AppL10n {
       'Harga tampak memakai pemisah ribuan sebagai desimal. Mohon periksa tiap angka sebelum menyimpan.';
 
   @override
+  String get authFieldEmail => 'Email';
+
+  @override
+  String get authFieldPassword => 'Password';
+
+  @override
+  String get authEmailRequired => 'Email wajib diisi';
+
+  @override
+  String get authInvalidEmailFormat => 'Format email tidak valid';
+
+  @override
+  String get authPasswordRequired => 'Password wajib diisi';
+
+  @override
+  String get authPasswordMinLength => 'Password minimal 6 karakter';
+
+  @override
+  String get authShowPassword => 'Tampilkan password';
+
+  @override
+  String get authHidePassword => 'Sembunyikan password';
+
+  @override
+  String get authSignInWithGoogle => 'Masuk dengan Google';
+
+  @override
+  String get authGoogleSigningIn => 'Sedang masuk...';
+
+  @override
+  String get failureRetry => 'Coba Lagi';
+
+  @override
+  String failurePrefixNetwork(String message) {
+    return 'Jaringan: $message';
+  }
+
+  @override
+  String failurePrefixServer(String code, String message) {
+    return 'Server ($code): $message';
+  }
+
+  @override
+  String failurePrefixServerNoCode(String message) {
+    return 'Server: $message';
+  }
+
+  @override
+  String failurePrefixParsing(String message) {
+    return 'Respons tidak terbaca: $message';
+  }
+
+  @override
+  String failurePrefixAuth(String message) {
+    return 'Autentikasi: $message';
+  }
+
+  @override
+  String failurePrefixUnexpected(String error) {
+    return 'Tidak terduga: $error';
+  }
+
+  @override
+  String get historyFilterActiveBadge => 'Aktif';
+
+  @override
+  String get commonPlus => 'Plus';
+
+  @override
+  String get billReviewQtyLabel => 'Qty';
+
+  @override
+  String get billReviewSubtotalLabel => 'Subtotal';
+
+  @override
+  String get billReviewTotalLabel => 'Total';
+
+  @override
+  String get exportLabelItems => 'Item';
+
+  @override
+  String get exportLabelParticipants => 'Peserta';
+
+  @override
+  String get exportLabelCurrency => 'Mata Uang';
+
+  @override
+  String get exportLabelName => 'Nama';
+
+  @override
+  String get exportLabelQty => 'Qty';
+
+  @override
+  String get exportLabelPrice => 'Harga';
+
+  @override
+  String get exportLabelSubtotal => 'Subtotal';
+
+  @override
+  String get exportLabelTax => 'Pajak';
+
+  @override
+  String get exportLabelService => 'Service';
+
+  @override
+  String get exportLabelTotal => 'Total';
+
+  @override
+  String get exportLabelStatus => 'Status';
+
+  @override
+  String get exportLabelAssignedParticipants => 'Partisipan yang ditugaskan';
+
+  @override
+  String get exportLabelBillTitle => 'Judul';
+
+  @override
+  String get exportLabelReceiptDate => 'Tanggal struk';
+
+  @override
+  String get exportLabelCreatedAt => 'Dibuat pada';
+
+  @override
+  String get exportLabelTotalAmount => 'Total tagihan';
+
+  @override
+  String get exportLabelSettledYes => 'ya';
+
+  @override
+  String get exportLabelSettledNo => 'tidak';
+
+  @override
+  String get exportLabelPaidStatus => 'lunas';
+
+  @override
+  String get exportLabelUnpaidStatus => 'belum lunas';
+
+  @override
+  String exportCsvTopTitle(String title) {
+    return 'Detail Bill: $title';
+  }
+
+  @override
+  String exportPdfSubjectFallback(String title) {
+    return 'Export PDF $title';
+  }
+
+  @override
+  String exportPdfShareTextFallback(String title) {
+    return 'Export PDF untuk $title';
+  }
+
+  @override
+  String exportCsvSubjectFallback(String title) {
+    return 'Export CSV $title';
+  }
+
+  @override
+  String exportCsvShareTextFallback(String title) {
+    return 'Export CSV untuk $title';
+  }
+
+  @override
+  String settlementMessageCompactTitle(String title) {
+    return 'BagiStruk - $title';
+  }
+
+  @override
+  String settlementMessageDetailedTitle(String title) {
+    return 'BagiStruk - $title';
+  }
+
+  @override
+  String settlementMessageBasicTitle(String title) {
+    return '$title';
+  }
+
+  @override
+  String get billDetailParticipantPhoneHint => 'Telepon (opsional)';
+
+  @override
+  String get appInitErrorTitle => 'BagiStruk gagal dimulai';
+
+  @override
+  String get appInitErrorRetryHint =>
+      'Cek koneksi internet, lalu buka ulang aplikasi. Kalau masih bermasalah, periksa file .env dan setting Supabase.';
+
+  @override
+  String appInitErrorEnvLoad(String message) {
+    return 'Gagal muat konfigurasi (.env): $message';
+  }
+
+  @override
+  String appInitErrorSupabase(String message) {
+    return 'Gagal inisialisasi Supabase: $message';
+  }
+
+  @override
   String get paywallTitle => 'Simpan riwayat & lacak piutang';
 
   @override
@@ -1473,4 +1671,8 @@ class AppL10nId extends AppL10n {
 
   @override
   String get onboardingSaveError => 'Gagal menyimpan. Coba lagi.';
+
+  @override
+  String get ocrAiDisclosure =>
+      'Foto struk diproses oleh layanan AI pihak ketiga untuk ekstraksi item.';
 }

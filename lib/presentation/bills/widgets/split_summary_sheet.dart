@@ -366,7 +366,7 @@ class _ParticipantSummaryCard extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 Text(
-                  'Plus',
+                  AppL10n.of(context).commonPlus,
                   style: TextStyle(
                     color: scheme.onSurfaceVariant,
                     fontSize: 11.sp,
@@ -403,6 +403,7 @@ class _TemplateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
@@ -414,7 +415,7 @@ class _TemplateTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(999.r),
               ),
               child: Text(
-                'Plus',
+                l10n.commonPlus,
                 style: TextStyle(
                   color: scheme.onPrimaryContainer,
                   fontSize: 11.sp,

@@ -71,10 +71,10 @@ class BillPdfExporter {
           pw.SizedBox(height: 20),
           _summaryBox(),
           pw.SizedBox(height: 20),
-          _sectionTitle('Items'),
+          _sectionTitle(l10n.exportLabelItems),
           _itemsTable(participantById),
           pw.SizedBox(height: 20),
-          _sectionTitle('Participants'),
+          _sectionTitle(l10n.exportLabelParticipants),
           _participantsTable(totalsByParticipant),
           if (bankInfo?.isComplete ?? false) ...[
             pw.SizedBox(height: 20),
@@ -98,7 +98,7 @@ class BillPdfExporter {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          _summaryTextRow('Currency', state.bill.currencyCode),
+          _summaryTextRow(l10n.exportLabelCurrency, state.bill.currencyCode),
           _summaryRow(l10n.settlementMessageGrandTotal, state.bill.totalAmount),
           _summaryRow(l10n.splitSummaryTax, state.bill.tax),
           _summaryRow(l10n.splitSummaryService, state.bill.service),
@@ -155,7 +155,13 @@ class BillPdfExporter {
         3: const pw.FlexColumnWidth(1.3),
         4: const pw.FlexColumnWidth(2.5),
       },
-      headers: ['Item', 'Qty', 'Price', 'Subtotal', 'Participants'],
+      headers: [
+        l10n.exportLabelItems,
+        l10n.exportLabelQty,
+        l10n.exportLabelPrice,
+        l10n.exportLabelSubtotal,
+        l10n.exportLabelParticipants,
+      ],
       data: state.items.map((item) {
         final assignees = state.assignments
             .where((assignment) => assignment.itemId == item.id)
@@ -183,7 +189,14 @@ class BillPdfExporter {
       headerDecoration: const pw.BoxDecoration(color: PdfColors.grey200),
       cellStyle: const pw.TextStyle(fontSize: 10),
       cellPadding: const pw.EdgeInsets.all(6),
-      headers: ['Name', 'Subtotal', 'Tax', 'Service', 'Total', 'Status'],
+      headers: [
+        l10n.exportLabelName,
+        l10n.exportLabelSubtotal,
+        l10n.exportLabelTax,
+        l10n.exportLabelService,
+        l10n.exportLabelTotal,
+        l10n.exportLabelStatus,
+      ],
       data: state.participants.map((participant) {
         final total = totalsByParticipant[participant.id];
         return [

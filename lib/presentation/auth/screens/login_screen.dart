@@ -81,7 +81,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _sendEmailOtp() async {
     if (_busy) return;
-    final emailError = validateEmail(_email.text);
+    final emailError = validateEmail(_email.text, AppL10n.of(context));
     if (emailError != null) {
       _showError(emailError);
       return;
@@ -247,12 +247,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(height: 32.h),
                 AuthTextField(
                   controller: _email,
-                  label: 'Email',
+                  label: l10n.authFieldEmail,
                   icon: Icons.email_outlined,
                   hint: l10n.loginEmailHint,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  validator: validateEmail,
+                  validator: (v) => validateEmail(v, l10n),
                   autofillHints: const [
                     AutofillHints.username,
                     AutofillHints.email,
@@ -261,11 +261,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(height: 16.h),
                 AuthTextField(
                   controller: _password,
-                  label: 'Password',
+                  label: l10n.authFieldPassword,
                   icon: Icons.lock_outline,
                   obscure: true,
                   textInputAction: TextInputAction.done,
-                  validator: validatePassword,
+                  validator: (v) => validatePassword(v, l10n),
                   onSubmitted: (_) => _submit(),
                   autofillHints: const [AutofillHints.password],
                 ),
