@@ -71,7 +71,7 @@ final class SplitNotifierProvider
   }
 }
 
-String _$splitNotifierHash() => r'b9810145f2c4ca19134b482774a3a518e8d37355';
+String _$splitNotifierHash() => r'7bcc7530f3544cdd8afb0454ccddac4c39b8a65f';
 
 /// Stateful controller for the split screen. Loads the bill graph from the
 /// repository and lets the UI mutate participants/assignments live.
