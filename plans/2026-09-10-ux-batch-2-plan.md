@@ -28,7 +28,7 @@ badge status di history, rate-limit manual bill via tabel.
 - [x] T3 recopy/rotate + clipboard log (+ test)
 - [x] T4 badge status history (+ test)
 - [x] T5 migrasi app_limits + origin + client mapping (+ test)
-- [ ] Verifikasi: analyze 0 error, full test, bump patch, commit, push, tag
+- [x] Verifikasi: analyze 0 error, full test, bump patch, commit, push, tag
 
 ## Risks
 
@@ -42,7 +42,13 @@ badge status di history, rate-limit manual bill via tabel.
 - 2026-09-10 — T1–T5 selesai di kode. analyze 0 error, full test 636 passed,
   pubspec 0.32.5+85. Migrasi `20260910000000` ditulis di submodule, menunggu
   commit submodule + apply operator. Verifikasi CI/release + commit/push/tag
-  parvientzia belum jalan.
+  belum jalan (saat itu).
+- 2026-09-10 — Selesai penuh: submodule `feat/manual-bill-rate-limit`
+  (c53c654) ter-push; parent `86a2394` + fixup `c692885` (hash regen) +
+  `2c39861` (warning gate) ter-push; tag `v0.32.5` ter-push. Flutter CI
+  `34443673407` sukses, CodeQL sukses, Release `34442621127` sukses
+  (3 APK + AAB, Play Internal Testing). Operator masih perlu: apply migrasi
+  `20260910000000` + uji limit manual E2E.
 
 ## Notes
 
