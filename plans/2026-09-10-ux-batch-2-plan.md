@@ -49,6 +49,10 @@ badge status di history, rate-limit manual bill via tabel.
   `34443673407` sukses, CodeQL sukses, Release `34442621127` sukses
   (3 APK + AAB, Play Internal Testing). Operator masih perlu: apply migrasi
   `20260910000000` + uji limit manual E2E.
+- 2026-09-10 — Migrasi TER-APPLY via `supabase db push` (operator).
+  Verifikasi MCP: kolom `bills.origin` (default 'ocr', NOT NULL) ada,
+  fungsi `check_manual_bill_limit` terdaftar, seed `app_limits`
+  (free=1, plus=10) benar. Sisa: uji limit manual E2E di device.
 
 ## Notes
 
