@@ -34,6 +34,7 @@ void main() {
       ),
     );
     provideDummy<Result<List<Item>>>(const Result.success([]));
+    provideDummy<Result<int>>(const Result.success(99));
   });
 
   setUp(() {
@@ -54,6 +55,9 @@ void main() {
     when(
       mockRepo.ensureSignedIn(),
     ).thenAnswer((_) async => const Result.success(null));
+    when(
+      mockRepo.checkManualBillLimit(),
+    ).thenAnswer((_) async => const Result.success(1));
     when(mockRepo.createBill(any)).thenAnswer(
       (_) async => Result.success(
         Bill(
@@ -201,6 +205,9 @@ void main() {
       when(
         mockRepo.ensureSignedIn(),
       ).thenAnswer((_) async => const Result.success(null));
+      when(
+        mockRepo.checkManualBillLimit(),
+      ).thenAnswer((_) async => const Result.success(1));
       when(mockRepo.createBill(any)).thenAnswer(
         (_) async => Result.success(
           Bill(

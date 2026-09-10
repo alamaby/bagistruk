@@ -4,6 +4,7 @@ import 'package:bagistruk/data/providers.dart';
 import 'package:bagistruk/domain/entities/shared_bill.dart' as shared_bill;
 import 'package:bagistruk/domain/repositories/i_bill_repository.dart';
 import 'package:bagistruk/presentation/bills/providers/bill_share_link_notifier.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -230,6 +231,62 @@ void main() {
           billId: anyNamed('billId'),
           tokenHash: anyNamed('tokenHash'),
         ),
+      );
+    });
+  });
+
+  group('BillShareLink.recopyOrRotate', () {
+    test('known lastLink re-copies without any RPC', () async {
+      // Clipboard channel succeeds in this harness.
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (
+            call,
+          ) async => null);
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance
+            .defaultBinaryMessenger
+            .setMockMethodCallHandler(SystemChannels.platform, null),
+      );
+      stubCreateSuccess();
+      final first = await notifier().createAndCopy(billId);
+      clearInteractions(mockRepo);
+
+      final result = await notifier().recopyOrRotate(billId);
+
+      expect(result.link, first.link);
+      verifyNever(
+        mockRepo.createShareToken(
+          billId: anyNamed('billId'),
+          tokenHash: anyNamed('tokenHash'),
+        ),
+      );
+      verifyNever(mockRepo.revokeShareToken(any));
+    });
+
+    test('unknown lastLink rotates: revoke then fresh create', () async {
+      stubCreateSuccess();
+      // Reopened session: active link known, raw token forgotten.
+      notifier().state = AsyncData(
+        BillShareState(tokenId: 'old-token', expiresAt: DateTime.utc(2026, 9, 9)),
+      );
+      when(
+        mockRepo.revokeShareToken(any),
+      ).thenAnswer((_) async => const Result.success(null));
+
+      final result = await notifier().recopyOrRotate(billId);
+
+      expect(result.link, startsWith('bagistruk://share/'));
+      verify(mockRepo.revokeShareToken('old-token')).called(1);
+      verify(
+        mockRepo.createShareToken(
+          billId: anyNamed('billId'),
+          tokenHash: anyNamed('tokenHash'),
+        ),
+      ).called(1);
+      // Panel now shows the fresh link state.
+      expect(
+        container.read(billShareLinkFamily(billId)).value?.lastLink,
+        result.link,
       );
     });
   });

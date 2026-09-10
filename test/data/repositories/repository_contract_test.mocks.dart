@@ -169,6 +169,14 @@ class MockBillRemoteDataSource extends _i1.Mock
           as _i7.Future<_i4.BillDto>);
 
   @override
+  _i7.Future<int> checkManualBillLimit() =>
+      (super.noSuchMethod(
+            Invocation.method(#checkManualBillLimit, []),
+            returnValue: _i7.Future<int>.value(0),
+          )
+          as _i7.Future<int>);
+
+  @override
   _i7.Future<_i4.BillDto> upsertBill(_i4.BillDto? dto) =>
       (super.noSuchMethod(
             Invocation.method(#upsertBill, [dto]),

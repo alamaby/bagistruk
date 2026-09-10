@@ -3347,6 +3347,12 @@ abstract class AppL10n {
   /// **'Tanpa foto struk — tambah item manual, gratis tanpa credit.'**
   String get manualBillEmptyHint;
 
+  /// No description provided for @manualBillLimitReached.
+  ///
+  /// In id, this message translates to:
+  /// **'Batas bill manual harian tercapai. Coba lagi besok.'**
+  String get manualBillLimitReached;
+
   /// No description provided for @billReviewSwipeHint.
   ///
   /// In id, this message translates to:

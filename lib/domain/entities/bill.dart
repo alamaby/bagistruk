@@ -21,6 +21,10 @@ abstract class Bill with _$Bill {
     /// Bill category preset (`makan`, `transport`, `groceries`, `belanja`,
     /// `lain`). Server CHECK-enforced; unknown values never persist.
     @Default('lain') String category,
+    /// Bill origin for the manual-bill daily rate limit (`check_manual_bill_limit`):
+    /// 'manual' only for bills created from the manual form, 'ocr' for scan
+    /// results, duplicates, and template instantiations.
+    @Default('ocr') String origin,
     /// Plus-only custom tags (max 5, normalized client-side). Excluded from
     /// the public share-link snapshot.
     @Default([]) List<String> tags,

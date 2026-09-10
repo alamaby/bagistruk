@@ -211,6 +211,14 @@ class BillRemoteDataSource {
     return BillDto.fromJson(row);
   }
 
+  /// Manual-bill daily quota pre-check. Returns remaining quota; the RPC
+  /// raises `manual_bill_limit` (P0001) when exhausted.
+  Future<int> checkManualBillLimit() async {
+    final Object? res = await _client.rpc('check_manual_bill_limit');
+    if (res == null) throw const FormatException('empty limit response');
+    return int.parse(res.toString());
+  }
+
   Future<BillDto> upsertBill(BillDto dto) async {
     final row = await _client
         .from(_bills)

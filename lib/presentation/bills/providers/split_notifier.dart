@@ -180,6 +180,14 @@ abstract class ParticipantItemShare with _$ParticipantItemShare {
 class SplitNotifier extends _$SplitNotifier {
   static const _uuid = Uuid();
 
+  /// Serializes assignment persists. Rapid toggles enqueue behind the
+  /// in-flight request instead of racing it: the queued persist always sends
+  /// the *latest* optimistic state, so two quick taps can no longer compute
+  /// from the same snapshot and collide on `item_assignments_pkey` (23505).
+  /// The chain never throws (persist returns errors, never raises), so one
+  /// failure cannot stall later toggles.
+  Future<void> _assignPersistChain = Future.value();
+
   @override
   Future<SplitState> build(String billId) async {
     final repo = ref.watch(billRepositoryProvider);
@@ -353,17 +361,55 @@ class SplitNotifier extends _$SplitNotifier {
 
     state = AsyncData(s.copyWith(assignments: next));
 
+    return _enqueueAssignPersist();
+  }
+
+  /// Runs a persist after all previously enqueued assignment persists.
+  Future<SplitActionError?> _enqueueAssignPersist() {
+    final pending = _assignPersistChain.then((_) => _persistAssignments());
+    // Detach: the chain itself stays alive even if a waiter drops it.
+    _assignPersistChain = pending.then((_) {});
+    return pending;
+  }
+
+  /// Persists the current optimistic assignments. On failure the UI is
+  /// reconciled with server truth instead of blindly rolling back (a blind
+  /// rollback would clobber newer optimistic toggles queued behind this one):
+  /// - 23505 / duplicate-key (a concurrent writer won) → adopt the fresh
+  ///   list silently; no bogus "could not save" toast for a race the user
+  ///   never caused.
+  /// - any other failure → adopt the fresh list when readable and still
+  ///   report [SplitActionErrorKind.saveAssignmentFailed] so a real persist
+  ///   problem stays visible; keep the optimistic state only when even the
+  ///   re-fetch fails (offline).
+  Future<SplitActionError?> _persistAssignments() async {
+    // The screen may be gone (autoDispose) by the time a queued persist
+    // runs — the in-flight RPC still lands server-side; there is just no
+    // live state left to reconcile.
+    if (!ref.mounted) return null;
+    final s = state.value;
+    if (s == null) return const SplitActionError(SplitActionErrorKind.notReady);
     final repo = ref.read(billRepositoryProvider);
-    final res = await repo.replaceAssignments(s.bill.id, next);
-    if (res is ResultFailure<List<Assignment>>) {
-      // Roll back local state on persistence failure.
-      state = AsyncData(s);
-      return SplitActionError(
-        SplitActionErrorKind.saveAssignmentFailed,
-        res.failure.toString(),
-      );
+    final res = await repo.replaceAssignments(s.bill.id, s.assignments);
+    if (!ref.mounted) return null;
+    if (res is! ResultFailure<List<Assignment>>) return null;
+
+    final message = res.failure.toString();
+    final isRace =
+        message.contains('23505') || message.contains('duplicate key');
+    final fresh = await repo.listAssignments(s.bill.id);
+    if (!ref.mounted) return null;
+    if (fresh is Success<List<Assignment>>) {
+      final cur = state.value;
+      if (cur != null) {
+        state = AsyncData(cur.copyWith(assignments: fresh.data));
+      }
+      if (isRace) return null;
     }
-    return null;
+    return SplitActionError(
+      SplitActionErrorKind.saveAssignmentFailed,
+      res.failure.toString(),
+    );
   }
 
   /// Assigns every participant to every item ("bagi rata") in a single
@@ -386,17 +432,7 @@ class SplitNotifier extends _$SplitNotifier {
 
     state = AsyncData(s.copyWith(assignments: next));
 
-    final repo = ref.read(billRepositoryProvider);
-    final res = await repo.replaceAssignments(s.bill.id, next);
-    if (res is ResultFailure<List<Assignment>>) {
-      // Roll back local state on persistence failure.
-      state = AsyncData(s);
-      return SplitActionError(
-        SplitActionErrorKind.saveAssignmentFailed,
-        res.failure.toString(),
-      );
-    }
-    return null;
+    return _enqueueAssignPersist();
   }
 
   static T _unwrap<T>(Result<T> r) => switch (r) {

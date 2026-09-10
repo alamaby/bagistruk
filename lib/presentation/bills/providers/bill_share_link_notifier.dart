@@ -145,6 +145,30 @@ class BillShareLink extends _$BillShareLink {
     }
   }
 
+  /// Re-copies the active link, or rotates it when the raw token is unknown
+  /// in this session (reopened screen: the server stores only the hash, so
+  /// the old link text cannot be reconstructed). Rotation revokes first so
+  /// the Free 1-active invariant holds, then creates fresh.
+  Future<ShareLinkResult> recopyOrRotate(String billId) async {
+    final current = state.value;
+    final last = current?.lastLink;
+    if (last != null) {
+      // The first clipboard write may have failed silently — retry it and
+      // report the outcome instead of assuming success.
+      try {
+        await Clipboard.setData(ClipboardData(text: last));
+      } catch (e, st) {
+        AppLogger.error('BillShareLink.recopy clipboard failed', e, st);
+        return const ShareLinkResult.failed();
+      }
+      return ShareLinkResult.created(last);
+    }
+    if (current != null) {
+      await revoke(current.tokenId);
+    }
+    return createAndCopy(billId);
+  }
+
   Future<bool> revoke(String tokenId) async {
     try {
       final repo = ref.read(billRepositoryProvider);

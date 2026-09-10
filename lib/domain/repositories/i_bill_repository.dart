@@ -32,6 +32,11 @@ abstract interface class IBillRepository {
   });
   Future<Result<Bill>> getBill(String id);
   Future<Result<Bill>> createBill(Bill bill);
+
+  /// Manual-bill daily quota pre-check (Free 1/hari, Plus 10/hari via
+  /// `app_limits`). Returns remaining quota; the RPC raises
+  /// `manual_bill_limit` (P0001) when exhausted.
+  Future<Result<int>> checkManualBillLimit();
   Future<Result<Bill>> updateBill(Bill bill);
   Future<Result<void>> deleteBill(String id);
   Future<Result<void>> restoreDeletedBill(String id);

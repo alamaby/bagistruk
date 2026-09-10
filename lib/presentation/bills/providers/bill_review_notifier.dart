@@ -49,6 +49,9 @@ abstract class BillReviewState with _$BillReviewState {
     // custom tags are Plus-gated in the UI and normalized on save.
     @Default(BillCategory.lain) String category,
     @Default([]) List<String> tags,
+    // Bill origin for the manual-bill daily rate limit: 'manual' only when
+    // the form was opened from the manual entry (no OCR).
+    @Default('ocr') String origin,
   }) = _BillReviewState;
 
   const BillReviewState._();
@@ -111,8 +114,14 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       detectedTotal: normalizedOcr.detectedTotal,
       confidence: normalizedOcr.confidence,
       currency: currency,
+      origin: ocr.isManual ? 'manual' : 'ocr',
     );
   }
+
+  /// Centralized manual-limit match (case-insensitive; the RPC raises
+  /// `manual_bill_limit: ...` with ERRCODE P0001).
+  static bool isManualLimitError(Object e) =>
+      e.toString().toLowerCase().contains('manual_bill_limit');
 
   void setTitle(String value) => state = state.copyWith(title: value);
   void setCurrency(String value) => state = state.copyWith(currency: value);
@@ -198,6 +207,23 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       return SaveError(SaveErrorKind.saveBillFailed, _msg(authRes.failure));
     }
 
+    // Daily manual-bill quota (Free 1/hari, Plus 10/hari, via app_limits).
+    // Server is authoritative (check-then-insert); OCR bills skip the call.
+    if (state.origin == 'manual') {
+      final limitRes = await repo.checkManualBillLimit();
+      if (limitRes is ResultFailure<int>) {
+        state = state.copyWith(saving: false);
+        AppLogger.error(
+          'BillReviewNotifier.save: manual limit check failed',
+          limitRes.failure,
+        );
+        if (isManualLimitError(limitRes.failure)) {
+          return const SaveError(SaveErrorKind.manualBillLimit);
+        }
+        return SaveError(SaveErrorKind.saveBillFailed, _msg(limitRes.failure));
+      }
+    }
+
     final billId = _uuid.v4();
     // Single timestamp for the whole save so downstream consumers (e.g. the
     // T+3/T+7 reminder schedule) use exactly the bill's creation time instead
@@ -214,6 +240,7 @@ class BillReviewNotifier extends _$BillReviewNotifier {
       createdAt: createdAt,
       category: BillCategory.coerce(state.category),
       tags: BillCategory.normalizeTags(state.tags),
+      origin: state.origin,
     );
 
     final billRes = await repo.createBill(bill);
@@ -283,6 +310,7 @@ enum SaveErrorKind {
   titleRequired,
   itemsRequired,
   invalidItem,
+  manualBillLimit,
   saveBillFailed,
   saveItemsFailed,
 }

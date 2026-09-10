@@ -1002,18 +1002,52 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
           IconButton(
             tooltip: l10n.splitSummaryShare,
             visualDensity: VisualDensity.compact,
-            onPressed: () =>
-                Share.share(_shareText(l10n, value.lastLink!)),
+            onPressed: _creating
+                ? null
+                : () => Share.share(_shareText(l10n, value.lastLink!)),
             icon: const Icon(Icons.share_outlined),
           ),
+        // Always available while a link is active: re-copies the known raw
+        // link, or rotates (revoke + fresh create) when this session never
+        // saw the raw token.
+        IconButton(
+          tooltip: l10n.shareLinkCreate,
+          visualDensity: VisualDensity.compact,
+          onPressed: _creating ? null : () => _recopy(context, ref),
+          icon: const Icon(Icons.content_copy_outlined),
+        ),
         IconButton(
           tooltip: l10n.shareLinkRevoke,
           visualDensity: VisualDensity.compact,
-          onPressed: () => _revoke(context, ref, value.tokenId),
+          onPressed: _creating ? null : () => _revoke(context, ref, value.tokenId),
           icon: const Icon(Icons.link_off_outlined),
         ),
       ],
     );
+  }
+
+  Future<void> _recopy(BuildContext context, WidgetRef ref) async {
+    if (_creating) return;
+    setState(() => _creating = true);
+    try {
+      final result = await ref
+          .read(billShareLinkFamily(widget.billId).notifier)
+          .recopyOrRotate(widget.billId);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              result.link != null
+                  ? AppL10n.of(context).shareLinkCopied
+                  : AppL10n.of(context).shareLinkCreateFailed,
+            ),
+          ),
+        );
+    } finally {
+      if (mounted) setState(() => _creating = false);
+    }
   }
 
   Future<void> _revoke(

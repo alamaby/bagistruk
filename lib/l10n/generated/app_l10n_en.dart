@@ -1874,6 +1874,10 @@ class AppL10nEn extends AppL10n {
       'No receipt photo — add items manually, free with no credit.';
 
   @override
+  String get manualBillLimitReached =>
+      'Daily manual bill limit reached. Try again tomorrow.';
+
+  @override
   String get billReviewSwipeHint => 'Swipe an item left to delete it.';
 
   @override

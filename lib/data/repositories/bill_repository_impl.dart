@@ -76,6 +76,10 @@ class BillRepositoryImpl implements IBillRepository {
       guardAsync(() async => (await _ds.getBill(id)).toEntity());
 
   @override
+  Future<Result<int>> checkManualBillLimit() =>
+      guardAsync(() => _ds.checkManualBillLimit());
+
+  @override
   Future<Result<Bill>> createBill(Bill bill) async {
     final authResult = await _ds.authEnsureSignedIn();
     if (authResult is ResultFailure<String>) {

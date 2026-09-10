@@ -20,6 +20,7 @@ abstract class BillDto with _$BillDto {
     @JsonKey(name: 'receipt_date') DateTime? receiptDate,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @Default('lain') String category,
+    @Default('ocr') String origin,
     @JsonKey(name: 'bill_tags') @Default([]) List<String> tags,
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default([])
@@ -52,6 +53,7 @@ abstract class BillDto with _$BillDto {
     receiptDate: b.receiptDate,
     createdAt: b.createdAt,
     category: b.category,
+    origin: b.origin,
     tags: b.tags,
     participantPaymentStatuses: b.participantPaymentStatuses,
   );
@@ -67,6 +69,7 @@ abstract class BillDto with _$BillDto {
     receiptDate: receiptDate,
     createdAt: createdAt,
     category: category,
+    origin: origin,
     tags: tags,
     participantPaymentStatuses: participantPaymentStatuses,
   );

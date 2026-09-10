@@ -155,6 +155,19 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
           as _i3.Future<_i4.Result<_i5.Bill>>);
 
   @override
+  _i3.Future<_i4.Result<int>> checkManualBillLimit() =>
+      (super.noSuchMethod(
+            Invocation.method(#checkManualBillLimit, []),
+            returnValue: _i3.Future<_i4.Result<int>>.value(
+              _i6.dummyValue<_i4.Result<int>>(
+                this,
+                Invocation.method(#checkManualBillLimit, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Result<int>>);
+
+  @override
   _i3.Future<_i4.Result<_i5.Bill>> updateBill(_i5.Bill? bill) =>
       (super.noSuchMethod(
             Invocation.method(#updateBill, [bill]),

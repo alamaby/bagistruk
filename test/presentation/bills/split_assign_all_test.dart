@@ -250,6 +250,116 @@ void main() {
     });
   });
 
+  group('SplitNotifier.toggleAssignment race', () {
+    void keepAlive() {
+      // autoDispose would drop the provider mid-flight during the delayed
+      // persists below; a listener keeps the same instance for the test.
+      final sub = container.listen(splitFamily('bill-1'), (_, _) {});
+      addTearDown(sub.close);
+    }
+
+    test('rapid double toggle serializes; final persist wins, no error',
+        () async {
+      seedGraph(
+        items: [item('i1', 60000)],
+        participants: [participant('p1', 'Budi')],
+      );
+      keepAlive();
+      var calls = 0;
+      when(mockRepo.replaceAssignments(any, any)).thenAnswer((inv) async {
+        calls++;
+        // Stall the first persist so the second toggle enqueues behind it —
+        // without serialization both would send the same snapshot.
+        if (calls == 1) {
+          await Future<void>.delayed(const Duration(milliseconds: 50));
+        }
+        return Result<List<Assignment>>.success(
+          (inv.positionalArguments[1] as List<Assignment>),
+        );
+      });
+      await loadState();
+      final notifier = container.read(splitFamily('bill-1').notifier);
+      notifier.selectParticipant('p1');
+
+      final results = await Future.wait([
+        notifier.toggleAssignment('i1'),
+        notifier.toggleAssignment('i1'),
+      ]);
+
+      expect(results, [isNull, isNull]);
+      // On then off: the last persist carries the empty list.
+      final saved = verify(
+        mockRepo.replaceAssignments(any, captureAny),
+      ).captured.cast<List<Assignment>>();
+      expect(saved.last, isEmpty);
+      expect(
+        container.read(splitFamily('bill-1')).value!.assignments,
+        isEmpty,
+      );
+    });
+
+    test('23505 reconciles silently from server truth', () async {
+      seedGraph(
+        items: [item('i1', 60000)],
+        participants: [participant('p1', 'Budi')],
+      );
+      keepAlive();
+      when(mockRepo.replaceAssignments(any, any)).thenAnswer(
+        (_) async => const Result.failure(
+          Failure.server(
+            code: 23505,
+            message:
+                'duplicate key value violates unique constraint "item_assignments_pkey"',
+          ),
+        ),
+      );
+      const serverTruth = [
+        Assignment(id: 'a9', itemId: 'i1', participantId: 'p1'),
+      ];
+      when(
+        mockRepo.listAssignments(any),
+      ).thenAnswer((_) async => const Result.success(serverTruth));
+      await loadState();
+      final notifier = container.read(splitFamily('bill-1').notifier);
+      notifier.selectParticipant('p1');
+
+      final err = await notifier.toggleAssignment('i1');
+
+      // No toast for a race: UI adopts what the server has.
+      expect(err, isNull);
+      expect(
+        container.read(splitFamily('bill-1')).value!.assignments,
+        serverTruth,
+      );
+    });
+
+    test('genuine failure still surfaces after reconcile', () async {
+      seedGraph(
+        items: [item('i1', 60000)],
+        participants: [participant('p1', 'Budi')],
+      );
+      keepAlive();
+      when(mockRepo.replaceAssignments(any, any)).thenAnswer(
+        (_) async => const Result.failure(
+          Failure.server(code: 500, message: 'boom'),
+        ),
+      );
+      await loadState();
+      final notifier = container.read(splitFamily('bill-1').notifier);
+      notifier.selectParticipant('p1');
+
+      final err = await notifier.toggleAssignment('i1');
+
+      expect(err, isNotNull);
+      expect(err!.kind, SplitActionErrorKind.saveAssignmentFailed);
+      // Reconciled with server truth (seeded empty), not the optimistic add.
+      expect(
+        container.read(splitFamily('bill-1')).value!.assignments,
+        isEmpty,
+      );
+    });
+  });
+
   group('SplitState equal totals', () {
     test('equal split of 100000 across 3 is whole rupiah', () {
       final bill = testBill();

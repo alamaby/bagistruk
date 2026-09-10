@@ -121,6 +121,10 @@ class FakeBillRepository implements IBillRepository {
       Result.failure(Failure.unknown('not used', null));
 
   @override
+  Future<Result<int>> checkManualBillLimit() async =>
+      const Result.success(99);
+
+  @override
   Future<Result<Bill>> createBill(Bill bill) async =>
       Result.failure(Failure.unknown('not used', null));
 

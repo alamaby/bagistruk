@@ -171,6 +171,7 @@ class _BillReviewScreenState extends ConsumerState<BillReviewScreen> {
       SaveErrorKind.titleRequired => l10n.billReviewTitleRequired,
       SaveErrorKind.itemsRequired => l10n.billReviewItemsRequired,
       SaveErrorKind.invalidItem => l10n.billReviewInvalidItem,
+      SaveErrorKind.manualBillLimit => l10n.manualBillLimitReached,
       SaveErrorKind.saveBillFailed => l10n.billReviewSaveBillFailed(
         error.message ?? '',
       ),
@@ -576,86 +577,12 @@ class _Header extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8.h),
-          Padding(
-            padding: EdgeInsets.only(left: 32.w),
-            child: Text(
-              AppL10n.of(context).categoryLabel,
-              style: TextStyle(fontSize: 12.sp, color: scheme.outline),
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Padding(
-            padding: EdgeInsets.only(left: 32.w),
-            child: Wrap(
-              spacing: 8.w,
-              runSpacing: 6.h,
-              children: [
-                for (final preset in BillCategory.presets)
-                  ChoiceChip(
-                    label: Text(categoryLabel(preset, AppL10n.of(context))),
-                    selected: category == preset,
-                    showCheckmark: false,
-                    visualDensity: VisualDensity.compact,
-                    onSelected: (_) => onCategoryChanged(preset),
-                  ),
-              ],
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Padding(
-            padding: EdgeInsets.only(left: 32.w),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      final rawCount = BillCategory.parseTagsField(
-                        tagsCtrl.text,
-                      ).length;
-                      final keptCount = BillCategory.normalizeTags(
-                        BillCategory.parseTagsField(tagsCtrl.text),
-                      ).length;
-                      // Overflow = raw entries beyond the kept 5 (extra items
-                      // or dupes/empties trimmed away): surface the cap error.
-                      final overflow = isPlus && rawCount > keptCount;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            controller: tagsCtrl,
-                            enabled: isPlus,
-                            onChanged: (v) {
-                              onTagsChanged(v);
-                              // Rebuild to refresh the n/5 counter + error.
-                              (context as Element).markNeedsBuild();
-                            },
-                            style: TextStyle(fontSize: 13.sp),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              border: const OutlineInputBorder(),
-                              labelText: AppL10n.of(context).tagLabel,
-                              helperText: isPlus ? '$keptCount/5' : null,
-                              errorText: overflow
-                                  ? AppL10n.of(context).tagLimitReached
-                                  : null,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                if (!isPlus) ...[
-                  SizedBox(width: 4.w),
-                  PlusInfoIcon(
-                    title: AppL10n.of(context).tagLabel,
-                    message: AppL10n.of(context).tagPlusLocked,
-                    iconColor: scheme.onSurfaceVariant,
-                  ),
-                ],
-              ],
-            ),
+          _CategorySection(
+            category: category,
+            tagsCtrl: tagsCtrl,
+            isPlus: isPlus,
+            onCategoryChanged: onCategoryChanged,
+            onTagsChanged: onTagsChanged,
           ),
           if (lowConfidence) ...[
             SizedBox(height: 10.h),
@@ -690,6 +617,133 @@ class _Header extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// Category + tags block as a collapsed-by-default section. The header shows
+/// the active category so the current value is visible without expanding.
+class _CategorySection extends StatefulWidget {
+  const _CategorySection({
+    required this.category,
+    required this.tagsCtrl,
+    required this.isPlus,
+    required this.onCategoryChanged,
+    required this.onTagsChanged,
+  });
+
+  final String category;
+  final TextEditingController tagsCtrl;
+  final bool isPlus;
+  final ValueChanged<String> onCategoryChanged;
+  final ValueChanged<String> onTagsChanged;
+
+  @override
+  State<_CategorySection> createState() => _CategorySectionState();
+}
+
+class _CategorySectionState extends State<_CategorySection> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final l10n = AppL10n.of(context);
+    return Padding(
+      padding: EdgeInsets.only(left: 32.w),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          initiallyExpanded: false,
+          onExpansionChanged: (v) => setState(() => _expanded = v),
+          title: Row(
+            children: [
+              Icon(
+                Icons.label_outline,
+                size: 14.r,
+                color: scheme.outline,
+              ),
+              SizedBox(width: 6.w),
+              Expanded(
+                child: Text(
+                  '${l10n.categoryLabel}: ${categoryLabel(widget.category, l10n)}',
+                  style: TextStyle(fontSize: 12.sp, color: scheme.outline),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          children: [
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 6.h,
+              children: [
+                for (final preset in BillCategory.presets)
+                  ChoiceChip(
+                    label: Text(categoryLabel(preset, l10n)),
+                    selected: widget.category == preset,
+                    showCheckmark: false,
+                    visualDensity: VisualDensity.compact,
+                    onSelected: (_) => widget.onCategoryChanged(preset),
+                  ),
+              ],
+            ),
+            SizedBox(height: 8.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      final rawCount = BillCategory.parseTagsField(
+                        widget.tagsCtrl.text,
+                      ).length;
+                      final keptCount = BillCategory.normalizeTags(
+                        BillCategory.parseTagsField(widget.tagsCtrl.text),
+                      ).length;
+                      // Overflow = raw entries beyond the kept 5 (extra items
+                      // or dupes/empties trimmed away): surface the cap error.
+                      final overflow = widget.isPlus && rawCount > keptCount;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            controller: widget.tagsCtrl,
+                            enabled: widget.isPlus,
+                            onChanged: (v) {
+                              widget.onTagsChanged(v);
+                              // Rebuild to refresh the n/5 counter + error.
+                              (context as Element).markNeedsBuild();
+                            },
+                            style: TextStyle(fontSize: 13.sp),
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: const OutlineInputBorder(),
+                              labelText: l10n.tagLabel,
+                              helperText: widget.isPlus ? '$keptCount/5' : null,
+                              errorText: overflow ? l10n.tagLimitReached : null,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                if (!widget.isPlus) ...[
+                  SizedBox(width: 4.w),
+                  PlusInfoIcon(
+                    title: l10n.tagLabel,
+                    message: l10n.tagPlusLocked,
+                    iconColor: scheme.onSurfaceVariant,
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

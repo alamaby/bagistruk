@@ -1121,6 +1121,7 @@
   "ocrAiDisclosure": "Foto struk diproses oleh layanan AI pihak ketiga untuk ekstraksi item.",
   "manualBillAction": "Buat manual",
   "manualBillEmptyHint": "Tanpa foto struk — tambah item manual, gratis tanpa credit.",
+  "manualBillLimitReached": "Batas bill manual harian tercapai. Coba lagi besok.",
   "billReviewSwipeHint": "Geser item ke kiri untuk menghapusnya.",
   "billRename": "Ubah nama",
   "billRenameTitle": "Ubah nama bill",

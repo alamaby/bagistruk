@@ -29,6 +29,7 @@ import '../../bills/widgets/bill_templates_sheet.dart';
 import '../providers/history_filter_notifier.dart';
 import '../utils/bill_category.dart';
 import '../utils/bill_category_labels.dart';
+import '../widgets/bill_status_badge.dart';
 import '../providers/history_list_notifier.dart';
 import '../providers/history_plus_banner_notifier.dart';
 
@@ -414,6 +415,13 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       return Card(
                         child: ListTile(
                           isThreeLine: true,
+                          leading: BillStatusBadge(
+                            status: bill.paymentStatus,
+                            semanticLabel: _paymentStatusLabel(
+                              l10n,
+                              bill.paymentStatus,
+                            ),
+                          ),
                           title: Text(bill.title),
                           subtitle: Text(
                             '${currency.format(bill.totalAmount)}  •  ${_paymentStatusLabel(l10n, bill.paymentStatus)}  •  $createdLabel\n${categoryLabel(bill.category, l10n)}',

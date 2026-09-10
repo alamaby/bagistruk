@@ -1873,6 +1873,10 @@ class AppL10nId extends AppL10n {
       'Tanpa foto struk — tambah item manual, gratis tanpa credit.';
 
   @override
+  String get manualBillLimitReached =>
+      'Batas bill manual harian tercapai. Coba lagi besok.';
+
+  @override
   String get billReviewSwipeHint => 'Geser item ke kiri untuk menghapusnya.';
 
   @override

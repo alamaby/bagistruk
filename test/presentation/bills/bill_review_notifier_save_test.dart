@@ -36,6 +36,7 @@ void main() {
       ),
     );
     provideDummy<Result<List<Item>>>(const Result.success([]));
+    provideDummy<Result<int>>(const Result.success(99));
   });
 
   setUp(() {
@@ -74,6 +75,12 @@ void main() {
     detectedTotal: -1500,
     merchant: 'Indomaret',
     providerUsed: 'gemini',
+  );
+
+  OcrResult _manualOcr() => const OcrResult(
+    items: [OcrLineItem(name: 'Telur', price: 5000, qty: 1)],
+    merchant: 'Warung Test',
+    providerUsed: OcrResult.manualProviderUsed,
   );
 
   BillReviewNotifier _notifier([OcrResult? ocr]) {
@@ -305,5 +312,115 @@ void main() {
         verify(mockRepo.upsertItems(any)).called(1);
       },
     );
+
+    test('ocr bill skips the manual quota check', () async {
+      when(
+        mockRepo.ensureSignedIn(),
+      ).thenAnswer((_) async => const Result.success(null));
+      when(mockRepo.createBill(any)).thenAnswer(
+        (_) async => Result.success(
+          Bill(
+            id: 'bill-1',
+            title: 'Warung Test',
+            totalAmount: 25000,
+            currencyCode: 'IDR',
+            tax: 0,
+            service: 0,
+            createdAt: DateTime(2026),
+          ),
+        ),
+      );
+      when(mockRepo.upsertItems(any)).thenAnswer(
+        (_) async => const Result.success([
+          Item(
+            id: 'item-1',
+            billId: 'bill-1',
+            name: 'Nasi Goreng',
+            price: 25000,
+            qty: 1,
+          ),
+        ]),
+      );
+
+      final result = await _notifier().save();
+
+      expect(result, isA<SaveSuccess>());
+      verifyNever(mockRepo.checkManualBillLimit());
+      final capturedBill = verify(
+        mockRepo.createBill(captureAny),
+      ).captured.cast<Bill>().single;
+      expect(capturedBill.origin, 'ocr');
+    });
+
+    test('manual bill with quota remaining saves with origin manual', () async {
+      when(
+        mockRepo.ensureSignedIn(),
+      ).thenAnswer((_) async => const Result.success(null));
+      when(
+        mockRepo.checkManualBillLimit(),
+      ).thenAnswer((_) async => const Result.success(1));
+      when(mockRepo.createBill(any)).thenAnswer(
+        (inv) async =>
+            Result.success(inv.positionalArguments.single as Bill),
+      );
+      when(mockRepo.upsertItems(any)).thenAnswer(
+        (_) async => const Result.success([
+          Item(
+            id: 'item-1',
+            billId: 'bill-1',
+            name: 'Telur',
+            price: 5000,
+            qty: 1,
+          ),
+        ]),
+      );
+
+      final result = await _notifier(_manualOcr()).save();
+
+      expect(result, isA<SaveSuccess>());
+      verify(mockRepo.checkManualBillLimit()).called(1);
+      final capturedBill = verify(
+        mockRepo.createBill(captureAny),
+      ).captured.cast<Bill>().single;
+      expect(capturedBill.origin, 'manual');
+    });
+
+    test('manual bill quota exhausted → manualBillLimit, no insert', () async {
+      when(
+        mockRepo.ensureSignedIn(),
+      ).thenAnswer((_) async => const Result.success(null));
+      when(mockRepo.checkManualBillLimit()).thenAnswer(
+        (_) async => const Result.failure(
+          Failure.server(
+            code: 400,
+            message: 'manual_bill_limit: max 1 manual bills per day',
+          ),
+        ),
+      );
+
+      final result = await _notifier(_manualOcr()).save();
+
+      expect(result, isA<SaveError>());
+      expect((result as SaveError).kind, SaveErrorKind.manualBillLimit);
+      verify(mockRepo.checkManualBillLimit()).called(1);
+      verifyNever(mockRepo.createBill(any));
+      verifyNever(mockRepo.upsertItems(any));
+    });
+
+    test('manual quota check transport failure → saveBillFailed', () async {
+      when(
+        mockRepo.ensureSignedIn(),
+      ).thenAnswer((_) async => const Result.success(null));
+      when(mockRepo.checkManualBillLimit()).thenAnswer(
+        (_) async =>
+            const Result.failure(Failure.server(code: 500, message: 'boom')),
+      );
+
+      final result = await _notifier(_manualOcr()).save();
+
+      expect(result, isA<SaveError>());
+      expect((result as SaveError).kind, SaveErrorKind.saveBillFailed);
+      verifyNever(mockRepo.createBill(any));
+    });
   });
 }
