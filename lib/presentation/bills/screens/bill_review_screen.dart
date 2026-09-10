@@ -644,8 +644,6 @@ class _CategorySection extends StatefulWidget {
 }
 
 class _CategorySectionState extends State<_CategorySection> {
-  bool _expanded = false;
-
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -658,7 +656,6 @@ class _CategorySectionState extends State<_CategorySection> {
           tilePadding: EdgeInsets.zero,
           childrenPadding: EdgeInsets.zero,
           initiallyExpanded: false,
-          onExpansionChanged: (v) => setState(() => _expanded = v),
           title: Row(
             children: [
               Icon(
