@@ -37,6 +37,11 @@ class AppConstants {
   /// cost without improving extraction accuracy in our spike tests.
   static const int ocrMaxImageEdgePx = 1600;
 
+  /// Owner-side share-link UI kill switch. Kept `false` while link
+  /// creation/copy is unstable; the public `/share/:token` route stays so
+  /// already-shared links keep resolving.
+  static const bool shareLinksEnabled = false;
+
   /// Default share weight when a participant claims one item alone.
   static const double defaultShareWeight = 1.0;
 

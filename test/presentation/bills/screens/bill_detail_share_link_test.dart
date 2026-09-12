@@ -76,8 +76,11 @@ Future<void> _pumpSection(
 }
 
 void main() {
-  group('_ShareLinkSection countdown', () {
-    testWidgets('active link shows countdown plus absolute date', (
+  // Owner-side share-link UI is behind the kill switch
+  // (AppConstants.shareLinksEnabled = false): the section renders nothing,
+  // and these tests pin that behavior until the feature is re-enabled.
+  group('_ShareLinkSection hidden', () {
+    testWidgets('no countdown, copy, or revoke controls render', (
       tester,
     ) async {
       final expiresAt = DateTime.now().add(const Duration(days: 3, hours: 2));
@@ -86,27 +89,17 @@ void main() {
         link: BillShareState(tokenId: 't', expiresAt: expiresAt),
       );
 
-      expect(find.text('Expires in 3 days'), findsOneWidget);
-      expect(find.textContaining('Valid until'), findsOneWidget);
-      // Revoke still offered while live — now icon-only at the row's end.
-      expect(find.byTooltip('Disable link'), findsOneWidget);
-      expect(find.text('Disable link'), findsNothing);
-    });
-
-    testWidgets('hours bucket under 24h', (tester) async {
-      final expiresAt = DateTime.now().add(const Duration(hours: 5));
-      await _pumpSection(
-        tester,
-        link: BillShareState(tokenId: 't', expiresAt: expiresAt),
+      expect(find.textContaining('Expires in'), findsNothing);
+      expect(find.textContaining('Valid until'), findsNothing);
+      expect(find.text('Copy link'), findsNothing);
+      expect(find.byTooltip('Disable link'), findsNothing);
+      expect(
+        find.text('This link is expired or invalid.'),
+        findsNothing,
       );
-
-      expect(find.textContaining('Expires in'), findsOneWidget);
-      expect(find.textContaining('days'), findsNothing);
     });
 
-    testWidgets('expired link shows expired state with create, no revoke', (
-      tester,
-    ) async {
+    testWidgets('expired link state also stays hidden', (tester) async {
       final expiresAt = DateTime.now().subtract(const Duration(minutes: 5));
       await _pumpSection(
         tester,
@@ -115,16 +108,16 @@ void main() {
 
       expect(
         find.text('This link is expired or invalid.'),
-        findsOneWidget,
+        findsNothing,
       );
-      expect(find.text('Copy link'), findsOneWidget);
-      expect(find.text('Disable link'), findsNothing);
+      expect(find.text('Copy link'), findsNothing);
+      expect(find.byTooltip('Disable link'), findsNothing);
     });
 
-    testWidgets('no link shows create button', (tester) async {
+    testWidgets('no link still shows no create button', (tester) async {
       await _pumpSection(tester, link: null);
 
-      expect(find.text('Copy link'), findsOneWidget);
+      expect(find.text('Copy link'), findsNothing);
     });
   });
 }

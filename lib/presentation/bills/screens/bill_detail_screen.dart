@@ -365,8 +365,11 @@ class _Body extends ConsumerWidget {
           l10n: l10n,
         ),
         SizedBox(height: 12.h),
-        _ShareLinkSection(billId: billId),
-        SizedBox(height: 20.h),
+        if (AppConstants.shareLinksEnabled) ...[
+          _ShareLinkSection(billId: billId),
+          SizedBox(height: 20.h),
+        ] else
+          SizedBox(height: 20.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 4.w),
           child: Text(
