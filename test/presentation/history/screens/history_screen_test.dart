@@ -1,4 +1,5 @@
 import 'package:bagistruk/domain/entities/bill_payment_status.dart';
+import 'package:bagistruk/domain/entities/history_bill.dart';
 import 'package:bagistruk/domain/entities/history_summary.dart';
 import 'package:bagistruk/domain/entities/monthly_spending_insight.dart';
 import 'package:bagistruk/domain/entities/ocr_credit_status.dart';
@@ -68,7 +69,9 @@ void main() {
             AsyncValue.data(creditStatus),
           ),
           currencyPrefProvider.overrideWithValue('IDR'),
-          monthlySpendingInsightProvider.overrideWith((ref, query) async => null),
+          monthlySpendingInsightProvider.overrideWith(
+            (ref, query) async => null,
+          ),
         ],
         child: MaterialApp(
           locale: locale,
@@ -280,7 +283,9 @@ void main() {
             AsyncValue.data(creditStatus),
           ),
           currencyPrefProvider.overrideWithValue('USD'),
-          monthlySpendingInsightProvider.overrideWith((ref, query) async => null),
+          monthlySpendingInsightProvider.overrideWith(
+            (ref, query) async => null,
+          ),
         ],
         child: MaterialApp(
           locale: const Locale('en'),
@@ -376,13 +381,16 @@ void main() {
       expect(normalized.sort, HistorySort.amountAsc);
     });
 
-    test('multi-currency with amount sort and null currency falls back to newest', () {
-      const filter = HistoryFilterState(sort: HistorySort.amountAsc);
-      const currencies = ['IDR', 'USD'];
-      final normalized = normalizeHistoryFilter(filter, currencies);
-      expect(normalized.currencyCode, isNull);
-      expect(normalized.sort, HistorySort.newest);
-    });
+    test(
+      'multi-currency with amount sort and null currency falls back to newest',
+      () {
+        const filter = HistoryFilterState(sort: HistorySort.amountAsc);
+        const currencies = ['IDR', 'USD'];
+        final normalized = normalizeHistoryFilter(filter, currencies);
+        expect(normalized.currencyCode, isNull);
+        expect(normalized.sort, HistorySort.newest);
+      },
+    );
 
     test('empty currencies with amount sort falls back to newest', () {
       const filter = HistoryFilterState(sort: HistorySort.amountDesc);
@@ -411,29 +419,39 @@ void main() {
       expect(normalized.sort, HistorySort.amountDesc);
     });
 
-    test('removing currency from multi-currency amount sort falls back to newest', () {
-      const filter = HistoryFilterState(
-        sort: HistorySort.amountAsc,
-        currencyCode: 'IDR',
-      );
-      const currencies = ['IDR', 'USD'];
-      final afterRemove =
-          normalizeHistoryFilter(filter.copyWith(currencyCode: null), currencies);
-      expect(afterRemove.currencyCode, isNull);
-      expect(afterRemove.sort, HistorySort.newest);
-    });
+    test(
+      'removing currency from multi-currency amount sort falls back to newest',
+      () {
+        const filter = HistoryFilterState(
+          sort: HistorySort.amountAsc,
+          currencyCode: 'IDR',
+        );
+        const currencies = ['IDR', 'USD'];
+        final afterRemove = normalizeHistoryFilter(
+          filter.copyWith(currencyCode: null),
+          currencies,
+        );
+        expect(afterRemove.currencyCode, isNull);
+        expect(afterRemove.sort, HistorySort.newest);
+      },
+    );
 
-    test('removing currency from single-currency amount sort keeps that currency', () {
-      const filter = HistoryFilterState(
-        sort: HistorySort.amountAsc,
-        currencyCode: 'IDR',
-      );
-      const currencies = ['IDR'];
-      final afterRemove =
-          normalizeHistoryFilter(filter.copyWith(currencyCode: null), currencies);
-      expect(afterRemove.currencyCode, 'IDR');
-      expect(afterRemove.sort, HistorySort.amountAsc);
-    });
+    test(
+      'removing currency from single-currency amount sort keeps that currency',
+      () {
+        const filter = HistoryFilterState(
+          sort: HistorySort.amountAsc,
+          currencyCode: 'IDR',
+        );
+        const currencies = ['IDR'];
+        final afterRemove = normalizeHistoryFilter(
+          filter.copyWith(currencyCode: null),
+          currencies,
+        );
+        expect(afterRemove.currencyCode, 'IDR');
+        expect(afterRemove.sort, HistorySort.amountAsc);
+      },
+    );
 
     test('payment status preserved through normalization', () {
       const filter = HistoryFilterState(
@@ -540,9 +558,7 @@ void main() {
         summary: const HistorySummary(
           totalBillCount: 3,
           availableCurrencies: ['IDR'],
-          outstanding: [
-            OutstandingByCurrency(currency: 'IDR', amount: 80001),
-          ],
+          outstanding: [OutstandingByCurrency(currency: 'IDR', amount: 80001)],
         ),
       );
       await tester.pumpWidget(
@@ -577,6 +593,225 @@ void main() {
     });
   });
 
+  group('HistoryScreen pagination info', () {
+    final freeStatus = OcrCreditStatus(
+      planCode: 'free',
+      balance: 5,
+      monthlyAllowance: 10,
+      adsEnabled: true,
+      plusFeaturesEnabled: false,
+    );
+
+    HistoryBill bill(String id) => HistoryBill(
+      id: id,
+      title: 'Bill $id',
+      totalAmount: 10000,
+      currencyCode: 'IDR',
+      participantCount: 1,
+      paidParticipantCount: 0,
+      paymentStatus: BillPaymentStatus.unpaid,
+      createdAt: DateTime.utc(2026, 9, 1),
+    );
+
+    Widget buildApp({
+      required HistoryListState listState,
+      HistoryFilterState? filterState,
+      Locale locale = const Locale('id'),
+    }) {
+      return ProviderScope(
+        overrides: [
+          historyListProvider.overrideWithValue(listState),
+          ocrCreditStatusProvider.overrideWithValue(
+            AsyncValue.data(freeStatus),
+          ),
+          currencyPrefProvider.overrideWithValue('IDR'),
+          if (filterState != null)
+            historyFilterProvider.overrideWithValue(filterState),
+          monthlySpendingInsightProvider.overrideWith(
+            (ref, query) async => null,
+          ),
+        ],
+        child: MaterialApp(
+          locale: locale,
+          localizationsDelegates: AppL10n.localizationsDelegates,
+          supportedLocales: AppL10n.supportedLocales,
+          home: ScreenUtilInit(
+            designSize: const Size(393, 852),
+            child: const HistoryScreen(),
+          ),
+        ),
+      );
+    }
+
+    testWidgets('shows "Menampilkan X dari Y" without suffix when hasMore', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2')],
+        summary: const HistorySummary(
+          totalBillCount: 60,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: true,
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Menampilkan 2 dari 60 bill'), findsOneWidget);
+      expect(find.textContaining('Semua ditampilkan'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('shows "Semua ditampilkan" suffix when !hasMore', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2'), bill('3')],
+        summary: const HistorySummary(
+          totalBillCount: 3,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: false,
+        isLoadingMore: false,
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(
+        find.text('Menampilkan 3 dari 3 bill · Semua ditampilkan'),
+        findsOneWidget,
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('hides suffix while isLoadingMore even if !hasMore', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1')],
+        summary: const HistorySummary(
+          totalBillCount: 3,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: false,
+        isLoadingMore: true,
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Menampilkan 1 dari 3 bill'), findsOneWidget);
+      expect(find.textContaining('Semua ditampilkan'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('filter active uses historyFilterCount format', (tester) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2')],
+        summary: const HistorySummary(
+          totalBillCount: 60,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: true,
+      );
+      await tester.pumpWidget(
+        buildApp(
+          listState: state,
+          filterState: const HistoryFilterState(query: 'kopi'),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('2 dari 60 bill'), findsOneWidget);
+      expect(find.text('Menampilkan 2 dari 60 bill'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('no pagination label when items empty (loading initial)', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: true,
+        summary: const HistorySummary(
+          totalBillCount: 0,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.textContaining('Menampilkan'), findsNothing);
+      expect(find.textContaining('dari'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('EN locale shows pagination in English', (tester) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2')],
+        summary: const HistorySummary(
+          totalBillCount: 60,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: true,
+      );
+      await tester.pumpWidget(
+        buildApp(listState: state, locale: const Locale('en')),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Showing 2 of 60 bills'), findsOneWidget);
+      expect(find.textContaining('All shown'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('EN locale shows "All shown" suffix when complete', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2'), bill('3')],
+        summary: const HistorySummary(
+          totalBillCount: 3,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: false,
+        isLoadingMore: false,
+      );
+      await tester.pumpWidget(
+        buildApp(listState: state, locale: const Locale('en')),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Showing 3 of 3 bills · All shown'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  });
+
   group('HistoryScreen monthly insight controls', () {
     final plusStatus = OcrCreditStatus(
       planCode: 'plus',
@@ -605,7 +840,9 @@ void main() {
       return ProviderScope(
         overrides: [
           historyListProvider.overrideWithValue(_nonEmptyHistoryState),
-          ocrCreditStatusProvider.overrideWithValue(AsyncValue.data(plusStatus)),
+          ocrCreditStatusProvider.overrideWithValue(
+            AsyncValue.data(plusStatus),
+          ),
           currencyPrefProvider.overrideWithValue('IDR'),
           monthlySpendingInsightProvider.overrideWith(
             (ref, query) async => data,
@@ -652,8 +889,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       final prevMonth = DateTime(now.year, now.month - 1, 1);
-      expect(find.text('Pengeluaran ${formatMonthLabel(prevMonth)}'),
-          findsOneWidget);
+      expect(
+        find.text('Pengeluaran ${formatMonthLabel(prevMonth)}'),
+        findsOneWidget,
+      );
 
       final afterTexts = find
           .byType(Text)
@@ -667,8 +906,8 @@ void main() {
       );
       expect(nextAfterBack.onPressed, isNotNull);
 
-       await tester.pumpWidget(const SizedBox.shrink());
-     });
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
   });
 }
 

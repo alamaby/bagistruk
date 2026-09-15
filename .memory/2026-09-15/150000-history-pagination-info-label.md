@@ -1,0 +1,22 @@
+# History pagination info label
+
+- **Date:** 2026-09-15
+- **Feature:** `feat(history): show pagination summary above bill list`
+- **Files changed:**
+  - `lib/l10n/app_id.arb` / `lib/l10n/app_en.arb` — +2 key (`historyPaginationShowing`, `historyPaginationAllShown`).
+  - `lib/l10n/generated/*` — regen via `flutter pub get`.
+  - `lib/presentation/history/screens/history_screen.dart` — ganti slot/filter `filter.hasActiveFilters && hasItems` → `hasItems`; ganti `_FilteredCountLabel` → `_PaginationInfoLabel` (param: `shown`, `total`, `hasMore`, `isLoadingMore`, `loadMoreFailed`, `filtered`; clamp total; sufiks `· Semua ditampilkan`/`· All shown` hanya `!hasMore && !isLoadingMore && !loadMoreFailed`).
+  - `test/presentation/history/screens/history_screen_test.dart` — +7 widget test di grup `HistoryScreen pagination info` (hasMore, suffix selesai, hide suffix loading-more, filter pakai `historyFilterCount`, hidden saat empty/loading, EN + EN suffix).
+  - `pubspec.yaml` — bump minor `0.32.6+86` → `0.33.0+87`.
+- **Decisions:**
+  - Format: `Menampilkan X dari Y bill` (atau `X dari Y bill` bila filter aktif via key lama `historyFilterCount`) + sufiks selesai.
+  - Posisi: atas daftar (slot yang sama `_FilteredCountLabel`, kini selalu tampil saat ada items).
+  - Total: pakai `summary.totalBillCount` (total jendela) — tidak ikut filter status/mata uang karena RPC `get_history_page_summary` tidak menerimanya. Diusulkan user: cukup total jendela; akurasi penuh ditolak (butuh migrasi).
+- **Verification:**
+  - `flutter analyze` — 0 error (info baseline).
+  - `flutter test` (history screen file) — 34/34 passed (7 baru + 27 lama).
+  - `flutter test test/presentation/history/` — 98/98 passed.
+  - `flutter test` (full) — 642/642 passed (`All tests passed!`)
+  - `dart format` clean.
+- **Open items:** tidak ada. Tanggal 1 September 2026 butuh test date-rot lama (`history_screen_test.dart` "previous month navigates...") yang pre-existing dan di luar scope ini.
+- **Proposed commit:** `feat(history): show pagination summary above bill list`

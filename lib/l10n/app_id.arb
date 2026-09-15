@@ -566,6 +566,18 @@
       }
     }
   },
+  "historyPaginationShowing": "Menampilkan {shown} dari {total} bill",
+  "@historyPaginationShowing": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "historyPaginationAllShown": "Semua ditampilkan",
   "historySortNewest": "Terbaru",
   "historySortOldest": "Terlama",
   "historySortTitle": "Nama A-Z",

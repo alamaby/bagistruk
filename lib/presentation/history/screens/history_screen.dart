@@ -195,13 +195,11 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       defaultCurrency,
     );
     final monthlyInsight = ref.watch(
-      monthlySpendingInsightProvider(
-        (
-          month: _selectedInsightMonth,
-          currencyCode: selectedCurrency,
-          category: null,
-        ),
-      ),
+      monthlySpendingInsightProvider((
+        month: _selectedInsightMonth,
+        currencyCode: selectedCurrency,
+        category: null,
+      )),
     );
 
     // Keep the search box in sync with external filter changes (e.g. reset)
@@ -246,12 +244,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       ),
                       child: const Icon(Icons.tune),
                     ),
-                    onPressed: () => _openFilterSheet(
-                      context,
-                      ref,
-                      currencies,
-                      filter,
-                    ),
+                    onPressed: () =>
+                        _openFilterSheet(context, ref, currencies, filter),
                   ),
                 ],
               ),
@@ -350,16 +344,19 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     onPreviousMonth: () =>
                         _previousInsightMonth(planCode: planCode),
                     onNextMonth: _nextInsightMonth,
-                    onCurrencyChanged: (code) => setState(
-                      () => _selectedInsightCurrency = code,
-                    ),
+                    onCurrencyChanged: (code) =>
+                        setState(() => _selectedInsightCurrency = code),
                   ),
                 ),
-              if (filter.hasActiveFilters && hasItems)
+              if (hasItems)
                 SliverToBoxAdapter(
-                  child: _FilteredCountLabel(
-                    filteredCount: items.length,
-                    totalCount: summary?.totalBillCount ?? items.length,
+                  child: _PaginationInfoLabel(
+                    shown: items.length,
+                    total: summary?.totalBillCount ?? items.length,
+                    hasMore: historyState.hasMore,
+                    isLoadingMore: historyState.isLoadingMore,
+                    loadMoreFailed: historyState.loadMoreFailure != null,
+                    filtered: filter.hasActiveFilters,
                   ),
                 ),
               if (historyState.isLoadingInitial)
@@ -431,23 +428,17 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                             children: [
                               IconButton(
                                 tooltip: l10n.billDuplicateTooltip,
-                                onPressed:
-                                    _duplicatingIds.contains(bill.id)
+                                onPressed: _duplicatingIds.contains(bill.id)
                                     ? null
-                                    : () => _duplicateBill(
-                                        context,
-                                        ref,
-                                        bill.id,
-                                      ),
-                                icon:
-                                    _duplicatingIds.contains(bill.id)
+                                    : () =>
+                                          _duplicateBill(context, ref, bill.id),
+                                icon: _duplicatingIds.contains(bill.id)
                                     ? SizedBox(
                                         width: 20.w,
                                         height: 20.w,
-                                        child:
-                                            const CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
+                                        child: const CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
                                       )
                                     : const Icon(Icons.copy_outlined),
                               ),
@@ -531,16 +522,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         case ResultFailure():
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text(l10n.billDuplicateFailed)),
-            );
+            ..showSnackBar(SnackBar(content: Text(l10n.billDuplicateFailed)));
         case Success(:final data):
           ref.invalidate(historyListProvider);
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text(l10n.billDuplicateSuccess)),
-            );
+            ..showSnackBar(SnackBar(content: Text(l10n.billDuplicateSuccess)));
           // Fire-and-forget: navigation owns its own lifecycle.
           unawaited(
             context.pushNamed(
@@ -598,9 +585,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       // Deleted bills must not keep firing reminders (best-effort).
       unawaited(() async {
         try {
-          final svc = await ref.read(
-            settlementReminderServiceProvider.future,
-          );
+          final svc = await ref.read(settlementReminderServiceProvider.future);
           await svc.cancelForBill(billId);
         } catch (e) {
           AppLogger.error('HistoryScreen.reminderCancel failed', e);
@@ -672,23 +657,37 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 }
 
-class _FilteredCountLabel extends StatelessWidget {
-  const _FilteredCountLabel({
-    required this.filteredCount,
-    required this.totalCount,
+class _PaginationInfoLabel extends StatelessWidget {
+  const _PaginationInfoLabel({
+    required this.shown,
+    required this.total,
+    required this.hasMore,
+    required this.isLoadingMore,
+    required this.loadMoreFailed,
+    required this.filtered,
   });
 
-  final int filteredCount;
-  final int totalCount;
+  final int shown;
+  final int total;
+  final bool hasMore;
+  final bool isLoadingMore;
+  final bool loadMoreFailed;
+  final bool filtered;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppL10n.of(context);
     final scheme = Theme.of(context).colorScheme;
+    final effectiveTotal = total < shown ? shown : total;
+    final base = filtered
+        ? l10n.historyFilterCount(shown, effectiveTotal)
+        : l10n.historyPaginationShowing(shown, effectiveTotal);
+    final allShown = !hasMore && !isLoadingMore && !loadMoreFailed;
+    final text = allShown ? '$base · ${l10n.historyPaginationAllShown}' : base;
     return Padding(
       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0),
       child: Text(
-        l10n.historyFilterCount(filteredCount, totalCount),
+        text,
         style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
       ),
     );
@@ -1064,14 +1063,12 @@ class _FilterSheetState extends State<_FilterSheet> {
                     _StatusChoiceChip(
                       label: l10n.historyStatusAll,
                       selected: _draft.currencyCode == null,
-                      onSelected: () => setState(
-                        () {
-                          _draft = normalizeHistoryFilter(
-                            _draft.copyWith(currencyCode: null),
-                            widget.currencies,
-                          );
-                        },
-                      ),
+                      onSelected: () => setState(() {
+                        _draft = normalizeHistoryFilter(
+                          _draft.copyWith(currencyCode: null),
+                          widget.currencies,
+                        );
+                      }),
                     ),
                     ...widget.currencies.map(
                       (c) => _StatusChoiceChip(
@@ -1422,11 +1419,7 @@ class _MonthlyInsightCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.insights,
-                          color: scheme.primary,
-                          size: 20.r,
-                        ),
+                        Icon(Icons.insights, color: scheme.primary, size: 20.r),
                         SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
@@ -1463,22 +1456,24 @@ class _MonthlyInsightCard extends StatelessWidget {
             Wrap(
               spacing: 8.w,
               runSpacing: 4.h,
-              children: availableCurrencies.map(
-                (code) => ChoiceChip(
-                  label: Text(code),
-                  selected: code == selectedCurrency,
-                  showCheckmark: false,
-                  onSelected: (_) => onCurrencyChanged(code),
-                  visualDensity: VisualDensity.compact,
-                  selectedColor: scheme.primaryContainer,
-                  labelStyle: TextStyle(
-                    fontSize: 12.sp,
-                    color: code == selectedCurrency
-                        ? scheme.onPrimaryContainer
-                        : null,
-                  ),
-                ),
-              ).toList(growable: false),
+              children: availableCurrencies
+                  .map(
+                    (code) => ChoiceChip(
+                      label: Text(code),
+                      selected: code == selectedCurrency,
+                      showCheckmark: false,
+                      onSelected: (_) => onCurrencyChanged(code),
+                      visualDensity: VisualDensity.compact,
+                      selectedColor: scheme.primaryContainer,
+                      labelStyle: TextStyle(
+                        fontSize: 12.sp,
+                        color: code == selectedCurrency
+                            ? scheme.onPrimaryContainer
+                            : null,
+                      ),
+                    ),
+                  )
+                  .toList(growable: false),
             ),
           ],
           SizedBox(height: 12.h),
@@ -2138,10 +2133,7 @@ class _HistoryAccessBanner extends StatelessWidget {
 }
 
 class _SummaryCards extends StatefulWidget {
-  const _SummaryCards({
-    required this.summary,
-    required this.defaultCurrency,
-  });
+  const _SummaryCards({required this.summary, required this.defaultCurrency});
   final HistorySummary summary;
   final String defaultCurrency;
 
@@ -2359,7 +2351,11 @@ class _CardValueText extends StatelessWidget {
         value,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700, color: color),
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
       ),
     );
   }

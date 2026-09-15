@@ -1018,6 +1018,14 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String historyPaginationShowing(int shown, int total) {
+    return 'Showing $shown of $total bills';
+  }
+
+  @override
+  String get historyPaginationAllShown => 'All shown';
+
+  @override
   String get historySortNewest => 'Newest';
 
   @override

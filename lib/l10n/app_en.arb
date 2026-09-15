@@ -566,6 +566,18 @@
       }
     }
   },
+  "historyPaginationShowing": "Showing {shown} of {total} bills",
+  "@historyPaginationShowing": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "historyPaginationAllShown": "All shown",
   "historySortNewest": "Newest",
   "historySortOldest": "Oldest",
   "historySortTitle": "Name A-Z",

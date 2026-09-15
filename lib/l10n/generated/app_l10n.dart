@@ -1853,6 +1853,18 @@ abstract class AppL10n {
   /// **'{filteredCount} dari {totalCount} bill'**
   String historyFilterCount(int filteredCount, int totalCount);
 
+  /// No description provided for @historyPaginationShowing.
+  ///
+  /// In id, this message translates to:
+  /// **'Menampilkan {shown} dari {total} bill'**
+  String historyPaginationShowing(int shown, int total);
+
+  /// No description provided for @historyPaginationAllShown.
+  ///
+  /// In id, this message translates to:
+  /// **'Semua ditampilkan'**
+  String get historyPaginationAllShown;
+
   /// No description provided for @historySortNewest.
   ///
   /// In id, this message translates to:
