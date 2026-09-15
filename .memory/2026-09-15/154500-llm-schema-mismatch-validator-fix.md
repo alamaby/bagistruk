@@ -28,8 +28,9 @@ Attempt-1 OCR (`gemini-3.5-flash-lite`, prio 2) me-return `"price": "25,000"` (k
 
 ## Blockers / unresolved
 
-- `supabase functions deploy process-receipt` + bump pointer submodule + verifikasi `llm_logs` 7 hari — menunggu operator (butuh kredensial Supabase).
-- Commit: kerjakan di dalam submodule dulu (`cd supabase`), lalu bump pointer dari parent.
+- Deploy `process-receipt` — selesai oleh operator.
+- Commit: submodule `3fc4451` (`fix/ocr-validator-zero-decimal`, ter-push); parent `ad2f98a` (pointer bump + plan/memory, ter-push).
+- Sisa: merge PR submodule → main lalu re-bump pointer bila perlu; verifikasi `llm_logs` 7 hari (`schema_error/schema_mismatch` pola koma → 0).
 
 ## Verification
 
