@@ -47,7 +47,6 @@ subprojects {
         compilerOptions.jvmTarget.set(JvmTarget.fromTarget(javaTarget.toString()))
     }
 }
-}
 
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
