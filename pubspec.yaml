@@ -41,7 +41,10 @@ dependencies:
   # Android share target ("Scan receipt" activity-alias): receives images
   # shared from other apps (SEND / SEND_MULTIPLE) into the scan draft.
   # Wrapped in ISharedMediaService so it can be mocked / swapped later.
-  receive_sharing_intent: ^1.9.0
+  # Pinned to 1.8.1: last version compatible with AGP 8 / compileSdk 36.
+  # 1.9.0+ requires AGP 9.2.1 + compileSdk 37 + Flutter built-in Kotlin (>=3.47)
+  # plus iOS SPM/SceneDelegate migration. Lift only with the full toolchain bump.
+  receive_sharing_intent: 1.8.1
   # Device fingerprint signals for the anti-abuse gate. Read-only access
   # to non-PII hardware fields (Android version, SDK, brand, model,
   # hardware) — no IMEI, Android ID, serial, MAC, or advertising ID.

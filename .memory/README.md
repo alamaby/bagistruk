@@ -1,6 +1,6 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-15 15:45
+- **Updated:** 2026-09-15 16:35
 - **Format version:** 1
 
 ## Current State
@@ -9,9 +9,10 @@
 - Lazy anonymous sign-in; onboarding has a preference slide (language + currency + theme with live preview) and optional promo slide.
 - Theme picker unified as bottom sheet (onboarding + Settings); transient preview via `themePreviewProvider`, persisted atomically with language + currency.
 - Backend lives in `supabase/` git submodule (`bagistruk-supabase`).
+- **2026-09-15:** Maestro E2E debug-APK build fixed: pin `receive_sharing_intent` `^1.9.0` → exact `1.8.1` (1.9.0 butuh AGP 9.2.1 + `compileSdk 37` + Flutter built-in Kotlin ≥3.47; app di AGP 8.11.1/Flutter 3.41.7) + `android/build.gradle.kts` selaraskan `KotlinCompile.jvmTarget` tiap subproject dengan `compileOptions.targetCompatibility` sendiri (perbaiki "Inconsistent JVM-target compatibility" yang JDK-dependent: 21 lokal / 17 CI). Verifikasi lokal: `build apk --debug` OK, analyze 0 error/0 warning, `flutter test` 645 passed. BELUM di-commit; Maestro re-run pending.
 - **2026-09-14:** Gemini flash-lite migration: `20260914120000` tambah `gemini-3.5-flash-lite` (default p30) + `gemini-2.5-flash-lite` (default p40), `is_active=false`, key clone dari default p10. Commit `a7ed1ff` + pointer `b1489c5` TER-PUSH; migration TER-APPLY (terverifikasi di remote). Sisa: validasi upstream + aktivasi.
 - **2026-09-08:** M4 Power Plus implemented (code only): bill templates/duplikat (migration `20260908120000` + RPC, `BillDuplicator`, detail menu + history row + templates sheet), Plus server retry 1x (`plus_retry.ts` + wiring), Plus in-card retry + scanning status, client 10-photo cap + 413 mapping, 22 ARB keys ID+EN. `flutter test` 612 passed, `deno test` 55 passed, `analyze` 0 errors. BELUM di-commit; migrasi + Edge deploy menunggu operator.
-- **2026-09-05:** Onboarding theme picker + preview + review fix; commit `a75fdaf` ter-push; `pubspec 0.30.1+76` (patch bump), `flutter test` 482 passed, `analyze` 0 errors. APK lokal gagal (Gradle `receive_sharing_intent` pre-existing) — build di workflow.
+- **2026-09-05:** Onboarding theme picker + preview + review fix; commit `a75fdaf` ter-push; `pubspec 0.30.1+76` (patch bump), `flutter test` 482 passed, `analyze` 0 errors. APK lokal gagal (Gradle `receive_sharing_intent` pre-existing) — build di workflow. **Resolved 2026-09-15** (pin 1.8.1 + Gradle JVM-target fix).
 - **2026-09-04:** Legal docs refresh (privacy + terms) — effective date `2026-09-04`; share-to-scan disclosure, HMAC v2 signals, post-confirmation opt-in, ToS §4 shared-images, ID date fix `2026-07-10→2026-09-04`; `pubspec 0.29.1+74`, `legal-compliance-checklist` now tracked. `app_config` bump 1→2 pending operator (post-rollout). `flutter test` 477 passed, `analyze` 0 errors.
 - **2026-09-04:** Android share-to-scan (activity-alias "Scan receipt", `receive_sharing_intent` 1.9.0, draft `addSharedFiles` dedup, auto-scan via pending flag). Commits `4a3f538` + `d43cdf4` ter-push, Flutter CI + CodeQL hijau, 477 test passed. Tag `v0.29.0` di-push → Release Android Artifacts sukses (3 APK split-per-ABI + AAB). `PROJECT_SUMMARY.md`/`docs/release-play-store.md` diff dari agen paralel dibiarkan (tidak di-commit).
 - **2026-08-31:** Security audit → 2 celah kritis ditutup (REVOKE FROM PUBLIC tidak efektif di Supabase → RPC monetisasi bisa dipanggil langsung; IDOR `migrate_anon_data`). 8 migration hardening (20260830110000–07) TER-APPLY ke remote + 6 migration admin dipulihkan dari remote history; `migration list` sinkron penuh. BELUM di-commit.
@@ -28,6 +29,7 @@
 
 ## Open Items / Blockers
 
+- Re-run `Maestro Android E2E` (dispatch/nightly) untuk konfirmasi `Build debug APK` hijau di CI setelah fix 2026-09-15; follow-up plan migrasi penuh AGP 9 (Flutter ≥3.47, AGP 9.2.1, Kotlin 2.4.0, `compileSdk 37`, `builtInKotlin=true`, iOS SPM) diperlukan sebelum bump `receive_sharing_intent` ≥1.9.0. Detail: [plan](../plans/2026-09-15-maestro-apk-receive-sharing-intent-fix.md).
 - Operator bump `app_config` `legal.terms_version`/`privacy_version` 1→2 via Supabase Dashboard setelah rilis `0.29.1+74` (MCP read-only; jangan bump sebelum rollout karena aset markdown ter-bundle). Detail: [plan](../plans/2026-09-04-legal-docs-refresh-plan.md).
 - Manual sync: `bagistruk-landing-page/src/legalContent.ts`, public privacy URL (host `docs/privacy-policy.md`), Play Console Data Safety check (tidak ada tipe data baru, hanya jalur foto baru via share intent).
 - Manual device verification for share-to-scan (adb SEND/SEND_MULTIPLE, cold/warm, gates) + `flutter build apk --split-per-abi`. Commits ter-push (`4a3f538`, `d43cdf4`) — `PROJECT_SUMMARY.md`/`docs/release-play-store.md` working-tree diff dari agen paralel belum di-commit, sengaja dibiarkan.
@@ -42,6 +44,7 @@
 
 ## Recent Entries
 
+- [2026-09-15/maestro-apk-receive-sharing-intent-fix.md](2026-09-15/163500-maestro-apk-receive-sharing-intent-fix.md)
 - [2026-09-15/history-pagination-info-label.md](2026-09-15/150000-history-pagination-info-label.md)
 - [2026-09-15/llm-schema-mismatch-validator-fix.md](2026-09-15/154500-llm-schema-mismatch-validator-fix.md)
 - [2026-09-14/gemini-flash-lite-models.md](2026-09-14/120000-gemini-flash-lite-models.md)
