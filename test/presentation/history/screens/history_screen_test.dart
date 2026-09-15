@@ -1,3 +1,4 @@
+import 'package:bagistruk/core/error/failure.dart';
 import 'package:bagistruk/domain/entities/bill_payment_status.dart';
 import 'package:bagistruk/domain/entities/history_bill.dart';
 import 'package:bagistruk/domain/entities/history_summary.dart';
@@ -807,6 +808,73 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('Showing 3 of 3 bills · All shown'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('hides suffix when loadMore fails even if !hasMore', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2')],
+        summary: const HistorySummary(
+          totalBillCount: 60,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: false,
+        isLoadingMore: false,
+        loadMoreFailure: const Failure.network('x'),
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Menampilkan 2 dari 60 bill'), findsOneWidget);
+      expect(find.textContaining('Semua ditampilkan'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('no pagination label when initial load fails', (tester) async {
+      const state = HistoryListState(
+        isLoadingInitial: false,
+        initialFailure: Failure.network('x'),
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.textContaining('Menampilkan'), findsNothing);
+      expect(find.textContaining('dari'), findsNothing);
+      expect(find.text('Terjadi kesalahan. Coba lagi.'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('clamps total when more items shown than total', (
+      tester,
+    ) async {
+      final state = HistoryListState(
+        isLoadingInitial: false,
+        items: [bill('1'), bill('2'), bill('3')],
+        summary: const HistorySummary(
+          totalBillCount: 2,
+          availableCurrencies: ['IDR'],
+          outstanding: <OutstandingByCurrency>[],
+        ),
+        hasMore: false,
+        isLoadingMore: false,
+      );
+      await tester.pumpWidget(buildApp(listState: state));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(
+        find.text('Menampilkan 3 dari 3 bill · Semua ditampilkan'),
+        findsOneWidget,
+      );
 
       await tester.pumpWidget(const SizedBox.shrink());
     });
