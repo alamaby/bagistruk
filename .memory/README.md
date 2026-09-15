@@ -1,6 +1,6 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-15 16:35
+- **Updated:** 2026-09-15 17:15
 - **Format version:** 1
 
 ## Current State
@@ -9,7 +9,7 @@
 - Lazy anonymous sign-in; onboarding has a preference slide (language + currency + theme with live preview) and optional promo slide.
 - Theme picker unified as bottom sheet (onboarding + Settings); transient preview via `themePreviewProvider`, persisted atomically with language + currency.
 - Backend lives in `supabase/` git submodule (`bagistruk-supabase`).
-- **2026-09-15:** Maestro E2E debug-APK build fixed: pin `receive_sharing_intent` `^1.9.0` → exact `1.8.1` (1.9.0 butuh AGP 9.2.1 + `compileSdk 37` + Flutter built-in Kotlin ≥3.47; app di AGP 8.11.1/Flutter 3.41.7) + `android/build.gradle.kts` selaraskan `KotlinCompile.jvmTarget` tiap subproject dengan `compileOptions.targetCompatibility` sendiri (perbaiki "Inconsistent JVM-target compatibility" yang JDK-dependent: 21 lokal / 17 CI). Verifikasi lokal: `build apk --debug` OK, analyze 0 error/0 warning, `flutter test` 645 passed. BELUM di-commit; Maestro re-run pending.
+- **2026-09-15:** Maestro E2E debug-APK build fixed: pin `receive_sharing_intent` `^1.9.0` → exact `1.8.1` (1.9.0 butuh AGP 9.2.1 + `compileSdk 37` + Flutter built-in Kotlin ≥3.47; app di AGP 8.11.1/Flutter 3.41.7) + `android/build.gradle.kts` selaraskan `KotlinCompile.jvmTarget` tiap subproject dengan `compileOptions.targetCompatibility` sendiri (perbaiki "Inconsistent JVM-target compatibility" yang JDK-dependent: 21 lokal / 17 CI). Commit `715bacc` GAGAL CI (stray `}` di line 50, build lokal terverifikasi sebelum edit terakhir) → fixed `4e2c6fb`; CI run `34978993486` hijau, `Build debug APK` pass. Verifikasi lokal: analyze 0 error/0 warning, `flutter test` 645 passed.
 - **2026-09-14:** Gemini flash-lite migration: `20260914120000` tambah `gemini-3.5-flash-lite` (default p30) + `gemini-2.5-flash-lite` (default p40), `is_active=false`, key clone dari default p10. Commit `a7ed1ff` + pointer `b1489c5` TER-PUSH; migration TER-APPLY (terverifikasi di remote). Sisa: validasi upstream + aktivasi.
 - **2026-09-08:** M4 Power Plus implemented (code only): bill templates/duplikat (migration `20260908120000` + RPC, `BillDuplicator`, detail menu + history row + templates sheet), Plus server retry 1x (`plus_retry.ts` + wiring), Plus in-card retry + scanning status, client 10-photo cap + 413 mapping, 22 ARB keys ID+EN. `flutter test` 612 passed, `deno test` 55 passed, `analyze` 0 errors. BELUM di-commit; migrasi + Edge deploy menunggu operator.
 - **2026-09-05:** Onboarding theme picker + preview + review fix; commit `a75fdaf` ter-push; `pubspec 0.30.1+76` (patch bump), `flutter test` 482 passed, `analyze` 0 errors. APK lokal gagal (Gradle `receive_sharing_intent` pre-existing) — build di workflow. **Resolved 2026-09-15** (pin 1.8.1 + Gradle JVM-target fix).
@@ -29,7 +29,8 @@
 
 ## Open Items / Blockers
 
-- Re-run `Maestro Android E2E` (dispatch/nightly) untuk konfirmasi `Build debug APK` hijau di CI setelah fix 2026-09-15; follow-up plan migrasi penuh AGP 9 (Flutter ≥3.47, AGP 9.2.1, Kotlin 2.4.0, `compileSdk 37`, `builtInKotlin=true`, iOS SPM) diperlukan sebelum bump `receive_sharing_intent` ≥1.9.0. Detail: [plan](../plans/2026-09-15-maestro-apk-receive-sharing-intent-fix.md).
+- **Maestro E2E flows 8/8 GAGAL tapi workflow melaporkan hijau** (pre-existing, terungkap 2026-09-15). `maestro.yml` `continue-on-error: true` + upload artifact `maestro-failure-*` menyembunyikan kegagalan; run "sukses" pun meng-upload artifact failure dan log berakhir `8/8 Flows Failed`. Penyebab: job `cp .env.example .env` → `SUPABASE_URL`/`SUPABASE_ANON_KEY` PLACEHOLDER, sedangkan tiap flow butuh backend reachable + user signed-in ter-seed (legal accepted + onboarding selesai); tidak ada seeding step. `SUPABASE_URL` (variable) & `SUPABASE_ANON_KEY` (secret) sudah ada dan dipakai `release.yml`, jadi seharusnya bisa dipakai di sini. **Jangan anggap centang hijau Maestro sebagai bukti E2E sampai ini diperbaiki.** Detail: [plan](../plans/2026-09-15-maestro-apk-receive-sharing-intent-fix.md).
+- Follow-up plan migrasi penuh AGP 9 (Flutter ≥3.47, AGP 9.2.1, Kotlin 2.4.0, `compileSdk 37`, `builtInKotlin=true`, iOS SPM) diperlukan sebelum bump `receive_sharing_intent` ≥1.9.0. Detail: [plan](../plans/2026-09-15-maestro-apk-receive-sharing-intent-fix.md).
 - Operator bump `app_config` `legal.terms_version`/`privacy_version` 1→2 via Supabase Dashboard setelah rilis `0.29.1+74` (MCP read-only; jangan bump sebelum rollout karena aset markdown ter-bundle). Detail: [plan](../plans/2026-09-04-legal-docs-refresh-plan.md).
 - Manual sync: `bagistruk-landing-page/src/legalContent.ts`, public privacy URL (host `docs/privacy-policy.md`), Play Console Data Safety check (tidak ada tipe data baru, hanya jalur foto baru via share intent).
 - Manual device verification for share-to-scan (adb SEND/SEND_MULTIPLE, cold/warm, gates) + `flutter build apk --split-per-abi`. Commits ter-push (`4a3f538`, `d43cdf4`) — `PROJECT_SUMMARY.md`/`docs/release-play-store.md` working-tree diff dari agen paralel belum di-commit, sengaja dibiarkan.
