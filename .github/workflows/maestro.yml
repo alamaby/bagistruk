@@ -12,6 +12,20 @@ concurrency:
   group: maestro-android
   cancel-in-progress: true
 
+# Scaffold workflow. The flows in .maestro/ are manual smoke scripts that need
+# an isolated test backend, a seeded signed-in user (legal acceptance +
+# onboarding complete), and Settings writes. That backend does not exist yet,
+# so the suite SKIPS rather than pretending to pass.
+#
+# History: this job used `continue-on-error: true`, so it always concluded
+# "success" even when every flow failed (e.g. run 34978993486 — 8/8 Flows
+# Failed, job success). Combined with `cp .env.example .env`, the app was built
+# against placeholder credentials (SUPABASE_URL=https://YOUR-PROJECT.supabase.co)
+# that can never satisfy a flow, making the green check meaningless.
+#
+# Do NOT point this at the production Supabase project: the flows mutate
+# preferences and create anonymous users. Provide a dedicated test project via
+# the `E2E_SUPABASE_URL` / `E2E_SUPABASE_ANON_KEY` secrets to enable the run.
 jobs:
   maestro:
     name: Run Maestro flows
@@ -35,8 +49,34 @@ jobs:
           channel: stable
           cache: true
 
+      # `.env` is bundled into the APK at build time (flutter_dotenv asset), so
+      # the backend must be selected here — before `flutter build apk` — not
+      # after. Also decides whether the flows can run at all.
       - name: Create CI environment file
-        run: cp .env.example .env
+        id: backend
+        env:
+          E2E_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+          E2E_SUPABASE_ANON_KEY: ${{ secrets.E2E_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          cp .env.example .env
+
+          if [ -n "${E2E_SUPABASE_URL:-}" ]; then
+            # Drop the placeholder pair, then append the real one, so each key
+            # appears exactly once (dup-key resolution differs between dotenv
+            # implementations — don't rely on last-wins).
+            grep -v -E '^(SUPABASE_URL|SUPABASE_ANON_KEY)=' .env > .env.tmp || true
+            {
+              echo "SUPABASE_URL=${E2E_SUPABASE_URL}"
+              echo "SUPABASE_ANON_KEY=${E2E_SUPABASE_ANON_KEY}"
+            } >> .env.tmp
+            mv .env.tmp .env
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Using E2E test backend from secrets."
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::E2E test backend not configured (E2E_SUPABASE_URL secret missing). The APK will build against .env.example placeholders and the Maestro flows will be SKIPPED — a flow cannot pass against placeholders, so running them would only produce a guaranteed failure."
+          fi
 
       - name: Flutter pub get
         run: flutter pub get
@@ -48,13 +88,18 @@ jobs:
         run: flutter build apk --debug
 
       - name: Install Maestro
+        if: steps.backend.outputs.configured == 'true'
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
+      # No `continue-on-error`: a genuine flow failure must fail the job. This
+      # workflow only runs on schedule / workflow_dispatch and is not a
+      # required PR check, so a red result blocks nothing — it just stops the
+      # suite from advertising coverage it does not have.
       - name: Run Maestro on Android emulator
         id: maestro
-        continue-on-error: true
+        if: steps.backend.outputs.configured == 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
@@ -72,7 +117,7 @@ jobs:
             exit $status
 
       - name: Upload Maestro failure artifacts
-        if: steps.maestro.outcome == 'failure'
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-failure-${{ github.run_id }}
@@ -81,3 +126,22 @@ jobs:
             build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 14
           if-no-files-found: warn
+
+      - name: Summarize Maestro results
+        if: always()
+        run: |
+          {
+            echo "## Maestro Android E2E"
+            echo ""
+            echo "- Build debug APK: passed"
+            if [ "${{ steps.backend.outputs.configured }}" = "true" ]; then
+              echo "- Flows: \`${{ steps.maestro.outcome }}\`"
+            else
+              echo "- Flows: **skipped** (no isolated E2E test backend configured)"
+              echo ""
+              echo "Add the \`E2E_SUPABASE_URL\` / \`E2E_SUPABASE_ANON_KEY\` repository"
+              echo "secrets pointing at a **dedicated test project** to enable these"
+              echo "flows. Never use the production project — the flows mutate"
+              echo "preferences and create anonymous users."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
