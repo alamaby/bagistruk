@@ -1,6 +1,9 @@
 import 'package:bagistruk/core/error/failure.dart';
+import 'package:bagistruk/data/providers.dart';
+import 'package:bagistruk/data/services/settlement_reminder_service.dart';
 import 'package:bagistruk/domain/entities/bill_payment_status.dart';
 import 'package:bagistruk/domain/entities/history_bill.dart';
+import 'package:bagistruk/domain/entities/history_bill_page.dart';
 import 'package:bagistruk/domain/entities/history_summary.dart';
 import 'package:bagistruk/domain/entities/monthly_spending_insight.dart';
 import 'package:bagistruk/domain/entities/ocr_credit_status.dart';
@@ -19,6 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/history_list_notifier_test.dart' as history_notifier_test;
 
 const _emptyHistoryState = HistoryListState(isLoadingInitial: false);
 
@@ -977,6 +982,149 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     });
   });
+
+  group('HistoryScreen swipe-to-delete', () {
+    final freeStatus = OcrCreditStatus(
+      planCode: 'free',
+      balance: 5,
+      monthlyAllowance: 10,
+      adsEnabled: true,
+      plusFeaturesEnabled: false,
+    );
+
+    HistoryBill swipeBill(String id) => HistoryBill(
+      id: id,
+      title: 'Bill $id',
+      totalAmount: 10000,
+      currencyCode: 'IDR',
+      participantCount: 1,
+      paidParticipantCount: 0,
+      paymentStatus: BillPaymentStatus.unpaid,
+      createdAt: DateTime.utc(2026, 9, 1),
+    );
+
+    history_notifier_test.FakeBillRepository swipeRepo() {
+      final repo = history_notifier_test.FakeBillRepository();
+      repo.responder = (_) => HistoryBillPage(
+        bills: [swipeBill('1'), swipeBill('2')],
+        hasMore: false,
+      );
+      repo.summary = const HistorySummary(
+        totalBillCount: 2,
+        availableCurrencies: ['IDR'],
+        outstanding: <OutstandingByCurrency>[],
+      );
+      return repo;
+    }
+
+    Widget buildSwipeApp(
+      history_notifier_test.FakeBillRepository repo,
+    ) {
+      return ProviderScope(
+        overrides: [
+          billRepositoryProvider.overrideWithValue(repo),
+          ocrCreditStatusProvider.overrideWithValue(
+            AsyncValue.data(freeStatus),
+          ),
+          currencyPrefProvider.overrideWithValue('IDR'),
+          monthlySpendingInsightProvider.overrideWith(
+            (ref, query) async => null,
+          ),
+          settlementReminderServiceProvider.overrideWith(
+            (ref) async =>
+                _NoopReminderService(await SharedPreferences.getInstance()),
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('id'),
+          localizationsDelegates: AppL10n.localizationsDelegates,
+          supportedLocales: AppL10n.supportedLocales,
+          home: ScreenUtilInit(
+            designSize: const Size(393, 852),
+            child: const HistoryScreen(),
+          ),
+        ),
+      );
+    }
+
+    Future<void> pumpSwipeApp(WidgetTester tester) async {
+      await tester.pumpWidget(buildSwipeApp(swipeRepo()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    testWidgets('rows expose duplicate but no delete icon button', (
+      tester,
+    ) async {
+      await pumpSwipeApp(tester);
+
+      expect(find.text('Bill 1'), findsOneWidget);
+      expect(find.text('Bill 2'), findsOneWidget);
+      expect(
+        find.widgetWithIcon(IconButton, Icons.delete_outline),
+        findsNothing,
+      );
+      expect(
+        find.widgetWithIcon(IconButton, Icons.copy_outlined),
+        findsNWidgets(2),
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('swipe shows confirmation; cancel keeps the row', (
+      tester,
+    ) async {
+      await pumpSwipeApp(tester);
+
+      await tester.drag(find.text('Bill 1'), const Offset(-400, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Hapus bill ini?'), findsOneWidget);
+
+      await tester.tap(find.text('Batal'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bill 1'), findsOneWidget);
+      expect(find.text('Bill 2'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('confirm deletes the row and shows success snackbar', (
+      tester,
+    ) async {
+      await pumpSwipeApp(tester);
+
+      await tester.drag(find.text('Bill 1'), const Offset(-400, 0));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Hapus'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bill 1'), findsNothing);
+      expect(find.text('Bill 2'), findsOneWidget);
+      expect(
+        find.text('Bill dipindahkan ke Bill terhapus.'),
+        findsOneWidget,
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('opposite swipe direction does nothing', (tester) async {
+      await pumpSwipeApp(tester);
+
+      await tester.drag(find.text('Bill 1'), const Offset(400, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Hapus bill ini?'), findsNothing);
+      expect(find.text('Bill 1'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  });
 }
 
 String formatMonthLabel(DateTime m) {
@@ -995,4 +1143,13 @@ String formatMonthLabel(DateTime m) {
     12: 'Desember',
   };
   return '${idMonths[m.month]} ${m.year}';
+}
+
+/// Reminder-service stub for swipe-delete tests: row + snackbar behavior is
+/// asserted, the best-effort reminder cancel is a no-op here.
+class _NoopReminderService extends SettlementReminderService {
+  _NoopReminderService(SharedPreferences prefs) : super(prefs: prefs);
+
+  @override
+  Future<void> cancelForBill(String billId) async {}
 }

@@ -1,10 +1,11 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-15 22:35
+- **Updated:** 2026-09-16 19:15
 - **Format version:** 1
 
 ## Current State
 
+- **2026-09-16:** History swipe-to-delete: tombol ikon hapus per-row diganti `Dismissible(endToStart)` + dialog konfirmasi tetap (`_confirmAndDeleteBill`, `_HistorySwipeBackground`); 4 widget test baru. `flutter analyze` 0 error, `flutter test` 649 passed. Verifikasi manual device belum dilakukan.
 - Flutter + Supabase split-bill app; capture → OCR (Edge Function → LLM) → review/edit → split → settlement loop.
 - Lazy anonymous sign-in; onboarding has a preference slide (language + currency + theme with live preview) and optional promo slide.
 - Theme picker unified as bottom sheet (onboarding + Settings); transient preview via `themePreviewProvider`, persisted atomically with language + currency.
@@ -45,6 +46,7 @@
 
 ## Recent Entries
 
+- [2026-09-16/history-swipe-to-delete.md](2026-09-16/191500-history-swipe-to-delete.md)
 - [2026-09-15/maestro-apk-receive-sharing-intent-fix.md](2026-09-15/163500-maestro-apk-receive-sharing-intent-fix.md)
 - [2026-09-15/history-pagination-info-label.md](2026-09-15/150000-history-pagination-info-label.md)
 - [2026-09-15/llm-schema-mismatch-validator-fix.md](2026-09-15/154500-llm-schema-mismatch-validator-fix.md)

@@ -409,54 +409,59 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       final createdLabel = AppFormat.longDate(
                         AppFormat.intlLocaleOf(Localizations.localeOf(context)),
                       ).format(bill.createdAt);
-                      return Card(
-                        child: ListTile(
-                          isThreeLine: true,
-                          leading: BillStatusBadge(
-                            status: bill.paymentStatus,
-                            semanticLabel: _paymentStatusLabel(
-                              l10n,
-                              bill.paymentStatus,
+                      return Dismissible(
+                        key: ValueKey(bill.id),
+                        direction: DismissDirection.endToStart,
+                        background: const _HistorySwipeBackground(),
+                        // Delete runs inside confirmDismiss (not onDismissed):
+                        // the row must only disappear when the provider state
+                        // actually drops it, so a failed delete or a
+                        // cancelled dialog always leaves the row in place.
+                        // Always returns false — list updates come from the
+                        // provider, Dismissible must not self-animate.
+                        confirmDismiss: (_) async {
+                          await _confirmAndDeleteBill(
+                            context,
+                            ref,
+                            bill.id,
+                            currency.format(bill.totalAmount),
+                          );
+                          return false;
+                        },
+                        child: Card(
+                          child: ListTile(
+                            isThreeLine: true,
+                            leading: BillStatusBadge(
+                              status: bill.paymentStatus,
+                              semanticLabel: _paymentStatusLabel(
+                                l10n,
+                                bill.paymentStatus,
+                              ),
                             ),
-                          ),
-                          title: Text(bill.title),
-                          subtitle: Text(
-                            '${currency.format(bill.totalAmount)}  •  ${_paymentStatusLabel(l10n, bill.paymentStatus)}  •  $createdLabel\n${categoryLabel(bill.category, l10n)}',
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                tooltip: l10n.billDuplicateTooltip,
-                                onPressed: _duplicatingIds.contains(bill.id)
-                                    ? null
-                                    : () =>
-                                          _duplicateBill(context, ref, bill.id),
-                                icon: _duplicatingIds.contains(bill.id)
-                                    ? SizedBox(
-                                        width: 20.w,
-                                        height: 20.w,
-                                        child: const CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : const Icon(Icons.copy_outlined),
-                              ),
-                              IconButton(
-                                tooltip: l10n.deleteBillAction,
-                                onPressed: () => _deleteBill(
-                                  context,
-                                  ref,
-                                  bill.id,
-                                  currency.format(bill.totalAmount),
-                                ),
-                                icon: const Icon(Icons.delete_outline),
-                              ),
-                            ],
-                          ),
-                          onTap: () => context.pushNamed(
-                            Routes.billDetailName,
-                            pathParameters: {'billId': bill.id},
+                            title: Text(bill.title),
+                            subtitle: Text(
+                              '${currency.format(bill.totalAmount)}  •  ${_paymentStatusLabel(l10n, bill.paymentStatus)}  •  $createdLabel\n${categoryLabel(bill.category, l10n)}',
+                            ),
+                            trailing: IconButton(
+                              tooltip: l10n.billDuplicateTooltip,
+                              onPressed: _duplicatingIds.contains(bill.id)
+                                  ? null
+                                  : () =>
+                                        _duplicateBill(context, ref, bill.id),
+                              icon: _duplicatingIds.contains(bill.id)
+                                  ? SizedBox(
+                                      width: 20.w,
+                                      height: 20.w,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(Icons.copy_outlined),
+                            ),
+                            onTap: () => context.pushNamed(
+                              Routes.billDetailName,
+                              pathParameters: {'billId': bill.id},
+                            ),
                           ),
                         ),
                       );
@@ -541,7 +546,11 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     }
   }
 
-  Future<void> _deleteBill(
+  /// Shows the delete confirmation dialog and, when confirmed, deletes the
+  /// bill. Returns `true` only when the bill was actually deleted, so swipe
+  /// callers (`Dismissible.confirmDismiss`) can decide whether the row may
+  /// go away. The dialog itself is the anti-accidental-swipe guard.
+  Future<bool> _confirmAndDeleteBill(
     BuildContext context,
     WidgetRef ref,
     String billId,
@@ -577,7 +586,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         ],
       ),
     );
-    if (ok != true || !context.mounted) return;
+    if (ok != true || !context.mounted) return false;
     final deleted = await ref
         .read(historyListProvider.notifier)
         .deleteBill(billId);
@@ -592,7 +601,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         }
       }());
     }
-    if (!context.mounted) return;
+    if (!context.mounted) return deleted;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -600,6 +609,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
           content: Text(deleted ? l10n.deleteBillSuccess : l10n.errorGeneric),
         ),
       );
+    return deleted;
   }
 
   void _openFilterSheet(
@@ -654,6 +664,29 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     if (shouldUpgrade == true && context.mounted) {
       context.goNamed(Routes.settingsName);
     }
+  }
+}
+
+class _HistorySwipeBackground extends StatelessWidget {
+  const _HistorySwipeBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      alignment: Alignment.centerRight,
+      decoration: BoxDecoration(
+        color: scheme.error,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Icon(
+        Icons.delete_outline,
+        color: scheme.onError,
+        semanticLabel: AppL10n.of(context).deleteBillAction,
+        size: 24.r,
+      ),
+    );
   }
 }
 
