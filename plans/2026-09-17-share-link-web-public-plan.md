@@ -33,7 +33,12 @@ Copy-link menghasilkan URL https yang bisa dibuka siapa pun di browser (tanpa in
 - [x] Landing: route `/s/:token`, `ShareBillPage.tsx`, port kalkulator, tombol buka-di-aplikasi + fallback, noindex, strings
 - [x] Verifikasi: analyze 0 error/0 warning, `flutter test` 666 passed, landing `vite build` + `tsc` (1 error pra-eksis Waitlist)
 - [x] Review vs plan: F1 alive-bill predicate di semua active-set migration + revoked_count aktual (GET DIAGNOSTICS); F2 snackbar `shareLinkRotated` + test rotate; F3 unit test `ShareQuota.fromJson`; F4 koreksi komentar migration; F5 kembalikan churn `dart format` tak terkait agar diff minimal
-- [ ] Operator: commit+push migration di submodule + `supabase db push` + advisor re-run (MCP read-only)
+- [x] Operator: commit+push migration di submodule + `supabase db push` + advisor re-run (MCP read-only)
+  → DIKERJAKAN 2026-09-17: apply via MCP (CLI tanpa token), koreksi 1 kesalahan
+  transkripsi di resolve (blok items ganda → re-apply, terverifikasi), advisor re-run
+  tanpa temuan baru. Submodule commit `4d53566` branch `feat/share-token-global-quota`
+  ter-push; pointer parent `34b0c63` ter-push; landing `4ffcb00` ter-push.
+- [ ] Uji manual matriks (Free/Plus × kuota × downgrade, browser incognito, buka-di-aplikasi Android/iOS)
 - [ ] Operator: uji manual matriks (Free/Plus × kuota × downgrade, browser incognito, buka-di-aplikasi Android/iOS)
 - [ ] Memory entry + update `.memory/README.md`
 
@@ -47,6 +52,8 @@ Copy-link menghasilkan URL https yang bisa dibuka siapa pun di browser (tanpa in
 - iOS `APP_STORE_URL` landing masih kosong — fallback tombol buka-di-aplikasi di iOS = section unduh generik.
 
 ## Progress Log
+
+- 2026-09-17 — Apply + push selesai: migration TER-APPLY ke produksi via MCP (prasyarat remote lengkap, head `20260914120000`), lalu **insiden transkripsi**: payload apply pertama mengandung blok items ganda korup di `resolve_share_token` (tak ada di file; lolos karena plpgsql tak divalidasi saat CREATE) → terdeteksi via read-back `prosrc` → corrective re-apply → terverifikasi (body sesuai file, trigger aktif, grants benar, EXPLAIN valid, advisor tanpa temuan baru). File migration di disk TIDAK berubah (sudah benar). Commit: submodule `4d53566` (`feat/share-token-global-quota`, ter-push; PR belum dibuat), parent pointer `34b0c63` (ter-push ke main), landing `4ffcb00` (ter-push ke main). Pelajaran: untuk payload SQL panjang, verifikasi read-back wajib sebelum declare selesai.
 
 - 2026-09-17 — Plan dibuat dari sesi analisa 2026-09-16/17 (URL /s/, browser-dulu, tanggal tanpa jam, tempat disamarkan, tombol buka-di-aplikasi, kuota Free 1 / Plus 5 FIFO, entitlement habis sisa 1, peringatan in-app). Mulai implementasi dari DB.
 - 2026-09-17 — Implementasi selesai semua (kode saja, belum commit/apply): migration global-quota di submodule (untracked, menunggu operator), app (link https, privacy screen, quota+dialog, ARB), landing (`/s/:token` + kalkulator + buka-di-aplikasi). Verifikasi: analyze 0e/0w, test 666 passed, landing build hijau. Temuan penting: Riverpod 3 default-retry 10x untuk non-Error → `shareQuotaProvider` di-set `retry: (_, _) => null` (fail-fast). Sisa operator: submodule commit/push + db push + uji manual device.

@@ -35,6 +35,13 @@
 - **Verification:** `flutter analyze` 0 error/0 warning; `flutter test` 670 passed;
   landing `vite build` hijau; `dart format` hanya untuk baris baru (churn tak terkait
   dikembalikan agar diff minimal).
+- **Apply produksi (2026-09-17):** migration TER-APPLY via MCP (CLI tanpa token).
+  Insiden: payload pertama korup di transit (blok items ganda di resolve) → terdeteksi
+  via read-back `prosrc` → corrective re-apply → verified (4 fungsi sesuai file, trigger
+  aktif, grants benar, EXPLAIN valid, advisor tanpa temuan baru). File disk tak berubah.
+- **Push:** submodule `4d53566` branch `feat/share-token-global-quota` (PR belum dibuat);
+  parent `ee8352d` + pointer `34b0c63` ke main; landing `4ffcb00` ke main.
+  Sisa: uji manual matriks + merge PR submodule bila alur tim menghendaki.
 - **Review (2026-09-17):** F1 token bill-terhapus dikecualikan dari semua active-set
   (guard downgrade bisa buta bila newest menunjuk bill terhapus) + revoked aktual;
   F2 snackbar `shareLinkRotated` + test rotate; F3 unit test `ShareQuota.fromJson`;
