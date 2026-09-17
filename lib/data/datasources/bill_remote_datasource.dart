@@ -300,6 +300,18 @@ class BillRemoteDataSource {
     params: {'p_token_id': tokenId},
   );
 
+  /// Global quota for pre-create warnings (`my_share_token_quota`).
+  /// Returns null only on an empty response; errors propagate to the caller
+  /// so the UI can fall back to generic warnings.
+  Future<Map<String, dynamic>?> getShareQuota() async {
+    // ignore: inference_failure_on_function_invocation
+    final dynamic res = await _client.rpc('my_share_token_quota');
+    if (res == null) return null;
+    if (res is Map<String, dynamic>) return res;
+    if (res is Map) return Map<String, dynamic>.from(res);
+    return null;
+  }
+
   /// Public resolve (no login required). Returns null when the token is
   /// invalid, expired, revoked, or the bill was deleted.
   Future<Map<String, dynamic>?> resolveShareToken(String tokenHash) async {

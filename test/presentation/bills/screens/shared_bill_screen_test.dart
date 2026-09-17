@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../helpers/widget_test_harness.dart';
 
-SharedBill _shared() => SharedBill(
+SharedBill _shared({DateTime? receiptDate}) => SharedBill(
   bill: Bill(
     id: 'bill-1',
     title: 'Bukber',
@@ -19,6 +19,7 @@ SharedBill _shared() => SharedBill(
     currencyCode: 'IDR',
     tax: 10000,
     service: 0,
+    receiptDate: receiptDate,
     createdAt: DateTime.utc(2026, 9, 2),
   ),
   items: const [
@@ -56,7 +57,12 @@ void main() {
     ) async {
       await _pump(tester, AsyncData(_shared()));
 
-      expect(find.text('Bukber'), findsOneWidget);
+      // Privacy: masked title only — the full title never renders.
+      expect(find.text('Bukb•••'), findsOneWidget);
+      expect(find.text('Bukber'), findsNothing);
+      // Privacy: no receipt_date on the snapshot and created_at is never
+      // used as a fallback — no date row at all.
+      expect(find.text('September 2, 2026'), findsNothing);
       expect(find.text('Ani'), findsOneWidget);
       expect(find.text('Budi'), findsOneWidget);
       // Per-person total Ani = 50000 + half of 10000 tax.
@@ -64,31 +70,34 @@ void main() {
       // No settlement toggles anywhere on the public screen.
       expect(find.byType(Switch), findsNothing);
       // Join CTA present on success (plan Notes requirement).
-      expect(
-        find.text('Sign up to create your own bills'),
-        findsOneWidget,
-      );
+      expect(find.text('Sign up to create your own bills'), findsOneWidget);
     });
 
-    testWidgets('null snapshot renders expired view with CTA', (
+    testWidgets('receipt date renders date-only without clock time', (
       tester,
     ) async {
+      await _pump(
+        tester,
+        AsyncData(_shared(receiptDate: DateTime(2026, 9, 5))),
+      );
+
+      expect(find.text('September 5, 2026'), findsOneWidget);
+    });
+
+    testWidgets('null snapshot renders expired view with CTA', (tester) async {
       await _pump(tester, const AsyncData<SharedBill?>(null));
 
-      expect(
-        find.text('This link is expired or invalid.'),
-        findsOneWidget,
-      );
-      expect(
-        find.text('Sign up to create your own bills'),
-        findsOneWidget,
-      );
+      expect(find.text('This link is expired or invalid.'), findsOneWidget);
+      expect(find.text('Sign up to create your own bills'), findsOneWidget);
     });
 
     testWidgets('genuine error renders retry, not expired view', (
       tester,
     ) async {
-      await _pump(tester, AsyncError<SharedBill?>(Exception('offline'), StackTrace.empty));
+      await _pump(
+        tester,
+        AsyncError<SharedBill?>(Exception('offline'), StackTrace.empty),
+      );
 
       // Error view: message + retry, and NOT the expired copy.
       expect(find.textContaining('offline'), findsOneWidget);

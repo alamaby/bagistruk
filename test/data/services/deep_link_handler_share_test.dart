@@ -12,6 +12,22 @@ void main() {
       );
     });
 
+    test('extracts token from https public links', () {
+      expect(
+        DeepLinkHandler.parseShareToken(
+          Uri.parse('https://bagistruk.alamaby.com/s/abc123XYZ'),
+        ),
+        'abc123XYZ',
+      );
+      // Landing i18n prefix.
+      expect(
+        DeepLinkHandler.parseShareToken(
+          Uri.parse('https://bagistruk.alamaby.com/id/s/abc123XYZ'),
+        ),
+        'abc123XYZ',
+      );
+    });
+
     test('rejects auth callbacks and other schemes/hosts', () {
       expect(
         DeepLinkHandler.parseShareToken(
@@ -25,6 +41,18 @@ void main() {
       );
       expect(
         DeepLinkHandler.parseShareToken(Uri.parse('bagistruk://share/')),
+        isNull,
+      );
+      expect(
+        DeepLinkHandler.parseShareToken(
+          Uri.parse('https://bagistruk.alamaby.com/s/'),
+        ),
+        isNull,
+      );
+      expect(
+        DeepLinkHandler.parseShareToken(
+          Uri.parse('https://bagistruk.alamaby.com/'),
+        ),
         isNull,
       );
       expect(

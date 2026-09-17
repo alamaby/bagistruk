@@ -122,7 +122,16 @@ class BillRepositoryImpl implements IBillRepository {
     return BillShareLink(
       tokenId: row['token_id'].toString(),
       expiresAt: DateTime.parse(row['expires_at'].toString()),
+      // Pre-quota servers omit this column — tolerate as 0.
+      revokedCount: int.tryParse(row['revoked_count']?.toString() ?? '') ?? 0,
     );
+  });
+
+  @override
+  Future<Result<ShareQuota?>> getShareQuota() => guardAsync(() async {
+    final json = await _ds.getShareQuota();
+    if (json == null) return null;
+    return ShareQuota.fromJson(json);
   });
 
   @override

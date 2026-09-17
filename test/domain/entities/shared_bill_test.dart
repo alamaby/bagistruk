@@ -68,4 +68,39 @@ void main() {
       expect(shared.assignments, isEmpty);
     });
   });
+
+  group('ShareQuota.fromJson', () {
+    test('parses plan, count, and cap', () {
+      final quota = ShareQuota.fromJson({
+        'plan': 'plus',
+        'active_count': 4,
+        'max_allowed': 5,
+      });
+
+      expect(quota.isPlus, isTrue);
+      expect(quota.activeCount, 4);
+      expect(quota.maxAllowed, 5);
+      expect(quota.willExpireOld, isFalse);
+    });
+
+    test('free at cap reports willExpireOld', () {
+      final quota = ShareQuota.fromJson({
+        'plan': 'free',
+        'active_count': 1,
+        'max_allowed': 1,
+      });
+
+      expect(quota.isPlus, isFalse);
+      expect(quota.willExpireOld, isTrue);
+    });
+
+    test('falls back to plan-based cap when max is missing', () {
+      final plus = ShareQuota.fromJson({'plan': 'plus', 'active_count': 0});
+      expect(plus.maxAllowed, 5);
+
+      final free = ShareQuota.fromJson({'plan': 'other', 'active_count': 0});
+      expect(free.isPlus, isFalse);
+      expect(free.maxAllowed, 1);
+    });
+  });
 }

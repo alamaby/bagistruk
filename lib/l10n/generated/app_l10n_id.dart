@@ -1497,7 +1497,7 @@ class AppL10nId extends AppL10n {
 
   @override
   String get shareLinkFreeLimit =>
-      'Free hanya boleh 1 link aktif per bill. Matikan link lama atau upgrade ke Plus untuk rotate.';
+      'Batas link aktif tercapai. Matikan link lama atau coba lagi.';
 
   @override
   String shareLinkExpiresIn(String date) {
@@ -1509,6 +1509,54 @@ class AppL10nId extends AppL10n {
 
   @override
   String get shareLinkJoinCta => 'Daftar untuk membuat bill sendiri';
+
+  @override
+  String get shareLinkQuotaFreeNote =>
+      'Free: 1 link aktif. Link baru mematikan link lama.';
+
+  @override
+  String get shareLinkQuotaPlusNote => 'Plus: maks 5 link aktif.';
+
+  @override
+  String shareLinkQuotaPlusUsed(int used, int max) {
+    return 'Plus: $used dari $max link dipakai.';
+  }
+
+  @override
+  String get shareLinkWarnFreeTitle => 'Link lama akan dimatikan?';
+
+  @override
+  String get shareLinkWarnFreeBody =>
+      'Free hanya boleh 1 link aktif. Link baru untuk bill ini akan mematikan link lamamu.';
+
+  @override
+  String get shareLinkWarnRotateTitle => 'Ganti link saat ini?';
+
+  @override
+  String get shareLinkWarnRotateBody =>
+      'Link saat ini akan diganti. Penerima link lama tidak bisa membukanya lagi.';
+
+  @override
+  String get shareLinkWarnPlusTitle => 'Batas 5 link tercapai';
+
+  @override
+  String get shareLinkWarnPlusBody =>
+      'Link terlama akan dimatikan otomatis agar link baru bisa dibuat.';
+
+  @override
+  String get shareLinkWarnContinue => 'Lanjut & salin';
+
+  @override
+  String get shareLinkRevokedOldFree =>
+      'Link disalin. Link lama dimatikan (Free: 1 link aktif).';
+
+  @override
+  String get shareLinkRevokedOldPlus =>
+      'Link disalin. Link terlama dimatikan (Plus 5/5).';
+
+  @override
+  String get shareLinkRotated =>
+      'Link diganti. Penerima link lama tidak bisa membukanya lagi.';
 
   @override
   String get exportXlsx => 'Export XLSX';

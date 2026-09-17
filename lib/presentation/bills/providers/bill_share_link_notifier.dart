@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/billing/share_link_token.dart';
@@ -6,6 +7,7 @@ import '../../../core/error/result.dart';
 import '../../../core/network/supabase_client_provider.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../data/providers.dart';
+import '../../../domain/entities/shared_bill.dart';
 
 part 'bill_share_link_notifier.g.dart';
 
@@ -15,9 +17,10 @@ class BillShareState {
   final String tokenId;
   final DateTime expiresAt;
 
-  /// Raw `bagistruk://share/<token>` link from the most recent create call.
-  /// Memory-only (never persisted): the server stores only the SHA-256 hash,
-  /// so a re-share is possible only in the session that created the link.
+  /// Raw `https://bagistruk.alamaby.com/s/<token>` link from the most recent
+  /// create call. Memory-only (never persisted): the server stores only the
+  /// SHA-256 hash, so a re-share is possible only in the session that
+  /// created the link.
   final String? lastLink;
 }
 
@@ -27,9 +30,11 @@ class ShareLinkResult {
     this.link,
     this.limited = false,
     this.rateLimited = false,
+    this.revokedCount = 0,
   });
 
-  const ShareLinkResult.created(String? link) : this._(link: link);
+  const ShareLinkResult.created(String? link, {int revokedCount = 0})
+    : this._(link: link, revokedCount: revokedCount);
   const ShareLinkResult.limited() : this._(limited: true);
   const ShareLinkResult.rateLimited() : this._(rateLimited: true);
   const ShareLinkResult.failed() : this._();
@@ -37,6 +42,9 @@ class ShareLinkResult {
   final String? link;
   final bool limited;
   final bool rateLimited;
+
+  /// Older links the server auto-revoked for this create (global quota).
+  final int revokedCount;
 }
 
 @riverpod
@@ -119,7 +127,7 @@ class BillShareLink extends _$BillShareLink {
               ? const ShareLinkResult.limited()
               : const ShareLinkResult.failed();
         case Success(:final data):
-          final link = 'bagistruk://share/$token';
+          final link = ShareLinkToken.webLink(token);
           state = AsyncData(
             BillShareState(
               tokenId: data.tokenId,
@@ -134,7 +142,7 @@ class BillShareLink extends _$BillShareLink {
           } catch (e, st) {
             AppLogger.error('BillShareLink.clipboard failed', e, st);
           }
-          return ShareLinkResult.created(link);
+          return ShareLinkResult.created(link, revokedCount: data.revokedCount);
       }
     } catch (e, st) {
       AppLogger.error('BillShareLink.createAndCopy failed', e, st);
@@ -198,3 +206,22 @@ class BillShareLink extends _$BillShareLink {
     }
   }
 }
+
+/// Global share-link quota for the current user, backing the pre-create
+/// warnings in `_ShareLinkSection` ("Free: 1 link aktif", "Plus: X dari 5").
+///
+/// Null data (or error) means *unknown* — the UI falls back to generic
+/// warnings instead of blocking creation. Auto-disposed and invalidated
+/// after every create/revoke so the count never goes stale.
+///
+/// `retry` is disabled: quota is advisory (the server enforces the real
+/// limit), so a failure must surface immediately as "unknown" instead of
+/// churning up to 10 RPC retries in the background.
+final shareQuotaProvider = FutureProvider.autoDispose<ShareQuota?>((ref) async {
+  final repo = ref.read(billRepositoryProvider);
+  final res = await repo.getShareQuota();
+  return switch (res) {
+    Success(:final data) => data,
+    ResultFailure(:final failure) => throw failure,
+  };
+}, retry: (_, _) => null);

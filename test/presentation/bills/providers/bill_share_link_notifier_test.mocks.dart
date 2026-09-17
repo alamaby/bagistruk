@@ -368,6 +368,19 @@ class MockIBillRepository extends _i1.Mock implements _i2.IBillRepository {
           as _i3.Future<_i4.Result<void>>);
 
   @override
+  _i3.Future<_i4.Result<_i13.ShareQuota?>> getShareQuota() =>
+      (super.noSuchMethod(
+            Invocation.method(#getShareQuota, []),
+            returnValue: _i3.Future<_i4.Result<_i13.ShareQuota?>>.value(
+              _i6.dummyValue<_i4.Result<_i13.ShareQuota?>>(
+                this,
+                Invocation.method(#getShareQuota, []),
+              ),
+            ),
+          )
+          as _i3.Future<_i4.Result<_i13.ShareQuota?>>);
+
+  @override
   _i3.Future<_i4.Result<_i13.SharedBill?>> resolveShareToken(
     String? tokenHash,
   ) =>

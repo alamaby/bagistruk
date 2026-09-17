@@ -22,7 +22,7 @@ void main() {
     });
 
     test('shareText puts link first, fallback second', () {
-      const link = 'bagistruk://share/abc123';
+      const link = 'https://bagistruk.alamaby.com/s/abc123';
       const fallback = 'Get the app: https://x.test/';
       final text = ShareLinkToken.shareText(
         link: link,
@@ -31,6 +31,26 @@ void main() {
       expect(text, '$link\n$fallback');
       // Raw link stays intact on line 1 (tappable where installed).
       expect(text.split('\n').first, link);
+    });
+
+    test('webLink builds the canonical https share URL', () {
+      expect(
+        ShareLinkToken.webLink('abc123'),
+        'https://bagistruk.alamaby.com/s/abc123',
+      );
+    });
+
+    test('appLink keeps the legacy custom-scheme form', () {
+      expect(ShareLinkToken.appLink('abc123'), 'bagistruk://share/abc123');
+    });
+
+    test('maskPlaceName shows 4 chars + ellipsis', () {
+      expect(ShareLinkToken.maskPlaceName('Kopi Kenangan Senayan'), 'Kopi•••');
+      // Short titles collapse to first char + ellipsis (never full).
+      expect(ShareLinkToken.maskPlaceName('A'), 'A•••');
+      expect(ShareLinkToken.maskPlaceName('Kopi'), 'K•••');
+      expect(ShareLinkToken.maskPlaceName(''), isEmpty);
+      expect(ShareLinkToken.maskPlaceName('   '), isEmpty);
     });
   });
 

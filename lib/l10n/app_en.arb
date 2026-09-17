@@ -886,7 +886,7 @@
   "shareLinkRevoke": "Disable link",
   "shareLinkRevoked": "Link disabled.",
   "shareLinkExpired": "This link is expired or invalid.",
-  "shareLinkFreeLimit": "Free allows 1 active link per bill. Disable the old link or upgrade to Plus to rotate.",
+  "shareLinkFreeLimit": "Active link limit reached. Disable the old link or try again.",
   "shareLinkExpiresIn": "Valid until {date}",
   "@shareLinkExpiresIn": {
     "placeholders": {
@@ -897,6 +897,29 @@
   },
   "shareLinkPublicTitle": "Shared details",
   "shareLinkJoinCta": "Sign up to create your own bills",
+  "shareLinkQuotaFreeNote": "Free: 1 active link. A new link disables the old one.",
+  "shareLinkQuotaPlusNote": "Plus: max 5 active links.",
+  "shareLinkQuotaPlusUsed": "Plus: {used} of {max} links used.",
+  "@shareLinkQuotaPlusUsed": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "shareLinkWarnFreeTitle": "Disable the old link?",
+  "shareLinkWarnFreeBody": "Free allows 1 active link. A new link for this bill will disable your old one.",
+  "shareLinkWarnRotateTitle": "Replace the current link?",
+  "shareLinkWarnRotateBody": "The current link will be replaced. Recipients of the old link won't be able to open it anymore.",
+  "shareLinkWarnPlusTitle": "5-link limit reached",
+  "shareLinkWarnPlusBody": "The oldest link will be disabled automatically to make room for the new one.",
+  "shareLinkWarnContinue": "Continue & copy",
+  "shareLinkRevokedOldFree": "Link copied. Old link disabled (Free: 1 active link).",
+  "shareLinkRevokedOldPlus": "Link copied. Oldest link disabled (Plus 5/5).",
+  "shareLinkRotated": "Link replaced. The old link no longer works.",
   "exportXlsx": "Export XLSX",
   "exportXlsxPlusLocked": "Export XLSX (Plus)",
   "exportXlsxSubject": "Export {title}",

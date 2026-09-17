@@ -31,6 +31,7 @@ void main() {
       ),
     );
     provideDummy<Result<void>>(const Result.success(null));
+    provideDummy<Result<shared_bill.ShareQuota?>>(const Result.success(null));
   });
 
   setUp(() {
@@ -77,7 +78,7 @@ void main() {
 
       final result = await notifier().createAndCopy(billId);
 
-      expect(result.link, startsWith('bagistruk://share/'));
+      expect(result.link, startsWith('https://bagistruk.alamaby.com/s/'));
       expect(result.limited, isFalse);
       final state = container.read(billShareLinkFamily(billId)).value;
       expect(state?.tokenId, 'token-id');
@@ -275,7 +276,7 @@ void main() {
 
       final result = await notifier().recopyOrRotate(billId);
 
-      expect(result.link, startsWith('bagistruk://share/'));
+      expect(result.link, startsWith('https://bagistruk.alamaby.com/s/'));
       verify(mockRepo.revokeShareToken('old-token')).called(1);
       verify(
         mockRepo.createShareToken(
@@ -316,6 +317,80 @@ void main() {
       );
 
       expect(await notifier().revoke('token-id'), isFalse);
+    });
+  });
+
+  group('BillShareLink.createAndCopy revokedCount', () {
+    test('passes through server-reported auto-revoked count', () async {
+      when(
+        mockRepo.createShareToken(
+          billId: anyNamed('billId'),
+          tokenHash: anyNamed('tokenHash'),
+        ),
+      ).thenAnswer(
+        (_) async => Result.success(
+          shared_bill.BillShareLink(
+            tokenId: 'token-id',
+            expiresAt: DateTime.utc(2026, 9, 9),
+            revokedCount: 2,
+          ),
+        ),
+      );
+
+      final result = await notifier().createAndCopy(billId);
+
+      expect(result.link, isNotNull);
+      expect(result.revokedCount, 2);
+    });
+
+    test('defaults to zero when the server omits the column', () async {
+      stubCreateSuccess();
+
+      final result = await notifier().createAndCopy(billId);
+
+      expect(result.revokedCount, 0);
+    });
+  });
+
+  group('shareQuotaProvider', () {
+    test('returns quota on success', () async {
+      when(mockRepo.getShareQuota()).thenAnswer(
+        (_) async => const Result.success(
+          shared_bill.ShareQuota(isPlus: true, activeCount: 4, maxAllowed: 5),
+        ),
+      );
+
+      final quota = await container.read(shareQuotaProvider.future);
+
+      expect(quota?.isPlus, isTrue);
+      expect(quota?.activeCount, 4);
+      expect(quota?.willExpireOld, isFalse);
+    });
+
+    test('free quota at cap reports willExpireOld', () async {
+      when(mockRepo.getShareQuota()).thenAnswer(
+        (_) async => const Result.success(
+          shared_bill.ShareQuota(isPlus: false, activeCount: 1, maxAllowed: 1),
+        ),
+      );
+
+      final quota = await container.read(shareQuotaProvider.future);
+
+      expect(quota?.willExpireOld, isTrue);
+    });
+
+    test('failure surfaces as provider error (UI falls back)', () async {
+      when(mockRepo.getShareQuota()).thenAnswer(
+        (_) async => const Result.failure(Failure.unknown('boom', null)),
+      );
+
+      Object? caught;
+      try {
+        await container.read(shareQuotaProvider.future);
+      } catch (e) {
+        caught = e;
+      }
+      expect(caught, isA<Failure>());
     });
   });
 

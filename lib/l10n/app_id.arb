@@ -886,7 +886,7 @@
   "shareLinkRevoke": "Matikan link",
   "shareLinkRevoked": "Link dimatikan.",
   "shareLinkExpired": "Link sudah kedaluwarsa atau tidak valid.",
-  "shareLinkFreeLimit": "Free hanya boleh 1 link aktif per bill. Matikan link lama atau upgrade ke Plus untuk rotate.",
+  "shareLinkFreeLimit": "Batas link aktif tercapai. Matikan link lama atau coba lagi.",
   "shareLinkExpiresIn": "Berlaku sampai {date}",
   "@shareLinkExpiresIn": {
     "placeholders": {
@@ -897,6 +897,29 @@
   },
   "shareLinkPublicTitle": "Rincian berbagi",
   "shareLinkJoinCta": "Daftar untuk membuat bill sendiri",
+  "shareLinkQuotaFreeNote": "Free: 1 link aktif. Link baru mematikan link lama.",
+  "shareLinkQuotaPlusNote": "Plus: maks 5 link aktif.",
+  "shareLinkQuotaPlusUsed": "Plus: {used} dari {max} link dipakai.",
+  "@shareLinkQuotaPlusUsed": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "shareLinkWarnFreeTitle": "Link lama akan dimatikan?",
+  "shareLinkWarnFreeBody": "Free hanya boleh 1 link aktif. Link baru untuk bill ini akan mematikan link lamamu.",
+  "shareLinkWarnRotateTitle": "Ganti link saat ini?",
+  "shareLinkWarnRotateBody": "Link saat ini akan diganti. Penerima link lama tidak bisa membukanya lagi.",
+  "shareLinkWarnPlusTitle": "Batas 5 link tercapai",
+  "shareLinkWarnPlusBody": "Link terlama akan dimatikan otomatis agar link baru bisa dibuat.",
+  "shareLinkWarnContinue": "Lanjut & salin",
+  "shareLinkRevokedOldFree": "Link disalin. Link lama dimatikan (Free: 1 link aktif).",
+  "shareLinkRevokedOldPlus": "Link disalin. Link terlama dimatikan (Plus 5/5).",
+  "shareLinkRotated": "Link diganti. Penerima link lama tidak bisa membukanya lagi.",
   "exportXlsx": "Export XLSX",
   "exportXlsxPlusLocked": "Export XLSX (Plus)",
   "exportXlsxSubject": "Export {title}",

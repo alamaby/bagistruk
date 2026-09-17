@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/billing/share_link_token.dart';
 import '../../../core/format/app_format.dart';
 import '../../../core/format/currency_formatter.dart';
 import '../../../core/router/routes.dart';
@@ -13,10 +14,12 @@ import '../../shared/widgets/loading_view.dart';
 import '../providers/bill_detail_notifier.dart';
 import '../providers/shared_bill_provider.dart';
 
-/// Public read-only bill view opened from a `bagistruk://share/<token>` link.
+/// Public read-only bill view opened from a share link (`/s/<token>` https
+/// or legacy `bagistruk://share/<token>`).
 /// No login wall, no legal/onboarding gates (exempted in the router): viewers
 /// without an account see items, per-person totals, and payment status only.
-/// No toggles, no edits, no bank info, no phone numbers.
+/// No toggles, no edits, no bank info, no phone numbers, masked title, and
+/// receipt date without clock time.
 class SharedBillScreen extends ConsumerWidget {
   const SharedBillScreen({super.key, required this.token});
 
@@ -152,20 +155,26 @@ class _SharedBillView extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
       children: [
+        // Privacy: the title often carries the place/merchant name, so only
+        // a masked prefix is shown on public views.
         Text(
-          shared.bill.title,
+          ShareLinkToken.maskPlaceName(shared.bill.title),
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
         ),
         SizedBox(height: 4.h),
-        Text(
-          AppFormat.longDate(
-            AppFormat.intlLocaleOf(Localizations.localeOf(context)),
-          ).format(shared.bill.receiptDate ?? shared.bill.createdAt),
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+        // Privacy: receipt date only (no clock time), and never fall back to
+        // `created_at` — creation timestamps stay private. No date row at
+        // all when the receipt date is unknown.
+        if (shared.bill.receiptDate != null)
+          Text(
+            AppFormat.longDate(
+              AppFormat.intlLocaleOf(Localizations.localeOf(context)),
+            ).format(shared.bill.receiptDate!),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
-        ),
         SizedBox(height: 8.h),
         Text(
           '${l10n.billDetailTotalBill}: ${currency.format(shared.bill.totalAmount)}',

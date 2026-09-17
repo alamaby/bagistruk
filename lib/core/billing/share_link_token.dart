@@ -3,22 +3,47 @@ import 'dart:convert';
 
 import 'package:uuid/uuid.dart';
 
+import '../config/app_constants.dart';
+
 /// Share-link token helpers (M2/F5).
 ///
-/// The raw token is opaque and travels only in the deep link + clipboard.
+/// The raw token is opaque and travels only in the link + clipboard.
 /// What persists server-side is the SHA-256 hex (`token_hash`), so a DB leak
 /// never yields usable links. Matches the `email_canonical_hash` pattern.
+///
+/// Public links are https (`AppConstants.shareBaseUrl`, rendered by the
+/// sibling landing page without installing the app). Legacy
+/// `bagistruk://share/<token>` links keep resolving in-app (back-compat).
 class ShareLinkToken {
   ShareLinkToken._();
 
   static const _uuid = Uuid();
 
-  /// A fresh opaque token, e.g. `bagistruk://share/<token>`.
+  /// A fresh opaque token, e.g. `https://bagistruk.alamaby.com/s/<token>`.
   static String generate() => _uuid.v4().replaceAll('-', '');
 
   /// `token_hash` as stored in `bill_share_tokens`.
   static String hash(String token) =>
       sha256.convert(utf8.encode(token)).toString();
+
+  /// Public https link for [token] (copy-link output).
+  static String webLink(String token) => '${AppConstants.shareBaseUrl}$token';
+
+  /// Legacy in-app link (kept for back-compat + "open in app" buttons).
+  static String appLink(String token) => 'bagistruk://share/$token';
+
+  /// Partially masks a bill title for public views: the title often carries
+  /// the place/merchant name, so only the first 4 characters are shown
+  /// (e.g. `Kopi Kenangan Senayan` → `Kopi•••`). Rune-safe for unicode.
+  static String maskPlaceName(String title) {
+    final t = title.trim();
+    if (t.isEmpty) return t;
+    final runes = t.runes.toList(growable: false);
+    if (runes.length <= 4) {
+      return '${String.fromCharCode(runes.first)}•••';
+    }
+    return '${String.fromCharCodes(runes.take(4))}•••';
+  }
 
   /// Two-line share text: the raw tappable link first, then a localized
   /// fallback line for recipients without the app (custom-scheme links are

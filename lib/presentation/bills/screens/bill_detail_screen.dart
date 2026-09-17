@@ -856,6 +856,8 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
 
   Future<void> _create(BuildContext context, WidgetRef ref) async {
     if (_creating) return;
+    final proceed = await _confirmIfExpiring(context, ref, isRotate: false);
+    if (!proceed || !context.mounted) return;
     setState(() => _creating = true);
     try {
       final result = await ref
@@ -866,6 +868,63 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
     } finally {
       if (mounted) setState(() => _creating = false);
     }
+  }
+
+  /// Pre-create warning: creating a link can kill older link(s) (Free global
+  /// 1-active, Plus FIFO at 5). Returns true when nothing will die or the
+  /// user confirmed. Fail-safe: an unknown quota still warns Free users
+  /// (assume the worst) but never blocks creation.
+  Future<bool> _confirmIfExpiring(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool isRotate,
+  }) async {
+    final l10n = AppL10n.of(context);
+    final quota = ref.read(shareQuotaProvider).value;
+    final isPlus =
+        quota?.isPlus ??
+        switch (ref.read(ocrCreditStatusProvider)) {
+          AsyncData(:final value) => value?.isPlus ?? false,
+          _ => false,
+        };
+    String? title;
+    String? body;
+    if (isRotate) {
+      title = l10n.shareLinkWarnRotateTitle;
+      body = l10n.shareLinkWarnRotateBody;
+    } else if (quota != null) {
+      if (!quota.willExpireOld) return true;
+      if (quota.isPlus) {
+        title = l10n.shareLinkWarnPlusTitle;
+        body = l10n.shareLinkWarnPlusBody;
+      } else {
+        title = l10n.shareLinkWarnFreeTitle;
+        body = l10n.shareLinkWarnFreeBody;
+      }
+    } else if (!isPlus) {
+      title = l10n.shareLinkWarnFreeTitle;
+      body = l10n.shareLinkWarnFreeBody;
+    } else {
+      return true;
+    }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title!),
+        content: Text(body!),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancelAction),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.shareLinkWarnContinue),
+          ),
+        ],
+      ),
+    );
+    return confirmed == true;
   }
 
   /// Shows the snackbar for a create outcome, then reconciles the panel
@@ -879,6 +938,8 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
     ShareLinkResult result,
   ) async {
     final notifier = ref.read(billShareLinkFamily(widget.billId).notifier);
+    // Quota counts changed server-side — refresh the note + future warnings.
+    ref.invalidate(shareQuotaProvider);
     if (result.link == null) {
       await notifier.load(widget.billId);
       if (!context.mounted) return;
@@ -886,9 +947,22 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
     final l10n = AppL10n.of(context);
     final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
     if (result.link != null) {
+      // Tell the truth about auto-revoked older links (global quota).
+      final quota = ref.read(shareQuotaProvider).value;
+      final isPlus =
+          quota?.isPlus ??
+          switch (ref.read(ocrCreditStatusProvider)) {
+            AsyncData(:final value) => value?.isPlus ?? false,
+            _ => false,
+          };
+      final message = result.revokedCount > 0
+          ? (isPlus
+                ? l10n.shareLinkRevokedOldPlus
+                : l10n.shareLinkRevokedOldFree)
+          : l10n.shareLinkCopied;
       messenger.showSnackBar(
         SnackBar(
-          content: Text(l10n.shareLinkCopied),
+          content: Text(message),
           action: SnackBarAction(
             label: l10n.splitSummaryShare,
             onPressed: () {
@@ -1031,20 +1105,31 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
 
   Future<void> _recopy(BuildContext context, WidgetRef ref) async {
     if (_creating) return;
+    // Rotating (this session never saw the raw token) kills the current
+    // link — warn first. A plain re-copy kills nothing.
+    final current = ref.read(billShareLinkFamily(widget.billId)).value;
+    final wasRotate = current != null && current.lastLink == null;
+    if (wasRotate) {
+      final proceed = await _confirmIfExpiring(context, ref, isRotate: true);
+      if (!proceed || !context.mounted) return;
+    }
     setState(() => _creating = true);
     try {
       final result = await ref
           .read(billShareLinkFamily(widget.billId).notifier)
           .recopyOrRotate(widget.billId);
       if (!context.mounted) return;
+      ref.invalidate(shareQuotaProvider);
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
             content: Text(
-              result.link != null
-                  ? AppL10n.of(context).shareLinkCopied
-                  : AppL10n.of(context).shareLinkCreateFailed,
+              result.link == null
+                  ? AppL10n.of(context).shareLinkCreateFailed
+                  : wasRotate
+                  ? AppL10n.of(context).shareLinkRotated
+                  : AppL10n.of(context).shareLinkCopied,
             ),
           ),
         );
@@ -1062,6 +1147,7 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
         .read(billShareLinkFamily(widget.billId).notifier)
         .revoke(tokenId);
     if (!context.mounted) return;
+    if (ok) ref.invalidate(shareQuotaProvider);
     final l10n = AppL10n.of(context);
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1077,6 +1163,13 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
     final l10n = AppL10n.of(context);
     final scheme = Theme.of(context).colorScheme;
     final async = ref.watch(billShareLinkFamily(widget.billId));
+    final quota = ref.watch(shareQuotaProvider).value;
+    final isPlus =
+        quota?.isPlus ??
+        switch (ref.watch(ocrCreditStatusProvider)) {
+          AsyncData(:final value) => value?.isPlus ?? false,
+          _ => false,
+        };
 
     return Container(
       padding: EdgeInsets.all(16.w),
@@ -1105,6 +1198,22 @@ class _ShareLinkSectionState extends ConsumerState<_ShareLinkSection> {
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 8.h),
+          // Permanent quota note so the limit is known before intent forms
+          // (the dialog alone only fires at tap time).
+          Text(
+            quota == null
+                ? (isPlus
+                      ? l10n.shareLinkQuotaPlusNote
+                      : l10n.shareLinkQuotaFreeNote)
+                : (quota.isPlus
+                      ? l10n.shareLinkQuotaPlusUsed(
+                          quota.activeCount,
+                          quota.maxAllowed,
+                        )
+                      : l10n.shareLinkQuotaFreeNote),
+            style: TextStyle(fontSize: 12.sp, color: scheme.onSurfaceVariant),
           ),
           SizedBox(height: 8.h),
           switch (async) {

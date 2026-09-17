@@ -1498,7 +1498,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get shareLinkFreeLimit =>
-      'Free allows 1 active link per bill. Disable the old link or upgrade to Plus to rotate.';
+      'Active link limit reached. Disable the old link or try again.';
 
   @override
   String shareLinkExpiresIn(String date) {
@@ -1510,6 +1510,53 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get shareLinkJoinCta => 'Sign up to create your own bills';
+
+  @override
+  String get shareLinkQuotaFreeNote =>
+      'Free: 1 active link. A new link disables the old one.';
+
+  @override
+  String get shareLinkQuotaPlusNote => 'Plus: max 5 active links.';
+
+  @override
+  String shareLinkQuotaPlusUsed(int used, int max) {
+    return 'Plus: $used of $max links used.';
+  }
+
+  @override
+  String get shareLinkWarnFreeTitle => 'Disable the old link?';
+
+  @override
+  String get shareLinkWarnFreeBody =>
+      'Free allows 1 active link. A new link for this bill will disable your old one.';
+
+  @override
+  String get shareLinkWarnRotateTitle => 'Replace the current link?';
+
+  @override
+  String get shareLinkWarnRotateBody =>
+      'The current link will be replaced. Recipients of the old link won\'t be able to open it anymore.';
+
+  @override
+  String get shareLinkWarnPlusTitle => '5-link limit reached';
+
+  @override
+  String get shareLinkWarnPlusBody =>
+      'The oldest link will be disabled automatically to make room for the new one.';
+
+  @override
+  String get shareLinkWarnContinue => 'Continue & copy';
+
+  @override
+  String get shareLinkRevokedOldFree =>
+      'Link copied. Old link disabled (Free: 1 active link).';
+
+  @override
+  String get shareLinkRevokedOldPlus =>
+      'Link copied. Oldest link disabled (Plus 5/5).';
+
+  @override
+  String get shareLinkRotated => 'Link replaced. The old link no longer works.';
 
   @override
   String get exportXlsx => 'Export XLSX';

@@ -288,6 +288,14 @@ class MockBillRemoteDataSource extends _i1.Mock
           as _i7.Future<void>);
 
   @override
+  _i7.Future<Map<String, dynamic>?> getShareQuota() =>
+      (super.noSuchMethod(
+            Invocation.method(#getShareQuota, []),
+            returnValue: _i7.Future<Map<String, dynamic>?>.value(),
+          )
+          as _i7.Future<Map<String, dynamic>?>);
+
+  @override
   _i7.Future<Map<String, dynamic>?> resolveShareToken(String? tokenHash) =>
       (super.noSuchMethod(
             Invocation.method(#resolveShareToken, [tokenHash]),

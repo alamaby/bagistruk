@@ -2696,7 +2696,7 @@ abstract class AppL10n {
   /// No description provided for @shareLinkFreeLimit.
   ///
   /// In id, this message translates to:
-  /// **'Free hanya boleh 1 link aktif per bill. Matikan link lama atau upgrade ke Plus untuk rotate.'**
+  /// **'Batas link aktif tercapai. Matikan link lama atau coba lagi.'**
   String get shareLinkFreeLimit;
 
   /// No description provided for @shareLinkExpiresIn.
@@ -2716,6 +2716,84 @@ abstract class AppL10n {
   /// In id, this message translates to:
   /// **'Daftar untuk membuat bill sendiri'**
   String get shareLinkJoinCta;
+
+  /// No description provided for @shareLinkQuotaFreeNote.
+  ///
+  /// In id, this message translates to:
+  /// **'Free: 1 link aktif. Link baru mematikan link lama.'**
+  String get shareLinkQuotaFreeNote;
+
+  /// No description provided for @shareLinkQuotaPlusNote.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus: maks 5 link aktif.'**
+  String get shareLinkQuotaPlusNote;
+
+  /// No description provided for @shareLinkQuotaPlusUsed.
+  ///
+  /// In id, this message translates to:
+  /// **'Plus: {used} dari {max} link dipakai.'**
+  String shareLinkQuotaPlusUsed(int used, int max);
+
+  /// No description provided for @shareLinkWarnFreeTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Link lama akan dimatikan?'**
+  String get shareLinkWarnFreeTitle;
+
+  /// No description provided for @shareLinkWarnFreeBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Free hanya boleh 1 link aktif. Link baru untuk bill ini akan mematikan link lamamu.'**
+  String get shareLinkWarnFreeBody;
+
+  /// No description provided for @shareLinkWarnRotateTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Ganti link saat ini?'**
+  String get shareLinkWarnRotateTitle;
+
+  /// No description provided for @shareLinkWarnRotateBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Link saat ini akan diganti. Penerima link lama tidak bisa membukanya lagi.'**
+  String get shareLinkWarnRotateBody;
+
+  /// No description provided for @shareLinkWarnPlusTitle.
+  ///
+  /// In id, this message translates to:
+  /// **'Batas 5 link tercapai'**
+  String get shareLinkWarnPlusTitle;
+
+  /// No description provided for @shareLinkWarnPlusBody.
+  ///
+  /// In id, this message translates to:
+  /// **'Link terlama akan dimatikan otomatis agar link baru bisa dibuat.'**
+  String get shareLinkWarnPlusBody;
+
+  /// No description provided for @shareLinkWarnContinue.
+  ///
+  /// In id, this message translates to:
+  /// **'Lanjut & salin'**
+  String get shareLinkWarnContinue;
+
+  /// No description provided for @shareLinkRevokedOldFree.
+  ///
+  /// In id, this message translates to:
+  /// **'Link disalin. Link lama dimatikan (Free: 1 link aktif).'**
+  String get shareLinkRevokedOldFree;
+
+  /// No description provided for @shareLinkRevokedOldPlus.
+  ///
+  /// In id, this message translates to:
+  /// **'Link disalin. Link terlama dimatikan (Plus 5/5).'**
+  String get shareLinkRevokedOldPlus;
+
+  /// No description provided for @shareLinkRotated.
+  ///
+  /// In id, this message translates to:
+  /// **'Link diganti. Penerima link lama tidak bisa membukanya lagi.'**
+  String get shareLinkRotated;
 
   /// No description provided for @exportXlsx.
   ///

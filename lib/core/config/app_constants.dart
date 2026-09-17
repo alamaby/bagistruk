@@ -22,7 +22,7 @@ class AppConstants {
 
   /// External links shown on the About screen. Keep placeholders as '#'
   /// until the final public URLs are ready.
-  static const String websiteUrl = 'https://bagistruk.vercel.app/';
+  static const String websiteUrl = 'https://bagistruk.alamaby.com/';
   static const String githubUrl = 'https://github.com/alamaby';
   static const String linkedinUrl = 'https://linkedin.com/in/alamaby';
   static const String buyMeACoffeeUrl = 'https://buymeacoffee.com/alamaby';
@@ -40,7 +40,14 @@ class AppConstants {
   /// Owner-side share-link UI kill switch. Kept `false` while link
   /// creation/copy is unstable; the public `/share/:token` route stays so
   /// already-shared links keep resolving.
-  static const bool shareLinksEnabled = false;
+  static const bool shareLinksEnabled = true;
+
+  /// Canonical host + base for public https share-links rendered by the
+  /// sibling landing page (`bagistruk-landing-page`, route `/s/:token`).
+  /// Copy-link output uses [shareBaseUrl]; must stay in sync with the
+  /// landing `SITE_URL`.
+  static const String shareHost = 'bagistruk.alamaby.com';
+  static const String shareBaseUrl = 'https://bagistruk.alamaby.com/s/';
 
   /// Default share weight when a participant claims one item alone.
   static const double defaultShareWeight = 1.0;

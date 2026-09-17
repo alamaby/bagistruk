@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../core/config/app_constants.dart';
 import '../../core/utils/app_logger.dart';
 import 'password_recovery_session.dart';
 
@@ -38,18 +39,31 @@ class DeepLinkHandler {
   final _appLinks = AppLinks();
   StreamSubscription<Uri>? _sub;
 
-  /// Token from the most recent `bagistruk://share/<token>` link that the
-  /// router has not consumed yet. Kept outside the widget tree because the
-  /// handler runs before `ProviderScope` mounts on cold start.
+  /// Token from the most recent share link that the router has not consumed
+  /// yet. Kept outside the widget tree because the handler runs before
+  /// `ProviderScope` mounts on cold start.
   static String? _pendingShareToken;
 
-  /// Extracts the share token from a `bagistruk://share/<token>` URI, or
-  /// null for anything else. Pure — unit-tested.
+  /// Extracts the share token from a `bagistruk://share/<token>` URI or a
+  /// public https link (`https://bagistruk.alamaby.com/s/<token>`, with an
+  /// optional `/id` locale prefix from the landing page). Returns null for
+  /// anything else. Pure — unit-tested.
   static String? parseShareToken(Uri uri) {
-    if (uri.scheme != 'bagistruk' || uri.host != 'share') return null;
-    if (uri.pathSegments.isEmpty) return null;
-    final token = uri.pathSegments.first.trim();
-    return token.isEmpty ? null : token;
+    if (uri.scheme == 'bagistruk' && uri.host == 'share') {
+      if (uri.pathSegments.isEmpty) return null;
+      final token = uri.pathSegments.first.trim();
+      return token.isEmpty ? null : token;
+    }
+    if ((uri.scheme == 'https' || uri.scheme == 'http') &&
+        uri.host == AppConstants.shareHost) {
+      // Segments look like [s, <token>] or [id, s, <token>].
+      final segs = uri.pathSegments;
+      final idx = segs.indexOf('s');
+      if (idx < 0 || idx + 1 >= segs.length) return null;
+      final token = segs[idx + 1].trim();
+      return token.isEmpty ? null : token;
+    }
+    return null;
   }
 
   /// Takes the pending share token, if any. One-shot: the router redirect
@@ -83,8 +97,9 @@ class DeepLinkHandler {
 
   Future<void> _processUri(Uri uri) async {
     final raw = uri.toString();
-    // Public share-links (M2/F5) never touch Supabase auth: stash the token
-    // for the router redirect and stop. The token itself is never logged.
+    // Public share-links (M2/F5, custom-scheme or https) never touch
+    // Supabase auth: stash the token for the router redirect and stop.
+    // The token itself is never logged.
     final shareToken = parseShareToken(uri);
     if (shareToken != null) {
       _pendingShareToken = shareToken;

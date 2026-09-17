@@ -1,9 +1,11 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-16 19:15
+- **Updated:** 2026-09-17 10:20
 - **Format version:** 1
 
 ## Current State
+
+- **2026-09-17:** Share-link web publik (code only, belum commit/apply): copy-link jadi `https://bagistruk.alamaby.com/s/<token>` dirender landing (`ShareBillPage.tsx` + kalkulator + tombol buka-di-aplikasi + noindex); kuota global Free 1 auto-expire / Plus 5 FIFO / downgrade sisa 1 via migration `20260917000000` (untracked di submodule, menunggu operator `db push`); privacy in-app (mask judul, date-only); quota note + dialog + snackbar revoked; `shareLinksEnabled=true`. `flutter analyze` 0e/0w, `flutter test` 666 passed, landing build hijau. Temuan: Riverpod 3 default-retry 10x untuk non-Error → `shareQuotaProvider` di-set fail-fast. Detail: [plan](../plans/2026-09-17-share-link-web-public-plan.md).
 
 - **2026-09-16:** History swipe-to-delete: tombol ikon hapus per-row diganti `Dismissible(endToStart)` + dialog konfirmasi tetap (`_confirmAndDeleteBill`, `_HistorySwipeBackground`); 4 widget test baru. `flutter analyze` 0 error, `flutter test` 649 passed. Verifikasi manual device belum dilakukan.
 - Flutter + Supabase split-bill app; capture → OCR (Edge Function → LLM) → review/edit → split → settlement loop.
@@ -46,6 +48,8 @@
 
 ## Recent Entries
 
+- [2026-09-17/share-link-web-public.md](2026-09-17/102000-share-link-web-public.md)
+- [2026-09-16/landing-preline-revamp-plan.md](2026-09-16/222200-landing-preline-revamp-plan.md)
 - [2026-09-16/history-swipe-to-delete.md](2026-09-16/191500-history-swipe-to-delete.md)
 - [2026-09-15/maestro-apk-receive-sharing-intent-fix.md](2026-09-15/163500-maestro-apk-receive-sharing-intent-fix.md)
 - [2026-09-15/history-pagination-info-label.md](2026-09-15/150000-history-pagination-info-label.md)

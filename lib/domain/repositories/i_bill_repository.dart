@@ -59,13 +59,16 @@ abstract interface class IBillRepository {
   /// available before write operations that require RLS authorization.
   Future<Result<void>> ensureSignedIn();
 
-  /// Share-link (M2/F5): create/rotate a token (server enforces Free 1-active
-  /// via `plan_code`), revoke it, or resolve it publicly (no login).
+  /// Share-link (M2/F5): create a token (server auto-revokes older actives
+  /// per the global quota — Free 1/user, Plus 5/user FIFO — and reports how
+  /// many died via [BillShareLink.revokedCount]), revoke it, read the global
+  /// quota for pre-create warnings, or resolve it publicly (no login).
   Future<Result<BillShareLink>> createShareToken({
     required String billId,
     required String tokenHash,
   });
   Future<Result<void>> revokeShareToken(String tokenId);
+  Future<Result<ShareQuota?>> getShareQuota();
   Future<Result<SharedBill?>> resolveShareToken(String tokenHash);
 
   /// M4/F12 bill templates (fase 1, tanpa grup). Server enforces Free max 5

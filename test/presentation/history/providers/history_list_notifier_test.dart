@@ -186,6 +186,9 @@ class FakeBillRepository implements IBillRepository {
   Future<Result<void>> revokeShareToken(String tokenId) =>
       throw UnimplementedError();
   @override
+  Future<Result<ShareQuota?>> getShareQuota() =>
+      throw UnimplementedError();
+  @override
   Future<Result<SharedBill?>> resolveShareToken(String tokenHash) =>
       throw UnimplementedError();
 

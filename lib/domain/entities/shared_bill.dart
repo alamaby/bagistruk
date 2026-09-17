@@ -95,8 +95,49 @@ class SharedBill {
 
 /// Active share-link state for one bill (owner view).
 class BillShareLink {
-  const BillShareLink({required this.tokenId, required this.expiresAt});
+  const BillShareLink({
+    required this.tokenId,
+    required this.expiresAt,
+    this.revokedCount = 0,
+  });
 
   final String tokenId;
   final DateTime expiresAt;
+
+  /// How many older active links the server auto-revoked while creating
+  /// this one (Free global rotate / Plus FIFO). 0 when nothing died.
+  /// Defaults to 0 so rows from pre-quota servers keep parsing.
+  final int revokedCount;
+}
+
+/// Global share-link quota for the current user (owner view).
+/// Served by `my_share_token_quota()`; null (unknown) when the call fails.
+class ShareQuota {
+  const ShareQuota({
+    required this.isPlus,
+    required this.activeCount,
+    required this.maxAllowed,
+  });
+
+  final bool isPlus;
+  final int activeCount;
+  final int maxAllowed;
+
+  /// True when creating one more link will kill older link(s).
+  bool get willExpireOld => activeCount >= maxAllowed;
+
+  factory ShareQuota.fromJson(Map<String, dynamic> json) {
+    int asInt(Object? v) {
+      if (v is num) return v.toInt();
+      return int.tryParse(v?.toString() ?? '') ?? 0;
+    }
+
+    final plan = json['plan']?.toString() ?? 'free';
+    final max = asInt(json['max_allowed']);
+    return ShareQuota(
+      isPlus: plan == 'plus',
+      activeCount: asInt(json['active_count']),
+      maxAllowed: max > 0 ? max : (plan == 'plus' ? 5 : 1),
+    );
+  }
 }

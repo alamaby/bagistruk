@@ -68,7 +68,8 @@ class Routes {
   static const String callback = '/callback';
   static const String callbackName = 'callback';
 
-  /// Public read-only bill view (`bagistruk://share/<token>`). No login wall
+  /// Public read-only bill view (https `/s/<token>` links and legacy
+  /// `bagistruk://share/<token>`). No login wall
   /// and no legal/onboarding gates — viewers without an account must land
   /// here directly (exempted in the router redirect).
   static const String share = '/share/:token';
