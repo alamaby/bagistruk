@@ -1,6 +1,6 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-17 10:20
+- **Updated:** 2026-09-17 11:45
 - **Format version:** 1
 
 ## Current State
@@ -24,7 +24,7 @@
 
 - **Memory format:** active memory lives in `.memory/`; `PROJECT_MEMORY.md` is a historical archive (read-only) linked below.
 - **Onboarding layout:** illustrations are centered vertically via `LayoutBuilder` + `ConstrainedBox(minHeight)` inside `_page()` scroll view.
-- **Versioning:** current pubspec version `0.30.1+76` (onboarding theme review fix — patch bump).
+- **Versioning:** current pubspec version `0.35.0+90` (v0.35.0 tag: share-link web publik).
 - **Legal docs (2026-09-04):** effective date bumped to 2026-09-04; HMAC v2 signals enumerated, marketing opt-in post-confirmation clarified, share-to-scan disclosed. `app_config` `legal.terms_version`/`privacy_version` must be bumped 1→2 via Dashboard after app rollout to trigger re-accept (pending operator). Sibling landing-page `legalContent.ts` + public privacy URL + Play Console Data Safety pending manual sync.
 - **Ads readiness (2026-09-03):** jangan pernah meng-issue `ad.load()` sebelum `AdService.ready` (dengan timeout); init ads tetap non-blocking di `main()` (insiden launch freeze). Banner failure class harus self-healing (watchdog) + observable (log `BannerAd ... tag=<placement>`).
 - **SQL standard baru (2026-08-30):** setiap fungsi public baru wajib `REVOKE ALL ... FROM PUBLIC, anon, authenticated` + GRANT eksplisit; `REVOKE FROM PUBLIC` saja tidak cukup (default privileges Supabase).
@@ -48,6 +48,7 @@
 
 ## Recent Entries
 
+- [2026-09-17/release-v0-35-0.md](2026-09-17/114500-release-v0-35-0.md)
 - [2026-09-17/share-link-web-public.md](2026-09-17/102000-share-link-web-public.md)
 - [2026-09-16/landing-preline-revamp-plan.md](2026-09-16/222200-landing-preline-revamp-plan.md)
 - [2026-09-16/history-swipe-to-delete.md](2026-09-16/191500-history-swipe-to-delete.md)
