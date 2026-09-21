@@ -1,10 +1,11 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-17 11:45
+- **Updated:** 2026-09-21 12:00
 - **Format version:** 1
 
 ## Current State
 
+- **2026-09-21:** Cloudflare Workers AI provider integration (release v0.36.0 — committed, tag v0.36.0): `callCloudflare()` + `case "cloudflare"` (+3 alias) di `process-receipt/index.ts` (reuse OpenAI-compatible, timeout 30s FINAL dari Spike-3: 6/6 OK, p50 ~6.3s, p95 ~9.5s); placeholder `CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_API_TOKEN` di `.env.example` (nilai real di `.env.local`, tidak pernah dicetak/di-commit); spike aman: vision 1×/2× → 200 JSON valid, tanpa-`response_format` → fence markdown (parser existing menanganinya). `deno check` pass, `deno test` 64 passed. Deploy/DB insert/QA menunggu operator. Detail: [plan](../plans/2026-09-21-cloudflare-workers-ai-gemma-pilot-plan.md).
 - **2026-09-17:** Share-link web publik (code only, belum commit/apply): copy-link jadi `https://bagistruk.alamaby.com/s/<token>` dirender landing (`ShareBillPage.tsx` + kalkulator + tombol buka-di-aplikasi + noindex); kuota global Free 1 auto-expire / Plus 5 FIFO / downgrade sisa 1 via migration `20260917000000` (untracked di submodule, menunggu operator `db push`); privacy in-app (mask judul, date-only); quota note + dialog + snackbar revoked; `shareLinksEnabled=true`. `flutter analyze` 0e/0w, `flutter test` 666 passed, landing build hijau. Temuan: Riverpod 3 default-retry 10x untuk non-Error → `shareQuotaProvider` di-set fail-fast. Detail: [plan](../plans/2026-09-17-share-link-web-public-plan.md).
 
 - **2026-09-16:** History swipe-to-delete: tombol ikon hapus per-row diganti `Dismissible(endToStart)` + dialog konfirmasi tetap (`_confirmAndDeleteBill`, `_HistorySwipeBackground`); 4 widget test baru. `flutter analyze` 0 error, `flutter test` 649 passed. Verifikasi manual device belum dilakukan.
@@ -24,7 +25,7 @@
 
 - **Memory format:** active memory lives in `.memory/`; `PROJECT_MEMORY.md` is a historical archive (read-only) linked below.
 - **Onboarding layout:** illustrations are centered vertically via `LayoutBuilder` + `ConstrainedBox(minHeight)` inside `_page()` scroll view.
-- **Versioning:** current pubspec version `0.35.0+90` (v0.35.0 tag: share-link web publik).
+- **Versioning:** current pubspec version `0.36.0+91` (v0.36.0 tag: cloudflare workers ai provider).
 - **Legal docs (2026-09-04):** effective date bumped to 2026-09-04; HMAC v2 signals enumerated, marketing opt-in post-confirmation clarified, share-to-scan disclosed. `app_config` `legal.terms_version`/`privacy_version` must be bumped 1→2 via Dashboard after app rollout to trigger re-accept (pending operator). Sibling landing-page `legalContent.ts` + public privacy URL + Play Console Data Safety pending manual sync.
 - **Ads readiness (2026-09-03):** jangan pernah meng-issue `ad.load()` sebelum `AdService.ready` (dengan timeout); init ads tetap non-blocking di `main()` (insiden launch freeze). Banner failure class harus self-healing (watchdog) + observable (log `BannerAd ... tag=<placement>`).
 - **SQL standard baru (2026-08-30):** setiap fungsi public baru wajib `REVOKE ALL ... FROM PUBLIC, anon, authenticated` + GRANT eksplisit; `REVOKE FROM PUBLIC` saja tidak cukup (default privileges Supabase).
@@ -48,6 +49,7 @@
 
 ## Recent Entries
 
+- [2026-09-21/cloudflare-workers-ai-provider.md](2026-09-21/120000-cloudflare-workers-ai-provider.md)
 - [2026-09-17/release-v0-35-0.md](2026-09-17/114500-release-v0-35-0.md)
 - [2026-09-17/share-link-web-public.md](2026-09-17/102000-share-link-web-public.md)
 - [2026-09-16/landing-preline-revamp-plan.md](2026-09-16/222200-landing-preline-revamp-plan.md)

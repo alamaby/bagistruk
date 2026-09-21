@@ -75,7 +75,7 @@ presentation/  →  domain/  ←  data/
 
 **Design principles:**
 - All LLM API keys live in `llm_configs` (server-side only). Never bundled in the client.
-- Provider failover = rows with increasing `priority`. Swapping a provider, model, or key requires no redeploy.
+- Provider failover = route-scoped rows with increasing `priority`. Swapping a provider, model, key, Plus priority route, or per-user experiment requires no redeploy after the route columns exist.
 - `llm_logs` records every attempt (success and failure) fire-and-forget so it never blocks the user response.
 
 ---
@@ -162,20 +162,22 @@ Source: [supabase/functions/process-receipt/index.ts](supabase/functions/process
 1. **CORS preflight** — `OPTIONS` → 204.
 2. **Validate body** — `images: string[]` must be non-empty with all string values. Otherwise 400.
 3. **Init service-role client** — uses `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (auto-injected by Supabase, no manual setup).
-4. **Query `llm_configs`** — `is_active=true ORDER BY priority ASC`. Error or empty result → 500 `no_active_provider`.
+4. **Query route-specific LLM configs** — per-user experiment override first, then `plus_priority` + `default` for Plus users, otherwise `default`. Error or empty result → 500 `no_active_provider`.
 5. **Failover loop** — for each row:
    - System prompt is built per-request via `buildSystemPrompt(currency)` — appends locale rules ('.' is thousand separator in ID/EU; '.' is decimal in US/UK) and, for zero-decimal currencies (`IDR / JPY / KRW / VND / CLP / ISK / HUF / TWD`), a hard rule that every numeric output must be a JSON integer.
-   - Dispatches to `callProvider(cfg, images, currency, hint)` by `cfg.provider_name.toLowerCase()`:
-     - `gemini` → Gemini REST (`POST /v1beta/models/{model}:generateContent`)
-     - `openrouter` → OpenAI-compatible (`POST {base_url}/chat/completions`)
-     - `nvidianim` → placeholder `not_implemented`
-     - unknown → `ProviderError('unsupported_provider', 400)`
+    - Dispatches to `callProvider(cfg, images, currency, hint)` by `cfg.provider_name.toLowerCase()`:
+      - `gemini` → Gemini REST (`POST /v1beta/models/{model}:generateContent`)
+      - `openrouter` → OpenAI-compatible (`POST {base_url}/chat/completions`)
+      - `nvidia` / `nvidia_nim` / `nvidianim` → Nvidia NIM OpenAI-compatible (`POST {base_url}/chat/completions`)
+      - `cloudflare` (+ aliases `cloudflare_workers_ai`, `workers_ai`, `workersai`) → Cloudflare Workers AI OpenAI-compatible (`POST {base_url}/chat/completions`, timeout 30s)
+      - `ollama` → Ollama native (`POST {base_url}/api/chat`)
+      - unknown → `ProviderError('unsupported_provider', 400)`
    - `model_name` and `api_key` always come from the DB row — no hardcoded defaults.
    - Fire-and-forget INSERT to `llm_logs` (image_count, model, latency_ms, status_code, error/summary).
    - Success → return 200 immediately.
    - Retryable failure (`429 / 5xx / 408`) → continue to next row.
    - Non-retryable failure (other 4xx) → break loop.
-6. **Post-process** — on the first successful payload, `normalizePayload(payload, currency)` runs before `jsonResponse`. For zero-decimal currencies it forces every numeric field (`item.price`, `detected_total`, `detected_tax`, `detected_service`) to an integer by reconstructing from the string form: a value the JSON parser saw as `10.455` is restripped to `10455`. This is the safety net for cases where the LLM ignores the prompt rule and still returns a fractional value (the most common Indonesian-receipt failure mode).
+6. **Post-process** — on the first successful payload, `normalizePayload(payload, currency)` runs before `jsonResponse`. For zero-decimal currencies it forces every numeric field (`item.price`, `detected_total`, `detected_tax`, `detected_service`) to an integer. If the JSON parser sees a fractional value such as `10.455` or `15.3`, it is treated as a thousands-separated value and scaled back to `10455` or `15300`. This is the safety net for cases where the LLM ignores the prompt rule and still returns a fractional value (the most common Indonesian-receipt failure mode).
 7. **No successful payload** → 502 `all_providers_failed` with `attempts` array detailing each tried provider.
 
 ### URL Builder Per Provider
@@ -186,6 +188,9 @@ Source: [supabase/functions/process-receipt/index.ts](supabase/functions/process
 | Gemini | `https://generativelanguage.googleapis.com/v1beta` | `…/models/{model}:generateContent?key={api_key}` |
 | OpenRouter | `https://openrouter.ai/api/v1` | `…/chat/completions` |
 | OpenRouter | `https://openrouter.ai/api/v1/chat/completions` | used as-is |
+| Nvidia NIM | `https://integrate.api.nvidia.com/v1` | `…/chat/completions` |
+| Nvidia NIM | `https://integrate.api.nvidia.com/v1/chat/completions` | used as-is |
+| Cloudflare Workers AI | `https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1` | `.../chat/completions` (`model_name` = full `@cf/...` id) |
 
 The builder is defensive — all conventions above are handled without double-appending path segments.
 
@@ -257,24 +262,49 @@ Supabase PostgREST (tables: bills + items)
 
 ## 5. LLM Configuration (`llm_configs`)
 
-Each row is one provider option, consumed in ascending `priority` order. **`model_name` is required** — the Edge Function has no fallback default.
+Each row is one provider option, consumed in ascending `priority` order within its route scope. **`model_name` is required** — the Edge Function has no fallback default.
 
 ```sql
-INSERT INTO llm_configs(provider_name, api_key, base_url, model_name, priority, is_active) VALUES
+INSERT INTO llm_configs(provider_name, api_key, base_url, model_name, priority, is_active, route_scope, fallback_policy) VALUES
 -- Gemini as primary (priority 1)
-('gemini',     'AIza...',   'https://generativelanguage.googleapis.com', 'gemini-2.0-flash',                1, TRUE),
+('gemini',     'AIza...',   'https://generativelanguage.googleapis.com', 'gemini-2.0-flash',                1, TRUE, 'default', 'retryable_only'),
 -- OpenRouter as fallback (priority 2)
-('openrouter', 'sk-or-...', 'https://openrouter.ai/api/v1',             'google/gemini-2.0-flash-exp:free', 2, TRUE);
+('openrouter', 'sk-or-...', 'https://openrouter.ai/api/v1',             'google/gemini-2.0-flash-exp:free', 2, TRUE, 'default', 'retryable_only'),
+-- Nvidia NIM as another fallback (priority 3)
+('nvidia',     'nvapi-...', 'https://integrate.api.nvidia.com/v1',      'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning', 3, TRUE, 'default', 'retryable_only');
 ```
 
 **Operational rules:**
 - `is_active=false` — row is skipped without deletion.
+- `route_scope='default'` — normal provider chain for all users.
+- `route_scope='plus_priority'` — attempted before default only for users whose server-side credit status is `plan_code='plus'`.
+- `route_scope='experiment'` — only used when an admin assigns the row to a user through `llm_user_overrides`.
+- `fallback_policy='always'` is recommended for Plus priority and experiment rows that should fall back to default when their key/model/provider fails.
 - `model_name` must be explicit. If NULL or empty, the attempt is logged to `llm_logs` as `config_invalid` and the loop continues.
 - Key rotation: `UPDATE llm_configs SET api_key='...' WHERE id=...` — no redeploy needed.
 - Model rotation: `UPDATE llm_configs SET model_name='...' WHERE id=...` — takes effect on the next request.
 - `base_url` conventions:
   - Gemini: `https://generativelanguage.googleapis.com` (host only) — the Edge Function appends `/v1beta/models/...`.
   - OpenRouter: `https://openrouter.ai/api/v1` (no `/chat/completions`) — the Edge Function appends the endpoint.
+  - Nvidia NIM: `https://integrate.api.nvidia.com/v1` (no `/chat/completions`) — the Edge Function appends the endpoint.
+  - Nvidia NIM uses `/no_think`, `max_tokens=4096`, and a 60-second timeout because reasoning VLM responses can be slower and may otherwise put useful output outside `message.content`.
+  - Cloudflare Workers AI: `https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1` (no `/chat/completions`) — the Edge Function appends the endpoint. `model_name` is the full `@cf/...` id (pilot: `@cf/google/gemma-4-26b-a4b-it`), timeout 30s pending the latency spike.
+
+**Per-user experiment override:**
+```sql
+INSERT INTO llm_user_overrides(user_id, llm_config_id, fallback_to_default, expires_at, notes)
+VALUES (
+  '<AUTH_USER_ID>',
+  '<EXPERIMENT_LLM_CONFIG_ID>',
+  TRUE,
+  NOW() + INTERVAL '7 days',
+  'Temporary provider/model test'
+);
+```
+
+The override config is tried first. If `fallback_to_default=TRUE`, the request
+continues to the caller's normal route after the experiment fails. If it is
+`FALSE`, the experiment is isolated and failures are returned to that user.
 
 **Verify valid Gemini models:**
 ```bash
@@ -315,14 +345,26 @@ ORDER BY provider;
 
 ## 7. Adding a New LLM Provider
 
-### OpenAI-compatible providers (Groq, Together, DeepSeek, etc.)
+### OpenAI-compatible providers (Nvidia NIM, Cloudflare Workers AI, Groq, Together, DeepSeek, etc.)
 
-Insert a new row — no code change required:
+For provider aliases already wired in the dispatcher, insert a new row — no code change required. Nvidia NIM is already wired through `nvidia`, `nvidia_nim`, and `nvidianim`; Cloudflare Workers AI through `cloudflare`, `cloudflare_workers_ai`, `workers_ai`, and `workersai`:
+
+```sql
+INSERT INTO llm_configs(provider_name, api_key, base_url, model_name, priority, is_active)
+VALUES ('nvidia', 'nvapi-...', 'https://integrate.api.nvidia.com/v1', 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning', 3, TRUE);
+```
+
+```sql
+INSERT INTO llm_configs(provider_name, api_key, base_url, model_name, priority, is_active)
+VALUES ('cloudflare', '<CLOUDFLARE_API_TOKEN>', 'https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1', '@cf/google/gemma-4-26b-a4b-it', 5, TRUE);
+```
+
+For another OpenAI-compatible provider, add a dispatcher alias and point it to `callOpenAICompatible(...)`, then insert the DB row:
+
 ```sql
 INSERT INTO llm_configs(provider_name, api_key, base_url, model_name, priority, is_active)
 VALUES ('groq', 'gsk_...', 'https://api.groq.com/openai/v1', 'llama-3.3-70b-versatile', 3, TRUE);
 ```
-Then add `case "groq": return await callOpenRouter(cfg, images, hint);` in the dispatcher (or refactor into a shared `callOpenAICompatible` helper).
 
 ### Providers with a custom wire format (Anthropic, etc.)
 
@@ -493,7 +535,7 @@ The fix is defense-in-depth, currency-aware:
 
 1. **Client passes currency.** [`receipt_capture_screen.dart`](lib/presentation/ocr/screens/receipt_capture_screen.dart) reads `profileProvider.value?.defaultCurrency` (default `'IDR'`) and pipes it through `OcrNotifier.process(..., currency:)` → `OCRService` → `OcrRequestDto.currency`.
 2. **Server prompt is currency-aware.** [`buildSystemPrompt(currency)`](supabase/functions/process-receipt/index.ts) appends explicit locale rules ('.' = thousand separator in ID/EU receipts) and, for zero-decimal currencies, a hard "every numeric output must be an integer" rule.
-3. **Server post-process heuristic.** `normalizePayload(payload, currency)` runs after the LLM responds. For currencies in `ZERO_DECIMAL_CURRENCIES = {IDR, JPY, KRW, VND, CLP, ISK, HUF, TWD}`, every fractional value is reconstructed via `parseInt(String(v).replace(/\./g,''), 10)` — `10.455 → "10.455" → "10455" → 10455`. Other currencies pass through untouched (USD `12.50` stays `12.50`).
+3. **Server post-process heuristic.** `normalizePayload(payload, currency)` runs after the LLM responds. For currencies in `ZERO_DECIMAL_CURRENCIES = {IDR, JPY, KRW, VND, CLP, ISK, HUF, TWD}`, every fractional value below 1000 is treated as a thousands-separated value and multiplied by 1000 — `10.455 → 10455`, `15.3 → 15300`. Other currencies pass through untouched (USD `12.50` stays `12.50`).
 4. **Client safety net.** [`BillReviewState.suspectThousandsBug`](lib/presentation/bills/providers/bill_review_notifier.dart) flags the case where the currency is zero-decimal yet any price/tax/service still has a fractional part (i.e. both prompt + heuristic missed it). `bill_review_screen.dart` shows a red `_SuspectThousandsBanner` above the mismatch banner asking the user to verify before saving. Localized via `reviewSuspectThousandsBug`.
 
 `AppConstants.zeroDecimalCurrencies` mirrors the server-side set so prompts, heuristic, and client banner stay in sync. Adding a new zero-decimal currency requires updating both lists.
