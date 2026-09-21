@@ -26,7 +26,7 @@
 
 - **Memory format:** active memory lives in `.memory/`; `PROJECT_MEMORY.md` is a historical archive (read-only) linked below.
 - **Onboarding layout:** illustrations are centered vertically via `LayoutBuilder` + `ConstrainedBox(minHeight)` inside `_page()` scroll view.
-- **Versioning:** current pubspec version `0.36.0+91` (v0.36.0 tag: cloudflare workers ai provider).
+- **Versioning:** current pubspec version `0.36.1+92` (v0.36.1 tag: share-link RPC parse fix; sebelumnya v0.36.0: cloudflare workers ai provider).
 - **Legal docs (2026-09-04):** effective date bumped to 2026-09-04; HMAC v2 signals enumerated, marketing opt-in post-confirmation clarified, share-to-scan disclosed. `app_config` `legal.terms_version`/`privacy_version` must be bumped 1→2 via Dashboard after app rollout to trigger re-accept (pending operator). Sibling landing-page `legalContent.ts` + public privacy URL + Play Console Data Safety pending manual sync.
 - **Ads readiness (2026-09-03):** jangan pernah meng-issue `ad.load()` sebelum `AdService.ready` (dengan timeout); init ads tetap non-blocking di `main()` (insiden launch freeze). Banner failure class harus self-healing (watchdog) + observable (log `BannerAd ... tag=<placement>`).
 - **SQL standard baru (2026-08-30):** setiap fungsi public baru wajib `REVOKE ALL ... FROM PUBLIC, anon, authenticated` + GRANT eksplisit; `REVOKE FROM PUBLIC` saja tidak cukup (default privileges Supabase).
@@ -50,6 +50,7 @@
 
 ## Recent Entries
 
+- [2026-09-21/release-v0-36-1.md](2026-09-21/173100-release-v0-36-1.md)
 - [2026-09-21/134800-fix-share-link-rpc-parse.md](2026-09-21/134800-fix-share-link-rpc-parse.md)
 - [2026-09-21/release-v0-36-0.md](2026-09-21/131000-release-v0-36-0.md)
 - [2026-09-21/cloudflare-workers-ai-provider.md](2026-09-21/120000-cloudflare-workers-ai-provider.md)
