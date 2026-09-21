@@ -279,6 +279,14 @@ class BillRemoteDataSource {
   Future<void> deleteParticipant(String participantId) =>
       _client.from(_participants).delete().eq('id', participantId);
 
+  /// Parses the raw [TABLE] response from [create_bill_share_token] RPC into
+  /// the [Map] consumed by the repository layer. Isolated here so the parser
+  /// itself can be unit-tested without mocking PostgREST's builder chain.
+  static Map<String, dynamic> parseShareTokenResponse(List<dynamic> rows) {
+    if (rows.isEmpty) throw const FormatException('empty create response');
+    return Map<String, dynamic>.from(rows.first as Map);
+  }
+
   /// Creates (or rotates, for Plus) a share-link token. Only the SHA-256 of
   /// the opaque [tokenHash] is sent — the raw token never leaves the device
   /// except via the deep link the owner shares.
@@ -286,13 +294,13 @@ class BillRemoteDataSource {
     required String billId,
     required String tokenHash,
   }) async {
-    final rows = await _client.rpc<Map<String, dynamic>>(
+    // `create_bill_share_token` is RETURNS TABLE → PostgREST returns a JSON
+    // array with 1 row. Request List so _parseResponse never casts List→Map.
+    final rows = await _client.rpc<List<dynamic>>(
       'create_bill_share_token',
       params: {'p_bill_id': billId, 'p_token_hash': tokenHash},
     );
-    final list = (rows as List?) ?? const [];
-    if (list.isEmpty) throw const FormatException('empty create response');
-    return Map<String, dynamic>.from(list.first as Map);
+    return parseShareTokenResponse(rows);
   }
 
   Future<void> revokeShareToken(String tokenId) => _client.rpc(

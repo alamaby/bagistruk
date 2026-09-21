@@ -1,10 +1,11 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-21 12:00
+- **Updated:** 2026-09-21 13:48
 - **Format version:** 1
 
 ## Current State
 
+- **2026-09-21:** Share-link RPC parse fix (code done, smoke pending): `createShareToken` di `bill_remote_datasource.dart` sekarang pakai `rpc<List<dynamic>>` (sebelumnya `rpc<Map>` yang crash saat `_parseResponse` cast List→Map); tambah `parseShareTokenResponse()` statis + 3 regression test. Commit proposal: `fix: parse create_bill_share_token as List for TABLE return`. Detail: [plan](../plans/2026-09-21-fix-share-link-rpc-parse-plan.md), [entry](2026-09-21/134800-fix-share-link-rpc-parse.md).
 - **2026-09-21:** Cloudflare Workers AI provider integration (release v0.36.0 — committed, tag v0.36.0): `callCloudflare()` + `case "cloudflare"` (+3 alias) di `process-receipt/index.ts` (reuse OpenAI-compatible, timeout 30s FINAL dari Spike-3: 6/6 OK, p50 ~6.3s, p95 ~9.5s); placeholder `CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_API_TOKEN` di `.env.example` (nilai real di `.env.local`, tidak pernah dicetak/di-commit); spike aman: vision 1×/2× → 200 JSON valid, tanpa-`response_format` → fence markdown (parser existing menanganinya). `deno check` pass, `deno test` 64 passed. Deploy/DB insert/QA menunggu operator. Detail: [plan](../plans/2026-09-21-cloudflare-workers-ai-gemma-pilot-plan.md).
 - **2026-09-17:** Share-link web publik (code only, belum commit/apply): copy-link jadi `https://bagistruk.alamaby.com/s/<token>` dirender landing (`ShareBillPage.tsx` + kalkulator + tombol buka-di-aplikasi + noindex); kuota global Free 1 auto-expire / Plus 5 FIFO / downgrade sisa 1 via migration `20260917000000` (untracked di submodule, menunggu operator `db push`); privacy in-app (mask judul, date-only); quota note + dialog + snackbar revoked; `shareLinksEnabled=true`. `flutter analyze` 0e/0w, `flutter test` 666 passed, landing build hijau. Temuan: Riverpod 3 default-retry 10x untuk non-Error → `shareQuotaProvider` di-set fail-fast. Detail: [plan](../plans/2026-09-17-share-link-web-public-plan.md).
 
@@ -49,6 +50,8 @@
 
 ## Recent Entries
 
+- [2026-09-21/134800-fix-share-link-rpc-parse.md](2026-09-21/134800-fix-share-link-rpc-parse.md)
+- [2026-09-21/release-v0-36-0.md](2026-09-21/131000-release-v0-36-0.md)
 - [2026-09-21/cloudflare-workers-ai-provider.md](2026-09-21/120000-cloudflare-workers-ai-provider.md)
 - [2026-09-17/release-v0-35-0.md](2026-09-17/114500-release-v0-35-0.md)
 - [2026-09-17/share-link-web-public.md](2026-09-17/102000-share-link-web-public.md)
