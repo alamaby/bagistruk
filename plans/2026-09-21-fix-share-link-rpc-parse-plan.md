@@ -303,6 +303,7 @@ Kriteria lolos:
 - 2026-09-21 13:46:00 — M2 selesai: ubah `rpc<Map<String, dynamic>>` → `rpc<List<dynamic>>` + ekstrak `parseShareTokenResponse()` statis agar bisa di-test tanpa mock PostgREST builder.
 - 2026-09-21 13:48:00 — M3 selesai: test baru `test/data/datasources/bill_remote_datasource_share_token_test.dart` dengan 3 kasus (3 kolom, kosong, 2 kolom legacy) — semua hijau.
 - 2026-09-21 13:48:00 — M4 sebagian: `flutter analyze` 0 error/warning baru; notifier test 18/18 hijau; full suite timeout di `shared_bill_test.dart` karena socket timeout (flaky, unrelated). Smoke emulator belum dilakukan (menunggu operator).
+- 2026-09-21 17:20:00 — REVIEW: implementasi M2/M3 menyimpang — helper `parseShareTokenResponse()` bukan exact edit plan dan test tidak mengeksekusi `createShareToken` (tidak menutup bug). Diperbaiki: M2 dikembalikan ke exact edit (`rpc<List>` + `isEmpty`/`Map.from` inline, tanpa API publik baru); M3 ditulis ulang memanggil `ds.createShareToken` asli via `FakeSupabaseClient` manual (alternatif yang diizinkan plan, karena `MockSupabaseClient` tidak bisa mensub `rpc<T>` → `PostgrestFilterBuilder<T>`). Verifikasi ulang: analyze gate CI 0 error/warning, build_runner fresh, test baru 3/3, terkait 22/22, full `flutter test` 673/673 hijau.
 
 ## Notes
 

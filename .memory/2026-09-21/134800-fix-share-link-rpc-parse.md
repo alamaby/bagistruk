@@ -15,23 +15,23 @@ Perbaiki crash `copy share link` di `bill_detail_screen` emulator: `type 'List<d
 
 ### Production (1 file)
 - `lib/data/datasources/bill_remote_datasource.dart`:
-  - `createShareToken`: ubah generic dari `rpc<Map<String, dynamic>>` ke `rpc<List<dynamic>>` (line ~291).
-  - Tambah method statis `parseShareTokenResponse(List<dynamic> rows)` agar parsing bisa di-test tanpa mock PostgREST builder.
+  - `createShareToken`: ubah generic dari `rpc<Map<String, dynamic>>` ke `rpc<List<dynamic>>` (line ~299), hapus baris dead code `(rows as List?)`. Signature, nama RPC, nama params, dan pesan `FormatException` tidak berubah.
 
 ### Tests (1 file baru)
 - `test/data/datasources/bill_remote_datasource_share_token_test.dart`:
-  - 3 regression test untuk `parseShareTokenResponse`:
-    1. TABLE shape List 3 kolom → Map row pertama
-    2. List kosong → FormatException
+  - 3 regression test yang memanggil `ds.createShareToken` asli via `FakeSupabaseClient` (fake manual, alternatif yang diizinkan plan):
+    1. TABLE shape List 3 kolom → Map row pertama (+ assert nama RPC & params)
+    2. List kosong → FormatException dengan pesan `empty create response`
     3. Server lama 2 kolom (tanpa `revoked_count`) tetap parse
 
 ## Verification
 
-- `flutter analyze` lib + test: 0 error, 0 warning baru (hanya pre-existing info-level)
+- `flutter analyze` lib + test: 0 error, 0 warning (hanya pre-existing info-level)
+- `flutter analyze --no-fatal-infos` penuh: 163 info pre-existing, 0 error/warning (gate CI)
+- `dart run build_runner build --delete-conflicting-outputs`: fresh, tidak ada diff generated
 - `flutter test test/data/datasources/bill_remote_datasource_share_token_test.dart`: 3/3 hijau
-- `flutter test test/presentation/bills/providers/bill_share_link_notifier_test.dart`: 18/18 hijau
-- `flutter test test/data/datasources/`: 7/7 hijau (auth + share token)
-- Full suite `flutter test` timeout di `shared_bill_test.dart` (socket timeout, flaky, unrelated)
+- `flutter test test/presentation/bills/providers/bill_share_link_notifier_test.dart test/data/datasources/bill_remote_datasource_auth_test.dart`: 22/22 hijau (test lama tidak diubah)
+- `flutter test` penuh: 673/673 hijau
 
 ## Pending
 
@@ -43,5 +43,5 @@ Perbaiki crash `copy share link` di `bill_detail_screen` emulator: `type 'List<d
 
 ## Notes
 
-- Tidak menyentuh: migration, repository, notifier, screen, quota, resolve. Satu PR = satu bug.
-- `parseShareTokenResponse` dibuat statis agar bisa di-test tanpa mock PostgREST builder (generic `rpc<T>` sulit di-stub dengan mockito karena `PostgrestFilterBuilder` punya banyak method).
+- Tidak menyentuh: migration, repository, notifier, screen, quota, resolve, `pubspec.yaml` (versi sudah di-bump di commit sebelumnya bila diminta eksplisit). Satu PR = satu bug.
+- `MockSupabaseClient` hasil `@GenerateMocks` tidak bisa mensub `rpc<T>` karena return type-nya `PostgrestFilterBuilder<T>` (yang juga `implements Future<T>`): `thenAnswer((_) async => [...])` gagal cast `Future as PostgrestFilterBuilder` di kode mock generated. Dipakai `FakeSupabaseClient` manual sesuai alternatif plan.
