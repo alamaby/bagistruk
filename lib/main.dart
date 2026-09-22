@@ -73,7 +73,7 @@ Future<String?> _bootstrap(PasswordRecoverySession recovery) async {
   try {
     await Supabase.initialize(
       url: Env.supabaseUrl,
-      anonKey: Env.supabaseAnonKey,
+      publishableKey: Env.supabasePublishableKey,
     ).timeout(const Duration(seconds: 10));
   } catch (e) {
     return 'Failed to initialize Supabase: $e';

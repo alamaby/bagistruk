@@ -47,6 +47,7 @@ void main() {
       mergeWith: {
         'ADS_ENABLED': 'false',
         'SUPABASE_URL': 'http://test',
+        'SUPABASE_PUBLISHABLE_KEY': 'test',
         'SUPABASE_ANON_KEY': 'test',
         'GOOGLE_WEB_CLIENT_ID': 'test',
       },

@@ -9,7 +9,10 @@ class Env {
   const Env._();
 
   static String get supabaseUrl => _required('SUPABASE_URL');
-  static String get supabaseAnonKey => _required('SUPABASE_ANON_KEY');
+  static String get supabasePublishableKey =>
+      _optional('SUPABASE_PUBLISHABLE_KEY') ?? _required('SUPABASE_ANON_KEY');
+  @Deprecated('Use supabasePublishableKey (SUPABASE_PUBLISHABLE_KEY). Kept for old builds/rollback.')
+  static String get supabaseAnonKey => supabasePublishableKey;
   static String get googleWebClientId => _required('GOOGLE_WEB_CLIENT_ID');
   static String? get googleIosClientId => _optional('GOOGLE_IOS_CLIENT_ID');
   static String get authEmailRedirectTo =>
