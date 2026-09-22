@@ -20,7 +20,7 @@ jobs:
       - name: Ping auth health
         env:
           URL: ${{ vars.SUPABASE_URL }}
-          KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
           curl --silent --show-error --fail-with-body \
             -H "apikey: $KEY" \
@@ -29,9 +29,8 @@ jobs:
       - name: Ping PostgREST (DB activity)
         env:
           URL: ${{ vars.SUPABASE_URL }}
-          KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
           curl --silent --show-error --fail-with-body -I \
             -H "apikey: $KEY" \
-            -H "Authorization: Bearer $KEY" \
             "$URL/rest/v1/profiles?select=id&limit=1"

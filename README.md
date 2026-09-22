@@ -99,7 +99,8 @@ Editing anything under `supabase/` happens in the submodule repo, not this one. 
 cp .env.example .env
 # Fill in your values:
 # SUPABASE_URL=https://<project>.supabase.co
-# SUPABASE_ANON_KEY=<anon-key>
+# SUPABASE_PUBLISHABLE_KEY=<sb_publishable-key>
+# (fallback) SUPABASE_ANON_KEY=<anon-key, kept for old builds)
 # AUTH_EMAIL_REDIRECT_TO=bagistruk://auth/callback
 # ADS_ENABLED=false
 ```
@@ -217,12 +218,10 @@ supabase functions deploy delete-account
 supabase functions deploy inactive-user-cleanup --no-verify-jwt
 ```
 
-The `delete-account` function requires an authenticated user JWT and uses
-`SUPABASE_SERVICE_ROLE_KEY` server-side to delete the user's bills before
+The `delete-account` function requires an authenticated user JWT and uses secret key (SUPABASE_SECRET_KEYS, service_role) server-side to delete the user's bills before
 deleting the Supabase Auth user.
 
-The `inactive-user-cleanup` function is intended for Supabase Cron. It uses
-`SUPABASE_SERVICE_ROLE_KEY` server-side, optionally sends reminders with Resend
+The `inactive-user-cleanup` function is intended for Supabase Cron. It uses secret key (SUPABASE_SECRET_KEYS, service_role) server-side, optionally sends reminders with Resend
 (`RESEND_API_KEY`, `INACTIVE_REMINDER_FROM`), excludes registered users with an
 active Plus entitlement from inactivity cleanup, uses the later of last app
 activity and latest Plus entitlement end as the cleanup baseline after Plus
@@ -260,7 +259,7 @@ flutter run
 ./smoketest.sh path/to/receipt.jpg
 ```
 
-Reads `SUPABASE_URL` and `SUPABASE_ANON_KEY` from `.env`. Exit 0 = OCR pipeline is healthy.
+Reads `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` (fallback `SUPABASE_ANON_KEY`) from `.env`. Exit 0 = OCR pipeline is healthy.
 
 ---
 

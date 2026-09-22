@@ -79,7 +79,7 @@ Required repository secrets and variables:
 | Secret | `STORE_PASSWORD` | Keystore password |
 | Secret | `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` | Raw JSON key for the Play Console service account used by the tagged release workflow upload |
 | Variable | `SUPABASE_URL` | Supabase project URL |
-| Secret | `SUPABASE_ANON_KEY` | Supabase anon key |
+| Secret | `SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key (`sb_publishable_...`; `SUPABASE_ANON_KEY` kept as fallback) |
 | Variable | `GOOGLE_WEB_CLIENT_ID` | Required. Google OAuth web client ID used as Android `serverClientId` and by Supabase auth |
 | Variable | `GOOGLE_IOS_CLIENT_ID` | Google OAuth iOS client ID, required for iOS builds |
 | Variable | `AUTH_EMAIL_REDIRECT_TO` | Optional; defaults to `bagistruk://auth/callback` for Supabase email verification/password reset links |
@@ -111,7 +111,7 @@ canceled sign-in immediately after account selection.
 
 The manual Play Store workflow uploads the signed AAB as a workflow artifact with 30-day retention. Download it and upload manually to Play Console when you need an on-demand build outside tagged releases.
 
-The Android workflows fail early when `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or
+The Android workflows fail early when `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, or
 `GOOGLE_WEB_CLIENT_ID` is missing from the generated `.env`. If Google Sign-In
 shows `Missing required env var: GOOGLE_WEB_CLIENT_ID`, add
 `GOOGLE_WEB_CLIENT_ID` under repository **Variables**, rebuild the AAB, and

@@ -25,7 +25,7 @@ concurrency:
 #
 # Do NOT point this at the production Supabase project: the flows mutate
 # preferences and create anonymous users. Provide a dedicated test project via
-# the `E2E_SUPABASE_URL` / `E2E_SUPABASE_ANON_KEY` secrets to enable the run.
+# the `E2E_SUPABASE_URL` / `E2E_SUPABASE_PUBLISHABLE_KEY` secrets to enable the run.
 jobs:
   maestro:
     name: Run Maestro flows
@@ -56,6 +56,7 @@ jobs:
         id: backend
         env:
           E2E_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+          E2E_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.E2E_SUPABASE_PUBLISHABLE_KEY }}
           E2E_SUPABASE_ANON_KEY: ${{ secrets.E2E_SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
@@ -65,9 +66,10 @@ jobs:
             # Drop the placeholder pair, then append the real one, so each key
             # appears exactly once (dup-key resolution differs between dotenv
             # implementations — don't rely on last-wins).
-            grep -v -E '^(SUPABASE_URL|SUPABASE_ANON_KEY)=' .env > .env.tmp || true
+            grep -v -E '^(SUPABASE_URL|SUPABASE_PUBLISHABLE_KEY|SUPABASE_ANON_KEY)=' .env > .env.tmp || true
             {
               echo "SUPABASE_URL=${E2E_SUPABASE_URL}"
+              echo "SUPABASE_PUBLISHABLE_KEY=${E2E_SUPABASE_PUBLISHABLE_KEY:-$E2E_SUPABASE_ANON_KEY}"
               echo "SUPABASE_ANON_KEY=${E2E_SUPABASE_ANON_KEY}"
             } >> .env.tmp
             mv .env.tmp .env
@@ -139,7 +141,7 @@ jobs:
             else
               echo "- Flows: **skipped** (no isolated E2E test backend configured)"
               echo ""
-              echo "Add the \`E2E_SUPABASE_URL\` / \`E2E_SUPABASE_ANON_KEY\` repository"
+              echo "Add the \`E2E_SUPABASE_URL\` / \`E2E_SUPABASE_PUBLISHABLE_KEY\` repository"
               echo "secrets pointing at a **dedicated test project** to enable these"
               echo "flows. Never use the production project — the flows mutate"
               echo "preferences and create anonymous users."

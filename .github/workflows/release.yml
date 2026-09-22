@@ -60,6 +60,7 @@ jobs:
       - name: Write .env from secrets
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           GOOGLE_WEB_CLIENT_ID: ${{ vars.GOOGLE_WEB_CLIENT_ID }}
           GOOGLE_IOS_CLIENT_ID: ${{ vars.GOOGLE_IOS_CLIENT_ID }}
@@ -73,6 +74,7 @@ jobs:
         run: |
           {
             echo "SUPABASE_URL=${SUPABASE_URL}"
+            echo "SUPABASE_PUBLISHABLE_KEY=${SUPABASE_PUBLISHABLE_KEY}"
             echo "SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}"
             echo "GOOGLE_WEB_CLIENT_ID=${GOOGLE_WEB_CLIENT_ID}"
             echo "GOOGLE_IOS_CLIENT_ID=${GOOGLE_IOS_CLIENT_ID}"
@@ -88,7 +90,7 @@ jobs:
       - name: Validate required app env
         run: |
           missing=()
-          for key in SUPABASE_URL SUPABASE_ANON_KEY GOOGLE_WEB_CLIENT_ID; do
+          for key in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY GOOGLE_WEB_CLIENT_ID; do
             if ! grep -Eq "^${key}=.+" .env; then
               missing+=("$key")
             fi
