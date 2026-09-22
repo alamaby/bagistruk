@@ -1,10 +1,11 @@
 # Project Memory — BagiStruk
 
-- **Updated:** 2026-09-21 13:48
+- **Updated:** 2026-09-22 09:25
 - **Format version:** 1
 
 ## Current State
 
+- **2026-09-22:** Landing publishable-key migration (pra-deploy audit): publishable key sudah ada di project (`sb_publishable_...`, legacy anon tetap aktif), lokal `.env.local` landing sudah terisi, `vite build` hijau. M2 (swap env + redeploy Vercel) tertahan blocker: Vercel CLI tidak ter-auth — harus dilakukan manual via Dashboard. Detail: [plan](../plans/2026-09-22-landing-publishable-key-migration-plan.md), [entry](2026-09-22/092400-landing-publishable-key-migration-predeploy-audit.md).
 - **2026-09-21:** Share-link RPC parse fix (code done, smoke pending): `createShareToken` di `bill_remote_datasource.dart` sekarang pakai `rpc<List<dynamic>>` persis sesuai plan (sebelumnya `rpc<Map>` yang crash saat `_parseResponse` cast List→Map); 3 regression test memanggil `createShareToken` asli via fake manual. Review 17:20 memperbaiki deviasi (helper statis interim dihapus). Detail: [plan](../plans/2026-09-21-fix-share-link-rpc-parse-plan.md), [entry](2026-09-21/134800-fix-share-link-rpc-parse.md).
 - **2026-09-21:** Cloudflare Workers AI provider integration (release v0.36.0 — committed, tag v0.36.0): `callCloudflare()` + `case "cloudflare"` (+3 alias) di `process-receipt/index.ts` (reuse OpenAI-compatible, timeout 30s FINAL dari Spike-3: 6/6 OK, p50 ~6.3s, p95 ~9.5s); placeholder `CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_API_TOKEN` di `.env.example` (nilai real di `.env.local`, tidak pernah dicetak/di-commit); spike aman: vision 1×/2× → 200 JSON valid, tanpa-`response_format` → fence markdown (parser existing menanganinya). `deno check` pass, `deno test` 64 passed. Deploy/DB insert/QA menunggu operator. Detail: [plan](../plans/2026-09-21-cloudflare-workers-ai-gemma-pilot-plan.md).
 - **2026-09-17:** Share-link web publik (code only, belum commit/apply): copy-link jadi `https://bagistruk.alamaby.com/s/<token>` dirender landing (`ShareBillPage.tsx` + kalkulator + tombol buka-di-aplikasi + noindex); kuota global Free 1 auto-expire / Plus 5 FIFO / downgrade sisa 1 via migration `20260917000000` (untracked di submodule, menunggu operator `db push`); privacy in-app (mask judul, date-only); quota note + dialog + snackbar revoked; `shareLinksEnabled=true`. `flutter analyze` 0e/0w, `flutter test` 666 passed, landing build hijau. Temuan: Riverpod 3 default-retry 10x untuk non-Error → `shareQuotaProvider` di-set fail-fast. Detail: [plan](../plans/2026-09-17-share-link-web-public-plan.md).
@@ -50,6 +51,7 @@
 
 ## Recent Entries
 
+- [2026-09-22/landing-publishable-key-migration-predeploy-audit.md](2026-09-22/092400-landing-publishable-key-migration-predeploy-audit.md)
 - [2026-09-21/supabase-cli-token-helper.md](2026-09-21/174317-supabase-cli-token-helper.md)
 - [2026-09-21/release-v0-36-1.md](2026-09-21/173100-release-v0-36-1.md)
 - [2026-09-21/134800-fix-share-link-rpc-parse.md](2026-09-21/134800-fix-share-link-rpc-parse.md)
