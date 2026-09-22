@@ -50,6 +50,7 @@
 
 ## Recent Entries
 
+- [2026-09-21/supabase-cli-token-helper.md](2026-09-21/174317-supabase-cli-token-helper.md)
 - [2026-09-21/release-v0-36-1.md](2026-09-21/173100-release-v0-36-1.md)
 - [2026-09-21/134800-fix-share-link-rpc-parse.md](2026-09-21/134800-fix-share-link-rpc-parse.md)
 - [2026-09-21/release-v0-36-0.md](2026-09-21/131000-release-v0-36-0.md)
